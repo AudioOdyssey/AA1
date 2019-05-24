@@ -1,0 +1,43 @@
+{% extends "template.html" %}
+{% block content %}
+<section class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <form method="post">
+            <h2>Login</h2>
+                
+            {% if err %}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error creating account</h4>
+                    <hr>
+                    {% for error in errors %}
+                        <p class="mb-0">{{ error }}/p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <label>Username or Email:</label>
+            <div class="input-group mb-2 icon-input">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-user"></i></div>
+                </div>
+                <input type="text" name="username" placeholder="Username" class="form-control" required>
+            </div>
+
+            <label>Password:</label>
+            <div class="input-group mb-2 icon-input">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-key"></i></div>
+                </div>
+                <input type="password" name="password" placeholder="Password" class="form-control" required>
+            </div>
+                
+            <div class="row">
+                <input type="submit" value="Login" class="btn btn-primary" style="margin: 0em 0.75em; width: 100%; text-align: center">
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3"></div>
+</section>
+<div class="clearfix"></div>
+{% endblock %}
