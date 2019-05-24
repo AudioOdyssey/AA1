@@ -9,4 +9,4 @@ def home():
 
 @app.route("/user/new")
 def user_new():
-    return render_template("user_new.html")
+    return render_template("user/new.html")
