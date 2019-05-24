@@ -1,0 +1,14 @@
+{% extends "template.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/object_show.css') }}" type="text/css"/>
+{% for object in objects %}
+<section class="object-row row">
+    <div class="col-sm-4">
+        <input class="form-control" type="text" name="object-name" value="{{ object.obj_name }}">
+    </div>
+    <div class="col-sm-8">
+        <input class="form-control" type="text" name="object-desc" value="The Office">
+    </div>
+</section>
+{% endfor %}
+{% endblock %}

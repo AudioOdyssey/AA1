@@ -1,3 +1,4 @@
+from models.storyobject import StoryObject
 from flask import Flask, render_template
 app = Flask(__name__)
 
@@ -14,3 +15,8 @@ def user_new():
 @app.route("/session/new")
 def session_new():
     return render_template("session/new.html")
+
+@app.route("/story/object/show")
+def event_show():
+    objects = [StoryObject(15, 1, "Adam's Water Bottle", "Constantly Empty", True, 7, False, 0)]
+    return render_template("story/object/show.html", objects=objects)

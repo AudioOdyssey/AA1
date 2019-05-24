@@ -1,0 +1,9 @@
+.form-control {
+    display: inline;
+    margin: 0.25em;
+}
+.object-row {
+    border: 1px solid lightgrey;
+    padding: 0.5em;
+    box-sizing: border-box;
+}
