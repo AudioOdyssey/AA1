@@ -2,8 +2,52 @@
     display: inline;
     margin: 0.25em;
 }
-.object-row {
-    border: 1px solid lightgrey;
+
+.object-main-row {
+    border-top: 1px solid lightgrey;
+    border-left: 1px solid lightgrey;
+    border-right: 1px solid lightgrey;
     padding: 0.5em;
-    box-sizing: border-box;
+}
+
+.object-main-row:first-of-type {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+  
+.object-main-row:last-of-type {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.down-arrow {
+    height: 100%;
+    padding: 0px 0.5em;
+    vertical-align: middle;
+}
+
+.down-arrow:hover {
+    cursor: pointer;
+}
+
+#active {
+    border: 0px;
+    box-shadow: 0 0 0.2rem 0.2rem RGBA(7, 56, 132, .5);
+}
+
+.row {
+    margin: 0px !important;
+}
+
+.flex-1 {
+    flex-grow: 1;
+}
+
+.flex-0 {
+    flex-grow: 0;
+}
+
+.details {
+    padding: 0.5em
 }
