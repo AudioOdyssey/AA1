@@ -1,0 +1,88 @@
+{% extends "template.html" %}
+{% block content %}
+<section class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <form method="post">
+            <h2>Create Account</h2>
+                
+            {% if err %}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error creating account</h4>
+                    <hr>
+                    {% for error in errors %}
+                        <p class="mb-0">{{ error }}/p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <h4 style="margin: 0px">Account Information</h4>
+            <hr style="margin-top: 0px">
+
+            <label>Username:</label>
+            <div class="input-group mb-2 icon-input">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-user"></i></div>
+                </div>
+                <input type="text" name="username" placeholder="Username" class="form-control" required>
+            </div>
+
+            <label>Password:</label>
+            <div class="input-group mb-2 icon-input">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-key"></i></div>
+                </div>
+                <input type="password" name="password" placeholder="Password" class="form-control" required>
+            </div>
+                
+            <label>Confirm Password:</label>
+            <div class="input-group mb-2 icon-input">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-key"></i></div>
+                </div>
+                <input type="password" name="password_confirm" placeholder="Password" class="form-control" required>
+            </div>
+
+            <h4 style="margin: 0px">Personal Information</h4>
+            <hr style="margin-top: 0px">
+
+            <label>Email:</label>
+            <div class="input-group mb-2 icon-input">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-at"></i></div>
+                </div>
+                <input type="email" name="email" placeholder="Email" class="form-control" required>
+            </div>
+
+            <label>Gender:</label>
+            <div class="input-group mb-2">
+                <select class="form-control" name="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <label>Profession:</label>
+            <div class="input-group mb-2">
+                <select class="form-control" name="job">
+                    <option value="trucker">Professional Driver</option>
+                    <option value="doctor">Healthcare Professional</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="blind">
+                <label class="form-check-label">Vision Impaired</label>
+            </div>
+                
+            <div class="row">
+                <input type="submit" value="Create Account" class="btn btn-primary" style="margin: 0em 0.75em; width: 100%; text-align: center">
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3"></div>
+</section>
+<div class="clearfix"></div>
+{% endblock %}
