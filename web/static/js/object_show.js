@@ -15,3 +15,8 @@ function set_focus(obj_id) {
     }
     elem.parentElement.id = "active";
 }
+
+function object_changed(obj_id) {
+    let elem = document.getElementById("object_id" + obj_id);
+    elem.parentElement.submit()
+}

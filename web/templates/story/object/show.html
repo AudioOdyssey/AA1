@@ -4,16 +4,16 @@
 <script src="{{ url_for('static', filename='js/object_show.js') }}"></script>
 
 {% for object in objects %}
-<section class="object-main-row" onclick="set_focus({{ object.obj_id }})">
+<form class="object-main-row" onclick="set_focus({{ object.obj_id }})" method="POST" action="/story/object/update">
     <section class="object-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="object-name" value="{{ object.obj_name }}">
+                <input class="form-control" type="text" name="object-name" onchange="object_changed({{ object.obj_id }})" value="{{ object.obj_name }}">
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="object-desc" value="The Office">
+                <input class="form-control" type="text" name="object-desc" onchange="object_changed({{ object.obj_id }})" value="The Office">
             </div>
         </section>
         <section class="flex-0" onclick="object_show({{ object.obj_id }})">
@@ -23,25 +23,25 @@
     <section class="row details" id="object_id{{ object.obj_id }}" style="display: none">
         <hr>
         <label>Description</label>
-        <textarea class="form-control" rows="3" name="obj_description">{{ object.obj_description }}</textarea>
+        <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed({{ object.obj_id }})">{{ object.obj_description }}</textarea>
 
         <label>Pick upable?</label>
         {% if object.can_pickup_obj %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj">
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})">
         {% else %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" checked>
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})" checked>
         {% endif %}
 
         <br>
 
         <label>Is Hidden? </label>
         {% if object.is_hidden %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj">
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})">
         {% else %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" checked>
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})" checked>
         {% endif %}
     </section>
-</section>
+</form>
 {% endfor %}
 
 {% endblock %}
