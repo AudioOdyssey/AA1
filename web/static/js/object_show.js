@@ -1,5 +1,5 @@
 function object_show(obj_id) {
-    let elem = document.getElementById("object_id" + obj_id);
+    var elem = document.getElementById("object_id" + obj_id);
     if (elem.style.display == "block")
         elem.style.display = "none";
     else
@@ -7,7 +7,7 @@ function object_show(obj_id) {
 }
 
 function set_focus(obj_id) {
-    let elem = document.getElementById("object_id" + obj_id);
+    var elem = document.getElementById("object_id" + obj_id);
     try {
         document.getElementById("active").id = "";
     } catch (err) {
@@ -17,6 +17,11 @@ function set_focus(obj_id) {
 }
 
 function object_changed(obj_id) {
-    let elem = document.getElementById("object_id" + obj_id);
+    var elem = document.getElementById("object_id" + obj_id);
     elem.parentElement.submit()
+}
+
+function add_btn_pressed() {
+    var template = document.getElementById("obj-template");
+    var newelem = template.cloneNode(true);
 }

@@ -3,6 +3,10 @@
     margin: 0.25em;
 }
 
+.object-row {
+    align-items: center;
+}
+
 .object-main-row {
     border-top: 1px solid lightgrey;
     border-left: 1px solid lightgrey;
@@ -50,4 +54,18 @@
 
 .details {
     padding: 0.5em
+}
+
+#add-btn {
+    border: 1px solid lightgrey;
+    margin-left: auto; 
+    margin-bottom: .5em;
+}
+
+.hidden-in {
+    display: none;
+}
+
+#obj-template {
+    display: none;
 }
