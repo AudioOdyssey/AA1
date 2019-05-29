@@ -8,30 +8,74 @@
 
 import UIKit
 
-class registerUserViewController: UIViewController {
+class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailAddressTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var repeatPasswordTextField: UITextField!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBAction func datePickerChanged(_ sender: Any) {
-        
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.locale = Locale(identifier: "en_US")
-        
-        let strDate = dateFormatter.string(from: datePicker.date)
-        dateLabel.text = strDate
-    }
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var picker: UIPickerView!
+    @IBOutlet weak var countryPicker: UIPickerView!
     
+    var pickerData: [String] = [String]()
+    
+    var countries: [String] = {
+        
+        var arrayOfCountries: [String] = []
+        
+        for code in NSLocale.isoCountryCodes as [String] {
+            let id = NSLocale.localeIdentifier(fromComponents: [NSLocale.Key.countryCode.rawValue: code])
+            let name = NSLocale(localeIdentifier: "en").displayName(forKey: NSLocale.Key.identifier, value: id) ?? "Country not found for code: \(code)"
+            arrayOfCountries.append(name)
+        }
+        
+        return arrayOfCountries
+    }()
+   
+    // Set the shouldAutorotate to False
+    override open var shouldAutorotate: Bool {
+        return false
+    }
+
+    // Specify the orientation.
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height+240)
+        // Connect data:
+        self.picker.delegate = self
+        self.picker.dataSource = self
+        self.countryPicker.delegate = self
+        self.countryPicker.dataSource = self
+        
+        pickerData = ["English","Español","日本人"]
 
-        // Do any additional setup after loading the view.
     }
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if pickerView.tag == 1{
+        return pickerData.count
+        }
+        else{
+            return countries.count
+        }
+        }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if pickerView.tag == 1{
+        return pickerData[row]
+        }else{
+            return countries[row]
+        }
+    }
+   
     
     @IBAction func cancelButtonTapped(_ sender: Any) {
         print("cancel button tapped")
@@ -80,7 +124,6 @@ class registerUserViewController: UIViewController {
                           "last_name": lastNameTextField.text!,
                           "email_address": emailAddressTextField.text!,
                           "password": passwordTextField.text!,
-                          "date_of_birth": dateLabel.text!,
                           ] as [String: String]
         
         do {

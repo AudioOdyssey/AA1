@@ -9,6 +9,8 @@ import random
 import hashlib 
 import binascii
 
+from datetime import datetime
+
 app = Flask(__name__)
 
 REGION = 'us-east-2b'
@@ -34,11 +36,25 @@ def user_new():
         details = request.form 
         username = details['username']
         raw_password = details['password']
+        email = details['email_address']
+        gender = int(details['gender'])
+        country_of_origin = int(details['country_of_origin'])
+        profession = details['profession']
+        disabilities = details.get('disabilities')
+        if disabilities is None:
+            disabilities_bool = 0
+        else:
+            disabilities_bool = 1
+        language = int(details['language-id'])
+        first_name = details['first_name']
+        last_name = details['last_name']
+        date_of_birth = datetime.strptime(details['date_of_birth'], '%Y-%m-%d')
         password_salt = generate_password_salt()
         password = raw_password + password_salt 
-        encrypted_password = hashlib.sha256(password.encode()).digest()       
+        encrypted_password = hashlib.sha256(password.encode()).digest()
+        password_hex_string = binascii.b2a_hex(encrypted_password)
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO users(username, password, password_salt) VALUES (%s, %s, %s)", (username, encrypted_password, password_salt))
+            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",(username, password_hex_string, password_salt, email, profession, gender, country_of_origin, disabilities_bool, language, first_name, last_name, date_of_birth))
             conn.commit()
             cur.close()
     return render_template("user/new.html")
@@ -56,7 +72,7 @@ def event_show():
 #Generates a salt for storing passwords
 def generate_password_salt():
     salt_source = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz123456789' 
-    salt_start = random.choice(salt_source)
+    salt = random.choice(salt_source)
     for i in range(15):
         salt += random.choice(salt_source)
     return salt
