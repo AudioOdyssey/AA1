@@ -11,7 +11,15 @@ import UIKit
 class signInViewController: UIViewController {
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var userPasswordTextField: UITextField!
+    // Set the shouldAutorotate to False
+    override open var shouldAutorotate: Bool {
+        return false
+    }
     
+    // Specify the orientation.
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
