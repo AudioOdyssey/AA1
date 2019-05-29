@@ -51,7 +51,7 @@ def session_new():
 def event_show():
     objects = [StoryObject(15, 1, "Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
                 StoryObject(15, 5, "Different Obj", "Constantly Empty", False, 7, False, 0)]
-    return render_template("story/object/show.html", objects=objects)
+    return render_template("story/object/show.html", objects=objects, story_id=1)
 
 #Generates a salt for storing passwords
 def generate_password_salt():
