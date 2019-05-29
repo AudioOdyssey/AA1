@@ -1,0 +1,22 @@
+Pseudocode for execution of events:
+
+if(first time)
+	Read original description
+Else
+	Read short description
+if(Event at location triggered decision)
+	read descrion of event
+if(object at location)
+	offer pickUp
+	userInput()
+
+def description():
+	if(not hidden)
+		if(locked && object)
+			read locked description
+		else
+			read object description
+
+def userInput():
+	description()
+	//offer three or so options
