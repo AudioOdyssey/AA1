@@ -1,3 +1,6 @@
 __pycache__
 env/
-backend/env/
+backend/
+web/venv/
+web/.vscode
+.DS_STORE
