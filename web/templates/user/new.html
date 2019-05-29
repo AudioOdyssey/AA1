@@ -1,5 +1,7 @@
 {% extends "template.html" %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user/new.css') }}" type="text/css"/>
+
 <section class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
@@ -13,7 +15,7 @@
                     <h4 class="alert-heading">Error creating account</h4>
                     <hr>
                     {% for error in errors %}
-                        <p class="mb-0">{{ error }}/p>
+                        <p class="mb-0">{{ error }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -48,12 +50,26 @@
             <h4 style="margin: 0px">Personal Information</h4>
             <hr style="margin-top: 0px">
 
+            <label>Name:</label>
+            <div class="input-group mb-2 row name-row">
+                <input type="text" name="first_name" placeholder="First Name" class="col-sm-6 form-control" required>
+                <input type="text" name="last_name" placeholder="Last Name" class="col-sm-6 form-control">
+            </div>
+
             <label>Email:</label>
             <div class="input-group mb-2 icon-input">
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-at"></i></div>
                 </div>
                 <input type="email" name="email_address" placeholder="Email" class="form-control" required>
+            </div>
+
+            <label>Birthday:</label>
+            <div class="input-group mb-2 icon-input">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-calendar-day"></i></div>
+                </div>
+                <input name="date_of_birth" class="form-control" type="date" required>
             </div>
 
             <label>Country:</label>
@@ -321,87 +337,18 @@
                     <div class="input-group-text"><i class="fas fa-language"></i></div>
                 </div>
                 <select name="language-id" class="form-control">
-                    <option value="AF">Afrikanns</option>
-                    <option value="SQ">Albanian</option>
-                    <option value="AR">Arabic</option>
-                    <option value="HY">Armenian</option>
-                    <option value="EU">Basque</option>
-                    <option value="BN">Bengali</option>
-                    <option value="BG">Bulgarian</option>
-                    <option value="CA">Catalan</option>
-                    <option value="KM">Cambodian</option>
-                    <option value="ZH">Chinese (Mandarin)</option>
-                    <option value="HR">Croation</option>
-                    <option value="CS">Czech</option>
-                    <option value="DA">Danish</option>
-                    <option value="NL">Dutch</option>
-                    <option value="EN">English</option>
-                    <option value="ET">Estonian</option>
-                    <option value="FJ">Fiji</option>
-                    <option value="FI">Finnish</option>
-                    <option value="FR">French</option>
-                    <option value="KA">Georgian</option>
-                    <option value="DE">German</option>
-                    <option value="EL">Greek</option>
-                    <option value="GU">Gujarati</option>
-                    <option value="HE">Hebrew</option>
-                    <option value="HI">Hindi</option>
-                    <option value="HU">Hungarian</option>
-                    <option value="IS">Icelandic</option>
-                    <option value="ID">Indonesian</option>
-                    <option value="GA">Irish</option>
-                    <option value="IT">Italian</option>
-                    <option value="JA">Japanese</option>
-                    <option value="JW">Javanese</option>
-                    <option value="KO">Korean</option>
-                    <option value="LA">Latin</option>
-                    <option value="LV">Latvian</option>
-                    <option value="LT">Lithuanian</option>
-                    <option value="MK">Macedonian</option>
-                    <option value="MS">Malay</option>
-                    <option value="ML">Malayalam</option>
-                    <option value="MT">Maltese</option>
-                    <option value="MI">Maori</option>
-                    <option value="MR">Marathi</option>
-                    <option value="MN">Mongolian</option>
-                    <option value="NE">Nepali</option>
-                    <option value="NO">Norwegian</option>
-                    <option value="FA">Persian</option>
-                    <option value="PL">Polish</option>
-                    <option value="PT">Portuguese</option>
-                    <option value="PA">Punjabi</option>
-                    <option value="QU">Quechua</option>
-                    <option value="RO">Romanian</option>
-                    <option value="RU">Russian</option>
-                    <option value="SM">Samoan</option>
-                    <option value="SR">Serbian</option>
-                    <option value="SK">Slovak</option>
-                    <option value="SL">Slovenian</option>
-                    <option value="ES">Spanish</option>
-                    <option value="SW">Swahili</option>
-                    <option value="SV">Swedish </option>
-                    <option value="TA">Tamil</option>
-                    <option value="TT">Tatar</option>
-                    <option value="TE">Telugu</option>
-                    <option value="TH">Thai</option>
-                    <option value="BO">Tibetan</option>
-                    <option value="TO">Tonga</option>
-                    <option value="TR">Turkish</option>
-                    <option value="UK">Ukranian</option>
-                    <option value="UR">Urdu</option>
-                    <option value="UZ">Uzbek</option>
-                    <option value="VI">Vietnamese</option>
-                    <option value="CY">Welsh</option>
-                    <option value="XH">Xhosa</option>
+                    <option value="1">English</option>
+                    <option value="2">Japanese</option>
+                    <option value="3">Spanish</option>
                 </select>
             </div>
 
             <label>Gender:</label>
             <div class="input-group mb-2">
                 <select class="form-control" name="gender">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                    <option value="0">Other</option>
                 </select>
             </div>
 
