@@ -50,7 +50,7 @@
 </form>
 
 {% for object in objects %}
-<form class="object-main-row" onclick="set_focus({{ object.obj_id }})" method="POST" action="/story/object/update">
+<form class="object-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" value="{{ object.story_id }}" readonly class="hidden-in">
     <input name="obj_id" value="{{ object.obj_id }}" readonly class="hidden-in">
     <input name="story_id" value="{{ object.story_id }}" readonly class="hidden-in">
@@ -58,36 +58,36 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="object-name" onchange="object_changed({{ object.obj_id }})" value="{{ object.obj_name }}">
+                <input class="form-control" type="text" name="object-name" onchange="object_changed(this)" value="{{ object.obj_name }}">
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="object-desc" onchange="object_changed({{ object.obj_id }})" value="The Office">
+                <input class="form-control" type="text" name="object-desc" onchange="object_changed(this)" value="The Office">
             </div>
         </section>
-        <section class="flex-0" onclick="object_show({{ object.obj_id }})">
+        <section class="flex-0" onclick="object_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
-    <section class="row details" id="object_id{{ object.obj_id }}" style="display: none">
+    <section class="row details" style="display: none">
         <hr>
         <label>Description</label>
-        <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed({{ object.obj_id }})">{{ object.obj_description }}</textarea>
+        <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed(this)">{{ object.obj_description }}</textarea>
 
         <label>Pick upable?</label>
         {% if object.can_pickup_obj %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})">
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed(this)">
         {% else %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})" checked>
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed(this)" checked>
         {% endif %}
 
         <br>
 
         <label>Is Hidden? </label>
         {% if object.is_hidden %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})">
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed(this)">
         {% else %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})" checked>
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed(this)" checked>
         {% endif %}
     </section>
 </form>
