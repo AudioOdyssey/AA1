@@ -1,24 +1,22 @@
-function object_show(obj_id) {
-    var elem = document.getElementById("object_id" + obj_id);
+function object_show(activ) {
+    var elem = activ.parentNode.nextElementSibling
     if (elem.style.display == "block")
         elem.style.display = "none";
     else
         elem.style.display = "block";
 }
 
-function set_focus(obj_id) {
-    var elem = document.getElementById("object_id" + obj_id);
+function set_focus(elem) {
     try {
         document.getElementById("active").id = "";
     } catch (err) {
 
     }
-    elem.parentElement.id = "active";
+    elem.id = "active";
 }
 
-function object_changed(obj_id) {
-    var elem = document.getElementById("object_id" + obj_id);
-    elem.parentElement.submit()
+function object_changed(elem) {
+    elem.form.submit()
 }
 
 function add_btn_pressed() {
