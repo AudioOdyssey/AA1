@@ -50,11 +50,9 @@ def user_new():
         last_name = details['last_name']
         date_of_birth = datetime.strptime(details['date_of_birth'], '%Y-%m-%d')
         password_salt = generate_password_salt()
-        password = raw_password + password_salt 
-        encrypted_password = hashlib.sha256(password.encode()).digest()
-        password_hex_string = binascii.b2a_hex(encrypted_password)
+        encrypted_password = encrypt_password(raw_password, password_salt)
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",(username, password_hex_string, password_salt, email, profession, gender, country_of_origin, disabilities_bool, language, first_name, last_name, date_of_birth))
+            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",(username, encrypted_password, password_salt, email, profession, gender, country_of_origin, disabilities_bool, language, first_name, last_name, date_of_birth))
             conn.commit()
             cur.close()
     return render_template("user/new.html")
@@ -76,3 +74,9 @@ def generate_password_salt():
     for i in range(15):
         salt += random.choice(salt_source)
     return salt
+
+def encrypt_password(raw_password, password_salt):
+    password = raw_password + password_salt 
+    encrypted_password = hashlib.sha256(password.encode()).digest()
+    password_hex_string = binascii.b2a_hex(encrypted_password)
+    return password_hex_string
