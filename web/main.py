@@ -57,8 +57,17 @@ def user_new():
             cur.close()
     return render_template("user/new.html")
 
-@app.route("/session/new")
+@app.route("/session/new", methods =['POST'])
 def session_new():
+    if request.method == 'POST':
+        conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db = db_name, connect_timeout = 5)
+        details = request.form
+        user_identifier = details['username']
+        password = details['password']
+        if "@" in user_identifier or ".com" in user_identifier:
+            pass
+        else:
+            pass
     return render_template("session/new.html")
 
 @app.route("/story/object/show")
