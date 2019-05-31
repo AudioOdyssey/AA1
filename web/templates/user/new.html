@@ -11,13 +11,13 @@
             <p>Already have an account? <a href="/session/new">Login</a></p>
 
             {% if err %}
-                <div class="alert alert-danger" role="alert">
-                    <h4 class="alert-heading">Error creating account</h4>
-                    <hr>
-                    {% for error in errors %}
-                        <p class="mb-0">{{ error }}</p>
-                    {% endfor %}
-                </div>
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error creating account</h4>
+                <hr>
+                {% for error in errors %}
+                    <p class="mb-0">{{ error }}</p>
+                {% endfor %}
+            </div>
             {% endif %}
             
             <h4 style="margin: 0px">Account Information</h4>
