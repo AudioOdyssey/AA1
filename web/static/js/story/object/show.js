@@ -23,8 +23,9 @@ function add_btn_pressed(story_id) {
     var template = document.getElementById("obj-template");
     var newelem = template.cloneNode(true);
     newelem.id = "";
+    newelem.classList.add("object-main-row");
     newelem.childNodes[0].value = story_id;
-    document.getElementById("main-site").insertBefore(newelem, template);
+    document.getElementById("main-site").insertBefore(newelem, document.getElementById("content-marker"));
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
