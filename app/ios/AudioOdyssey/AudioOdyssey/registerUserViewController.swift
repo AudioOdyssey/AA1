@@ -7,10 +7,34 @@
 //
 
 import UIKit
+import CountryPickerView
 
-class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, CountryPickerViewDelegate, CountryPickerViewDataSource{
     
+    func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {}
+    func preferredCountries(in countryPickerView: CountryPickerView) -> [Country]{
+        
+            var countries = [Country]()
+            ["US", "CA", "MX"].forEach { code in
+                if let country = countryPickerView.getCountryByCode(code) {
+                    countries.append(country)
+                }
+            }
+            return countries
+        }
+    func cellImageViewCornerRadius(in countryPickerView: CountryPickerView) -> CGFloat{
+        return 1
+    }
+    func sectionTitleForPreferredCountries(in countryPickerView: CountryPickerView) -> String?{
+        return "Active Countries"
+    }
     
+    func navigationTitle(in countryPickerView: CountryPickerView) -> String?{
+        return "Choose a Country:"
+    }
+
+    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailAddressTextField: UITextField!
@@ -19,6 +43,31 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var picker: UIPickerView!
     @IBOutlet weak var countryPicker: UIPickerView!
+    @IBOutlet weak var genderSegment: UISegmentedControl!
+    @IBAction func genderChanged(_ sender: UISegmentedControl) {
+        switch genderSegment.selectedSegmentIndex {
+        case 0:
+            print("first segement clicked")
+        case 1:
+            print("second segment clicked")
+        case 2:
+            print("third segemnet clicked")
+        default:
+            break;
+        }  //Switch
+    }
+    @IBAction func datePicker(_ sender: Any) {
+        // First we need to create a new instance of the NSDateFormatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        // Now we specify the display format, e.g. "27-08-2015
+    }
+    @IBOutlet weak var lblDisplayDate: UILabel!
+    
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var countryPickerView: CountryPickerView!
+    
     
     var pickerData: [String] = [String]()
     
@@ -34,7 +83,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         
         return arrayOfCountries
     }()
-   
+ 
     // Set the shouldAutorotate to False
     override open var shouldAutorotate: Bool {
         return false
@@ -46,16 +95,44 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height+240)
+        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height+460)
         // Connect data:
         self.picker.delegate = self
         self.picker.dataSource = self
-        self.countryPicker.delegate = self
-        self.countryPicker.dataSource = self
-        
+        countryPickerView.delegate = self
+        countryPickerView.dataSource = self
+        cancelButton.layer.cornerRadius = 10
+        cancelButton.clipsToBounds = true
+        signUpButton.layer.cornerRadius = 10
+        signUpButton.clipsToBounds = true
+        self.firstNameTextField.delegate = self
+        self.lastNameTextField.delegate = self
+        self.passwordTextField.delegate = self
+        self.repeatPasswordTextField.delegate = self
+        self.emailAddressTextField.delegate = self
+        countryPickerView.showPhoneCodeInView = false
+        //countryPickerView.showCountryCodeInView = true
+        self.usernameTextField.delegate = self
         pickerData = ["English","Español","日本人"]
 
     }
+    //Hide keyboard
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+
+    //presses return key
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        firstNameTextField.resignFirstResponder()
+        lastNameTextField.resignFirstResponder()
+        emailAddressTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        repeatPasswordTextField.resignFirstResponder()
+
+        usernameTextField.resignFirstResponder()
+        return (true)
+    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -75,7 +152,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
             return countries[row]
         }
     }
-   
+  
     
     @IBAction func cancelButtonTapped(_ sender: Any) {
         print("cancel button tapped")
@@ -85,7 +162,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         print("sign up button tapped")
         
         // validate required fields are filled
-        if(firstNameTextField.text?.isEmpty)! || (lastNameTextField.text?.isEmpty)! || (emailAddressTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)!
+        if(firstNameTextField.text?.isEmpty)! || (lastNameTextField.text?.isEmpty)! || (emailAddressTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)! || (usernameTextField.text?.isEmpty)! || (genderSegment.selectedSegmentIndex == -1)
         {
             //display error message and return
             displayMessage(userMessage: "All Fields are Required")
@@ -124,6 +201,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
                           "last_name": lastNameTextField.text!,
                           "email_address": emailAddressTextField.text!,
                           "password": passwordTextField.text!,
+                          "username": usernameTextField.text!
                           ] as [String: String]
         
         do {
@@ -190,8 +268,6 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
                 activityIndicator.removeFromSuperview()
         }
     }
-    
-    
     
     func displayMessage(userMessage:String) -> Void {
         DispatchQueue.main.async

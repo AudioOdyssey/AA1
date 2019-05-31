@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.388693"
+            timestampString = "581025904.725969"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.3893861"
+            timestampString = "581025904.726788"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.389755"
+            timestampString = "581025904.727386"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
             <Locations>
@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.390106"
+            timestampString = "581025904.727922"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.390445"
+            timestampString = "581025904.728573"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -218,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.390774"
+            timestampString = "581025904.729335"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.391103"
+            timestampString = "581025904.729826"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "251"
+            endingLineNumber = "251"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.391428"
+            timestampString = "581025904.730227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioOdyssey/registerUserViewController.swift"
-            timestampString = "580853439.3917511"
+            timestampString = "581025904.730642"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
             landmarkName = "signUpButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
