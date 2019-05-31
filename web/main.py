@@ -71,6 +71,14 @@ def event_show():
                 StoryObject(15, 5, "Different Obj", "Constantly Empty", False, 7, False, 0)]
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
 #Generates a salt for storing passwords
 def generate_password_salt():
     salt_source = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz123456789' 
