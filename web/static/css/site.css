@@ -89,6 +89,8 @@ lable {
 	margin-right: 0px;
 	padding: 0px;
 }
-.signin{
+#signin{
 	width: 80%;
+	margin:0 auto;
+	margin-top: 20px;
 }
