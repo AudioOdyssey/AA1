@@ -7,7 +7,7 @@
     <button type="button" onclick="add_btn_pressed({{ story_id }})" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
-<form id="obj-template" class="object-main-row" method="POST" action="/story/object/update">
+<form id="obj-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" readonly class="hidden-in">
     <input name="obj_id" readonly class="hidden-in">
     <section class="object-row row">
@@ -21,7 +21,7 @@
                 <input class="form-control" type="text" name="object-desc" value="The Office">
             </div>
         </section>
-        <section class="flex-0">
+        <section class="flex-0" onclick="object_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
@@ -39,6 +39,8 @@
         <input type="checkbox" autocomplete="off" name="can_pickup_obj">
     </section>
 </form>
+
+<div id="content-marker"></div>
 
 {% for object in objects %}
 <form class="object-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
