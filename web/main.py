@@ -2,7 +2,7 @@ from models.storyobject import StoryObject
 
 from flask import Flask, render_template, request
 
-from flask_login import LoginManager
+#from flask_login import LoginManager
 
 import pymysql
 import sys
