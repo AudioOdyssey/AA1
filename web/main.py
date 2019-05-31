@@ -2,7 +2,7 @@ from models.storyobject import StoryObject
 
 from flask import Flask, render_template, request
 
-from flask_login import LoginManager
+#from flask_login import LoginManager
 
 import pymysql
 import sys
@@ -61,8 +61,8 @@ def user_new():
 
 @app.route("/session/new", methods =['GET', 'POST'])
 def session_new():
-    login_manager = LoginManager()
-    login_manager.init_app(app)
+    #login_manager = LoginManager()
+    #login_manager.init_app(app)
     return render_template("session/new.html")
 
 @app.route("/story/object/show")
