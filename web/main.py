@@ -2,11 +2,13 @@ from models.storyobject import StoryObject
 
 from flask import Flask, render_template, request
 
+from flask_login import LoginManager
+
 import pymysql
 import sys
 
 import random
-import hashlib 
+import hashlib
 import binascii
 
 from datetime import datetime
@@ -57,17 +59,10 @@ def user_new():
             cur.close()
     return render_template("user/new.html")
 
-@app.route("/session/new", methods =['POST'])
+@app.route("/session/new", methods =['GET', 'POST'])
 def session_new():
-    if request.method == 'POST':
-        conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db = db_name, connect_timeout = 5)
-        details = request.form
-        user_identifier = details['username']
-        password = details['password']
-        if "@" in user_identifier or ".com" in user_identifier:
-            pass
-        else:
-            pass
+    login_manager = LoginManager()
+    login_manager.init_app(app)
     return render_template("session/new.html")
 
 @app.route("/story/object/show")
