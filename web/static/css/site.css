@@ -2,21 +2,22 @@ html {
     height: 100%;
 }
 body {
-	background-color: #073884 /* #e9ecef */;
+	background-color: #734f96 /* #e9ecef */;
 	
 	display: flex;
   	flex-flow: column;
   	min-height: 100%;
 }
 header {
-	flex: 0 1 auto
+	flex: 0 1 auto;
 }
 .navbar {
-	box-shadow: 0 0 4px 4px RGBA(50, 50, 50, 0.5);
+	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
+	background-color: #dcd0ff;
 }
 .footer {
-	box-shadow: 0 0 4px 4px RGBA(50, 50, 50, 0.5);
-	background-color: white;
+	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
+	background-color: #dcd0ff;
 	padding-top: 2em;
 	padding-bottom: 2em;
 	display: block;
@@ -32,12 +33,11 @@ header {
 	text-align: right;
 }
 #main-site {
-	box-shadow: 0 0 4px 4px RGBA(50, 50, 50, 0.5);
+	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
 	padding: 2em;
-	background-color: #ffffff;
+	background-color: #fffff1;
   	margin: 2em auto;
   	min-height: 100%;
-  	
   	flex: 1 1 auto;
 }
 .ml-auto {
@@ -58,7 +58,7 @@ lable {
 	font-weight: bold;
 }
 .input-group-text {
-	background-color: #fff;
+	background-color: #dcd0ff;
 	border-right: 0px;
 	color: #888;
 }
@@ -66,13 +66,31 @@ lable {
 	border-left: 0px;
 }
 .btn-primary {
-	background-color: #073884;
+	background-color: #734f96;
 	color: #fff;
+	border-color: #dcd0ff;
+}
+.btn-primary:hover {
+	background-color: #dcd0ff;  
+	border-color: #dcd0ff;
 }
 .form-control {
 	transition: box-shadow 0.35s, border 0.35s !important;
+	background-color: #dcd0ff;
 }
 .form-control:focus {
 	border: 0px;
-	box-shadow: 0 0 0.2rem 0.2rem RGBA(7, 56, 132, .5);
+	box-shadow: 0 0 0.2rem 0.2rem RGBA(160, 153, 168, .5);
+}
+.logo{
+	width:100%;
+	margin-left:0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	padding: 0px;
+}
+#signin{
+	width: 80%;
+	margin:0 auto;
+	margin-top: 20px;
 }

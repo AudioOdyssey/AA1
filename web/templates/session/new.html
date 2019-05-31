@@ -6,13 +6,11 @@
         <form method="post">
             <h2>Login</h2>
                 
-            {% if err %}
+            {% if error is not None %}
                 <div class="alert alert-danger" role="alert">
-                    <h4 class="alert-heading">Error creating account</h4>
+                    <h4 class="alert-heading">Error logging in</h4>
                     <hr>
-                    {% for error in errors %}
-                        <p class="mb-0">{{ error }}/p>
-                    {% endfor %}
+                    <p class="mb-0">{{ error }}/p>
                 </div>
             {% endif %}
 
