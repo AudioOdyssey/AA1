@@ -1,6 +1,96 @@
 {% extends "template.html" %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/update.css') }}" type="text/css"/>
 
+<section id="3-left-rows">
+    <section class="1-3-left-row">
+        <!-- Summary Row -->
+        <h3>Story Summary</h3>
+        <hr>
 
+        <form id="edit-story-details" method="POST" action="/story/update">
+            <div class="form-group update-form-group">
+                <label>Title:</label>
+                <input class="form-control col" type="text" name="story_title" placeholder="Story Title...">
+            </div>
+            <div class="form-group update-form-group">
+                <label>Synopsis:</label>
+                <textarea class="form-control" name="story_synopsis" placeholder="Story Synopsis..." rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Genre:</label>
+                <select class="form-control" name="genre">
+                    <option value="" selected disabled>Select a genre...</option>
+                    <option value="Mystery">Mystery</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Historical Fiction">Historical Fiction</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Horror">Horror</option>
+                    <option value="True Crime">True Crime</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Suspense">Suspense</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                    <option value="Other Fiction">Other Fiction</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input class="form-control" type="number" step="0.01" name="story_price" placeholder="Price in USD">
+            </div>
 
-{% end block %}
+            <div class="form-group">
+                <label>Length:</label>
+                <input class="form-control" type="number" step="1" name="story_length" placeholder="Number of Hours">
+            </div>
+        </form>
+    </section>
+
+    <!-- Object Row -->
+    <h3>Objects</h3>
+    <hr>
+    <section class="row 1-3-left-row">
+        {% for object in objects[:2] %}
+        <a class="col-sm-4 small-card" href="/story/object/show?story={{ object.story_id }}&highlight={{ object.obj_id }}">
+            <h4>{{ object.obj_name }}</h4>
+            <hr>
+            <h5>{{ object.obj_starting_loc_name }}</h5>
+            <p>{{ object.obj_description }}</p>
+        </a>
+        {% endfor %}
+    </section>
+
+    <!-- Event Row -->
+    <h3>Events</h3>
+    <hr>
+    <section class="row 1-3-left-row">
+        {% for event in events[:2] %}
+        <a class="col-sm-4 small-card" href="/story/event/show?story={{ event.story_id }}&highlight={{ event.event_id }}">
+            <h4>{{ event.event_name }}</h4>
+            <hr>
+            <h5>{{ event.event_location_name }}</h5>
+            <p>{{ event.event_description }}</p>
+        </a>
+        {% endfor %}
+    </section>
+</section>
+<section id="1-right-col">
+    <!-- Locations Row -->
+    <h3>Locations</h3>
+    <hr>
+    <section class="row">
+        {% for location in locations %}
+        <a class="col-sm-4 small-card" href="/story/location/show?location={{ location.location_id }}">
+            <h4>{{ location.location_name }}</h4>
+            <hr>
+            <p>{{ location.short_description }}</p>
+        </a>
+        {% endfor %}
+    </section>
+</section>
+
+{% endblock %}
