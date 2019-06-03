@@ -72,6 +72,7 @@ def session_new():
             cur.execute(("SELECT * FROM users WHERE 'username' = %s"), username)
             result = cur.fetchone()
             if(result['username'] is None):
+                pass
     return render_template("session/new.html")
 
 @app.route("/story/show")
