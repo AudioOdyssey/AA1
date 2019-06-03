@@ -1,6 +1,31 @@
 {% extends "template.html" %}
 {% block content %}
 
+<section id="3-left-rows">
+    <section class="row 1-3-left-row">
+        <!-- Summary Row -->
+        <form id="edit-story-details" method="POST" action="/story/update">
+            <div class="form-group row update-form-group">
+                <label>Title:</label>
+                <input class="form-control col" type="text" name="story_title" placeholder="Story Title...">
+            </div>
+            <div class="form-group row update-form-group">
+                <label>Synopsis:</label>
+                <textarea class="form-control col" name="story_synopsis" placeholder="Story Synopsis..." rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Genre:</label>
+            </div>
+        </form>
+    </section>
+    <section class="row 1-3-left-row">
+        <!-- Object Row -->
+    </section>
+    <section class="row 1-3-left-row">
+        <!-- Event Row -->
+    </section>
+</section>
+<section id="1-right-col">
+</section>
 
-
-{% end block %}
+{% endblock %}

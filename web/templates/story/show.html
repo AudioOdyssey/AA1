@@ -4,10 +4,11 @@
     <h2 id = "mystory">My Stories:</h2>
     <div class="row">
         {% for story in stories %}
-        <div class="col-sm-4">
+        <div class="col-sm-4 storycard">
             <h3>{{ story.story_title }}</h3>
         </div>
         {% endfor %}
     </div>
+
 
 {% endblock %}
