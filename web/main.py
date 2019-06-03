@@ -90,6 +90,10 @@ def session_new():
 def story_show():
     return render_template("story/show.html")
 
+@app.route("/story/update")
+def story_show():
+    return render_template("story/update.html")
+
 @app.route("/story/object/show")
 def event_show():
     objects = [StoryObject(15, 1, "Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
