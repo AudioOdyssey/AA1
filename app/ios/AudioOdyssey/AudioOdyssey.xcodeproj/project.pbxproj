@@ -66,7 +66,6 @@
 		B02797482298A5BD003C08ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B02797542298B055003C08ED /* signInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signInViewController.swift; sourceTree = "<group>"; };
 		B0CF6C5B229DB8ED0074E7EC /* iOSDropDown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = iOSDropDown.swift; path = ../../../../../iOSDropDown.swift; sourceTree = "<group>"; };
-		B0F0143522A1A3C00026B3DA /* AudioOdyssey-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AudioOdyssey-Bridging-Header.h"; sourceTree = "<group>"; };
 		BA967E5C19B42DD1C0D62D72 /* Pods_AudioOdyssey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioOdyssey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -156,7 +155,6 @@
 				B02797542298B055003C08ED /* signInViewController.swift */,
 				B0161405229A2F65004506F6 /* registerUserViewController.swift */,
 				B0161407229A32D6004506F6 /* homePageViewController.swift */,
-				B0F0143522A1A3C00026B3DA /* AudioOdyssey-Bridging-Header.h */,
 			);
 			path = AudioOdyssey;
 			sourceTree = "<group>";

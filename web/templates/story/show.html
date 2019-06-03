@@ -1,4 +1,13 @@
 {% extends "template.html" %}
 {% block content %}
+   <a  href= "/story/update"> <button id = "createstory" class= "btn-primary">Create Story</button></a>
+    <h2 id = "mystory">My Stories:</h2>
+    <div class="row">
+        {% for story in stories %}
+        <div class="col-sm-4">
+            <h3>{{ story.story_title }}</h3>
+        </div>
+        {% endfor %}
+    </div>
 
-{% end block %}
+{% endblock %}

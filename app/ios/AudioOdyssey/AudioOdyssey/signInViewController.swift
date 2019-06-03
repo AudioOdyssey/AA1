@@ -24,9 +24,9 @@ class signInViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerButton.layer.cornerRadius = 10
+        registerButton.layer.cornerRadius = 6
         registerButton.clipsToBounds = true
-        signInButton.layer.cornerRadius = 10
+        signInButton.layer.cornerRadius = 6
         signInButton.clipsToBounds = true
         // Do any additional setup after loading the view.
     }
