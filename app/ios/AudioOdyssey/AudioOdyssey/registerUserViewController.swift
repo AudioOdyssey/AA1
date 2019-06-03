@@ -11,9 +11,9 @@ import CountryPickerView
 
 class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, CountryPickerViewDelegate, CountryPickerViewDataSource{
     
+    //Country Picker View functions
     func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {}
     func preferredCountries(in countryPickerView: CountryPickerView) -> [Country]{
-        
             var countries = [Country]()
             ["US", "CA", "MX"].forEach { code in
                 if let country = countryPickerView.getCountryByCode(code) {
@@ -22,6 +22,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
             }
             return countries
         }
+    
     func cellImageViewCornerRadius(in countryPickerView: CountryPickerView) -> CGFloat{
         return 1
     }
@@ -32,7 +33,8 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     func navigationTitle(in countryPickerView: CountryPickerView) -> String?{
         return "Choose a Country:"
     }
-
+    
+    //Outlet declarations
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -42,8 +44,13 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var repeatPasswordTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var picker: UIPickerView!
-    @IBOutlet weak var countryPicker: UIPickerView!
+    @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var genderSegment: UISegmentedControl!
+    @IBOutlet weak var lblDisplayDate: UILabel!
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var countryPickerView: CountryPickerView!
+    
+    //Gender Selector
     @IBAction func genderChanged(_ sender: UISegmentedControl) {
         switch genderSegment.selectedSegmentIndex {
         case 0:
@@ -56,21 +63,23 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
             break;
         }  //Switch
     }
+    //Date Picker
     @IBAction func datePicker(_ sender: Any) {
-        // First we need to create a new instance of the NSDateFormatter
+        // create a new instance of the NSDateFormatter
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
-        // Now we specify the display format, e.g. "27-08-2015
+        let strDate = dateFormatter.string(from: datePicker.date)
+        // Finally we set the text of the label to our new string with the date
+        lblDisplayDate.text = strDate
     }
-    @IBOutlet weak var lblDisplayDate: UILabel!
+  
     
-    @IBOutlet weak var usernameTextField: UITextField!
-    @IBOutlet weak var countryPickerView: CountryPickerView!
-    
-    
+
+        //java.sql.Date sqlDate =java.sql.Date.valueOf(datepicker.getValue());
+
+    //Country Picker View/Parse Country data
     var pickerData: [String] = [String]()
-    
     var countries: [String] = {
         
         var arrayOfCountries: [String] = []
@@ -83,60 +92,59 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         
         return arrayOfCountries
     }()
- 
+    
     // Set the shouldAutorotate to False
     override open var shouldAutorotate: Bool {
         return false
     }
-
-    // Specify the orientation.
+    // Locking the orientation.
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height+460)
-        // Connect data:
-        self.picker.delegate = self
-        self.picker.dataSource = self
-        countryPickerView.delegate = self
-        countryPickerView.dataSource = self
-        cancelButton.layer.cornerRadius = 10
-        cancelButton.clipsToBounds = true
-        signUpButton.layer.cornerRadius = 10
-        signUpButton.clipsToBounds = true
-        self.firstNameTextField.delegate = self
-        self.lastNameTextField.delegate = self
-        self.passwordTextField.delegate = self
-        self.repeatPasswordTextField.delegate = self
-        self.emailAddressTextField.delegate = self
-        countryPickerView.showPhoneCodeInView = false
-        //countryPickerView.showCountryCodeInView = true
-        self.usernameTextField.delegate = self
-        pickerData = ["English","Español","日本人"]
-
+        //Scroll view sizing
+            scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height+390)
+        //Delegations
+            self.firstNameTextField.delegate = self
+            self.lastNameTextField.delegate = self
+            self.passwordTextField.delegate = self
+            self.repeatPasswordTextField.delegate = self
+            self.emailAddressTextField.delegate = self
+            self.picker.delegate = self
+            self.usernameTextField.delegate = self
+            countryPickerView.delegate = self
+        //Picker Data Sources
+            self.picker.dataSource = self
+            countryPickerView.dataSource = self
+        //Button/Picker Formatting
+            cancelButton.layer.cornerRadius = 6
+            cancelButton.clipsToBounds = true
+            signUpButton.layer.cornerRadius = 6
+            signUpButton.clipsToBounds = true
+            countryPickerView.showPhoneCodeInView = false
+        //Language Data for Picker
+            pickerData = ["English","Español","日本人"]
     }
+
     //Hide keyboard
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-
-    //presses return key
+    //Return key kills keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         firstNameTextField.resignFirstResponder()
         lastNameTextField.resignFirstResponder()
         emailAddressTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         repeatPasswordTextField.resignFirstResponder()
-
         usernameTextField.resignFirstResponder()
         return (true)
     }
-    
+    //Language Picker Components and Counter
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView.tag == 1{
         return pickerData.count
@@ -144,16 +152,16 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         else{
             return countries.count
         }
-        }
+    }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView.tag == 1{
-        return pickerData[row]
+            return pickerData[row]
         }else{
             return countries[row]
         }
     }
-  
     
+    //Button Functions
     @IBAction func cancelButtonTapped(_ sender: Any) {
         print("cancel button tapped")
         self.dismiss(animated: true, completion: nil)
@@ -286,6 +294,4 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
                 self.present(alertController, animated: true, completion:nil)
         }
     }
-    
 }
-
