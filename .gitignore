@@ -1,6 +1,6 @@
 __pycache__
-env/
-backend/env/
+env
 .DS_STORE
 .vscode
 venv
+~$*

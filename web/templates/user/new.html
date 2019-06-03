@@ -11,13 +11,13 @@
             <p>Already have an account? <a href="/session/new">Login</a></p>
 
             {% if err %}
-                <div class="alert alert-danger" role="alert">
-                    <h4 class="alert-heading">Error creating account</h4>
-                    <hr>
-                    {% for error in errors %}
-                        <p class="mb-0">{{ error }}</p>
-                    {% endfor %}
-                </div>
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error creating account</h4>
+                <hr>
+                {% for error in errors %}
+                    <p class="mb-0">{{ error }}</p>
+                {% endfor %}
+            </div>
             {% endif %}
             
             <h4 style="margin: 0px">Account Information</h4>
@@ -28,7 +28,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-user"></i></div>
                 </div>
-                <input type="text" name="username" placeholder="Username" class="form-control" required>
+                <input type="text" name="username" placeholder="Username" class="form-control" autocomplete="username" required>
             </div>
 
             <label>Password:</label>
@@ -36,7 +36,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-key"></i></div>
                 </div>
-                <input type="password" name="password" placeholder="Password" class="form-control" required>
+                <input type="password" name="password" placeholder="Password" class="form-control" autocomplete="new-password" required>
             </div>
                 
             <label>Confirm Password:</label>
@@ -44,7 +44,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-key"></i></div>
                 </div>
-                <input type="password" name="password_confirm" placeholder="Password" class="form-control" required>
+                <input type="password" name="password_confirm" placeholder="Password" class="form-control" autocomplete="new-password" required>
             </div>
 
             <h4 style="margin: 0px">Personal Information</h4>
@@ -52,8 +52,8 @@
 
             <label>Name:</label>
             <div class="input-group mb-2 row name-row">
-                <input type="text" name="first_name" placeholder="First Name" class="col-sm-6 form-control" required>
-                <input type="text" name="last_name" placeholder="Last Name" class="col-sm-6 form-control">
+                <input type="text" name="first_name" placeholder="First Name" class="col-sm-6 form-control" autocomplete="given-name" required>
+                <input type="text" name="last_name" placeholder="Last Name" class="col-sm-6 form-control" autocomplete="family-name">
             </div>
 
             <label>Email:</label>
@@ -61,7 +61,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-at"></i></div>
                 </div>
-                <input type="email" name="email_address" placeholder="Email" class="form-control" required>
+                <input type="email" name="email_address" placeholder="Email" class="form-control" autocomplete="email" required>
             </div>
 
             <label>Birthday:</label>
@@ -69,7 +69,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-calendar-day"></i></div>
                 </div>
-                <input name="date_of_birth" class="form-control" type="date" required>
+                <input name="date_of_birth" class="form-control" type="date" autocomplete="bday" required>
             </div>
 
             <label>Country:</label>
@@ -77,7 +77,12 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
                 </div>
-                <select name="country_of_origin" class="form-control">
+                <select name="country_of_origin" class="form-control" autocomplete="country-name">
+                    <option value="" selected disabled>Select your Country...</option>
+                    <option value="124">Canada</option>
+                    <option value="484">Mexico</option>
+                    <option value="840">United States</option>
+                    <option value="" disabled>-----</option>
                     <option value="4">Afghanistan</option>
                     <option value="248">Åland Islands</option>
                     <option value="8">Albania</option>
@@ -117,7 +122,6 @@
                     <option value="108">Burundi</option>
                     <option value="116">Cambodia</option>
                     <option value="120">Cameroon</option>
-                    <option value="124">Canada</option>
                     <option value="132">Cape Verde</option>
                     <option value="136">Cayman Islands</option>
                     <option value="140">Central African Republic</option>
@@ -221,7 +225,6 @@
                     <option value="478">Mauritania</option>
                     <option value="480">Mauritius</option>
                     <option value="175">Mayotte</option>
-                    <option value="484">Mexico</option>
                     <option value="583">Micronesia, Federated States of</option>
                     <option value="498">Moldova, Republic of</option>
                     <option value="492">Monaco</option>
@@ -313,7 +316,6 @@
                     <option value="804">Ukraine</option>
                     <option value="784">United Arab Emirates</option>
                     <option value="826">United Kingdom</option>
-                    <option value="840">United States</option>
                     <option value="581">United States Minor Outlying Islands</option>
                     <option value="858">Uruguay</option>
                     <option value="860">Uzbekistan</option>
@@ -336,7 +338,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-language"></i></div>
                 </div>
-                <select name="language-id" class="form-control">
+                <select name="language-id" class="form-control" autocomplete="language">
                     <option value="1">English</option>
                     <option value="2">Japanese</option>
                     <option value="3">Spanish</option>
@@ -345,7 +347,7 @@
 
             <label>Gender:</label>
             <div class="input-group mb-2">
-                <select class="form-control" name="gender">
+                <select class="form-control" name="gender" autocomplete="sex">
                     <option value="1">Male</option>
                     <option value="2">Female</option>
                     <option value="0">Other</option>
@@ -354,7 +356,7 @@
 
             <label>Profession:</label>
             <div class="input-group mb-2">
-                <select class="form-control" name="profession">
+                <select class="form-control" name="profession" autocomplete="off">
                     <option value="trucker">Professional Driver</option>
                     <option value="doctor">Healthcare Professional</option>
                     <option value="other">Other</option>
