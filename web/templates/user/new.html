@@ -10,7 +10,7 @@
             
             <p>Already have an account? <a href="/session/new">Login</a></p>
 
-            {% if error is not None %}
+            {% if error %}
             <div class="alert alert-danger" role="alert">
                 <h4 class="alert-heading">Error creating account</h4>
                 <hr>

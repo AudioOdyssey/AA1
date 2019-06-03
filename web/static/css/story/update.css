@@ -1,3 +1,14 @@
 .update-form-group {
     align-items: center;
 }
+.small-card {
+    background: white;
+    border-radius: 10px;
+    margin: 0.25em;
+    border: 1px solid lightgrey;
+    padding: 0.5em;
+}
+a,a:hover {
+    text-decoration: none;
+    color: black;
+}
