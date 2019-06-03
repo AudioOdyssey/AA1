@@ -86,9 +86,9 @@ def session_new():
                     error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
-#@app.route("/story/show")
-#def story_show():
-#    return render_template("story/show.html", stories=stories)
+@app.route("/story/show")
+def story_show():
+    return render_template("story/show.html")
 
 @app.route("/story/object/show")
 def event_show():
