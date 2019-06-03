@@ -1,10 +1,12 @@
 from models.storyobject import StoryObject
+from models.User import User
+#from models.story import Story
+from flask import Flask, redirect, render_template, request, session, url_for
 
-from flask import Flask, render_template, request
-
-#from flask_login import LoginManager
+from flask_login import LoginManager
 
 import pymysql
+import pymysql.cursors
 import sys
 
 import random
@@ -14,6 +16,10 @@ import binascii
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 REGION = 'us-east-2b'
 
@@ -34,7 +40,6 @@ def home():
 @app.route("/user/new", methods=['GET', 'POST'])
 def user_new():
     if request.method == "POST":
-        conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5)
         details = request.form 
         username = details['username']
         raw_password = details['password']
@@ -51,19 +56,41 @@ def user_new():
         first_name = details['first_name']
         last_name = details['last_name']
         date_of_birth = datetime.strptime(details['date_of_birth'], '%Y-%m-%d')
-        password_salt = generate_password_salt()
-        encrypted_password = encrypt_password(raw_password, password_salt)
-        with conn.cursor() as cur:
-            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",(username, encrypted_password, password_salt, email, profession, gender, country_of_origin, disabilities_bool, language, first_name, last_name, date_of_birth))
-            conn.commit()
-            cur.close()
+        usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
+                profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth, 
+                first_name_input=first_name, last_name_input=last_name, language=language)
+        usr.add_to_server()
+        #flash("Successful login!")
     return render_template("user/new.html")
 
 @app.route("/session/new", methods =['GET', 'POST'])
 def session_new():
-    # login_manager = LoginManager()
-    # slogin_manager.init_app(app)
+    error = None
+    if request.method == 'POST':
+        conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, 
+                                cursorclass = pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            details = request.form
+            username = details['username']
+            cur.execute(("SELECT * FROM users WHERE username = %s"), username)
+            result = cur.fetchone()
+                pass
     return render_template("session/new.html")
+
+@app.route("/story/show")
+def story_show():
+            if(result is None):
+                error = "Username and/or password not valid"
+            else:
+                usr = load_user(str(result['user_id']).encode('utf-8').decode('utf-8'))
+                is_authenticated = usr.authenticate(details['password'])
+                if(is_authenticated):
+                    session['username'] = username
+                    return redirect(url_for("home"))
+                else:
+                    error = "Username and/or password not valid"
+    return render_template("session/new.html", error=error)
+
 
 @app.route("/story/object/show")
 def event_show():
@@ -79,16 +106,7 @@ def about():
 def contact():
     return render_template("contact.html")
 
-#Generates a salt for storing passwords
-def generate_password_salt():
-    salt_source = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz123456789' 
-    salt = random.choice(salt_source)
-    for i in range(15):
-        salt += random.choice(salt_source)
-    return salt
-
-def encrypt_password(raw_password, password_salt):
-    password = raw_password + password_salt 
-    encrypted_password = hashlib.sha256(password.encode()).digest()
-    password_hex_string = binascii.b2a_hex(encrypted_password)
-    return password_hex_string
+@login_manager.user_loader
+def load_user(user_id):
+    usr = User()
+    return usr.get(user_id)

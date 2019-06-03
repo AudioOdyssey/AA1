@@ -11,6 +11,8 @@ import UIKit
 class signInViewController: UIViewController {
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var userPasswordTextField: UITextField!
+    @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var registerButton: UIButton!
     // Set the shouldAutorotate to False
     override open var shouldAutorotate: Bool {
         return false
@@ -22,12 +24,16 @@ class signInViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        registerButton.layer.cornerRadius = 10
+        registerButton.clipsToBounds = true
+        signInButton.layer.cornerRadius = 10
+        signInButton.clipsToBounds = true
         // Do any additional setup after loading the view.
     }
     
     @IBAction func signInButtonTapped(_ sender: Any) {
         print("sign in button tapped")
+        
     }
     
     @IBAction func registerNewAccountButtonTapped(_ sender: Any) {
@@ -39,14 +45,4 @@ class signInViewController: UIViewController {
         self.present(registerViewController, animated: true)
         
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
