@@ -13,7 +13,7 @@ header {
 }
 .navbar {
 	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
-	background-color: #dcd0ff;
+	background-color: #fffff1;
 }
 .footer {
 	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
@@ -35,7 +35,7 @@ header {
 #main-site {
 	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
 	padding: 2em;
-	background-color: #fffff1;
+	background-color: #dcd0ff;
   	margin: 2em auto;
   	min-height: 100%;
   	flex: 1 1 auto;
@@ -58,7 +58,7 @@ lable {
 	font-weight: bold;
 }
 .input-group-text {
-	background-color: #dcd0ff;
+	background-color: #fffff1;
 	border-right: 0px;
 	color: #888;
 }
@@ -67,16 +67,17 @@ lable {
 }
 .btn-primary {
 	background-color: #734f96;
-	color: #fff;
+	color: #fffff1;
 	border-color: #dcd0ff;
 }
 .btn-primary:hover {
-	background-color: #dcd0ff;  
-	border-color: #dcd0ff;
+	background-color: #fffff1;  
+	border-color: #734f96;
+	color: #734f96;
 }
 .form-control {
 	transition: box-shadow 0.35s, border 0.35s !important;
-	background-color: #dcd0ff;
+	background-color: #fffff1;
 }
 .form-control:focus {
 	border: 0px;
@@ -93,4 +94,10 @@ lable {
 	width: 80%;
 	margin:0 auto;
 	margin-top: 20px;
+}
+.about{
+	text-align: center;
+}
+.contact{
+	text-align: center;
 }
