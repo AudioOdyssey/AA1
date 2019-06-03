@@ -1,6 +1,7 @@
 from models.storyobject import StoryObject
 from models.User import User
 from models.story import Story
+from models.storyevent import StoryEvent
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from flask_login import LoginManager
@@ -96,10 +97,15 @@ def story_update():
     return render_template("story/update.html")
 
 @app.route("/story/object/show")
-def event_show():
+def object_show():
     objects = [StoryObject(15, 1, "Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
                 StoryObject(15, 5, "Different Obj", "Constantly Empty", False, 7, False, 0)]
     return render_template("story/object/show.html", objects=objects, story_id=1)
+
+@app.route("/story/event/show")
+def event_show():
+    events= [StoryEvent(1, 1, "FieldDay", "KidsGoOutside", 1, False)]
+    return render_template("story/event/show.html", events=events, story_id=1)
 
 @app.route("/about")
 def about():
