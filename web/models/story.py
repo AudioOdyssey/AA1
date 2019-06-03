@@ -15,4 +15,3 @@ class Story:
         self.number_of_decisions = number_of_decisions
         self.story_verified = story_verified
         self.story_verification_date = story_verification_date
-        self.
