@@ -74,11 +74,6 @@ def session_new():
             username = details['username']
             cur.execute(("SELECT * FROM users WHERE username = %s"), username)
             result = cur.fetchone()
-                pass
-    return render_template("session/new.html")
-
-@app.route("/story/show")
-def story_show():
             if(result is None):
                 error = "Username and/or password not valid"
             else:
@@ -91,6 +86,9 @@ def story_show():
                     error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
+#@app.route("/story/show")
+#def story_show():
+#    return render_template("story/show.html", stories=stories)
 
 @app.route("/story/object/show")
 def event_show():
