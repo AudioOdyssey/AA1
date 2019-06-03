@@ -92,7 +92,7 @@ def story_show():
     return render_template("story/show.html", stories=stories)
 
 @app.route("/story/update")
-def story_show():
+def story_update():
     return render_template("story/update.html")
 
 @app.route("/story/object/show")
