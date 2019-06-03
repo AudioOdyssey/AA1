@@ -97,9 +97,11 @@ lable {
 }
 .about{
 	text-align: center;
+	font-family: "Helvetica" sans-serif;
 }
 .contact{
 	text-align: center;
+	font-family: "Helvetica" sans-serif;
 }
 #createstory{
 	width: 75%;
@@ -109,6 +111,16 @@ lable {
 #mystory{
 	margin-top: 100px;
 	text-align: center;
+	color:#734f96;
+	font-family:"Helvetica" sans-serif;
 }
+.storycard{
+	border:5px solid;
+	border-color:#734f96;
+	background-color:#fffff1;
+	color:#734f96;
+	font-family: "Helvetica" sans-serif;
+	text-align: center;
 
+}
 	

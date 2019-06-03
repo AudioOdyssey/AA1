@@ -1,6 +1,58 @@
 {% extends "template.html" %}
 {% block content %}
 
+<section id="3-left-rows">
+    <section class="row 1-3-left-row">
+        <!-- Summary Row -->
+        <form id="edit-story-details" method="POST" action="/story/update">
+            <div class="form-group row update-form-group">
+                <label>Title:</label>
+                <input class="form-control col" type="text" name="story_title" placeholder="Story Title...">
+            </div>
+            <div class="form-group row update-form-group">
+                <label>Synopsis:</label>
+                <textarea class="form-control col" name="story_synopsis" placeholder="Story Synopsis..." rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Genre:</label>
+                <select class="form-control" name="genre">
+                    <option value="" selected disabled>Select a genre...</option>
+                    <option value="Mystery">Mystery</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Historical Fiction">Historical Fiction</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Horror">Horror</option>
+                    <option value="True Crime">True Crime</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Suspense">Suspense</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                    <option value="Other Fiction">Other Fiction</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input class="form-control" type="number" step="0.01" name="story_price" placeholder="Price in USD">
+            </div>
 
+            <div class="form-group">
+                <label>Length:</label>
+                <input class="form-control" type="number" step="1" name="story_length" placeholder="Number of Hours">
+            </div>
+        </form>
+    </section>
+    <section class="row 1-3-left-row">
+        <!-- Object Row -->
+    </section>
+    <section class="row 1-3-left-row">
+        <!-- Event Row -->
+    </section>
+</section>
+<section id="1-right-col">
+</section>
 
-{% end block %}
+{% endblock %}
