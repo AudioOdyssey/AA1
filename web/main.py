@@ -1,6 +1,6 @@
 from models.storyobject import StoryObject
 from models.User import User
-#from models.story import Story
+from models.story import Story
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from flask_login import LoginManager
@@ -88,7 +88,8 @@ def session_new():
 
 @app.route("/story/show")
 def story_show():
-    return render_template("story/show.html")
+    stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction", 3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
+    return render_template("story/show.html", stories=stories)
 
 @app.route("/story/update")
 def story_show():
