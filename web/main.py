@@ -81,7 +81,7 @@ def session_new():
                 is_authenticated = usr.authenticate(details['password'])
                 if(is_authenticated):
                     session['username'] = username
-                    return redirect(url_for("home"))
+                    return redirect(url_for("story_show"))
                 else:
                     error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
