@@ -15,3 +15,9 @@ class Story:
         self.number_of_decisions = number_of_decisions
         self.story_verified = story_verified
         self.story_verification_date = story_verification_date
+        self.name_of_verifier = name_of_verifier
+        self.story_ratings = story_ratings
+        self.story_language_id = story_language_id
+        self.storage_size = storage_size
+        self.obj_verification_status = obj_verification_status
+        self.event_verification_status = event_verification_status
