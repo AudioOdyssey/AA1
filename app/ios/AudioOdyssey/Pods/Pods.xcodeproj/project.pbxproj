@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -66,13 +66,13 @@
 		0295D6D53E992172BCCCECC5A206359D /* ResourceBundle-CountryPickerView-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-CountryPickerView-Info.plist"; sourceTree = "<group>"; };
 		09C84279A79B00F8CBC622142777FF8C /* Pods-AudioOdysseyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AudioOdysseyTests.release.xcconfig"; sourceTree = "<group>"; };
 		1A99DC18B7E00B30CA66E62A510E65DA /* Pods-AudioOdyssey-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AudioOdyssey-acknowledgements.plist"; sourceTree = "<group>"; };
-		1BA7710B26924634E48C930CB9B90748 /* CountryPickerView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CountryPickerView.framework; path = CountryPickerView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BA7710B26924634E48C930CB9B90748 /* CountryPickerView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CountryPickerView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A34A7A66829573122227DF983F6F52 /* Pods-AudioOdysseyTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AudioOdysseyTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		276A2CC5479A3F6F97B6DBAB8FFE4803 /* Pods-AudioOdyssey-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AudioOdyssey-umbrella.h"; sourceTree = "<group>"; };
 		311BC44E3E9D2FD3ACFD570315B48D77 /* Pods-AudioOdysseyTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AudioOdysseyTests-frameworks.sh"; sourceTree = "<group>"; };
 		31C249F85065FF3118C65D60E382AEA2 /* Pods-AudioOdyssey-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AudioOdyssey-acknowledgements.markdown"; sourceTree = "<group>"; };
 		331EB92D4C3EB9F2FD5A5230094F3572 /* Pods-AudioOdysseyUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AudioOdysseyUITests-acknowledgements.plist"; sourceTree = "<group>"; };
-		35CDEA5A1A7EB9E7EC2AC9024F90A131 /* Pods_AudioOdysseyUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AudioOdysseyUITests.framework; path = "Pods-AudioOdysseyUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		35CDEA5A1A7EB9E7EC2AC9024F90A131 /* Pods_AudioOdysseyUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioOdysseyUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3862AF72F34E987BEF953D24645EBA9A /* CountryPickerView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CountryPickerView.modulemap; sourceTree = "<group>"; };
 		3A4FD1EB1AC7762EBC45D6111B8F460C /* Pods-AudioOdysseyUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AudioOdysseyUITests-dummy.m"; sourceTree = "<group>"; };
 		3B2F1415237C5A1C586B1EEA54A29C38 /* CountryPickerView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CountryPickerView-dummy.m"; sourceTree = "<group>"; };
@@ -91,28 +91,28 @@
 		89F9D778F4878D71ADEB363BAA4BD726 /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = CountryPickerView/Extensions.swift; sourceTree = "<group>"; };
 		8C3965EE2C0428E10D9DEA18D2DECBD7 /* Delegate+DataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Delegate+DataSource.swift"; path = "CountryPickerView/Delegate+DataSource.swift"; sourceTree = "<group>"; };
 		91E8C159648A1E2037A1A20CB05EA262 /* Pods-AudioOdysseyUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AudioOdysseyUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		99562C0956E70E68D18398383A281818 /* CountryPickerView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CountryPickerView.xcconfig; sourceTree = "<group>"; };
-		9EF4AE4C7376101EFCE00A5D8C0E7328 /* Images */ = {isa = PBXFileReference; includeInIndex = 1; name = Images; path = CountryPickerView/Assets/CountryPickerView.bundle/Images; sourceTree = "<group>"; };
+		9EF4AE4C7376101EFCE00A5D8C0E7328 /* Images */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = Images; path = CountryPickerView/Assets/CountryPickerView.bundle/Images; sourceTree = "<group>"; };
 		A0756BFE2308935C5475834F568C907F /* Pods-AudioOdysseyTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AudioOdysseyTests-dummy.m"; sourceTree = "<group>"; };
 		A1A04C2990748233355C2E7DFB9A27DD /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A99D0903FF7563ADCB19484829A315BC /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ABCDE0BEF9B7E47A15A83FF0FE75A97D /* CountryPickerView.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = CountryPickerView.bundle; path = "CountryPickerView-CountryPickerView.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABCDE0BEF9B7E47A15A83FF0FE75A97D /* CountryPickerView.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountryPickerView.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABE883E807EE3B4E52A59A5997EEA5B4 /* Pods-AudioOdyssey.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AudioOdyssey.modulemap"; sourceTree = "<group>"; };
 		B11FCCD49E82EFFB68F1B0D8BEDCDB55 /* Pods-AudioOdyssey.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AudioOdyssey.debug.xcconfig"; sourceTree = "<group>"; };
 		B9BE74604F4CC91B5AAE0FAD8BF849E3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BCEB564F8EAD587C5B920EBB169E3806 /* Pods-AudioOdysseyUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AudioOdysseyUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		C1CB16BEEBE2557F6594F3494F246B60 /* Pods_AudioOdyssey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AudioOdyssey.framework; path = "Pods-AudioOdyssey.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1CB16BEEBE2557F6594F3494F246B60 /* Pods_AudioOdyssey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioOdyssey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBBBFF3B56403847D4BC6C759395387B /* CountryPickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CountryPickerView.swift; path = CountryPickerView/CountryPickerView.swift; sourceTree = "<group>"; };
 		D25C72E7F0E89268E194CA5CC3D32CB8 /* Pods-AudioOdysseyTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AudioOdysseyTests.modulemap"; sourceTree = "<group>"; };
 		D3FB96090B014B977799B25CAB1BBCC7 /* Pods-AudioOdysseyTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AudioOdysseyTests-acknowledgements.plist"; sourceTree = "<group>"; };
 		E12A21B9D85234D56B6AF39147EBFFC8 /* CountryPickerView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = CountryPickerView.xib; path = CountryPickerView/CountryPickerView.xib; sourceTree = "<group>"; };
-		E36B19BD8A24950F7EBA934A44DC818F /* Data */ = {isa = PBXFileReference; includeInIndex = 1; name = Data; path = CountryPickerView/Assets/CountryPickerView.bundle/Data; sourceTree = "<group>"; };
+		E36B19BD8A24950F7EBA934A44DC818F /* Data */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = Data; path = CountryPickerView/Assets/CountryPickerView.bundle/Data; sourceTree = "<group>"; };
 		E638815FC1B7076FBCF68A9BA3B343B5 /* NibView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NibView.swift; path = CountryPickerView/NibView.swift; sourceTree = "<group>"; };
 		E6BDECEDC444699D3D58F680D340B532 /* Pods-AudioOdyssey-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AudioOdyssey-dummy.m"; sourceTree = "<group>"; };
 		E7CE144BCE98EA7A72A65D9805D6B186 /* Pods-AudioOdysseyUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AudioOdysseyUITests-umbrella.h"; sourceTree = "<group>"; };
 		E8E2C1B9375C1C3AE406575B2423318B /* Pods-AudioOdysseyTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AudioOdysseyTests-resources.sh"; sourceTree = "<group>"; };
-		F4258F0918AB106F673538243A5993FD /* Pods_AudioOdysseyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AudioOdysseyTests.framework; path = "Pods-AudioOdysseyTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4258F0918AB106F673538243A5993FD /* Pods_AudioOdysseyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioOdysseyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F57AB3498311270E6C4409CEB10FCD71 /* Pods-AudioOdysseyUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AudioOdysseyUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -265,7 +265,6 @@
 				87F2E9C65EE14641BEDDA8A1ED7BF952 /* Resources */,
 				B39A20B1291EA894EA9695F406A46C62 /* Support Files */,
 			);
-			name = CountryPickerView;
 			path = CountryPickerView;
 			sourceTree = "<group>";
 		};
@@ -445,7 +444,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1010;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -618,6 +617,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;
@@ -640,11 +640,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-AudioOdysseyTests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AudioOdysseyTests/Pods-AudioOdysseyTests.modulemap";
 				OTHER_LDFLAGS = "";
@@ -679,11 +675,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-AudioOdysseyTests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AudioOdysseyTests/Pods-AudioOdysseyTests.modulemap";
 				OTHER_LDFLAGS = "";
@@ -717,11 +709,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-AudioOdyssey/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AudioOdyssey/Pods-AudioOdyssey.modulemap";
 				OTHER_LDFLAGS = "";
@@ -756,11 +744,7 @@
 				INFOPLIST_FILE = "Target Support Files/CountryPickerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/CountryPickerView/CountryPickerView.modulemap";
 				PRODUCT_MODULE_NAME = CountryPickerView;
 				PRODUCT_NAME = CountryPickerView;
@@ -793,11 +777,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-AudioOdyssey/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AudioOdyssey/Pods-AudioOdyssey.modulemap";
 				OTHER_LDFLAGS = "";
@@ -912,11 +892,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-AudioOdysseyUITests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AudioOdysseyUITests/Pods-AudioOdysseyUITests.modulemap";
 				OTHER_LDFLAGS = "";
@@ -967,11 +943,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-AudioOdysseyUITests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-AudioOdysseyUITests/Pods-AudioOdysseyUITests.modulemap";
 				OTHER_LDFLAGS = "";
@@ -1004,11 +976,7 @@
 				INFOPLIST_FILE = "Target Support Files/CountryPickerView/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/CountryPickerView/CountryPickerView.modulemap";
 				PRODUCT_MODULE_NAME = CountryPickerView;
 				PRODUCT_NAME = CountryPickerView;

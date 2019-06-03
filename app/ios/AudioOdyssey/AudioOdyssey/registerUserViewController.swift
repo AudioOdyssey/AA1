@@ -15,7 +15,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {}
     func preferredCountries(in countryPickerView: CountryPickerView) -> [Country]{
             var countries = [Country]()
-            ["US", "CA", "MX"].forEach { code in
+            ["US", "CA","JP","MX"].forEach { code in
                 if let country = countryPickerView.getCountryByCode(code) {
                     countries.append(country)
                 }
@@ -49,6 +49,10 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var lblDisplayDate: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var countryPickerView: CountryPickerView!
+    @IBAction func switchFlipped(_ sender: Any) {
+       
+    }
+    @IBOutlet weak var disabilitySwitch: UISwitch!
     
     //Gender Selector
     @IBAction func genderChanged(_ sender: UISegmentedControl) {
@@ -209,11 +213,17 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
                           "last_name": lastNameTextField.text!,
                           "email_address": emailAddressTextField.text!,
                           "password": passwordTextField.text!,
-                          "username": usernameTextField.text!
+                          "username": usernameTextField.text!,
+                          "birthDate": lblDisplayDate.text!
+                          
                           ] as [String: String]
+        
+       // let postBool = ["disabilities": disabilitySwitch.isOn
+       //     ] as [Bool : Any]
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: postString, options: .prettyPrinted)
+           // request.httpBody = try JSONSerialization.data(withJSONObject: postBool, options: .prettyPrinted)
         } catch let error {
             print(error.localizedDescription)
             displayMessage(userMessage: "Something went wrong. Try again.")
