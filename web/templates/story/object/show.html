@@ -4,48 +4,56 @@
 <script src="{{ url_for('static', filename='js/story/object/show.js') }}"></script>
 
 <section class="row">
-    <button type="button" onclick="add_btn_pressed({{ story_id }})" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
+    <button type="button" onclick="add_btn_pressed()" id="add-btn" class="btn btn-light" style=""><i class="fas fa-plus"></i></button>
 </section>
 
-<form id="obj-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
-    <input name="story_id" readonly class="hidden-in">
+<form id="obj-template" class="object-main-row" onclick="set_focus({{ object.obj_id }})" method="POST" action="/story/object/update">
+    <input name="story_id"  value="{{ object.story_id }}" readonly class="hidden-in">
     <input name="obj_id" readonly class="hidden-in">
+    <input name="story_id" readonly class="hidden-in">
     <section class="object-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="object-name">
+                <input class="form-control" type="text" name="object-name" onchange="object_changed({{ object.obj_id }})" value="{{ object.obj_name }}">
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="object-desc" value="The Office">
+                <input class="form-control" type="text" name="object-desc" onchange="object_changed({{ object.obj_id }})" value="The Office">
             </div>
         </section>
-        <section class="flex-0" onclick="object_show(this)">
+        <section class="flex-0" onclick="object_show({{ object.obj_id }})">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
-    <section class="row details" style="display: none">
+    <section class="row details" id="object_id{{ object.obj_id }}" style="display: none">
         <hr>
         <label>Description</label>
-        <textarea class="form-control" rows="3" name="obj_description"></textarea>
+        <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed({{ object.obj_id }})">{{ object.obj_description }}</textarea>
 
         <label>Pick upable?</label>
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj">
+        {% if object.can_pickup_obj %}
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})">
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})" checked>
+        {% endif %}
 
         <br>
 
         <label>Is Hidden? </label>
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj">
+        {% if object.is_hidden %}
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})">
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed({{ object.obj_id }})" checked>
+        {% endif %}
     </section>
 </form>
-
-<div id="content-marker"></div>
 
 {% for object in objects %}
 <form class="object-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" value="{{ object.story_id }}" readonly class="hidden-in">
     <input name="obj_id" value="{{ object.obj_id }}" readonly class="hidden-in">
+    <input name="story_id" value="{{ object.story_id }}" readonly class="hidden-in">
     <section class="object-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
