@@ -1,4 +1,4 @@
-function event_show(activ) {
+function location_show(activ) {
     var elem = activ.parentNode.nextElementSibling
     if (elem.style.display == "block")
         elem.style.display = "none";
@@ -15,15 +15,15 @@ function set_focus(elem) {
     elem.id = "active";
 }
 
-function event_changed(elem) {
+function location_changed(elem) {
     elem.form.submit()
 }
 
 function add_btn_pressed(story_id) {
-    var template = document.getElementById("ev-template");
+    var template = document.getElementById("loc-template");
     var newelem = template.cloneNode(true);
     newelem.id = "";
-    newelem.classList.add("event-main-row");
+    newelem.classList.add("location-main-row");
     newelem.childNodes[0].value = story_id;
     document.getElementById("main-site").insertBefore(newelem, document.getElementById("content-marker"));
 
@@ -32,8 +32,8 @@ function add_btn_pressed(story_id) {
         if (this.readyState == 4 && this.status == 200) {
             // Successful Request
             var event = JSON.parse(this.responseText);
-            if (ev.status == "ok") {
-                newelem.childNodes[1].value = ev.response.ev_id;
+            if (loc.status == "ok") {
+                newelem.childNodes[1].value = loc.response.loc_id;
             } else {
                 console.log("Bad Response, what do we do now?")
             }
@@ -41,7 +41,7 @@ function add_btn_pressed(story_id) {
             console.log("Bad Response, what do we do now?")
         }
     };
-    xhttp.open("POST", "/story/event/new", true);
+    xhttp.open("POST", "/story/location/new", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("desc=&name=&ev_start_location=0&story_id=" + story_id);
+    xhttp.send("desc=&name=&loc_start_location=0&story_id=" + story_id);
 }
