@@ -60,7 +60,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="df6-KO-NK1">
-                                <rect key="frame" x="173.66666666666663" y="205" width="67" height="28"/>
+                                <rect key="frame" x="173.66666666666666" y="205" width="67" height="28"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
                                 <state key="normal" title="Sign In">
@@ -372,7 +372,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jIp-fe-ctL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="829" y="171"/>
+            <point key="canvasLocation" x="723" y="139"/>
         </scene>
         <!--Home Page View Controller-->
         <scene sceneID="Dks-3h-VhP">
@@ -428,7 +428,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6XA-bS-vBQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1545" y="138"/>
+            <point key="canvasLocation" x="1375" y="121"/>
         </scene>
     </scenes>
 </document>
