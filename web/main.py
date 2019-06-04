@@ -95,15 +95,15 @@ def story_show():
 
 @app.route("/story/update")
 def story_update():
-    objects = [StoryObject(15, 1, "Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
-                StoryObject(15, 5, "Different Obj", "Constantly Empty", False, 7, False, 0)]
+    objects = [StoryObject(15,"Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
+                StoryObject(15,"Different Obj", "Constantly Empty", False, 7, False, 0)]
     events = [StoryEvent(1, 1, "FieldDay", "KidsGoOutside", 1, False)]
     return render_template("story/update.html", objects=objects, events=events)
 
 @app.route("/story/object/show")
 def object_show():
-    objects = [StoryObject(15, 1, "Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
-                StoryObject(15, 5, "Different Obj", "Constantly Empty", False, 7, False, 0)]
+    objects = [StoryObject(15, "Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
+                StoryObject(15, "Different Obj", "Constantly Empty", False, 7, False, 0)]
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
 @app.route("/story/event/show")

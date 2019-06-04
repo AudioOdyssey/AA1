@@ -56,7 +56,7 @@ class User(UserMixin):
 
         self.gender = gender_input
 
-        self.country_of_origin = country_of_origin_input
+        self.country_of_origin = country_of_origin_input 
 
         self.first_name = first_name_input
         self.last_name = last_name_input
