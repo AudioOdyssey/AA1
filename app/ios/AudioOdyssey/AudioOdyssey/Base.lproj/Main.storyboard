@@ -25,32 +25,33 @@
                                 </items>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign In" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bVc-Ue-Jhv">
-                                <rect key="frame" x="20" y="79" width="374" height="21"/>
+                                <rect key="frame" x="15" y="79" width="384" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="hh9-Q8-Wji">
-                                <rect key="frame" x="20" y="108" width="374" height="30"/>
+                                <rect key="frame" x="15" y="115" width="384" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" textContentType="email"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Mgr-Jd-doE">
-                                <rect key="frame" x="20" y="146" width="374" height="30"/>
+                                <rect key="frame" x="15" y="160" width="384" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gX5-R2-oCA">
-                                <rect key="frame" x="20" y="237" width="374" height="21"/>
+                                <rect key="frame" x="117.66666666666669" y="256" width="179" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhc-Kg-WQg">
-                                <rect key="frame" x="116" y="266" width="184" height="30"/>
+                                <rect key="frame" x="116" y="292" width="182" height="38"/>
                                 <color key="backgroundColor" red="0.74771893020000002" green="0.58001583810000001" blue="0.89451384540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="contentEdgeInsets" minX="15" minY="10" maxX="15" maxY="10"/>
                                 <state key="normal" title="Register New Account">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -59,8 +60,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="df6-KO-NK1">
-                                <rect key="frame" x="176" y="184" width="64" height="30"/>
+                                <rect key="frame" x="173.66666666666663" y="205" width="67" height="28"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
                                 <state key="normal" title="Sign In">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -71,27 +73,26 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="df6-KO-NK1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="1ln-Ne-Ejr"/>
                             <constraint firstItem="KPy-V1-6wF" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="2bf-8k-l21"/>
                             <constraint firstItem="df6-KO-NK1" firstAttribute="centerX" secondItem="Mhc-Kg-WQg" secondAttribute="centerX" id="593-gh-AMX"/>
-                            <constraint firstItem="bVc-Ue-Jhv" firstAttribute="trailing" secondItem="hh9-Q8-Wji" secondAttribute="trailing" id="9bE-3P-zqO"/>
                             <constraint firstItem="KPy-V1-6wF" firstAttribute="centerX" secondItem="bVc-Ue-Jhv" secondAttribute="centerX" id="CiZ-AB-i27"/>
+                            <constraint firstItem="bVc-Ue-Jhv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="DfZ-dC-P1j"/>
                             <constraint firstItem="KPy-V1-6wF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="I9r-tz-Frr"/>
-                            <constraint firstItem="hh9-Q8-Wji" firstAttribute="leading" secondItem="Mgr-Jd-doE" secondAttribute="leading" id="Jn1-6s-dTE"/>
-                            <constraint firstItem="Mhc-Kg-WQg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="116" id="O6S-3n-LPP"/>
-                            <constraint firstItem="Mgr-Jd-doE" firstAttribute="trailing" secondItem="gX5-R2-oCA" secondAttribute="trailing" id="SJr-jK-wo2"/>
-                            <constraint firstItem="Mgr-Jd-doE" firstAttribute="leading" secondItem="gX5-R2-oCA" secondAttribute="leading" id="SKE-80-r9X"/>
-                            <constraint firstItem="df6-KO-NK1" firstAttribute="top" secondItem="Mgr-Jd-doE" secondAttribute="bottom" constant="8" symbolic="YES" id="TV3-AJ-Y8s"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Mhc-Kg-WQg" secondAttribute="trailing" constant="114" id="XU4-lY-fQn"/>
+                            <constraint firstItem="hh9-Q8-Wji" firstAttribute="trailing" secondItem="bVc-Ue-Jhv" secondAttribute="trailing" id="Jn1-6s-dTE"/>
+                            <constraint firstItem="Mgr-Jd-doE" firstAttribute="trailing" secondItem="bVc-Ue-Jhv" secondAttribute="trailing" id="SJr-jK-wo2"/>
+                            <constraint firstItem="Mgr-Jd-doE" firstAttribute="leading" secondItem="bVc-Ue-Jhv" secondAttribute="leading" id="SKE-80-r9X"/>
+                            <constraint firstItem="Mhc-Kg-WQg" firstAttribute="top" secondItem="gX5-R2-oCA" secondAttribute="bottom" constant="15" id="UFm-dR-xy9"/>
+                            <constraint firstItem="gX5-R2-oCA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="g3X-7E-GgQ"/>
                             <constraint firstItem="gX5-R2-oCA" firstAttribute="top" secondItem="df6-KO-NK1" secondAttribute="bottom" constant="23" id="iEv-li-kcG"/>
-                            <constraint firstItem="bVc-Ue-Jhv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="iol-CT-svm"/>
-                            <constraint firstItem="df6-KO-NK1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="176" id="jag-Pm-1bV"/>
-                            <constraint firstItem="hh9-Q8-Wji" firstAttribute="top" secondItem="bVc-Ue-Jhv" secondAttribute="bottom" constant="8" symbolic="YES" id="lO8-qr-9yX"/>
+                            <constraint firstItem="df6-KO-NK1" firstAttribute="top" secondItem="Mgr-Jd-doE" secondAttribute="bottom" constant="15" id="kIY-8H-wN0"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bVc-Ue-Jhv" secondAttribute="trailing" constant="15" id="nQ1-M0-AAv"/>
                             <constraint firstItem="bVc-Ue-Jhv" firstAttribute="top" secondItem="KPy-V1-6wF" secondAttribute="bottom" constant="15" id="qI5-br-vtv"/>
-                            <constraint firstItem="bVc-Ue-Jhv" firstAttribute="leading" secondItem="hh9-Q8-Wji" secondAttribute="leading" id="re1-VN-1Mp"/>
-                            <constraint firstItem="Mgr-Jd-doE" firstAttribute="top" secondItem="hh9-Q8-Wji" secondAttribute="bottom" constant="8" symbolic="YES" id="swC-8U-4Ho"/>
+                            <constraint firstItem="Mhc-Kg-WQg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="skX-Q5-jaH"/>
+                            <constraint firstItem="Mgr-Jd-doE" firstAttribute="top" secondItem="hh9-Q8-Wji" secondAttribute="bottom" constant="15" id="swC-8U-4Ho"/>
                             <constraint firstAttribute="trailing" secondItem="KPy-V1-6wF" secondAttribute="trailing" id="uff-9n-bYx"/>
-                            <constraint firstItem="Mhc-Kg-WQg" firstAttribute="top" secondItem="gX5-R2-oCA" secondAttribute="bottom" constant="8" symbolic="YES" id="wGb-8J-Bg7"/>
-                            <constraint firstItem="hh9-Q8-Wji" firstAttribute="trailing" secondItem="Mgr-Jd-doE" secondAttribute="trailing" id="zuh-t0-tAT"/>
+                            <constraint firstItem="hh9-Q8-Wji" firstAttribute="top" secondItem="bVc-Ue-Jhv" secondAttribute="bottom" constant="15" id="yjN-8t-Yk8"/>
+                            <constraint firstItem="hh9-Q8-Wji" firstAttribute="leading" secondItem="bVc-Ue-Jhv" secondAttribute="leading" id="zuh-t0-tAT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -104,7 +105,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="132" y="132.68365817091455"/>
+            <point key="canvasLocation" x="64" y="121"/>
         </scene>
         <!--Register User View Controller-->
         <scene sceneID="Y3P-oi-L3k">
@@ -371,7 +372,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jIp-fe-ctL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="879.71014492753625" y="177.71739130434784"/>
+            <point key="canvasLocation" x="829" y="171"/>
         </scene>
         <!--Home Page View Controller-->
         <scene sceneID="Dks-3h-VhP">

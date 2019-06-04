@@ -15,7 +15,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {}
     func preferredCountries(in countryPickerView: CountryPickerView) -> [Country]{
             var countries = [Country]()
-            ["US", "CA","JP","MX"].forEach { code in
+            ["US", "CA","MX","JP"].forEach { code in
                 if let country = countryPickerView.getCountryByCode(code) {
                     countries.append(country)
                 }
@@ -295,10 +295,10 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
                 let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
                     // Code in this block will trigger when OK button tapped.
                     print("Ok button tapped")
-                    DispatchQueue.main.async
-                        {
-                            self.dismiss(animated: true, completion: nil)
-                    }
+                    //DispatchQueue.main.async
+                     //   {
+                      //      self.dismiss(animated: true, completion: nil)
+                    //}
                 }
                 alertController.addAction(OKAction)
                 self.present(alertController, animated: true, completion:nil)
