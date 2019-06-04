@@ -108,12 +108,12 @@ def object_show():
 
 @app.route("/story/event/show")
 def event_show():
-    events= [StoryEvent(1, 1, "FieldDay", "KidsGoOutside", 1, False)]
+    events= [StoryEvent(1, 1, "Field Day", "Kids Go Outside", 1, False)]
     return render_template("story/event/show.html", events=events, story_id=1)
 
 @app.route("/story/location/show")
 def location_show():
-    locations= [StoryLocation(1, 1, "zoes house", "yay", "y", "eyay", 1, False, 1, True,0, 8, 1)]
+    locations= [StoryLocation(1, 1, "zoe's house", "its in solon", "solon", "its gone", 1, False, 1, True,0, 8, 1)]
     return render_template("story/location/show.html", locations=locations, story_id=1)
 
 @app.route("/about")

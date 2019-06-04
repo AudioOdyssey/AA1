@@ -24,20 +24,20 @@
     <section class="row details" style="display: none">
         <hr>
         <label>Original Description</label>
-        <textarea class="form-control" rows="3" name="loc_orig_description"></textarea>
+        <textarea class="form-control" rows="3" name="loc_origin_description"></textarea>
         <hr>
         <label>Short Description</label>
         <textarea class="form-control" rows="3" name="loc_short_description"></textarea>
         <hr>
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="loc_post_event_description"></textarea>
-
+        <hr>
         <label>Event ID</label>
         <input type="text" autocomplete="off" name="event_id">
-
+        <hr>
         <label>Next Location ID</label>
         <input type="text" autocomplete="off" name="next_loc_id">
-
+        <hr>
         <label>Auto Goto</label>
         <input type="checkbox" autocomplete="off" name="auto_goto">
 
@@ -58,10 +58,6 @@
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="location-name" onchange="location_changed(this)" value="{{ location.location_name }}">
             </div>
-            <div class="col-sm-8">
-                <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="location-desc" onchange="location_changed(this)" value="The Office">
-            </div>
         </section>
         <section class="flex-0" onclick="location_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
@@ -70,14 +66,17 @@
     <section class="row details" style="display: none">
         <hr>
         <label> Original Description</label>
-        <textarea class="form-control" rows="3" name="location_origin_description" onchange="location_changed(this)">{{ location.original_description }}</textarea>
-       
+        <textarea class="form-control" rows="3" name="location_origin_description" onchange="location_changed(this)">{{ location.origin_description }}</textarea>
+       <hr>
         <label>Short Description</label>
         <textarea class="form-control" rows="3" name="location_short_description" onchange="location_changed(this)">{{ location.short_description }}</textarea>
-        
+        <hr>
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="location_post_event_description" onchange="location_changed(this)">{{ location.post_event_description }}</textarea>
-       
+       <hr>
+        <label>Event ID</label>
+        <datalist class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">{{ location.location_event_id }}</datalist>
+        <br>
         <label>Auto Go To</label>
         {% if location.auto_goto %}
         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)">

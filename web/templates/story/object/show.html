@@ -18,7 +18,7 @@
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="obj-location" value="The Office">
+                <input class="form-control" type="text" name="obj-location">
             </div>
         </section>
         <section class="flex-0" onclick="object_show(this)">
@@ -54,7 +54,7 @@
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="object-desc" onchange="object_changed(this)" value="The Office">
+                <input class="form-control" type="text" name="object-desc" onchange="object_changed(this)" value="{{ object.obj_location}}">
             </div>
         </section>
         <section class="flex-0" onclick="object_show(this)">
