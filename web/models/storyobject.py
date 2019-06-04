@@ -10,6 +10,7 @@ class StoryObject:
     obj_description = ""
     can_pickup_obj = 0
     obj_starting_loc = 0
+    obj_starting_loc_name = ""
     is_hidden = 0
     unhide_event_id = 0
 
