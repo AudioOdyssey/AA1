@@ -16,7 +16,7 @@ struct Object {
     var objectDesc:String
     var canPickupObject:Bool
     var isHidden:Bool
-    var unhideEventId:Int
+    var unhideEventId:Int?
     
     init (_ sId: Int, _ oId: Int, _ oStartLoc: Int, _ oName:String, _ oDesc: String, _ canPickupO: Bool, _ isHid: Bool, _ unhideEId: Int) {
         storyId = sId
