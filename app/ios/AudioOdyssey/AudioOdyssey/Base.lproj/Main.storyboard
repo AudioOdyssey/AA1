@@ -118,7 +118,13 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lHN-CP-H8M">
                                 <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                                 <items>
-                                    <navigationItem title="AudioOdyssey" id="qaZ-cN-tRH"/>
+                                    <navigationItem title="AudioOdyssey" id="qaZ-cN-tRH">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="zcP-v6-ymR">
+                                            <connections>
+                                                <action selector="cancelButtonBar:" destination="kcV-hh-9Sp" id="2mY-BG-0Y0"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KkK-14-za4">
@@ -146,7 +152,7 @@
                                         <rect key="frame" x="20" y="174" width="374" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                        <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="bIH-ng-YGh">
                                         <rect key="frame" x="20" y="215" width="374" height="30"/>
@@ -177,7 +183,8 @@
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="cancelButtonTapped:" destination="kcV-hh-9Sp" eventType="touchUpInside" id="NBC-tZ-rpk"/>
+                                            <action selector="cancelButtonTapped:" destination="kcV-hh-9Sp" eventType="touchUpInside" id="doY-O4-qTt"/>
+                                            <action selector="switchFlipped:" destination="kcV-hh-9Sp" eventType="touchUpInside" id="EJg-HM-GEh"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="akt-00-Ffh">
@@ -353,7 +360,7 @@
                     </view>
                     <size key="freeformSize" width="414" height="950"/>
                     <connections>
-                        <outlet property="cancelButton" destination="S4b-vM-dZ3" id="4XO-do-nWf"/>
+                        <outlet property="cancelButtonTapped" destination="S4b-vM-dZ3" id="h2l-Up-s9V"/>
                         <outlet property="countryPickerView" destination="LH1-m2-Qk5" id="EmN-jb-xPQ"/>
                         <outlet property="datePicker" destination="ktf-hu-TaA" id="C4K-Gj-I2Q"/>
                         <outlet property="disabilitySwitch" destination="gLV-A6-Xdk" id="clv-rM-IXL"/>
