@@ -591,9 +591,10 @@
 			baseConfigurationReference = 579A77453E31CFD05F2D8E2D /* Pods-AudioOdyssey.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JWLQ598D36;
+				DEVELOPMENT_TEAM = CS647QSD8B;
 				INFOPLIST_FILE = AudioOdyssey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -613,9 +614,10 @@
 			baseConfigurationReference = 282D641DF8F61D9F8FB65786 /* Pods-AudioOdyssey.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JWLQ598D36;
+				DEVELOPMENT_TEAM = CS647QSD8B;
 				INFOPLIST_FILE = AudioOdyssey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
