@@ -10,6 +10,7 @@
 		0ACD78020A71A7831F0CEA13 /* Pods_AudioOdysseyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 179214612A566BBD418A80F3 /* Pods_AudioOdysseyTests.framework */; };
 		3CB3AE5CA55714606BD94CE3 /* Pods_AudioOdysseyUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E04620403DB6FCAA2878326 /* Pods_AudioOdysseyUITests.framework */; };
 		745556F67E9824D194E6370A /* Pods_AudioOdyssey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA967E5C19B42DD1C0D62D72 /* Pods_AudioOdyssey.framework */; };
+		974758DB22A80ACD000BD4E2 /* playScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */; };
 		B0161406229A2F65004506F6 /* registerUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0161405229A2F65004506F6 /* registerUserViewController.swift */; };
 		B0161408229A32D6004506F6 /* homePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0161407229A32D6004506F6 /* homePageViewController.swift */; };
 		B02797272298A5BC003C08ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02797262298A5BC003C08ED /* AppDelegate.swift */; };
@@ -49,6 +50,7 @@
 		579A77453E31CFD05F2D8E2D /* Pods-AudioOdyssey.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioOdyssey.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AudioOdyssey/Pods-AudioOdyssey.debug.xcconfig"; sourceTree = "<group>"; };
 		64FC94282C6F0AC9D8B15BB2 /* Pods-AudioOdysseyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioOdysseyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AudioOdysseyTests/Pods-AudioOdysseyTests.release.xcconfig"; sourceTree = "<group>"; };
 		69291EF7D803E98B136E5C69 /* Pods-AudioOdysseyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioOdysseyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AudioOdysseyTests/Pods-AudioOdysseyTests.debug.xcconfig"; sourceTree = "<group>"; };
+		974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playScreenViewController.swift; sourceTree = "<group>"; };
 		B0161405229A2F65004506F6 /* registerUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerUserViewController.swift; sourceTree = "<group>"; };
 		B0161407229A32D6004506F6 /* homePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homePageViewController.swift; sourceTree = "<group>"; };
 		B02797232298A5BC003C08ED /* AudioOdyssey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioOdyssey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +157,7 @@
 				B02797542298B055003C08ED /* signInViewController.swift */,
 				B0161405229A2F65004506F6 /* registerUserViewController.swift */,
 				B0161407229A32D6004506F6 /* homePageViewController.swift */,
+				974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */,
 			);
 			path = AudioOdyssey;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				B02797292298A5BC003C08ED /* ViewController.swift in Sources */,
 				B02797552298B055003C08ED /* signInViewController.swift in Sources */,
 				B02797272298A5BC003C08ED /* AppDelegate.swift in Sources */,
+				974758DB22A80ACD000BD4E2 /* playScreenViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,7 +577,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CS647QSD8B;
+				DEVELOPMENT_TEAM = JWLQ598D36;
 				INFOPLIST_FILE = AudioOdyssey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -595,7 +599,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CS647QSD8B;
+				DEVELOPMENT_TEAM = JWLQ598D36;
 				INFOPLIST_FILE = AudioOdyssey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
