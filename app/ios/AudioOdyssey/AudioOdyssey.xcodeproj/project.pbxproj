@@ -11,6 +11,7 @@
 		3CB3AE5CA55714606BD94CE3 /* Pods_AudioOdysseyUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E04620403DB6FCAA2878326 /* Pods_AudioOdysseyUITests.framework */; };
 		745556F67E9824D194E6370A /* Pods_AudioOdyssey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA967E5C19B42DD1C0D62D72 /* Pods_AudioOdyssey.framework */; };
 		974758DB22A80ACD000BD4E2 /* playScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */; };
+		974758DF22A82F1C000BD4E2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974758DE22A82F1C000BD4E2 /* Event.swift */; };
 		B0161406229A2F65004506F6 /* registerUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0161405229A2F65004506F6 /* registerUserViewController.swift */; };
 		B0161408229A32D6004506F6 /* homePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0161407229A32D6004506F6 /* homePageViewController.swift */; };
 		B02797272298A5BC003C08ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02797262298A5BC003C08ED /* AppDelegate.swift */; };
@@ -51,6 +52,7 @@
 		64FC94282C6F0AC9D8B15BB2 /* Pods-AudioOdysseyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioOdysseyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AudioOdysseyTests/Pods-AudioOdysseyTests.release.xcconfig"; sourceTree = "<group>"; };
 		69291EF7D803E98B136E5C69 /* Pods-AudioOdysseyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioOdysseyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AudioOdysseyTests/Pods-AudioOdysseyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playScreenViewController.swift; sourceTree = "<group>"; };
+		974758DE22A82F1C000BD4E2 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		B0161405229A2F65004506F6 /* registerUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerUserViewController.swift; sourceTree = "<group>"; };
 		B0161407229A32D6004506F6 /* homePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homePageViewController.swift; sourceTree = "<group>"; };
 		B02797232298A5BC003C08ED /* AudioOdyssey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioOdyssey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +160,7 @@
 				B0161405229A2F65004506F6 /* registerUserViewController.swift */,
 				B0161407229A32D6004506F6 /* homePageViewController.swift */,
 				974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */,
+				974758DE22A82F1C000BD4E2 /* Event.swift */,
 			);
 			path = AudioOdyssey;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				974758DF22A82F1C000BD4E2 /* Event.swift in Sources */,
 				B0CF6C5C229DB8ED0074E7EC /* iOSDropDown.swift in Sources */,
 				B0161406229A2F65004506F6 /* registerUserViewController.swift in Sources */,
 				B0161408229A32D6004506F6 /* homePageViewController.swift in Sources */,
