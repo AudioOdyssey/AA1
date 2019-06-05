@@ -1,20 +1,36 @@
 from flask_restful import Resource, reqparse
-from models.user import UserModel
-#import flask
+from models.User import UserModel
 
-class UserRegister:
+from datetime import date
+
+class UserRegister(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('usernameTextField',
+    parser.add_argument('username',
         type=str,
         required=True,
         help="This field cannot be left blank."
     )
-    parser.add_argument('passwordTextField',
+    parser.add_argument('password',
         type=str,
         required=True,
         help="This field cannot be left blank."
     )
-    
+    parser.add_argument('first_name',
+        type=str,
+        required=True,
+        help="This field cannot be left blank.")
+    parser.add_argument('last_name',
+        type=str,
+        required=True,
+        help="This field cannot be left blank.")
+    parser.add_argument('email_address',
+        type=str,
+        required=True,
+        help="This field cannot be left blank.")
+    parser.add_argument('birthDate',
+        type=date,
+        required=True,
+        help="This field cannot be left blank")
 
     def post(self):
         data = UserRegister.parser.parse_args()
