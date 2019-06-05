@@ -117,12 +117,12 @@ class UserModel:
     def find_by_username(self, username_input):
             conn = pymysql.connect(self.rds_host, user=self.name, passwd = self.rds_password, db= self.db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
             with conn.cursor() as cur:
-                cur.execute(("SELECT * FROM users WHERE `username` = %s"), (username_input))
+                cur.execute(("SELECT `username`, `password`, `password_salt` FROM users WHERE `username` = %s"), (username_input))
                 result = cur.fetchone()
                 if result is None:
                     return None
                 else:
-                    return UserModel(result['username'], result['password'])
+                    return UserModel(result['username'], result['password'], password_salt_input=result['password_salt'])
 
     def authenticate(self, password_input):
         result = self.encrypt_password(password_input, self.password_salt)
