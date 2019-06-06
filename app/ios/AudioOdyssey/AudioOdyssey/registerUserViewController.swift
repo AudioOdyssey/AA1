@@ -35,8 +35,8 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     }
     
     //Outlet declarations
+    @IBOutlet weak var cancelButtonTapped: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailAddressTextField: UITextField!
@@ -122,8 +122,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
             self.picker.dataSource = self
             countryPickerView.dataSource = self
         //Button/Picker Formatting
-            cancelButton.layer.cornerRadius = 6
-            cancelButton.clipsToBounds = true
+        
             signUpButton.layer.cornerRadius = 6
             signUpButton.clipsToBounds = true
             countryPickerView.showPhoneCodeInView = false
@@ -166,10 +165,15 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     }
     
     //Button Functions
+    @IBAction func cancelButtonBar(_ sender: Any) {
+        print("cancel button tapped")
+        self.dismiss(animated: true, completion: nil)
+    }
     @IBAction func cancelButtonTapped(_ sender: Any) {
         print("cancel button tapped")
         self.dismiss(animated: true, completion: nil)
     }
+    
     @IBAction func signUpButtonTapped(_ sender: Any) {
         print("sign up button tapped")
         
