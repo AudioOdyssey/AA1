@@ -26,6 +26,7 @@
 		B0D8CAC722A836330043FC59 /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CAC622A836330043FC59 /* Object.swift */; };
 		B0D8CAC922A838E00043FC59 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CAC822A838E00043FC59 /* Location.swift */; };
 		B0D8CACB22A8490E0043FC59 /* Decision.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CACA22A8490E0043FC59 /* Decision.swift */; };
+		B0D8CACD22A96A410043FC59 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CACC22A96A410043FC59 /* Login.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		B0D8CAC622A836330043FC59 /* Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
 		B0D8CAC822A838E00043FC59 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		B0D8CACA22A8490E0043FC59 /* Decision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decision.swift; sourceTree = "<group>"; };
+		B0D8CACC22A96A410043FC59 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		BA967E5C19B42DD1C0D62D72 /* Pods_AudioOdyssey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioOdyssey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -170,6 +172,7 @@
 				B0D8CAC622A836330043FC59 /* Object.swift */,
 				B0D8CAC822A838E00043FC59 /* Location.swift */,
 				B0D8CACA22A8490E0043FC59 /* Decision.swift */,
+				B0D8CACC22A96A410043FC59 /* Login.swift */,
 			);
 			path = AudioOdyssey;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				B0D8CACB22A8490E0043FC59 /* Decision.swift in Sources */,
 				974758DF22A82F1C000BD4E2 /* Event.swift in Sources */,
 				B0CF6C5C229DB8ED0074E7EC /* iOSDropDown.swift in Sources */,
+				B0D8CACD22A96A410043FC59 /* Login.swift in Sources */,
 				B0D8CAC922A838E00043FC59 /* Location.swift in Sources */,
 				B0161406229A2F65004506F6 /* registerUserViewController.swift in Sources */,
 				B0161408229A32D6004506F6 /* homePageViewController.swift in Sources */,
