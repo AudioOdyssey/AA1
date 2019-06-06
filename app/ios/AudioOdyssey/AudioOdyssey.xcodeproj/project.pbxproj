@@ -12,6 +12,7 @@
 		745556F67E9824D194E6370A /* Pods_AudioOdyssey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA967E5C19B42DD1C0D62D72 /* Pods_AudioOdyssey.framework */; };
 		974758DB22A80ACD000BD4E2 /* playScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */; };
 		974758DF22A82F1C000BD4E2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974758DE22A82F1C000BD4E2 /* Event.swift */; };
+		974758E322A9934D000BD4E2 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974758E222A99346000BD4E2 /* Login.swift */; };
 		B0161406229A2F65004506F6 /* registerUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0161405229A2F65004506F6 /* registerUserViewController.swift */; };
 		B0161408229A32D6004506F6 /* homePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0161407229A32D6004506F6 /* homePageViewController.swift */; };
 		B02797272298A5BC003C08ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02797262298A5BC003C08ED /* AppDelegate.swift */; };
@@ -26,7 +27,6 @@
 		B0D8CAC722A836330043FC59 /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CAC622A836330043FC59 /* Object.swift */; };
 		B0D8CAC922A838E00043FC59 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CAC822A838E00043FC59 /* Location.swift */; };
 		B0D8CACB22A8490E0043FC59 /* Decision.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CACA22A8490E0043FC59 /* Decision.swift */; };
-		B0D8CACD22A96A410043FC59 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CACC22A96A410043FC59 /* Login.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +57,7 @@
 		69291EF7D803E98B136E5C69 /* Pods-AudioOdysseyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioOdysseyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AudioOdysseyTests/Pods-AudioOdysseyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		974758DA22A80ACD000BD4E2 /* playScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playScreenViewController.swift; sourceTree = "<group>"; };
 		974758DE22A82F1C000BD4E2 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		974758E222A99346000BD4E2 /* Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		B0161405229A2F65004506F6 /* registerUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerUserViewController.swift; sourceTree = "<group>"; };
 		B0161407229A32D6004506F6 /* homePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homePageViewController.swift; sourceTree = "<group>"; };
 		B02797232298A5BC003C08ED /* AudioOdyssey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioOdyssey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,7 +78,6 @@
 		B0D8CAC622A836330043FC59 /* Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
 		B0D8CAC822A838E00043FC59 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		B0D8CACA22A8490E0043FC59 /* Decision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decision.swift; sourceTree = "<group>"; };
-		B0D8CACC22A96A410043FC59 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		BA967E5C19B42DD1C0D62D72 /* Pods_AudioOdyssey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AudioOdyssey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -157,6 +157,7 @@
 		B02797252298A5BC003C08ED /* AudioOdyssey */ = {
 			isa = PBXGroup;
 			children = (
+				974758E222A99346000BD4E2 /* Login.swift */,
 				B0CF6C5B229DB8ED0074E7EC /* iOSDropDown.swift */,
 				B02797262298A5BC003C08ED /* AppDelegate.swift */,
 				B02797282298A5BC003C08ED /* ViewController.swift */,
@@ -172,7 +173,6 @@
 				B0D8CAC622A836330043FC59 /* Object.swift */,
 				B0D8CAC822A838E00043FC59 /* Location.swift */,
 				B0D8CACA22A8490E0043FC59 /* Decision.swift */,
-				B0D8CACC22A96A410043FC59 /* Login.swift */,
 			);
 			path = AudioOdyssey;
 			sourceTree = "<group>";
@@ -411,7 +411,7 @@
 				B0D8CACB22A8490E0043FC59 /* Decision.swift in Sources */,
 				974758DF22A82F1C000BD4E2 /* Event.swift in Sources */,
 				B0CF6C5C229DB8ED0074E7EC /* iOSDropDown.swift in Sources */,
-				B0D8CACD22A96A410043FC59 /* Login.swift in Sources */,
+				974758E322A9934D000BD4E2 /* Login.swift in Sources */,
 				B0D8CAC922A838E00043FC59 /* Location.swift in Sources */,
 				B0161406229A2F65004506F6 /* registerUserViewController.swift in Sources */,
 				B0161408229A32D6004506F6 /* homePageViewController.swift in Sources */,
@@ -478,8 +478,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -541,8 +539,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -599,10 +595,9 @@
 			baseConfigurationReference = 579A77453E31CFD05F2D8E2D /* Pods-AudioOdyssey.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CS647QSD8B;
+				DEVELOPMENT_TEAM = JWLQ598D36;
 				INFOPLIST_FILE = AudioOdyssey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -622,10 +617,9 @@
 			baseConfigurationReference = 282D641DF8F61D9F8FB65786 /* Pods-AudioOdyssey.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CS647QSD8B;
+				DEVELOPMENT_TEAM = JWLQ598D36;
 				INFOPLIST_FILE = AudioOdyssey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
