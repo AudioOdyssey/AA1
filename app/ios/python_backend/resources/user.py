@@ -5,33 +5,35 @@ from datetime import date
 
 class UserRegister(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('username',
+    parser.add_argument('usernameTextField',
         type=str,
         required=True,
         help="This field cannot be left blank."
     )
-    parser.add_argument('password',
+    parser.add_argument('passwordTextField',
         type=str,
         required=True,
         help="This field cannot be left blank."
     )
-    parser.add_argument('first_name',
+    parser.add_argument('firstNameTextField',
         type=str,
         required=True,
         help="This field cannot be left blank.")
-    parser.add_argument('last_name',
+    parser.add_argument('lastNameTextField',
         type=str,
         required=True,
         help="This field cannot be left blank.")
-    parser.add_argument('email_address',
+    parser.add_argument('emailAddressTextField',
         type=str,
         required=True,
         help="This field cannot be left blank.")
-    parser.add_argument('birthDate',
+    parser.add_argument('datePicker',
         type=date,
         required=True,
         help="This field cannot be left blank")
-
+    parser.add_argument('disabilitySwitch',
+        type=bool,
+        required=True)
     def post(self):
         data = UserRegister.parser.parse_args()
 
