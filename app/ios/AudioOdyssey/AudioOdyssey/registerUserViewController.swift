@@ -35,7 +35,8 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     }
     
     //Outlet declarations
-    @IBOutlet weak var cancelButtonTapped: UIButton!
+    
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
@@ -125,6 +126,8 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         
             signUpButton.layer.cornerRadius = 6
             signUpButton.clipsToBounds = true
+            cancelButton.layer.cornerRadius = 6
+            cancelButton.clipsToBounds = true
             countryPickerView.showPhoneCodeInView = false
         //Language Data for Picker
             pickerData = ["English","Español","日本人"]
@@ -213,14 +216,17 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-        let postString = ["first_name": firstNameTextField.text!,
-                          "last_name": lastNameTextField.text!,
-                          "email_address": emailAddressTextField.text!,
-                          "password": passwordTextField.text!,
-                          "username": usernameTextField.text!,
-                          "birthDate": lblDisplayDate.text!
+        let postString = Login(usernameTextField.text!, passwordTextField.text!, genderSegment.selectedSegmentIndex, picker.selectedRow(inComponent: 0), countryPickerView!.selectedCountry.code, emailAddressTextField.text!, datePicker.date, firstNameTextField.text!, lastNameTextField.text!, disabilitySwitch.isOn)
+            
+            //["first_name": firstNameTextField.text!,
+              //            "last_name": lastNameTextField.text!,
+                //          "email_address": emailAddressTextField.text!,
+                  //        "password": passwordTextField.text!,
+                    //      "username": usernameTextField.text!,
+                      //    "birthDate": lblDisplayDate.text!
                           
-                          ] as [String: String]
+                        //  ] as [String: String]
+        //lblDisplayDate.text
         
        // let postBool = ["disabilities": disabilitySwitch.isOn
        //     ] as [Bool : Any]

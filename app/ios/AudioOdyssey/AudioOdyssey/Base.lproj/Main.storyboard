@@ -112,7 +112,7 @@
             <objects>
                 <viewController storyboardIdentifier="registerUserViewController" id="kcV-hh-9Sp" customClass="registerUserViewController" customModule="AudioOdyssey" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yay-dY-gI3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="950"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lHN-CP-H8M">
@@ -173,12 +173,12 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4b-vM-dZ3">
-                                        <rect key="frame" x="20" y="824" width="115" height="34"/>
+                                        <rect key="frame" x="20" y="824" width="110" height="34"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="Eya-GL-MLw"/>
-                                            <constraint firstAttribute="width" constant="115" id="sEf-9B-8gw"/>
                                         </constraints>
+                                        <inset key="contentEdgeInsets" minX="31" minY="0.0" maxX="31" maxY="0.0"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -188,11 +188,9 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="akt-00-Ffh">
-                                        <rect key="frame" x="279" y="824" width="115" height="34"/>
+                                        <rect key="frame" x="284" y="824" width="110" height="34"/>
                                         <color key="backgroundColor" red="0.74771893020000002" green="0.58001583810000001" blue="0.89451384540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="115" id="8cO-GA-1Kc"/>
-                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="28" minY="0.0" maxX="28" maxY="0.0"/>
                                         <state key="normal" title="Sign Up">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -360,7 +358,7 @@
                     </view>
                     <size key="freeformSize" width="414" height="950"/>
                     <connections>
-                        <outlet property="cancelButtonTapped" destination="S4b-vM-dZ3" id="h2l-Up-s9V"/>
+                        <outlet property="cancelButton" destination="S4b-vM-dZ3" id="rcS-PH-e9G"/>
                         <outlet property="countryPickerView" destination="LH1-m2-Qk5" id="EmN-jb-xPQ"/>
                         <outlet property="datePicker" destination="ktf-hu-TaA" id="C4K-Gj-I2Q"/>
                         <outlet property="disabilitySwitch" destination="gLV-A6-Xdk" id="clv-rM-IXL"/>
@@ -459,9 +457,9 @@
                                 </items>
                             </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vuI-Oa-Vmi">
-                                <rect key="frame" x="184" y="353" width="46" height="30"/>
+                                <rect key="frame" x="192" y="353" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Play"/>
                                 <connections>
                                     <action selector="playButtonTapped:" destination="Vtw-qe-7qm" eventType="touchUpInside" id="eSy-9J-fyr"/>
                                 </connections>
@@ -470,6 +468,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="mrJ-bn-i0A"/>
                     </view>
+                    <connections>
+                        <outlet property="playButton" destination="vuI-Oa-Vmi" id="Vv4-tk-tW0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="anw-9b-7wc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
