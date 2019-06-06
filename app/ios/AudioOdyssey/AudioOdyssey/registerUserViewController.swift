@@ -35,7 +35,8 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
     }
     
     //Outlet declarations
-    @IBOutlet weak var cancelButtonTapped: UIButton!
+    
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
@@ -125,6 +126,8 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         
             signUpButton.layer.cornerRadius = 6
             signUpButton.clipsToBounds = true
+            cancelButton.layer.cornerRadius = 6
+            cancelButton.clipsToBounds = true
             countryPickerView.showPhoneCodeInView = false
         //Language Data for Picker
             pickerData = ["English","Español","日本人"]

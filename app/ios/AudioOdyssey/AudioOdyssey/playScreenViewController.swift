@@ -47,7 +47,7 @@ class playScreenViewController: UIViewController {
                     case .notDetermined: //if has not yet been asked
                         self.playButton.isEnabled = false;
                         self.playButton.setTitle("Speech recognition not yet authorized", for: .disabled)
-                @unknown default:
+                @unknown default: //if functionality is added in future to authStatus
                     return
                 }
             }

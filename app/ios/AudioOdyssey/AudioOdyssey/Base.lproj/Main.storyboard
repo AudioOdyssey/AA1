@@ -173,12 +173,12 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S4b-vM-dZ3">
-                                        <rect key="frame" x="20" y="824" width="115" height="34"/>
+                                        <rect key="frame" x="20" y="824" width="110" height="34"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="Eya-GL-MLw"/>
-                                            <constraint firstAttribute="width" constant="115" id="sEf-9B-8gw"/>
                                         </constraints>
+                                        <inset key="contentEdgeInsets" minX="31" minY="0.0" maxX="31" maxY="0.0"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -188,11 +188,9 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="akt-00-Ffh">
-                                        <rect key="frame" x="279" y="824" width="115" height="34"/>
+                                        <rect key="frame" x="284" y="824" width="110" height="34"/>
                                         <color key="backgroundColor" red="0.74771893020000002" green="0.58001583810000001" blue="0.89451384540000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="115" id="8cO-GA-1Kc"/>
-                                        </constraints>
+                                        <inset key="contentEdgeInsets" minX="28" minY="0.0" maxX="28" maxY="0.0"/>
                                         <state key="normal" title="Sign Up">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -360,7 +358,7 @@
                     </view>
                     <size key="freeformSize" width="414" height="950"/>
                     <connections>
-                        <outlet property="cancelButtonTapped" destination="S4b-vM-dZ3" id="h2l-Up-s9V"/>
+                        <outlet property="cancelButton" destination="S4b-vM-dZ3" id="rcS-PH-e9G"/>
                         <outlet property="countryPickerView" destination="LH1-m2-Qk5" id="EmN-jb-xPQ"/>
                         <outlet property="datePicker" destination="ktf-hu-TaA" id="C4K-Gj-I2Q"/>
                         <outlet property="disabilitySwitch" destination="gLV-A6-Xdk" id="clv-rM-IXL"/>
