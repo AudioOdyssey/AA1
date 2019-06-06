@@ -1,0 +1,179 @@
+{% extends "template.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/decision/show.css') }}" type="text/css"/>
+<script src="{{ url_for('static', filename='js/story/location/decision/show.js') }}"></script>
+
+<section class="row">
+    <h3>Decisions:</h3>
+    <button type="button" onclick="add_btn_pressed({{ story_id }}, {{ location_id }})" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
+</section>
+
+<form id="dec-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
+    <input name="story_id" readonly class="hidden-in">
+    <input name="obj_id" readonly class="hidden-in">
+    <section class="decision-row row">
+        <section class="row flex-1">
+            <div class="col-sm-4">
+                <label><b>Name:</b></label>
+                <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)">
+            </div>
+            <div class="col-sm-8">
+                <label><b>Location:</b></label>
+                <input class="form-control" type="text" name="decision-desc" onchange="decision_changed(this)">
+            </div>
+        </section>
+        <section class="flex-0" onclick="decision_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+    <section class="row details" style="display: none">
+        <hr>
+
+        <label>Decision Description:</label>
+        <textarea class="form-control" rows="3" name="obj_description" onchange="decision_changed(this)"></textarea>
+
+        <hr>
+
+        <label>Causes a transition?</label>
+        <input type="checkbox" autocomplete="off" name="transition" onchange="decision_changed(this)">
+        <br>
+
+        <label>Transition Location:</label>
+        <input class="form-control" type="text" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
+
+        <hr>
+
+        <label>Is Hidden?</label>
+        <input type="checkbox" autocomplete="off" name="hidden" onchange="decision_changed(this)">
+        <br>
+
+        <label>Event to show decision:</label>
+        <input class="form-control" type="text" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
+
+        <label>Object to show decision:</label>
+        <input class="form-control" type="text" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
+
+        <hr>
+
+        <label>Is Locked?</label>
+        <input type="checkbox" autocomplete="off" name="locked" onchange="decision_changed(this)">
+        <br>
+
+        <label>Description when locked:</label>
+        <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
+
+        <label>Event to unlock decision:</label>
+        <input class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+
+        <label>Object to unlock decision:</label>
+        <input class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+
+        <hr>
+
+        <label>Description of decision aftermath:</label>
+        <textarea class="form-control" name="aftermath_desc" autocomplete="off" onchange="decision_changed(this)"></textarea>
+
+        <label>Does this decision trigger an event?</label>
+        <input type="checkbox" autocomplete="off" onchange="decision_changed(this)" name="cause_event">
+        <br>
+
+        <label>Event triggered by this decision:</label>
+        <input class="form-control" type="text" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
+    </section>
+</form>
+
+<div id="content-marker"></div>
+
+{% for decision in decisions %}
+<form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
+    <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
+    <input name="obj_id" value="{{ decision.obj_id }}" readonly class="hidden-in">
+    <section class="decision-row row">
+        <section class="row flex-1">
+            <div class="col-sm-4">
+                <label><b>Name:</b></label>
+                <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)" value="{{ decision.obj_name }}">
+            </div>
+            <div class="col-sm-8">
+                <label><b>Location:</b></label>
+                <input class="form-control" type="text" name="decision-desc" onchange="decision_changed(this)" value="{{ decision.obj_location}}">
+            </div>
+        </section>
+        <section class="flex-0" onclick="decision_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+    <section class="row details" style="display: none">
+        <hr>
+
+        <label>Decision Description:</label>
+        <textarea class="form-control" rows="3" name="obj_description" onchange="decision_changed(this)">{{ decision.obj_description }}</textarea>
+
+        <hr>
+
+        <label>Causes a transition?</label>
+        {% if decision.transition %}
+        <input type="checkbox" autocomplete="off" name="transition" onchange="decision_changed(this)" checked>
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="transition" onchange="decision_changed(this)">
+        {% endif %}
+        <br>
+
+        <label>Transition Location:</label>
+        <input type="text" class="form-control" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
+
+        <hr>
+
+        <label>Is Hidden?</label>
+        {% if decision.hidden %}
+        <input type="checkbox" autocomplete="off" name="hidden" onchange="decision_changed(this)" checked>
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="hidden" onchange="decision_changed(this)">
+        {% endif %}
+        <br>
+
+        <label>Event to show decision:</label>
+        <input type="text" class="form-control" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
+
+        <label>Object to show decision:</label>
+        <input type="text" class="form-control" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
+
+        <hr>
+
+        <label>Is Locked?</label>
+        {% if decision.locked %}
+        <input type="checkbox" autocomplete="off" name="locked" onchange="decision_changed(this)" checked>
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="locked" onchange="decision_changed(this)">
+        {% endif %}
+        <br>
+
+        <label>Description when locked:</label>
+        <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
+
+        <label>Event to unlock decision:</label>
+        <input type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+
+        <label>Object to unlock decision:</label>
+        <input type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+
+        <hr>
+
+        <label>Description of decision aftermath:</label>
+        <textarea name="aftermath_desc" class="form-control" autocomplete="off" onchange="decision_changed(this)"></textarea>
+
+        <label>Does this decision trigger an event?</label>
+        {% if decision.cause_event %}
+        <input type="checkbox" autocomplete="off" onchange="decision_changed(this)" name="cause_event" checked>
+        {% else %}
+        <input type="checkbox" autocomplete="off" onchange="decision_changed(this)" name="cause_event">
+        {% endif %}
+        <br>
+
+        <label>Event triggered by this decision:</label>
+        <input type="text" class="form-control" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
+    </section>
+</form>
+{% endfor %}
+
+{% endblock %}

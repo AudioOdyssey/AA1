@@ -3,6 +3,7 @@ from models.User import User
 from models.story import Story
 from models.storyevent import StoryEvent
 from models.storylocation import StoryLocation
+from models.storydecision import StoryDecision
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from flask_login import LoginManager
@@ -146,6 +147,11 @@ def event_show():
 def location_show():
     locations= [StoryLocation(1, 1, "zoe's house", "its in solon", "solon", "its gone", 1, False, 1, True,0, 8, 1)]
     return render_template("story/location/show.html", locations=locations, story_id=1)
+
+@app.route("/story/location/decision/show")
+def decision_show():
+    decisions = [StoryDecision()]
+    return render_template("story/location/decision/show.html", decisions=decisions, story_id=1, location_id=1)
 
 @app.route("/about")
 def about():
