@@ -207,7 +207,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         view.addSubview(myActivityIndicator)
         
         // Send HTTP Request to Register user
-        let myUrl = URL(string: "http://myaudioodyssey.com")
+        let myUrl = URL(string: "http://3.216.9.206")
         var request = URLRequest(url:myUrl!)
         request.httpMethod = "POST"// Compose a query string
         request.addValue("application/json", forHTTPHeaderField: "content-type")
