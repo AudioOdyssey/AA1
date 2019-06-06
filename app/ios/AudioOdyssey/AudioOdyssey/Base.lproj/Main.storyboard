@@ -459,9 +459,9 @@
                                 </items>
                             </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vuI-Oa-Vmi">
-                                <rect key="frame" x="184" y="353" width="46" height="30"/>
+                                <rect key="frame" x="192" y="353" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Play"/>
                                 <connections>
                                     <action selector="playButtonTapped:" destination="Vtw-qe-7qm" eventType="touchUpInside" id="eSy-9J-fyr"/>
                                 </connections>
@@ -470,6 +470,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="mrJ-bn-i0A"/>
                     </view>
+                    <connections>
+                        <outlet property="playButton" destination="vuI-Oa-Vmi" id="Vv4-tk-tW0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="anw-9b-7wc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
