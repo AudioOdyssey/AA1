@@ -63,7 +63,7 @@ class signInViewController: UIViewController {
         
         
         //Send HTTP Request to perform Sign in
-        let myUrl = URL(string: "http://3.216.9.206")
+        let myUrl = URL(string: "http://3.216.9.206/session/new")
         var request = URLRequest(url:myUrl!)
         
         request.httpMethod = "POST"// Compose a query string
