@@ -4,6 +4,7 @@ from flask_jwt import JWT
 
 from security import authenticate, identity
 from resources.user import UserRegister
+from resources.storyobject import StoryObjectResource
 
 app = Flask(__name__)
 
@@ -14,3 +15,8 @@ api = Api(app)
 jwt = JWT(app, authenticate, identity)
 
 api.add_resource(UserRegister, '/register')
+
+api.add_resource(StoryObjectResource, '/story/objects')
+
+if __name__ == '__main__':
+    app.run()
