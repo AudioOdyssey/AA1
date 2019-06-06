@@ -112,7 +112,7 @@
             <objects>
                 <viewController storyboardIdentifier="registerUserViewController" id="kcV-hh-9Sp" customClass="registerUserViewController" customModule="AudioOdyssey" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yay-dY-gI3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="950"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lHN-CP-H8M">

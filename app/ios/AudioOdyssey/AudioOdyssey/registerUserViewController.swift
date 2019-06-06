@@ -213,14 +213,17 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-        let postString = ["first_name": firstNameTextField.text!,
-                          "last_name": lastNameTextField.text!,
-                          "email_address": emailAddressTextField.text!,
-                          "password": passwordTextField.text!,
-                          "username": usernameTextField.text!,
-                          "birthDate": lblDisplayDate.text!
+        let postString = Login(usernameTextField.text!, passwordTextField.text!, genderSegment.selectedSegmentIndex, picker.selectedRow(inComponent: 0), countryPickerView!.selectedCountry.code, emailAddressTextField.text!, datePicker.date, firstNameTextField.text!, lastNameTextField.text!, disabilitySwitch.isOn)
+            
+            //["first_name": firstNameTextField.text!,
+              //            "last_name": lastNameTextField.text!,
+                //          "email_address": emailAddressTextField.text!,
+                  //        "password": passwordTextField.text!,
+                    //      "username": usernameTextField.text!,
+                      //    "birthDate": lblDisplayDate.text!
                           
-                          ] as [String: String]
+                        //  ] as [String: String]
+        //lblDisplayDate.text
         
        // let postBool = ["disabilities": disabilitySwitch.isOn
        //     ] as [Bool : Any]
