@@ -36,10 +36,11 @@ class UserRegister(Resource):
         data = UserRegister.parser.parse_args()
 
         result = UserModel()
-        if result.find_by_username(data['usernameTextField']):
+        if result.find_by_username(data['username']):
             return {"message": "User already exists"}, 400
         
-        user = UserModel(username_input = data['usernameTextField'], password_input = data['passwordTextField'])
+        user = UserModel(username_input = data['username'], password_input = data['password'], 
+            email_input=data['email_address'], first_name_input=data['first_name'], last_name_input=data['last_name'], date_of_birth_input=data['birthDate'])
         user.add_to_server()
 
         return {"message": "User created successfully."}, 201
