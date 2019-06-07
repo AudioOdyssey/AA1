@@ -5,7 +5,7 @@
 
 <section class="row">
     <h3>Decisions:</h3>
-    <button type="button" onclick="add_btn_pressed({{ story_id }}, {{ location_id }})" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
+    <button type="button" onclick="add_btn_pressed('{{ story_id }}', '{{ location_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
 <form id="dec-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
