@@ -1,9 +1,9 @@
-from .models.storyobject import StoryObject
-from .models.User import User
-from .models.story import Story
-from .models.storyevent import StoryEvent
-from .models.storylocation import StoryLocation
-from .models.storydecision import StoryDecision
+from models.storyobject import StoryObject
+from models.User import User
+from models.story import Story
+from models.storyevent import StoryEvent
+from models.storylocation import StoryLocation
+from models.storydecision import StoryDecision
 from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
 
 from flask_login import LoginManager
@@ -146,7 +146,11 @@ def object_show():
 
 @app.route("/app/story/object/show", methods = ["GET"])
 def app_object_show():
-    pass
+    obj_list = StoryObject.obj_list_json
+    if obj_list:
+        return make_response(obj_list, 200)
+    else:
+        return make_response(jsonify({"message" : "Story does not exist"}), 404)
 
 @app.route("/story/object/update", methods = ['POST'])
 def object_update(story_id, object_id):

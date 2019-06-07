@@ -108,3 +108,14 @@ class StoryObject:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
+        result = []
+        with conn.cursor() as cur:
+            cur(("SELECT * FROM `object` WHERE story_id = %s"), (story_id))
+            query_data = cur.fetchall()
+            if query_data is None:
+                return None
+            for row in query_data:
+                obj_dict = {'story_id' : row[0], "obj_id" : row[1], "obj_starting_loc" : row[2], "obj_name" : row[3], "obj_description" : row[4], 
+                "can_pickup" : row[5], "is_hidden" : row[6], "unhide_event_id" : row[7]}
+                result.append(obj_dict)
+        return json.dumps(result)
