@@ -4,7 +4,7 @@
 <script src="{{ url_for('static', filename='js/story/event/show.js') }}"></script>
 
 <section class="row">
-    <button type="button" onclick="add_btn_pressed({{ story_id }})" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
+    <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
 <form id="ev-template" onclick="set_focus(this)" method="POST" action="/story/event/update">
