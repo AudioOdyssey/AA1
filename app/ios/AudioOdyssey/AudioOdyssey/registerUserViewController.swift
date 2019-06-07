@@ -181,7 +181,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         print("sign up button tapped")
         
         // validate required fields are filled
-        if(firstNameTextField.text?.isEmpty)! || (lastNameTextField.text?.isEmpty)! || (emailAddressTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)! || (usernameTextField.text?.isEmpty)! || (genderSegment.selectedSegmentIndex == -1)
+        if(firstNameTextField.text?.isEmpty)! || (lastNameTextField.text?.isEmpty)! || (emailAddressTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)! || (usernameTextField.text?.isEmpty)! || (genderSegment.selectedSegmentIndex == -1) || (lblDisplayDate.text?.isEmpty)! ||
         {
             //display error message and return
             displayMessage(userMessage: "All Fields are Required")
@@ -210,30 +210,40 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         view.addSubview(myActivityIndicator)
         
         // Send HTTP Request to Register user
-        let myUrl = URL(string: "http://3.216.9.206/user/new")
+        let myUrl = URL(string: "http://3.216.9.206/app/user/new")
         var request = URLRequest(url:myUrl!)
         request.httpMethod = "POST"// Compose a query string
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-        let postString = Login(usernameTextField.text!, passwordTextField.text!, genderSegment.selectedSegmentIndex, picker.selectedRow(inComponent: 0), countryPickerView!.selectedCountry.code, emailAddressTextField.text!, datePicker.date, firstNameTextField.text!, lastNameTextField.text!, disabilitySwitch.isOn)
-            
-            //["first_name": firstNameTextField.text!,
-              //            "last_name": lastNameTextField.text!,
-                //          "email_address": emailAddressTextField.text!,
-                  //        "password": passwordTextField.text!,
-                    //      "username": usernameTextField.text!,
-                      //    "birthDate": lblDisplayDate.text!
-                          
-                        //  ] as [String: String]
-        //lblDisplayDate.text
+    //    let loginInfo = Login(usernameTextField.text!, passwordTextField.text!, genderSegment.selectedSegmentIndex, picker.selectedRow(inComponent: 0), countryPickerView!.selectedCountry.code, emailAddressTextField.text!, datePicker.date, firstNameTextField.text!, lastNameTextField.text!, disabilitySwitch.isOn)
         
-       // let postBool = ["disabilities": disabilitySwitch.isOn
-       //     ] as [Bool : Any]
-        
+        //Int to string conversion
+        let genderString : Int = genderSegment.selectedSegmentIndex
+        let myGender = String(genderString)
+        let disabled: Bool = disabilitySwitch.isOn
+        let myDisability = String(disabled)
+        let lang : Int = picker.selectedRow(inComponent: 0)
+        let langString = String(lang)
+        print(myDisability)
+        print(myGender)
+        print(langString)
+        let postString = ["first_name": firstNameTextField.text!,
+                          "last_name": lastNameTextField.text!,
+                          "email_address": emailAddressTextField.text!,
+                          "password": passwordTextField.text!,
+                          "username": usernameTextField.text!,
+                          "date_of_birth": lblDisplayDate.text!,
+                          "language_id": langString,
+                          "country_of_origin":countryPickerView!.selectedCountry.code,
+                          "gender": myGender,
+                          "disabilities": myDisability
+                          ] as [String: String]
+  
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: postString, options: .prettyPrinted)
-           // request.httpBody = try JSONSerialization.data(withJSONObject: postBool, options: .prettyPrinted)
+            //try JSONSerialization.jsonObject(with: postString, options: [.allowFragments])
+           request.httpBody = try JSONSerialization.data(withJSONObject: postString, options: .prettyPrinted)
+            //try JSONSerialization.data(withJSONObject: postString, options: [.prettyPrinted])
         } catch let error {
             print(error.localizedDescription)
             displayMessage(userMessage: "Something went wrong. Try again.")
@@ -258,7 +268,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
                 if let parseJSON = json {
                     
                     
-                    let userId = parseJSON["userId"] as? String
+                    let userId = parseJSON["user_id"] as? String
                     print("User id: \(String(describing: userId!))")
                     
                     if (userId?.isEmpty)!

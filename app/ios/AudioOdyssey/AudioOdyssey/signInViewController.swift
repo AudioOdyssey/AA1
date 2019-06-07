@@ -103,9 +103,9 @@ class signInViewController: UIViewController {
                         return
                     }
                     // Now we can access value of First Name by its key
-                    let accessToken = parseJSON["token"] as? String
-                    let userId = parseJSON["id"] as? String
-                    print("Access token: \(String(describing: accessToken!))")
+                  //  let accessToken = parseJSON["token"] as? String
+                   // let userId = parseJSON["id"] as? String
+                   // print("Access token: \(String(describing: accessToken!))")
                     
                     //let saveAccesssToken: Bool = KeychainWrapper.standard.set(accessToken!, forKey: "accessToken")
                     //let saveUserId: Bool = KeychainWrapper.standard.set(userId!, forKey: "userId")
@@ -113,12 +113,12 @@ class signInViewController: UIViewController {
                   //  print("The access token save result: \(saveAccesssToken)")
                    // print("The userId save result \(saveUserId)")
                     
-                    if (accessToken?.isEmpty)!
-                    {
+                 //   if (accessToken?.isEmpty)!
+                  //  {
                         // Display an Alert dialog with a friendly error message
-                        self.displayMessage(userMessage: "Could not successfully perform this request. Please try again later")
-                        return
-                    }
+                   //     self.displayMessage(userMessage: "Could not successfully perform this request. Please try again later")
+                    //return
+                 //   }
                     
                     DispatchQueue.main.async
                         {
