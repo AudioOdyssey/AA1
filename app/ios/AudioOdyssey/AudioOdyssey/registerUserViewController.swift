@@ -181,7 +181,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         print("sign up button tapped")
         
         // validate required fields are filled
-        if(firstNameTextField.text?.isEmpty)! || (lastNameTextField.text?.isEmpty)! || (emailAddressTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)! || (usernameTextField.text?.isEmpty)! || (genderSegment.selectedSegmentIndex == -1) || (lblDisplayDate.text?.isEmpty)! ||
+        if(firstNameTextField.text?.isEmpty)! || (lastNameTextField.text?.isEmpty)! || (emailAddressTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)! || (usernameTextField.text?.isEmpty)! || (genderSegment.selectedSegmentIndex == -1) || (lblDisplayDate.text?.isEmpty)!
         {
             //display error message and return
             displayMessage(userMessage: "All Fields are Required")
@@ -216,7 +216,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-    //    let loginInfo = Login(usernameTextField.text!, passwordTextField.text!, genderSegment.selectedSegmentIndex, picker.selectedRow(inComponent: 0), countryPickerView!.selectedCountry.code, emailAddressTextField.text!, datePicker.date, firstNameTextField.text!, lastNameTextField.text!, disabilitySwitch.isOn)
+    //  let loginInfo = Login(usernameTextField.text!, passwordTextField.text!, genderSegment.selectedSegmentIndex, picker.selectedRow(inComponent: 0), countryPickerView!.selectedCountry.code, emailAddressTextField.text!, datePicker.date, firstNameTextField.text!, lastNameTextField.text!, disabilitySwitch.isOn)
         
         //Int to string conversion
         let genderString : Int = genderSegment.selectedSegmentIndex
@@ -225,9 +225,7 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
         let myDisability = String(disabled)
         let lang : Int = picker.selectedRow(inComponent: 0)
         let langString = String(lang)
-        print(myDisability)
-        print(myGender)
-        print(langString)
+
         let postString = ["first_name": firstNameTextField.text!,
                           "last_name": lastNameTextField.text!,
                           "email_address": emailAddressTextField.text!,
@@ -239,10 +237,11 @@ class registerUserViewController: UIViewController, UIPickerViewDelegate, UIPick
                           "gender": myGender,
                           "disabilities": myDisability
                           ] as [String: String]
-  
+        
         do {
             //try JSONSerialization.jsonObject(with: postString, options: [.allowFragments])
-           request.httpBody = try JSONSerialization.data(withJSONObject: postString, options: .prettyPrinted)
+            request.httpBody = try JSONSerialization.data(withJSONObject: postString, options: .prettyPrinted)
+            //
             //try JSONSerialization.data(withJSONObject: postString, options: [.prettyPrinted])
         } catch let error {
             print(error.localizedDescription)
