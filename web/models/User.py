@@ -93,6 +93,11 @@ class User(UserMixin):
         with conn.cursor() as cur:
             password_input = self.password
             self.password = self.encrypt_password(password_input, self.password_salt)
+            cur.execute(("SELECT * FROM users WHERE username = %s"), (self.username))
+            results = cur.fetchone()
+            if results:
+                conn.close()
+                return False
             cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             (self.username, self.password, self.password_salt, self.email, 
             self.profession, self.gender, self.country_of_origin, self.disabilities, self.language_id, self.first_name, self.last_name, self.date_of_birth))
@@ -102,6 +107,7 @@ class User(UserMixin):
             raw_user_id = result['user_id']
             self.user_id = str(raw_user_id).encode('utf-8').decode('utf-8')
         conn.close()
+        return True
 
     def get_id(self):
         return self.user_id
