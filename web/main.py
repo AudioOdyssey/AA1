@@ -1,10 +1,10 @@
-from models.storyobject import StoryObject
-from models.User import User
-from models.story import Story
-from models.storyevent import StoryEvent
-from models.storylocation import StoryLocation
-from models.storydecision import StoryDecision
-from flask import Flask, redirect, render_template, request, session, url_for
+from .models.storyobject import StoryObject
+from .models.User import User
+from .models.story import Story
+from .models.storyevent import StoryEvent
+from .models.storylocation import StoryLocation
+from .models.storydecision import StoryDecision
+from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
 
 from flask_login import LoginManager
 
@@ -51,13 +51,16 @@ def user_new():
 
 @app.route("/app/user/new", methods=['POST'])
 def app_user_new():
-    details = request.json
-    details_dict = json.loads(details)
-    sign_up(details_dict)
-    if sign_up:
-        return redirect(url_for("home"))
+    details = request.get_json(force=True)
+    user_id = sign_up(details)
+    if user_id:
+        result = {}
+        result['user_id']=user_id
+        return make_response(json.dumps(result),201)
     else:
-        pass
+        result = {}
+        result['message']='Username already exists'
+        return make_response(json.dumps(result),400)
 
 def sign_up(details_dict):
     username = details_dict['username']
@@ -71,19 +74,22 @@ def sign_up(details_dict):
         disabilities_bool = 1
     else:
         disabilities_bool =0
-    language = int(details_dict['language-id'])
+    language = int(details_dict['language_id'])
     first_name = details_dict['first_name']
     last_name = details_dict['last_name']
-    date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
+   # date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
     usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
-            profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth, 
+            profession_input=profession, disabilities_input=disabilities_bool, 
             first_name_input=first_name, last_name_input=last_name, language=language)
-    return usr.add_to_server()
+    if usr.add_to_server():
+        return usr.get_id()
+    else:
+        return None        
 
 @app.route("/session/new", methods =['GET', 'POST'])
 def session_new():
     error = None
-    if request.methods == 'POST':
+    if request.method == 'POST':
         details = request.json
         details_dict = json.loads(details)
         if authenticate(details_dict):
@@ -112,7 +118,7 @@ def authenticate(details_dict):
                 return False
     return True
 
-@app.route("app/session/new", methods =['POST'])
+@app.route("/app/session/new", methods =['POST'])
 def app_session_new():
     details = request.json
     details_dict = json.loads(details)
@@ -200,3 +206,6 @@ def contact():
 def load_user(user_id):
     usr = User()
     return usr.get(user_id)
+
+if __name__=='__main__':
+	app.run()
