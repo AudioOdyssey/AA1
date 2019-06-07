@@ -145,12 +145,21 @@ def object_show():
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
 @app.route("/app/story/object/show", methods = ["GET"])
-def app_object_show():
+def app_list_of_objects_show():
     obj_list = StoryObject.obj_list_json
     if obj_list:
         return make_response(obj_list, 200)
     else:
         return make_response(jsonify({"message" : "Story does not exist"}), 404)
+
+@app.route("/app/story/object/single/show", methods = ["GET", "POST"])
+def app_object_show():
+    obj_id = 0
+    story_id = 0
+    if request.method == "POST":
+        pass
+    if request.method == "GET":
+        pass
 
 @app.route("/story/object/update", methods = ['POST'])
 def object_update(story_id, object_id):
