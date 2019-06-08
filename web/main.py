@@ -1,9 +1,9 @@
-from models.storyobject import StoryObject
-from models.User import User
-from models.story import Story
-from models.storyevent import StoryEvent
-from models.storylocation import StoryLocation
-from models.storydecision import StoryDecision
+from .models.storyobject import StoryObject
+from .models.User import User
+from .models.story import Story
+from .models.storyevent import StoryEvent
+from .models.storylocation import StoryLocation
+from .models.storydecision import StoryDecision
 from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
 
 from flask_login import LoginManager
@@ -44,10 +44,11 @@ def home():
 @app.route("/user/new", methods=['GET', 'POST'])
 def user_new():
     if request.method == "POST":
-        details = request.json 
-        details_dict = json.loads(details)
-        sign_up(details_dict)
-    return render_template("user/new.html")
+        details = request.get_json(force=True) 
+        if sign_up(details_dict):
+            return make_response(render_template("user/new.html"),201)
+        else:
+            return make_response(jsonify({"message":"user already exists"}), 409)
 
 @app.route("/app/user/new", methods=['POST'])
 def app_user_new():
@@ -60,7 +61,7 @@ def app_user_new():
     else:
         result = {}
         result['message']='Username already exists'
-        return make_response(json.dumps(result),400)
+        return make_response(json.dumps(result),409)
 
 def sign_up(details_dict):
     username = details_dict['username']
@@ -90,13 +91,13 @@ def sign_up(details_dict):
 def session_new():
     error = None
     if request.method == 'POST':
-        details = request.json
+        details = request.get_json(force=True)
         details_dict = json.loads(details)
         if authenticate(details_dict):
-            return redirect(url_for("story_show"))
+            return make_response(redirect(url_for("story_show")),201)
         else:
             error = "Username and/or password not valid"
-    return render_template("session/new.html", error=error)
+    return make_response(render_template("session/new.html", error=error),404)
 
 def authenticate(details_dict):
     conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, 
@@ -145,21 +146,8 @@ def object_show():
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
 @app.route("/app/story/object/show", methods = ["GET"])
-def app_list_of_objects_show():
-    obj_list = StoryObject.obj_list_json
-    if obj_list:
-        return make_response(obj_list, 200)
-    else:
-        return make_response(jsonify({"message" : "Story does not exist"}), 404)
-
-@app.route("/app/story/object/single/show", methods = ["GET", "POST"])
 def app_object_show():
-    obj_id = 0
-    story_id = 0
-    if request.method == "POST":
-        pass
-    if request.method == "GET":
-        pass
+    pass
 
 @app.route("/story/object/update", methods = ['POST'])
 def object_update(story_id, object_id):
