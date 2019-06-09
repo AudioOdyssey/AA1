@@ -45,7 +45,7 @@ def home():
 def user_new():
     if request.method == "POST":
         details = request.get_json(force=True) 
-        if sign_up(details_dict):
+        if sign_up(details):
             return make_response(render_template("user/new.html"),201)
         else:
             return make_response(jsonify({"message":"user already exists"}), 409)
@@ -91,28 +91,25 @@ def sign_up(details_dict):
 def session_new():
     error = None
     if request.method == 'POST':
-        details = request.get_json(force=True)
-        details_dict = json.loads(details)
+        details = request.form
         if authenticate(details_dict):
             return make_response(redirect(url_for("story_show")),201)
         else:
             error = "Username and/or password not valid"
     return make_response(render_template("session/new.html", error=error),404)
 
-def authenticate(details_dict):
+def authenticate(details):
     conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, 
                             cursorclass = pymysql.cursors.DictCursor)
     with conn.cursor() as cur:
-        details = request.json
-        details_dict = json.loads(details)
-        username = details_dict['username']
+        username = details['username']
         cur.execute(("SELECT * FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
             return False
         else:
             usr = load_user(str(result['user_id']).encode('utf-8').decode('utf-8'))
-            if(usr.authenticate(details_dict['password'])):
+            if(usr.authenticate(details['password'])):
                 session['username'] = username
                 return True
             else:
