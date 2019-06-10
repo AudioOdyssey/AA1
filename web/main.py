@@ -1,9 +1,9 @@
-from .models.storyobject import StoryObject
-from .models.User import User
-from .models.story import Story
-from .models.storyevent import StoryEvent
-from .models.storylocation import StoryLocation
-from .models.storydecision import StoryDecision
+from models.storyobject import StoryObject
+from models.User import User
+from models.story import Story
+from models.storyevent import StoryEvent
+from models.storylocation import StoryLocation
+from models.storydecision import StoryDecision
 from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
 
 from flask_login import LoginManager
