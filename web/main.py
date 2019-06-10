@@ -42,13 +42,29 @@ def home():
     return render_template("index.html")
 
 @app.route("/user/new", methods=['GET', 'POST'])
-def user_new():
+def user_new(): #fix later
     if request.method == "POST":
-        details = request.get_json(force=True) 
-        if sign_up(details):
-            return make_response(render_template("user/new.html"),201)
+        details = request.form 
+        username = details['username']
+        raw_password = details['password']
+        email = details['email_address']
+        gender = int(details['gender'])
+        country_of_origin = int(details['country_of_origin'])
+        profession = details['profession']
+        disabilities = details.get('disabilities')
+        if disabilities is None:
+            disabilities_bool = 0
         else:
-            return make_response(jsonify({"message":"user already exists"}), 409)
+            disabilities_bool = 1
+        language = int(details['language-id'])
+        first_name = details['first_name']
+        last_name = details['last_name']
+        date_of_birth = datetime.strptime(details['date_of_birth'], '%Y-%m-%d')
+        usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
+                profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth, 
+                first_name_input=first_name, last_name_input=last_name, language=language)
+        usr.add_to_server()
+    return render_template("user/new.html")
 
 @app.route("/app/user/new", methods=['POST'])
 def app_user_new():
@@ -78,10 +94,10 @@ def sign_up(details_dict):
     language = int(details_dict['language_id'])
     first_name = details_dict['first_name']
     last_name = details_dict['last_name']
-   # date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
+    date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
     usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
             profession_input=profession, disabilities_input=disabilities_bool, 
-            first_name_input=first_name, last_name_input=last_name, language=language)
+            first_name_input=first_name, last_name_input=last_name, language=language, date_of_birth_input=date_of_birth)
     if usr.add_to_server():
         return usr.get_id()
     else:
@@ -92,11 +108,11 @@ def session_new():
     error = None
     if request.method == 'POST':
         details = request.form
-        if authenticate(details_dict):
-            return make_response(redirect(url_for("story_show")),201)
+        if authenticate(details):
+            return redirect(url_for("story_show"))
         else:
             error = "Username and/or password not valid"
-    return make_response(render_template("session/new.html", error=error),404)
+    return render_template("session/new.html", error=error)
 
 def authenticate(details):
     conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, 
@@ -132,23 +148,25 @@ def story_show():
 
 @app.route("/story/update")
 def story_update():
-    objects = [StoryObject(15,"Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
-                StoryObject(15,"Different Obj", "Constantly Empty", False, 7, False, 0)]
+    objects = StoryObject.obj_list(1)
     events = [StoryEvent(1, 1, "FieldDay", "KidsGoOutside", 1, False)]
     return render_template("story/update.html", objects=objects, events=events)
 
 @app.route("/story/object/show")
 def object_show():
-    objects = StoryObject.obj_list
+    objects = StoryObject.obj_list(1)
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
 @app.route("/app/story/object/show", methods = ["GET"])
 def app_object_show():
-    pass
+    objects = StoryObject.obj_list_json(1)
+    return make_response(objects, 200)
 
 @app.route("/story/object/update", methods = ['POST'])
-def object_update(story_id, object_id):
+def object_update():
     details = request.form
+    story_id = details['story_id']
+    object_id = details['obj_id']
     name = details['obj_name']
     desc = details['obj_description']
     starting_loc = details['obj_starting_loc']
@@ -162,10 +180,10 @@ def object_update(story_id, object_id):
         is_hidden = 1
     else:
         is_hidden = 0
-    unhide_event_id = details['unhide_event_id']
-    obj = StoryObject()
-    obj_result = obj.get(story_id, object_id)
-    obj_result.update(story_id, object_id, name, starting_loc, desc, can_pickup_obj, is_hidden, unhide_event_id)
+    #unhide_event_id = details['unhide_event_id']
+    obj = StoryObject.get(story_id, object_id)
+    obj.update(name, starting_loc, desc, can_pickup_obj, is_hidden)
+    return redirect(url_for("object_show"))
     
 @app.route("/story/object/new", methods = ['POST'])
 def object_new():
@@ -176,6 +194,7 @@ def object_new():
     story_id = details['story_id']
     obj = StoryObject(story_id, name, desc, obj_starting_loc = starting_loc)
     obj.add_to_server()
+    return render_template("story/object/show.html")
 
 @app.route("/story/event/show")
 def event_show():
