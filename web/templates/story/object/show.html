@@ -4,7 +4,7 @@
 <script src="{{ url_for('static', filename='js/story/object/show.js') }}"></script>
 
 <section class="row">
-    <button type="button" onclick="add_btn_pressed({{ story_id }})" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
+    <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
 <form id="obj-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
@@ -14,11 +14,11 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="obj_name">
+                <input class="form-control" type="text" onchange="object_changed(this)" name="obj_name">
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="obj-location">
+                <input class="form-control" type="text" onchange="object_changed(this)" name="obj_starting_loc">
             </div>
         </section>
         <section class="flex-0" onclick="object_show(this)">
@@ -28,15 +28,15 @@
     <section class="row details" style="display: none">
         <hr>
         <label>Description</label>
-        <textarea class="form-control" rows="3" name="obj_description"></textarea>
+        <textarea class="form-control" rows="3" onchange="object_changed(this)" name="obj_description"></textarea>
 
         <label>Pick upable?</label>
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj">
+        <input type="checkbox" autocomplete="off" onchange="object_changed(this)" name="can_pickup_obj">
 
         <br>
 
         <label>Is Hidden? </label>
-        <input type="checkbox" autocomplete="off" name="is_hidden">
+        <input type="checkbox" autocomplete="off" onchange="object_changed(this)" name="is_hidden">
     </section>
 </form>
 
@@ -50,11 +50,11 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="object-name" onchange="object_changed(this)" value="{{ object.obj_name }}">
+                <input class="form-control" type="text" name="obj_name" onchange="object_changed(this)" value="{{ object.obj_name }}">
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="object-desc" onchange="object_changed(this)" value="{{ object.obj_location}}">
+                <input class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)" value="{{ object.obj_location}}">
             </div>
         </section>
         <section class="flex-0" onclick="object_show(this)">

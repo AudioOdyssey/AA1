@@ -31,9 +31,9 @@ function add_btn_pressed(story_id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             // Successful Request
-            var event = JSON.parse(this.responseText);
+            var loc = JSON.parse(this.responseText);
             if (loc.status == "ok") {
-                newelem.childNodes[1].value = loc.response.loc_id;
+                newelem.childNodes[1].value = loc.response.location_id;
             } else {
                 console.log("Bad Response, what do we do now?")
             }
@@ -43,5 +43,5 @@ function add_btn_pressed(story_id) {
     };
     xhttp.open("POST", "/story/location/new", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("desc=&name=&loc_start_location=0&story_id=" + story_id);
+    xhttp.send("desc=&name=&story_id=" + story_id);
 }

@@ -1,4 +1,4 @@
-function event_show(activ) {
+function decision_show(activ) {
     var elem = activ.parentNode.nextElementSibling
     if (elem.style.display == "block")
         elem.style.display = "none";
@@ -15,15 +15,15 @@ function set_focus(elem) {
     elem.id = "active";
 }
 
-function event_changed(elem) {
+function decision_changed(elem) {
     elem.form.submit()
 }
 
-function add_btn_pressed(story_id) {
-    var template = document.getElementById("ev-template");
+function add_btn_pressed(story_id, location_id) {
+    var template = document.getElementById("dec-template");
     var newelem = template.cloneNode(true);
     newelem.id = "";
-    newelem.classList.add("event-main-row");
+    newelem.classList.add("decision-main-row");
     newelem.childNodes[0].value = story_id;
     document.getElementById("main-site").insertBefore(newelem, document.getElementById("content-marker"));
 
@@ -31,9 +31,9 @@ function add_btn_pressed(story_id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             // Successful Request
-            var ev = JSON.parse(this.responseText);
-            if (ev.status == "ok") {
-                newelem.childNodes[1].value = ev.response.event_id;
+            var obj = JSON.parse(this.responseText);
+            if (obj.status == "ok") {
+                newelem.childNodes[1].value = obj.response.decision_id;
             } else {
                 console.log("Bad Response, what do we do now?")
             }
@@ -41,7 +41,7 @@ function add_btn_pressed(story_id) {
             console.log("Bad Response, what do we do now?")
         }
     };
-    xhttp.open("POST", "/story/event/new", true);
+    xhttp.open("POST", "/story/location/decision/new", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("desc=&name=&event_start_location=0&story_id=" + story_id);
+    xhttp.send("decision_name=&loc_id=" + location_id + "&story_id=" + story_id);
 }

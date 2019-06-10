@@ -17,7 +17,7 @@
                 <input class="form-control" type="text" name="loc_name">
             </div>
         </section>
-        <section class="flex-0" onclick="object_show(this)">
+        <section class="flex-0" onclick="location_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
@@ -83,10 +83,8 @@
         {% else %}
         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" checked>
         {% endif %}
-
         <br>
-
-      
+        <a href="/story/location/decision/show">Edit Decisions</a>
     </section>
 </form>
 {% endfor %}
