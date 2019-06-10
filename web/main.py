@@ -44,11 +44,9 @@ def home():
 @app.route("/user/new", methods=['GET', 'POST'])
 def user_new():
     if request.method == "POST":
-        details = request.get_json(force=True) 
-        if sign_up(details):
-            return make_response(render_template("user/new.html"),201)
-        else:
-            return make_response(jsonify({"message":"user already exists"}), 409)
+        details = request.form 
+        sign_up(details)
+    return render_template("user/new.html")
 
 @app.route("/app/user/new", methods=['POST'])
 def app_user_new():
@@ -92,7 +90,7 @@ def session_new():
     error = None
     if request.method == 'POST':
         details = request.form
-        if authenticate(details_dict):
+        if authenticate(details):
             return make_response(redirect(url_for("story_show")),201)
         else:
             error = "Username and/or password not valid"
@@ -147,8 +145,10 @@ def app_object_show():
     pass
 
 @app.route("/story/object/update", methods = ['POST'])
-def object_update(story_id, object_id):
+def object_update():
     details = request.form
+    story_id = details['story_id']
+    object_id = details['object_id']
     name = details['obj_name']
     desc = details['obj_description']
     starting_loc = details['obj_starting_loc']
