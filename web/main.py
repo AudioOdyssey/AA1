@@ -155,18 +155,19 @@ def story_update():
 
 @app.route("/story/object/show")
 def object_show():
-    objects = StoryObject.obj_list
+    objects = StoryObject.obj_list(1)
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
 @app.route("/app/story/object/show", methods = ["GET"])
 def app_object_show():
-    pass
+    objects = StoryObject.obj_list_json(1)
+    return make_response(objects, 200)
 
 @app.route("/story/object/update", methods = ['POST'])
 def object_update():
     details = request.form
-    story_id = details['story_id']
-    object_id = details['object_id']
+    story_id = request.args['story_id']
+    object_id = request.args['highlight']
     name = details['obj_name']
     desc = details['obj_description']
     starting_loc = details['obj_starting_loc']
