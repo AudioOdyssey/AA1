@@ -42,10 +42,28 @@ def home():
     return render_template("index.html")
 
 @app.route("/user/new", methods=['GET', 'POST'])
-def user_new():
+def user_new(): #fix later
     if request.method == "POST":
         details = request.form 
-        sign_up(details)
+        username = details['username']
+        raw_password = details['password']
+        email = details['email_address']
+        gender = int(details['gender'])
+        country_of_origin = int(details['country_of_origin'])
+        profession = details['profession']
+        disabilities = details.get('disabilities')
+        if disabilities is None:
+            disabilities_bool = 0
+        else:
+            disabilities_bool = 1
+        language = int(details['language-id'])
+        first_name = details['first_name']
+        last_name = details['last_name']
+        date_of_birth = datetime.strptime(details['date_of_birth'], '%Y-%m-%d')
+        usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
+                profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth, 
+                first_name_input=first_name, last_name_input=last_name, language=language)
+        usr.add_to_server()
     return render_template("user/new.html")
 
 @app.route("/app/user/new", methods=['POST'])
@@ -76,10 +94,10 @@ def sign_up(details_dict):
     language = int(details_dict['language_id'])
     first_name = details_dict['first_name']
     last_name = details_dict['last_name']
-   # date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
+    date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
     usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
             profession_input=profession, disabilities_input=disabilities_bool, 
-            first_name_input=first_name, last_name_input=last_name, language=language)
+            first_name_input=first_name, last_name_input=last_name, language=language, date_of_birth_input=date_of_birth)
     if usr.add_to_server():
         return usr.get_id()
     else:
@@ -91,10 +109,10 @@ def session_new():
     if request.method == 'POST':
         details = request.form
         if authenticate(details):
-            return make_response(redirect(url_for("story_show")),201)
+            return redirect(url_for("story_show"))
         else:
             error = "Username and/or password not valid"
-    return make_response(render_template("session/new.html", error=error),404)
+    return render_template("session/new.html", error=error)
 
 def authenticate(details):
     conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, 
