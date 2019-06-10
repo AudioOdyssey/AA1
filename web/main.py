@@ -148,8 +148,7 @@ def story_show():
 
 @app.route("/story/update")
 def story_update():
-    objects = [StoryObject(15,"Adam's Water Bottle", "Constantly Empty", True, 7, False, 0),
-                StoryObject(15,"Different Obj", "Constantly Empty", False, 7, False, 0)]
+    objects = StoryObject.obj_list(1)
     events = [StoryEvent(1, 1, "FieldDay", "KidsGoOutside", 1, False)]
     return render_template("story/update.html", objects=objects, events=events)
 
@@ -166,8 +165,8 @@ def app_object_show():
 @app.route("/story/object/update", methods = ['POST'])
 def object_update():
     details = request.form
-    story_id = request.args['story_id']
-    object_id = request.args['highlight']
+    story_id = details['story_id']
+    object_id = details['obj_id']
     name = details['obj_name']
     desc = details['obj_description']
     starting_loc = details['obj_starting_loc']
@@ -181,10 +180,10 @@ def object_update():
         is_hidden = 1
     else:
         is_hidden = 0
-    unhide_event_id = details['unhide_event_id']
-    obj = StoryObject()
-    obj_result = obj.get(story_id, object_id)
-    obj_result.update(story_id, object_id, name, starting_loc, desc, can_pickup_obj, is_hidden, unhide_event_id)
+    #unhide_event_id = details['unhide_event_id']
+    obj = StoryObject.get(story_id, object_id)
+    obj.update(name, starting_loc, desc, can_pickup_obj, is_hidden)
+    return redirect(url_for("object_show"))
     
 @app.route("/story/object/new", methods = ['POST'])
 def object_new():
@@ -195,6 +194,7 @@ def object_new():
     story_id = details['story_id']
     obj = StoryObject(story_id, name, desc, obj_starting_loc = starting_loc)
     obj.add_to_server()
+    return render_template("story/object/show.html")
 
 @app.route("/story/event/show")
 def event_show():
