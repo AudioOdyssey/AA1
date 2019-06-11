@@ -167,8 +167,11 @@ def app_object_show():
 def object_update():
     details = request.form
     story_id = details['story_id']
+    if story_id == '':
+        story_id = request.args.get('story')
     object_id = details['obj_id']
-    if object_id 
+    if object_id == '':
+        object_id = StoryObject.get_last_id(story_id)
     name = details['obj_name']
     desc = details['obj_description']
     starting_loc = details['obj_starting_loc']
@@ -194,8 +197,7 @@ def object_new():
     story_id = details['story_id']
     obj = StoryObject(story_id)
     obj.add_to_server()
-    objects = StoryObject.obj_list(story_id)
-    return render_template("story/object/show.html", objects=objects, story_id=1)
+    return redirect(url_for("object_show"))
 
 @app.route("/story/event/show")
 def event_show():
