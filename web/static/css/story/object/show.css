@@ -29,7 +29,6 @@
     height: 100%;
     padding: 0px 0.5em;
     vertical-align: middle;
-    color: #ff1234;
 }
 
 .down-arrow:hover {
@@ -71,9 +70,9 @@
     display: none;
 }
 .trash{
-   
-    width: 500px;
-    height: 500px;
-   background-image:url("/web/static/image/trash.jpeg") !important
+   margin-left: 97%;
+    width: 25px ;
+    height: 25px ; 
+   background-image:url("/web/static/image/trash.png") !important
    
 }
