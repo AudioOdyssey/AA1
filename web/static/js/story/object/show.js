@@ -47,5 +47,6 @@ function add_btn_pressed(story_id) {
 }
 
 function delete_btn_pressed(story_id, obj_id) {
-   
+    var element = document.getElementById("obj-template");
+    element.parentNode.removeChild(element);
 }

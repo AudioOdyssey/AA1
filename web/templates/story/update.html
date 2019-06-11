@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/update.css') }}" type="text/css"/>
-
+<script src="{{ url_for('static', filename='js/story/update.js') }}"></script>
 <section id="3-left-rows">
     <section class="1-3-left-row">
         <!-- Summary Row -->
@@ -92,5 +92,7 @@
         {% endfor %}
     </section>
 </section>
-
+<hr>
+<button class="btn btn-light" onclick= "save('{{story_id}}')">Save For Later</button>
+<button class="btn btn-light" onclick= "publishStory('{{story_id}}')">Publish Story</button>
 {% endblock %}
