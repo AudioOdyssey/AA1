@@ -44,8 +44,7 @@ class StoryObject:
             cur.execute(("SELECT count(*) FROM `objects` WHERE story_id = %s"), (self.story_id))
             results = cur.fetchone()
             self.obj_id = results["count(*)"] + 1
-            cur.execute(("INSERT INTO objects(story_id, obj_id, obj_starting_loc, obj_name, obj_description, can_pickup_obj, is_hidden, unhide_event_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s")
-                        , (self.story_id, self.obj_id, self.obj_starting_loc, self.obj_name, self.obj_description, self.can_pickup_obj, self.is_hidden, self.unhide_event_id))
+            cur.execute(("INSERT INTO objects(story_id, obj_id) VALUES (%s, %s)"), (self.story_id, self.obj_id))
             conn.commit()
         conn.close()
 
@@ -68,7 +67,7 @@ class StoryObject:
             else:
                 return cls(story_id, results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"])
     
-    def update(self, name, starting_loc, desc, can_pickup_obj, is_hidden):
+    def update(self, story_id, object_id, name = '', starting_loc = 0, desc = '', can_pickup_obj = 0, is_hidden = 0):
         self.obj_name = name
         self.obj_starting_loc = starting_loc
         self.obj_description = desc
@@ -77,7 +76,7 @@ class StoryObject:
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `objects` SET obj_name = %s, obj_starting_loc = %s, obj_description = %s, can_pickup_obj=%s, is_hidden = %s WHERE story_id = %s AND obj_id= %s"),
-                        (self.obj_name, self.obj_starting_loc, self.obj_description, self.can_pickup_obj, self.is_hidden, self.story_id, self.obj_id))
+                        (self.obj_name, self.obj_starting_loc, self.obj_description, self.can_pickup_obj, self.is_hidden, story_id, object_id))
             conn.commit()
         conn.close()
         

@@ -182,19 +182,16 @@ def object_update():
         is_hidden = 0
     #unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
-    obj.update(name, starting_loc, desc, can_pickup_obj, is_hidden)
-    return redirect(url_for("object_show"))
+    obj.update(story_id, object_id, name=name, starting_loc=starting_loc, desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
+    
     
 @app.route("/story/object/new", methods = ['POST'])
 def object_new():
     details = request.form
-    name = details['obj_name']
-    starting_loc = details['obj_starting_loc']
-    desc = details['obj_description']
     story_id = details['story_id']
-    obj = StoryObject(story_id, name, desc, obj_starting_loc = starting_loc)
+    obj = StoryObject(story_id)
     obj.add_to_server()
-    return render_template("story/object/show.html")
+    return redirect(url_for("object_show"))
 
 @app.route("/story/event/show")
 def event_show():
