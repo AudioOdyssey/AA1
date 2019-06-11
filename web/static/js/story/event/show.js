@@ -45,3 +45,6 @@ function add_btn_pressed(story_id) {
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("desc=&name=&event_start_location=0&story_id=" + story_id);
 }
+function delete_btn_pressed(story_id, event_id) {
+   
+}

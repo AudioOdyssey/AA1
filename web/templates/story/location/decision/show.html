@@ -14,12 +14,14 @@
 <form id="dec-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" readonly class="hidden-in">
     <input name="obj_id" readonly class="hidden-in">
+    <button type= "button" onclick= "delete_btn_pressed('{{story_id , decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="decision-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)">
             </div>
+            <hr>
             <div class="col-sm-8">
                 <label><b>Summary</b></label>
                 <br>
@@ -112,12 +114,14 @@
 <form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
     <input name="obj_id" value="{{ decision.obj_id }}" readonly class="hidden-in">
+    <button type= "button" onclick= "delete_btn_pressed('{{story_id , decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="decision-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)" value="{{ decision.obj_name }}">
             </div>
+            <hr>
             <div class="col-sm-8">
                 <label><b>Properties</b></label>
                 <br>

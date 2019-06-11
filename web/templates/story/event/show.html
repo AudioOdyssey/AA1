@@ -10,6 +10,7 @@
 <form id="ev-template" onclick="set_focus(this)" method="POST" action="/story/event/update">
     <input name="story_id" readonly class="hidden-in">
     <input name="ev_id" readonly class="hidden-in">
+    <button type= "button" onclick= "delete_btn_pressed('{{story_id , event_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="event-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
@@ -43,6 +44,7 @@
 <form class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
     <input name="story_id" value="{{ event.story_id }}" readonly class="hidden-in">
     <input name="ev_id" value="{{ event.event_id }}" readonly class="hidden-in">
+    <button type= "button" onclick= "delete_btn_pressed('{{story_id , event_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="event-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
