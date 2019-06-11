@@ -33,6 +33,8 @@ name = "AA_admin"
 rds_password = "z9QC3pvQ"
 db_name = "audio_adventures_dev"
 
+story_id = 1
+
 random.seed()
 
 @app.route("/")
@@ -166,9 +168,6 @@ def app_object_show():
 @app.route("/story/object/update", methods = ['POST'])
 def object_update():
     details = request.form
-    story_id = details['story_id']
-    if story_id == '':
-        story_id = request.args.get('story')
     object_id = details['obj_id']
     if object_id == '':
         object_id = StoryObject.get_last_id(story_id)
@@ -189,8 +188,7 @@ def object_update():
     obj = StoryObject.get(story_id, object_id)
     obj.update(story_id, object_id, name=name, starting_loc=starting_loc, desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
     return redirect(url_for("object_show"))
-    
-    
+
 @app.route("/story/object/new", methods = ['POST'])
 def object_new():
     details = request.form

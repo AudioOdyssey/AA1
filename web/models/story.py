@@ -1,9 +1,35 @@
+import pymysql
+import pymysql.cursors
+import sys
+
+import json
+
 class Story:
-    def __init__(self, story_id, story_title, story_author, story_synopsis, story_price, 
-                author_paid, genre, length_of_story, number_of_locations, number_of_decisions, 
-                story_verified, story_verification_date, name_of_verifier, verification_status, 
-                story_ratings, story_language_id, storage_size, obj_verification_status, event_verification_status):
-        self.story_id = story_id
+    story_id = 0
+    story_title = ''
+    story_author = ''
+    story_synopsis = ''
+    story_price = 0
+    author_paid = False
+    length_of_story = 0
+    number_of_locations = 0
+    number_of_decisions = 0
+    story_verified = False
+    story_verification_date = None
+    name_of_verifier = ''
+    story_ratings = 0
+    story_language_id = 0
+    storage_size = 0
+    obj_verification_status = ''
+    event_verification_status = ''
+    genre =  ''
+
+    def __init__(self, story_id= 0, story_title = '', story_author= '', story_synopsis = '', story_price = 0, 
+                author_paid = False, genre = '', length_of_story = 0, number_of_locations = 0, number_of_decisions = 0, 
+                story_verified = False, story_verification_date = '', name_of_verifier = '', verification_status = '', 
+                story_ratings = 0, story_language_id = 1, storage_size = 0, obj_verification_status = '', event_verification_status = ''):
+        if story_id > 0:
+            self.story_id = story_id
         self.story_title = story_title
         self.story_author = story_author
         self.story_synopsis = story_synopsis
