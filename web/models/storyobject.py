@@ -124,3 +124,19 @@ class StoryObject:
                 "can_pickup" : row[5], "is_hidden" : row[6], "unhide_event_id" : row[7]}
                 result.append(obj_dict)
         return json.dumps(result)
+
+    @classmethod
+    def get_last_id(cls, story_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        last_id = 0
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT COUNT(*) FROM `objects` WHERE story_id = %s"), story_id)
+            query_data = cur.fetchall()
+            last_id = query_data[0]
+        conn.close()
+        return last_id
+         
