@@ -69,6 +69,7 @@ class Story:
         self.story_language_id = story_language_id
         self.length_of_story = length_of_story
         self.genre = genre
+
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -80,5 +81,37 @@ class Story:
             conn.commit()
         conn.close()
 
-    def update_admin(self, story_ratings, story_verified, story_verification_date, obj_verification_status, event_verification_status, storage_size):
-        pass
+    def update_admin(self, story_ratings, story_verified, story_verification_date, obj_verification_status, event_verification_status, storage_size, name_of_verifier):
+        self.story_ratings = story_ratings
+        self.story_verified = story_verified
+        self.story_verification_date = story_verification_date
+        self.obj_verification_status = obj_verification_status
+        self.event_verification_status = event_verification_status
+        self.storage_size = storage_size
+        self.name_of_verifier = name_of_verifier
+
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verified = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, name_of_verifier = %s WHERE story_id = %s")
+                        , (self.story_ratings, self.story_verified, self.story_verification_date, self.obj_verification_status, self.event_verification_status, self.storage_size, self.name_of_verifier))
+            conn.commit()
+        conn.close()
+
+    def get_id(self):
+        return self.story_id
+    '''  
+    @classmethod
+    def list_of_stories(cls, user_creator_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)   
+        with conn.cursor() as cur:
+            cur.execute
+    '''
