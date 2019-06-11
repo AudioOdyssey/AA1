@@ -70,6 +70,10 @@
     display: none;
 }
 .trash{
+   align-self: auto;
+    border: 1px solid RGBA(0,0,0,.5);
+    margin-left: auto; 
+    margin-bottom: .5em;
    margin-left: 97%;
     width: 25px ;
     height: 25px ; 

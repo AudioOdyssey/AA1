@@ -10,7 +10,7 @@
 <form id="obj-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" readonly class="hidden-in">
     <input name="obj_id" readonly class="hidden-in">
-<button type= "button" onclick= "delete_btn_pressed('{{story_id , obj_id}}')" class="trash"></button>
+<button type= "button" onclick= "delete_btn_pressed('{{story_id , obj_id}}')" class="trash btn btn-light"><i class= "fa fa-minus"></i></button>
     <section class="object-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
@@ -47,7 +47,7 @@
 <form class="object-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" value="{{ object.story_id }}" readonly class="hidden-in">
     <input name="obj_id" value="{{ object.obj_id }}" readonly class="hidden-in">
-    <button type="button" onclick= "delete_btn_pressed('{{story_id , obj_id}}')"  class="trash"></button>
+    <button type="button" onclick= "delete_btn_pressed('{{story_id , obj_id}}')"  class="trash"><i class= "fa fa-minus"></i></button>
     <section class="object-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
