@@ -29,6 +29,7 @@
     height: 100%;
     padding: 0px 0.5em;
     vertical-align: middle;
+    color: #ff1234;
 }
 
 .down-arrow:hover {
@@ -68,4 +69,11 @@
 
 #obj-template {
     display: none;
+}
+.trash{
+   
+    width: 500px;
+    height: 500px;
+   background-image:url("/web/static/image/trash.jpeg") !important
+   
 }
