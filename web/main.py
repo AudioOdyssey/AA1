@@ -149,8 +149,9 @@ def story_show():
 @app.route("/story/update")
 def story_update():
     objects = StoryObject.obj_list(1)
-    events = [StoryEvent(1, 1, "FieldDay", "KidsGoOutside", 1, False)]
-    return render_template("story/update.html", objects=objects, events=events)
+    events = [StoryEvent(1, 1, "Field Day", "Kids Go Outside", 1, False)]
+    locations= [StoryLocation(1, 1, "zoe's house", "its in solon", "solon", "its gone", 1, False, 1, True,0, 8, 1)]
+    return render_template("story/update.html", objects=objects, events=events, locations=locations)
 
 @app.route("/story/object/show")
 def object_show():

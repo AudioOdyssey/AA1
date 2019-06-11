@@ -4,7 +4,10 @@
 <script src="{{ url_for('static', filename='js/story/location/decision/show.js') }}"></script>
 
 <section class="row">
-    <h3>Decisions:</h3>
+    <h3>Decisions</h3>
+    <hr>
+    <h3>Location ID: '{{location_id}}'</h3>
+    
     <button type="button" onclick="add_btn_pressed('{{ story_id }}', '{{ location_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
@@ -18,8 +21,27 @@
                 <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)">
             </div>
             <div class="col-sm-8">
-                <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="decision-desc" onchange="decision_changed(this)">
+                <label><b>Summary</b></label>
+                <br>
+                <p class="form-control" >
+                    {%if hidden%}
+                    Hidden,
+                    {%else%}
+                    Not Hidden, 
+                    {%endif%}
+
+                    {%if transition%}
+                    Transition,
+                    {%else%}
+                    Not Transtion, 
+                    {%endif%}
+
+                    {%if locked%}
+                    Locked,
+                    {%else%}
+                    Not Locked
+                    {%endif%}
+                </p>
             </div>
         </section>
         <section class="flex-0" onclick="decision_show(this)">
@@ -27,6 +49,8 @@
         </section>
     </section>
     <section class="row details" style="display: none">
+        <label>Decision Sequence Number:</label>
+        <input class="form-control" type= "number" onchange="decision_changed(this)">
         <hr>
 
         <label>Decision Description:</label>
@@ -95,8 +119,27 @@
                 <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)" value="{{ decision.obj_name }}">
             </div>
             <div class="col-sm-8">
-                <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="decision-desc" onchange="decision_changed(this)" value="{{ decision.obj_location}}">
+                <label><b>Properties</b></label>
+                <br>
+                <p class="form-control">
+                    {%if hidden%}
+                    Hidden,
+                    {%else%}
+                    Not Hidden,
+                    {%endif%}
+
+                    {%if transition%}
+                    Transition,
+                    {%else%}
+                    Not Transtion, 
+                    {%endif%}
+
+                    {%if locked%}
+                    Locked,
+                    {%else%}
+                    Not Locked
+                    {%endif%}
+                </p>
             </div>
         </section>
         <section class="flex-0" onclick="decision_show(this)">
@@ -104,6 +147,8 @@
         </section>
     </section>
     <section class="row details" style="display: none">
+            <label>Decision Sequence Number:</label>
+            <input class="form-control" type= "number" onchange="decision_changed(this)">
         <hr>
 
         <label>Decision Description:</label>
