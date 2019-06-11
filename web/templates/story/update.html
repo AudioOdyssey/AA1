@@ -51,7 +51,7 @@
     </section>
 
     <!-- Object Row -->
-   <a href=""><h3>Objects</h3></a>
+   <a href="/story/object/show"><h3>Objects</h3></a>
     <hr>
     <section class="row 1-3-left-row">
         {% for object in objects %}
@@ -65,7 +65,7 @@
     </section>
 
     <!-- Event Row -->
-   <a href=""><h3>Events</h3></a>
+   <a href="/story/event/show"><h3>Events</h3></a>
     <hr>
     <section class="row 1-3-left-row">
         {% for event in events %}
@@ -80,7 +80,7 @@
 </section>
 <section id="1-right-col">
     <!-- Locations Row -->
-    <a href=""><h3>Locations</h3></a>
+    <a href="/story/location/show"><h3>Locations</h3></a>
     <hr>
     <section class="row">
         {% for location in locations %}
@@ -93,6 +93,6 @@
     </section>
 </section>
 <hr>
-<button class="btn btn-light" onclick= "save('{{story_id}}')">Save For Later</button>
-<button class="btn btn-light" onclick= "publishStory('{{story_id}}')">Publish Story</button>
+<a href= "/story/show"><button class="btn btn-light" onclick= "save('{{story_id}}')">Save For Later</button></a>
+<a href= "/story/show"> <button class="btn btn-light" onclick= "publishStory('{{story_id}}')">Publish Story</button></a>
 {% endblock %}
