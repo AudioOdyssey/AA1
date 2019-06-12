@@ -18,7 +18,7 @@
                 <input class="form-control" type="text" onchange="object_changed(this)" name="obj_name">
             </div>
             <div class="col-sm-8">
-                <label><b>Location:</b></label>
+                <label><b>Starting Location:</b></label>
                 <select class="form-control" type="text" onchange="object_changed(this)" name="obj_starting_loc">
                         {% for locations in location %}
                         <option>{{location.location_name}}</option>
@@ -59,7 +59,7 @@
                 <input class="form-control" type="text" name="obj_name" onchange="object_changed(this)" value="{{ object.obj_name }}">
             </div>
             <div class="col-sm-8">
-                <label><b>Location:</b></label>
+                <label><b>Starting Location:</b></label>
                 <select class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)" value="{{ object.obj_location}}">
                         {%for locations in location%}
                             <option>{{location.location_name}}</option>
