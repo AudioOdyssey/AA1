@@ -181,7 +181,9 @@ def object_update():
         object_id = StoryObject.get_last_id(story_id)
     name = details['obj_name']
     desc = details['obj_description']
-    starting_loc = details['obj_starting_loc']
+    starting_loc = details.get('obj_starting_loc')
+    if starting_loc is None:
+        starting_loc = 0
     can_pickup_obj = details.get('can_pickup_obj')
     if can_pickup_obj:
         can_pickup_obj = 1
@@ -218,7 +220,9 @@ def event_update():
         if event_id == '':
             event_id = StoryEvent.get_last_id(story_id)
         name = details['event_name']
-        location = details['event_loc']
+        location = details.get('event_loc')
+        if location is None:
+            location = 0
         desc = details['ev_description']
         is_global = details.get('is_global')
         if is_global is None:
