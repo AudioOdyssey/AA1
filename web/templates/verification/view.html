@@ -1,0 +1,11 @@
+{%extends "template.html" %}
+{% block content%}
+    <h1>Story Verification</h1>
+    <br><hr>
+    <h2>Stories Ready for Vericiation:</h2>
+    {%for stories in master_stories where verication_status="not_done"%}
+
+
+
+    {%endfor%}
+{% endblock %}
