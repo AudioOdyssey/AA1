@@ -15,11 +15,11 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="event-name">
+                <input class="form-control" type="text" name="event_name">
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="event-desc" >
+                <input class="form-control" type="text" name="event_desc" >
             </div>
         </section>
         <section class="flex-0" onclick="event_show(this)">
@@ -49,11 +49,11 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="event-name" onchange="event_changed(this)" value="{{ event.event_name }}">
+                <input class="form-control" type="text" name="event_name" onchange="event_changed(this)" value="{{ event.event_name }}">
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="event-location" onchange="event_changed(this)">
+                <input class="form-control" type="text" name="event_location" onchange="event_changed(this)">
             </div>
         </section>
         <section class="flex-0" onclick="event_show(this)">

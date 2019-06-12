@@ -4,7 +4,7 @@ import sys
 
 import json
 
-from datetime import date
+from datetime import datetime
 
 class StoryLocation:
     story_id = 0
@@ -26,7 +26,7 @@ class StoryLocation:
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
 
-    def __init__(self, story_id = 0, location_id = 0, location_name = '', original_description = '', short_description = '', post_event_description = '', location_event_id = 0, auto_goto = False, next_loc_id = 0, location_verified = False, location_verif_status = 0, location_timestamp = date.now(), verification_userid = 0): 
+    def __init__(self, story_id = 0, location_id = 0, location_name = '', original_description = '', short_description = '', post_event_description = '', location_event_id = 0, auto_goto = False, next_loc_id = 0, location_verified = False, location_verif_status = 0, location_timestamp = datetime.today(), verification_userid = 0): 
         self.story_id = story_id
         self.location_id = location_id
         self.location_name = location_name
@@ -123,7 +123,7 @@ class StoryLocation:
                 return json.dumps(result)
 
     @classmethod
-    def obj_dict(cls, story_id):
+    def loc_list(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -138,7 +138,7 @@ class StoryLocation:
         return objs_list
 
     @classmethod
-    def obj_list_json(cls, story_id):
+    def loc_list_json(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"

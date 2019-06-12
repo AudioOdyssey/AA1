@@ -151,8 +151,8 @@ def story_show():
 @app.route("/story/update")
 def story_update():
     objects = StoryObject.obj_list(story_id)
-    events = [StoryEvent(1, 1, "Field Day", "Kids Go Outside", 1, False)]
-    locations= [StoryLocation(1, 1, "zoe's house", "its in solon", "solon", "its gone", 1, False, 1, True,0, 8, 1)]
+    events = StoryEvent.event_list(story_id)
+    locations= StoryLocation.loc_list(story_id)
     return render_template("story/update.html", objects=objects, events=events, locations=locations)
 
 # @app.route("/story/new", methods = ['POST'])
@@ -165,12 +165,12 @@ def story_update():
 
 @app.route("/story/object/show")
 def object_show():
-    objects = StoryObject.obj_list(1)
+    objects = StoryObject.obj_list(story_id)
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
 @app.route("/app/story/object/show", methods = ["GET"])
 def app_object_show():
-    objects = StoryObject.obj_list_json(1)
+    objects = StoryObject.obj_list_json(story_id)
     return make_response(objects, 200)
 
 @app.route("/story/object/update", methods = ['POST'])
@@ -207,18 +207,25 @@ def object_new():
 
 @app.route("/story/event/show")
 def event_show():
-    events= [StoryEvent(1, 1, "Field Day", "Kids Go Outside", 1, False)]
-    return render_template("story/event/show.html", events=events, story_id=1)
+    events= StoryEvent.event_list(story_id)
+    return render_template("story/event/show.html", events=events, story_id=story_id)
+
+@app.route('/story/event/update', methods = ['POST'])
+def event_update():
+    details = request.form
+    event_id = details['ev_id']
+    if event_id == '':
+        event_id = StoryEvent.get_last_id(story_id)
 
 @app.route("/story/location/show")
 def location_show():
-    locations= [StoryLocation(1, 1, "zoe's house", "its in solon", "solon", "its gone", 1, False, 1, True,0, 8, 1)]
-    return render_template("story/location/show.html", locations=locations, story_id=1)
+    locations= StoryLocation.loc_list(story_id)
+    return render_template("story/location/show.html", locations=locations, story_id=story_id)
 
 @app.route("/story/location/decision/show")
 def decision_show():
     decisions = [StoryDecision()]
-    return render_template("story/location/decision/show.html", decisions=decisions, story_id=1, location_id=1)
+    return render_template("story/location/decision/show.html", decisions=decisions, story_id=story_id, location_id=1)
 
 @app.route("/about")
 def about():
@@ -240,5 +247,3 @@ def verification_view():
 
 if __name__=='__main__':
 	app.run()
-
-
