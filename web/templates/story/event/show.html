@@ -17,9 +17,13 @@
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="event_name">
             </div>
-            <div class="col-sm-8">
-                <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="event_desc" >
+            <div class = "col-sm-8">
+                <label for = "locations"><b>Location:</b></label>
+                <select id= "locations">
+                    {% for locations in location %}
+                        <option>{{location.location_name}}</option>
+                    {%endfor%}
+                </select>
             </div>
         </section>
         <section class="flex-0" onclick="event_show(this)">
@@ -52,8 +56,12 @@
                 <input class="form-control" type="text" name="event_name" onchange="event_changed(this)" value="{{ event.event_name }}">
             </div>
             <div class="col-sm-8">
-                <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="event_location" onchange="event_changed(this)">
+                <label for= "locations"><b>Location:</b></label>
+                <select id= "locations" class="form-control" type="text" name="event_location" onchange="event_changed(this)">
+                            {% for locations in location %}
+                                <option>{{location.location_name}}</option>
+                            {%endfor%}
+                        </select>
             </div>
         </section>
         <section class="flex-0" onclick="event_show(this)">
