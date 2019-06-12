@@ -205,17 +205,37 @@ def object_new():
     obj.add_to_server()
     return redirect(url_for("object_show"))
 
-@app.route("/story/event/show")
+@app.route("/story/event/show", methods = ['GET'])
 def event_show():
     events= StoryEvent.event_list(story_id)
     return render_template("story/event/show.html", events=events, story_id=story_id)
 
 @app.route('/story/event/update', methods = ['POST'])
 def event_update():
+    if request.method == 'POST':
+        details = request.form
+        event_id = details['event_id']
+        if event_id == '':
+            event_id = StoryEvent.get_last_id(story_id)
+        name = details['event_name']
+        location = details['event_loc']
+        desc = details['ev_description']
+        is_global = details.get('is_global')
+        if is_global is None:
+            is_global = False
+        else:
+            is_global = True
+        evnt = StoryEvent.get(story_id, event_id)
+        evnt.update(story_id, event_id, name, location, desc, is_global)
+    return redirect(url_for('event_show'))
+
+@app.route('/story/event/new', methods = ['POST'])
+def event_new():
     details = request.form
-    event_id = details['ev_id']
-    if event_id == '':
-        event_id = StoryEvent.get_last_id(story_id)
+    story_id = details['story_id']
+    evnt = StoryEvent(story_id)
+    evnt.add_to_server()
+    return redirect(url_for('event_show'))
 
 @app.route("/story/location/show")
 def location_show():
