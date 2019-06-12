@@ -60,9 +60,9 @@ class Story:
             cur.execute(("INSERT INTO master_stories(story_title, story_author, story_synopsis, story_price, author_paid, genre, length_of_story, number_of_locations, number_of_decisions, story_in_store, story_verified, story_verification_date, story_ratings, story_language_id, storage_size, obj_verification_status, event_verification_status, user_creator_id VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"), 
                         (self.story_title, self.story_author, self.story_synopsis, self.story_price, self.author_paid, self.genre, self.length_of_story, self.number_of_locations, self.number_of_decisions, self.story_in_store, self.story_verification_date, self.story_ratings, self.story_language_id, self.storage_size, self.obj_verification_status, self.event_verification_status, self.user_creator_id))
             conn.commit()
-            cur.execute(("SELECT COUNT(*) FROM master_stories WHERE `user_creator_id` = %s"), (self.user_creator_id))
+            cur.execute(("SELECT count(*) FROM master_stories WHERE `user_creator_id` = %s"), (self.user_creator_id))
             result = cur.fetchone()
-            self.story_id = result['COUNT(*)']
+            self.story_id = result['count(*)']
         conn.close()
     
     def get_id(self):
@@ -172,7 +172,7 @@ class Story:
         last_id = 0
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT COUNT(*) FROM master_stories WHERE user_creator_id = %s"), (user_creator_id))
+            cur.execute(("SELECT count(*) FROM master_stories WHERE user_creator_id = %s"), (user_creator_id))
             result = cur.fetchone()
             last_id = result[0]
         conn.close()

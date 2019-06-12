@@ -67,7 +67,7 @@ class StoryObject:
             else:
                 return cls(story_id, results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"])
     
-    def update(self, story_id, object_id, name = '', starting_loc = 0, desc = '', can_pickup_obj = 0, is_hidden = 0):
+    def update(self, story_id, object_id, name, starting_loc, desc, can_pickup_obj, is_hidden):
         self.obj_name = name
         self.obj_starting_loc = starting_loc
         self.obj_description = desc
@@ -134,8 +134,8 @@ class StoryObject:
         last_id = 0
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT COUNT(*) FROM `objects` WHERE story_id = %s"), story_id)
-            query_data = cur.fetchall()
+            cur.execute(("SELECT count(*) FROM `objects` WHERE story_id = %s"), (story_id))
+            query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()
         return last_id
