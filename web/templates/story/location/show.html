@@ -33,15 +33,23 @@
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="loc_post_event_description"></textarea>
         <hr>
-        <label>Event ID</label>
-        <input type="text" autocomplete="off" name="event_id">
+        <label>Event Name (will occur upon entry)</label>
+        <select type="text" autocomplete="off" name="event_id">
+                {%for events in event%}
+                <option>{{event.event_name}}</option>
+            {%endfor%}
+    </select>
         <hr>
-        <label>Next Location ID</label>
-        <input type="text" autocomplete="off" name="next_loc_id">
+        
         <hr>
         <label>Auto Goto</label>
         <input type="checkbox" autocomplete="off" name="auto_goto">
-
+<label>Next Location ID</label>
+        <slect type="text" autocomplete="off" name="next_loc_id">
+                {%for locations in location%}
+                <option>{{location.location_name}}</option>
+            {%endfor%}
+    </select> 
         <br>
 
     </section>
@@ -76,8 +84,12 @@
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="location_post_event_description" onchange="location_changed(this)">{{ location.post_event_description }}</textarea>
        <hr>
-        <label>Event Name</label>
-        <datalist class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">{{ location.location_event_id }}</datalist>
+        <label>Event Name (will occur upon entry)</label>
+        <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
+            {%for events in event%}
+            <option>{{event.event_name}}</option>
+        {%endfor%}
+        {{ location.location_event_id }} </select>
         <br>
         <label>Auto Go To</label>
         {% if location.auto_goto %}
@@ -86,9 +98,14 @@
         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" checked>
         {% endif %}
         <br>
+        <label>Next Location ID</label> <!--CHeck this out wtf-->
+        <select type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
+              
+   </select> 
         <a href="/story/location/decision/show">Edit Decisions</a>
     </section>
 </form>
+<br>
 {% endfor %}
 
 {% endblock %}
