@@ -7,7 +7,7 @@
     <div class="row">
         {% for story in stories %}
         <div class="col-sm-4 storycard">
-            <button id= "story" class="btn btn-light" onclick= "editStory('{{story_id}}')">{{ story.story_title }}</button>
+            <a href= "/story/update" ><button id= "story" class="btn btn-light" onclick= "editStory('{{story_id}}')">{{ story.story_title }}</button></a>
         </div>
         {% endfor %}
     </div>

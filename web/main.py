@@ -235,3 +235,8 @@ def load_user(user_id):
 
 if __name__=='__main__':
 	app.run()
+
+
+@app.route("/verifcation/view")
+def verifcation_view():
+    return render_template("verification/view.html")
