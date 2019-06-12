@@ -32,7 +32,7 @@ class StoryEvent:
             cur.execute(("SELECT count(*) FROM `events` WHERE story_id = %s"), (self.story_id))
             results = cur.fetchone()
             self.event_id = results["count(*)"] + 1
-            cur.execute(("INSERT INTO objects(story_id, event_id) VALUES (%s, %s)"), (self.story_id, self.event_id))
+            cur.execute(("INSERT INTO events(story_id, event_id) VALUES (%s, %s)"), (self.story_id, self.event_id))
             conn.commit()
         conn.close()
 
@@ -55,12 +55,11 @@ class StoryEvent:
             else:
                 return cls(story_id, results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"])
        
-    def update(self, story_id, event_id, name, location_id, description, is_global, is_hidden):
+    def update(self, story_id, event_id, name, location_id, description, is_global):
         self.event_name = name
         self.event_location_id = location_id
         self.event_description = description
         self.event_is_global = is_global
-        self.is_hidden = is_hidden
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `events` SET event_name = %s, event_location_id = %s, event_description = %s, event_is_global=%s WHERE story_id = %s AND event_id= %s"),
