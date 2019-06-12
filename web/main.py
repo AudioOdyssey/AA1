@@ -155,13 +155,13 @@ def story_update():
     locations= [StoryLocation(1, 1, "zoe's house", "its in solon", "solon", "its gone", 1, False, 1, True,0, 8, 1)]
     return render_template("story/update.html", objects=objects, events=events, locations=locations)
 
-@app.route("/story/new", methods = ['POST'])
-def story_new():
-    details = request.form
-    creator_id = details['user_creator_id']
-    new_story = Story(user_creator_id = creator_id)
-    new_story.add_to_server()
-    return redirect(url_for("story_update"))
+# @app.route("/story/new", methods = ['POST'])
+# def story_new():
+#     details = request.form
+#     creator_id = details['user_creator_id']
+#     new_story = Story(user_creator_id = creator_id)
+#     new_story.add_to_server()
+#     return redirect(url_for("story_update"))
 
 @app.route("/story/object/show")
 def object_show():
