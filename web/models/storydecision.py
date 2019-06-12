@@ -54,12 +54,12 @@ def add_to_server(self):
             conn.commit()
         conn.close()  
 
- def get_id(self):
+def get_id(self):
         id = (self.story_id, self.decision_id)
         return id
 
   @classmethod
-    def get(cls, story_id, decision_id):
+def get(cls, story_id, decision_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
