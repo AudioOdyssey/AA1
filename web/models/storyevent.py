@@ -20,7 +20,7 @@ class StoryEvent:
         with conn.cursor() as cur:
             cur.execute(("SELECT count(*) FROM `events` WHERE story_id = %s"), (self.story_id))
             results = cur.fetchone()
-            self.obj_id = results["count(*)"] + 1
+            self.event_id = results["count(*)"] + 1
             cur.execute(("INSERT INTO objects(story_id, event_id) VALUES (%s, %s)"), (self.story_id, self.event_id))
             conn.commit()
         conn.close()
@@ -30,7 +30,7 @@ class StoryEvent:
         return id
     
      @classmethod
-    def get(cls, story_id, obj_id):
+    def get(cls, story_id, event_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
