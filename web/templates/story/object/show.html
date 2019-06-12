@@ -19,7 +19,11 @@
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" onchange="object_changed(this)" name="obj_starting_loc">
+                <select class="form-control" type="text" onchange="object_changed(this)" name="obj_starting_loc">
+                        {% for locations in location %}
+                        <option>{{location.location_name}}</option>
+                    {% endfor %}
+                </select>
             </div>
         </section>
         <section class="flex-0" onclick="object_show(this)">
@@ -56,8 +60,13 @@
             </div>
             <div class="col-sm-8">
                 <label><b>Location:</b></label>
-                <input class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)" value="{{ object.obj_location}}">
-            </div>
+                <select class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)" value="{{ object.obj_location}}">
+                        {%for locations in location%}
+                            <option>{{location.location_name}}</option>
+                        {%endfor%}
+                </select>
+
+                </div>
         </section>
         <section class="flex-0" onclick="object_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
