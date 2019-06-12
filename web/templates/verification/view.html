@@ -1,11 +1,14 @@
 {%extends "template.html" %}
 {% block content%}
-    <h1>Story Verification</h1>
-    <br><hr>
-    <h2>Stories Ready for Vericiation:</h2>
-    {%for stories in master_stories where verication_status="not_done"%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verification/view.css') }}" type="text/css"/>
+    <h1 class= "text" >Story Verification</h1>
+    <hr>
+    <h2 class= "text">Stories Ready for Verification:</h2>
+    <br>
+    {% for story in stories %}
+    <div class="col-sm-4 storycard">
+        <button id = "tbvs" class= "btn btn-light">{{ story.story_title }}</button>
+    </div>
 
-
-
-    {%endfor%}
+    {% endfor %}
 {% endblock %}
