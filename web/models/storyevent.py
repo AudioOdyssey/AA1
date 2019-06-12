@@ -1,3 +1,9 @@
+import pymysql
+import pymysql.cursors
+import sys
+
+import json
+
 class StoryEvent:
     #event_location_name = ""
     story_id = 0
@@ -7,7 +13,12 @@ class StoryEvent:
     event_location_id = 0
     event_is_global = False  
 
-    def __init__(self, story_id, event_id, event_name, event_description, event_location_id, event_is_global):
+    rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+    name = "AA_admin"
+    rds_password = "z9QC3pvQ"
+    db_name = "audio_adventures_dev"
+
+    def __init__(self, story_id= 0, event_id = 0, event_name = 0, event_description = '', event_location_id = 0, event_is_global = False):
         self.story_id = story_id
         self.event_id = event_id
         self.event_name = event_name
@@ -29,8 +40,8 @@ class StoryEvent:
         id = (self.story_id, self.event_id)
         return id
     
-     @classmethod
-    def get(cls, story_id, obj_id):
+    @classmethod
+    def get(cls, story_id, event_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -44,7 +55,7 @@ class StoryEvent:
             else:
                 return cls(story_id, results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"])
        
-    def update(self, story_id, event_id, name = '', location_id = 0, description = '', is_global = False):
+    def update(self, story_id, event_id, name, location_id, description, is_global, is_hidden):
         self.event_name = name
         self.event_location_id = location_id
         self.event_description = description
@@ -67,7 +78,7 @@ class StoryEvent:
             else:
                 return json.dumps(results)
 
-     @classmethod
+    @classmethod
     def event_list(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
@@ -83,7 +94,7 @@ class StoryEvent:
         conn.close()
         return events_list
 
-     @classmethod
+    @classmethod
     def event_list_json(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
@@ -102,7 +113,7 @@ class StoryEvent:
                 result.append(event_dict)
         return json.dumps(result)
 
-     @classmethod
+    @classmethod
     def get_last_id(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
