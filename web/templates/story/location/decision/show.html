@@ -51,8 +51,8 @@
         </section>
     </section>
     <section class="row details" style="display: none">
-        <label>Decision Sequence Number:</label>
-        <input class="form-control" type= "number" onchange="decision_changed(this)">
+        <label>Decision Sequence Number:</label> <!---add max and min value--> 
+        <input class="form-control" type= "number" min= "1" onchange="decision_changed(this)">
         <hr>
 
         <label>Decision Description:</label>
@@ -63,9 +63,13 @@
         <label>Causes a transition?</label>
         <input type="checkbox" autocomplete="off" name="transition" onchange="decision_changed(this)">
         <br>
-
+       
         <label>Transition Location:</label>
-        <input class="form-control" type="text" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
+        <select class="form-control" type="text" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
+                    {% for locations in location %}
+                        <option>{{location.location_name}}</option>
+                    {%endfor%}
+                </select>
 
         <hr>
 
@@ -74,11 +78,17 @@
         <br>
 
         <label>Event to show decision:</label>
-        <input class="form-control" type="text" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
-
+        <select class="form-control" type="text" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
+                {%for events in event%}
+                    <option>{{event.event_name}}</option>
+                {%endfor%}
+        </select>
         <label>Object to show decision:</label>
-        <input class="form-control" type="text" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
-
+        <select class="form-control" type="text" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
+                {%for objects in object%}
+                <option>{{object.obj_name}}</option>
+            {%endfor%}
+    </select>      
         <hr>
 
         <label>Is Locked?</label>
@@ -89,11 +99,17 @@
         <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
 
         <label>Event to unlock decision:</label>
-        <input class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-
+        <select class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+                {%for events in event%}
+                <option>{{event.event_name}}</option>
+            {%endfor%}
+        </select>
         <label>Object to unlock decision:</label>
-        <input class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-
+        <select class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+                {%for objects in object%}
+                <option>{{object.obj_name}}</option>
+            {%endfor%}
+        </select>
         <hr>
 
         <label>Description of decision aftermath:</label>
@@ -104,8 +120,12 @@
         <br>
 
         <label>Event triggered by this decision:</label>
-        <input class="form-control" type="text" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
-    </section>
+        <select class="form-control" type="text" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
+                {%for events in event%}
+                <option>{{event.event_name}}</option>
+            {%endfor%}
+    </select>
+        </section>
 </form>
 
 <div id="content-marker"></div>
@@ -152,7 +172,7 @@
     </section>
     <section class="row details" style="display: none">
             <label>Decision Sequence Number:</label>
-            <input class="form-control" type= "number" onchange="decision_changed(this)">
+            <input class="form-control" min = "1" type= "number" onchange="decision_changed(this)">
         <hr>
 
         <label>Decision Description:</label>
@@ -169,8 +189,11 @@
         <br>
 
         <label>Transition Location:</label>
-        <input type="text" class="form-control" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
-
+        <select type="text" class="form-control" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
+                    {% for locations in location %}
+                        <option>{{location.location_name}}</option>
+                    {%endfor%}
+                </select>
         <hr>
 
         <label>Is Hidden?</label>
@@ -182,11 +205,18 @@
         <br>
 
         <label>Event to show decision:</label>
-        <input type="text" class="form-control" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
+        <select type="text" class="form-control" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
+                {%for events in event%}
+                <option>{{event.event_name}}</option>
+            {%endfor%}
+        </select>
 
         <label>Object to show decision:</label>
-        <input type="text" class="form-control" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
-
+        <select type="text" class="form-control" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
+                {%for objects in object%}
+                <option>{{object.obj_name}}</option>
+            {%endfor%}
+        </select>
         <hr>
 
         <label>Is Locked?</label>
@@ -201,11 +231,17 @@
         <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
 
         <label>Event to unlock decision:</label>
-        <input type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-
+        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+                {%for events in event%}
+                <option>{{event.event_name}}</option>
+            {%endfor%}
+    </select>
         <label>Object to unlock decision:</label>
-        <input type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-
+        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+                {%for objects in object%}
+                <option>{{object.obj_name}}</option>
+            {%endfor%}
+    </select>
         <hr>
 
         <label>Description of decision aftermath:</label>
@@ -220,8 +256,12 @@
         <br>
 
         <label>Event triggered by this decision:</label>
-        <input type="text" class="form-control" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
-    </section>
+        <select type="text" class="form-control" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
+                {%for events in event%}
+                <option>{{event.event_name}}</option>
+            {%endfor%}
+    </select>
+        </section>
 </form>
 {% endfor %}
 
