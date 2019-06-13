@@ -2,7 +2,7 @@
 {% block content%}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/verification/review.css') }}" type="text/css"/>
 <script src="{{ url_for('static', filename='js/verification/review.js') }}"></script>    
-<h1 class= "text" >Story Verification</h1>
+<h1 class= "text">Story Verification</h1>
     <hr>
     <h2 class= "text">Locations:</h2>
     <br>
@@ -45,7 +45,6 @@
                 <h6><b>Name:</b></h6>
                <p>{{decision.decision_name}}</p>
             </div>
-        <hr>
         <section class="flex-0" onclick="decision_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
@@ -63,7 +62,48 @@
      </section>
 
     {%endfor%}
-<br><br><hr>
+    <hr>
+    <h2>Objects:</h2>
+    <br>
+    {%for object in objects%}
+    <section class="object-row row">
+            <div>
+                <h6><b>Name:</b></h6>
+                <p>{{object.obj_name}}</p>
+            </div>
+        <section class="flex-0" onclick="object_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+    <section class="row details" style="display: none">
+        <hr>
+        <h6>Description</h6>
+       <p>{{object.obj_description}}</p>
+
+        <br>
+    </section>
+
+    {%endfor%}
+    <hr><br>
+    <h2>Events:</h2>
+    {%for event in events%}
+    <section class="event-row row">
+      
+            <div>
+                <h6><b>Name:</b></h6>
+                <p>{{event.event_name}}</p>
+            </div>
+        <section class="flex-0" onclick="event_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+    <section class="row details" style="display: none">
+        <hr>
+        <h6>Description:</h6>
+        <p>{{event.event_description}}</p>
+    </section>
+    {%endfor%}
+<br><hr><br>
 
      <label>Suggested Rating:</label>
     <select class= "form-control">
