@@ -105,8 +105,8 @@ class StoryDecision:
         self.locked_by_event_description = locked_by_event_description
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `decisions` SET loc_id = %s, sequence_num = %s, decision_name=%s, transition = %s, transition_loc_id = %s, hidden = %s,  locked = %s, decision_description = %s, show_event_id = %s, show_object_id = %s, unlock_event_id = %s, unlock_object_id = %s, locked_descr = %s, aftermath_descr = %s, cause_event = %s, effect_event_id = %s, can_occur_once = %s, is_locked_by_event_id = %s, locked_by_event_description = %s WHERE story_id = %s AND decision_id= %s"),
-                        (self.sequence_num, self.decision_name, self.transition, self.transition_loc_id, self.hidden, self.locked, self.decision_description, self.show_event_id, self.show_object_id, self.unlock_event_id, self.unlock_object_id, self.locked_descr, self.aftermath_descr, self.cause_event, self.effect_event_id, self.can_occur_once, self.is_locked_by_event_id, self.locked_by_event_description, story_id, decision_id))
+            cur.execute(("UPDATE `decisions` SET sequence_num = %s, decision_name=%s, transition = %s, transition_loc_id = %s, hidden = %s,  locked = %s, decision_description = %s, show_event_id = %s, show_object_id = %s, unlock_event_id = %s, unlock_object_id = %s, locked_descr = %s, aftermath_descr = %s, cause_event = %s, effect_event_id = %s, can_occur_once = %s, is_locked_by_event_id = %s, locked_by_event_description = %s WHERE story_id = %s AND decision_id= %s AND loc_id = %s"),
+                        (self.sequence_num, self.decision_name, self.transition, self.transition_loc_id, self.hidden, self.locked, self.decision_description, self.show_event_id, self.show_object_id, self.unlock_event_id, self.unlock_object_id, self.locked_descr, self.aftermath_descr, self.cause_event, self.effect_event_id, self.can_occur_once, self.is_locked_by_event_id, self.locked_by_event_description, story_id, decision_id, loc_id))
             conn.commit()
         conn.close()
 
@@ -163,7 +163,7 @@ class StoryDecision:
         last_id = 0
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT COUNT(*) FROM `decisions` WHERE story_id = %s"), story_id)
+            cur.execute(("SELECT count(*) FROM `decisions` WHERE story_id = %s"), story_id)
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()

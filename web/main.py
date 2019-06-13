@@ -34,6 +34,7 @@ rds_password = "z9QC3pvQ"
 db_name = "audio_adventures_dev"
 
 story_id = 1
+location_id = 1
 
 random.seed()
 
@@ -288,11 +289,12 @@ def decision_show():
 def decision_update():
     details = request.form
     decision_id = details['decision_id']
-    if decision_id is None:
+    if decision_id == '':
         decision_id = StoryDecision.get_last_id(story_id)
-    location_id = details['location_id']
     decision_name = details['decision-name']
     sequence = details['sequence_number']
+    if sequence == '':
+        sequence = 0
     transition = details.get('transition')
     if transition is None:
         transition = False
@@ -354,7 +356,7 @@ def decision_update():
 @app.route("/story/location/decision/new", methods = ['POST'])
 def decision_new():
     details = request.form
-    location_id = details['location_id']
+    location_id = details.get('loc_id')
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
     return redirect(url_for("decision_show"))
