@@ -48,7 +48,7 @@ class StoryLocation:
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM `objects` WHERE story_id = %s"), (self.story_id))
+            cur.execute(("SELECT count(*) FROM `locations` WHERE story_id = %s"), (self.story_id))
             results = cur.fetchone()
             self.location_id = results["count(*)"] + 1
             cur.execute(("INSERT INTO locations(story_id, location_id) VALUES (%s, %s)"), (self.story_id, self.location_id))
@@ -89,7 +89,7 @@ class StoryLocation:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connection_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `locations` SET location_name = %s, original_description = %s, short_description = %s, post_event_description = %s, location_event_id = %s, auto_goto = %s, next_loc_id = %s WHERE story_id = %s and location_id = %s"),
                         (self.location_name, self.original_description, self.short_description, self.post_event_description, self.location_event_id, self.auto_goto, self.next_loc_id, story_id, location_id))

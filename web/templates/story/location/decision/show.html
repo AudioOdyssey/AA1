@@ -15,7 +15,7 @@
     <input name="story_id" readonly class="hidden-in">
     <input name="location_id" readonly class = "hidden-in">
     <input name="decision_id" readonly class="hidden-in">
-    <button type= "button" onclick= "delete_btn_pressed('{{story_id , decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
+    <button type= "button" onclick= "delete_btn_pressed('{{story_id , location_id, decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="decision-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
@@ -154,6 +154,7 @@
 {% for decision in decisions %}
 <form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
+    <input name="location_id" value="{{ decision.location_id}}" readonly class = "hidden-in">
     <input name="obj_id" value="{{ decision.obj_id }}" readonly class="hidden-in">
     <button type= "button" onclick= "delete_btn_pressed('{{story_id , decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="decision-row row">
