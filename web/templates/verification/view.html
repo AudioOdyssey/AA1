@@ -6,11 +6,11 @@
     <h2 class= "text">Stories Ready for Verification:</h2>
     <br>
     {% for story in stories %}
-    {% if story.verification_status = "" %}
+   
     <div class="col-sm-4 storycard">
         <button id = "tbvs" class= "btn btn-light">{{ story.story_title }}</button>
     </div>
-    {% endif %}
+  
 
     {% endfor %}
 {% endblock %}
