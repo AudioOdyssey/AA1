@@ -58,10 +58,10 @@ class StoryDecision:
     def add_to_server(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM `decisions` WHERE story_id = %s"), (self.story_id))
+            cur.execute(("SELECT count(*) FROM `decisions` WHERE story_id = %s AND loc_id = %s"), (self.story_id, self.loc_id))
             results = cur.fetchone()
             self.decision_id = results["count(*)"] + 1
-            cur.execute(("INSERT INTO decisions(story_id, decision_id) VALUES (%s, %s)"), (self.story_id, self.decision_id))
+            cur.execute(("INSERT INTO decisions(story_id, loc_id, decision_id) VALUES (%s, %s, %s)"), (self.story_id, self.loc_id, self.decision_id))
             conn.commit()
         conn.close()  
 
@@ -70,21 +70,21 @@ class StoryDecision:
         return id
 
     @classmethod
-    def get(cls, story_id, decision_id):
+    def get(cls, story_id, location_id, decision_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND decision_id = %s"), (story_id, decision_id))
+            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND decision_id = %s AND loc_id = %s"), (story_id, decision_id, location_id))
             results = cur.fetchone()
             if results is None:
                 return None
             else:
                 return cls(story_id, results["loc_id"], results["sequence_num"], results["decision_id"], results["transition"], results["transition_loc_id"], results["hidden"], results["locked"], results["decision_description"], results["show_event_id"], results["show_object_id"], results["unlock_event_id"], results["unlock_object_id"], results["locked_descr"], results["aftermath_descr"], results["cause_event"], results["effect_event_id"], results["can_occur_once"], results["is_locked_by_event_id"], results["locked_by_event_description"])
     
-    def update(self, story_id, decision_id, loc_id = 0, sequence_num = 0, decision_name = '', transition = False, transition_loc_id = 0, hidden = False, locked= False, decision_description = '' , show_event_id = 0, show_object_id = 0, unlock_event_id=0, unlock_object_id= 0, locked_descr = '', aftermath_descr = '', cause_event= False, effect_event_id = 0, can_occur_once = False, is_locked_by_event_id = 0, locked_by_event_description = ''):
+    def update(self, story_id, decision_id, loc_id, sequence_num, decision_name, transition, transition_loc_id, hidden, locked, decision_description, show_event_id, show_object_id, unlock_event_id, unlock_object_id, locked_descr, aftermath_descr, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_description):
         self.sequence_num =  sequence_num
         self.decision_name = decision_name
         self.transition = transition
@@ -164,7 +164,7 @@ class StoryDecision:
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
             cur.execute(("SELECT COUNT(*) FROM `decisions` WHERE story_id = %s"), story_id)
-            query_data = cur.fetchall()
+            query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()
         return last_id

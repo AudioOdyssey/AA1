@@ -11,9 +11,10 @@
     <button type="button" onclick="add_btn_pressed('{{ story_id }}', '{{ location_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
-<form id="dec-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
+<form id="dec-template" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" readonly class="hidden-in">
-    <input name="obj_id" readonly class="hidden-in">
+    <input name="location_id" readonly class = "hidden-in">
+    <input name="decision_id" readonly class="hidden-in">
     <button type= "button" onclick= "delete_btn_pressed('{{story_id , decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="decision-row row">
         <section class="row flex-1">
@@ -52,11 +53,11 @@
     </section>
     <section class="row details" style="display: none">
         <label>Decision Sequence Number:</label> <!---add max and min value--> 
-        <input class="form-control" type= "number" min= "1" onchange="decision_changed(this)">
+        <input class="form-control" type= "number" min= "1" name="sequence_number" onchange="decision_changed(this)">
         <hr>
 
         <label>Decision Description:</label>
-        <textarea class="form-control" rows="3" name="obj_description" onchange="decision_changed(this)"></textarea>
+        <textarea class="form-control" rows="3" name="dec_description" onchange="decision_changed(this)"></textarea>
 
         <hr>
 
@@ -118,6 +119,12 @@
                 <option>{{event.event_name}}</option>
             {%endfor%}
         </select>
+        <label>Object to unlock decision:</label>
+        <select class="form-control" type="text" autocomplete="off" name="unlock_obj_id" onchange="decision_changed(this)">
+                {%for objects in object%}
+                <option>{{object.obj_name}}</option>
+            {%endfor%}
+        </select>
 
         <label>Description when locked by event:</label>
         <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
@@ -145,7 +152,7 @@
 <div id="content-marker"></div>
 
 {% for decision in decisions %}
-<form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
+<form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
     <input name="obj_id" value="{{ decision.obj_id }}" readonly class="hidden-in">
     <button type= "button" onclick= "delete_btn_pressed('{{story_id , decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
