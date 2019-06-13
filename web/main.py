@@ -374,12 +374,12 @@ def verification_view():
 
 @app.route("/verification/review")
 def verification_review():
-    objects = StoryObject.obj_list(story_id)
-    events = StoryEvent.event_list(story_id)
-    locations= StoryLocation.loc_list(story_id)
-    decisions = [StoryDecision()]
-    return render_template("verification/review.html", objects=objects, events=events, locations=locations, decisions=decisions)
-
+    #objects = StoryObject.obj_list(story_id)
+    #events = StoryEvent.event_list(story_id)
+    #locations= StoryLocation.loc_list(story_id)
+    #decisions = [StoryDecision()]
+    #return render_template("verification/review.html", objects=objects, events=events, locations=locations, decisions=decisions)
+    return render_template("verification/review.html")
 @login_manager.user_loader
 def load_user(user_id):
     usr = User()
