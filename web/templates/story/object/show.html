@@ -35,9 +35,6 @@
         <label>Description</label>
         <textarea class="form-control" rows="3" onchange="object_changed(this)" name="obj_description"></textarea>
 
-        <label>Pick upable?</label>
-        <input type="checkbox" autocomplete="off" onchange="object_changed(this)" name="can_pickup_obj">
-
         <br>
 
         <label>Is Hidden? </label>
@@ -77,12 +74,6 @@
         <label>Description</label>
         <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed(this)">{{ object.obj_description }}</textarea>
 
-        <label>Pick upable?</label>
-        {% if object.can_pickup_obj %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed(this)">
-        {% else %}
-        <input type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="object_changed(this)" checked>
-        {% endif %}
 
         <br>
 

@@ -45,7 +45,6 @@
                 <h6><b>Name:</b></h6>
                <p>{{decision.decision_name}}</p>
             </div>
-        <hr>
         <section class="flex-0" onclick="decision_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
@@ -63,7 +62,14 @@
      </section>
 
     {%endfor%}
-<br><br><hr>
+    <hr>
+    <h2>Objects:</h2>
+    <br>
+    {%for decision in decisions%}
+
+
+    {%endfor%}
+<hr><br><br>
 
      <label>Suggested Rating:</label>
     <select class= "form-control">
