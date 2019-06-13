@@ -1,0 +1,78 @@
+{%extends "template.html" %}
+{% block content%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verification/review.css') }}" type="text/css"/>
+<script src="{{ url_for('static', filename='js/verification/review.js') }}"></script>    
+<h1 class= "text" >Story Verification</h1>
+    <hr>
+    <h2 class= "text">Locations:</h2>
+    <br>
+
+    {% for location in locations %}
+    <section class="location-row row">
+       
+            <div ><!--class="col-sm-4"-->
+                <h6><b>Name:</b></h6>
+                <p>{{location.location_name}}</p>
+            </div>
+       <section class="flex-0" onclick="location_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+    <section class="row details" style="display: none">
+        <hr>
+        <h6><b>Original Description</b></h6>
+        <p>{{location.original_description}}</p>
+        <hr>
+        <h6><b>Short Description</b></h6>
+        <p>{{location.short_description}}</p>
+        <hr>
+        <h6><b>Post Event Description</b></h6>
+        <p>{{location.post_event_description}}</p>
+        <hr>
+        <h6><b>Event Name (will occur upon entry)</b></h6>
+            <p>{{location.location_event_id.event_name}}</p>
+        <hr>
+        <br>
+</section>
+
+    {% endfor %}
+    <hr>
+    <h2 class= "text">Decisions:</h2>
+    <br>
+    {%for decision in decisions%}
+    <section class="decision-row row">
+            <div>
+                <h6><b>Name:</b></h6>
+               <p>{{decision.decision_name}}</p>
+            </div>
+        <hr>
+        <section class="flex-0" onclick="decision_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+    <section class="row details" style="display: none">
+       <hr>
+        <h6><b>Decision Description:</b></h6>
+        <p>{{decision.decision_description}}</p>
+        <hr>
+        <h6><b>Description when locked:</b></h6>
+        <p>{{decision.locked_descr}}</p>
+        <hr>
+        <h6><b>Description of decision aftermath:</b></h6>
+        <p>{{decision.aftermath_descr}}</p>
+     </section>
+
+    {%endfor%}
+<br><br><hr>
+
+     <label>Suggested Rating:</label>
+    <select class= "form-control">
+        <option>G</option>
+        <option>PG</option>
+        <option>PG-13</option>
+        <option>R</option>
+    </select>
+    <br><hr>
+    <button class = "btn btn-light">Verify Story</button>
+    <button class = "btn btn-light">Report Story</button>
+{% endblock %}

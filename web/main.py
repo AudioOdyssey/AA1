@@ -269,5 +269,14 @@ def verification_view():
     stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction", 3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
     return render_template("verification/view.html" , stories=stories)
 
+@app.route("/verification/review")
+def verification_review():
+    objects = StoryObject.obj_list(story_id)
+    events = StoryEvent.event_list(story_id)
+    locations= StoryLocation.loc_list(story_id)
+    decisions = [StoryDecision()]
+    return render_template("verification/review.html", objects=objects, events=events, locations=locations, decisions=decisions)
+
+
 if __name__=='__main__':
 	app.run()
