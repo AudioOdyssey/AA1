@@ -2,12 +2,13 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/show.css') }}" type="text/css"/>
 <script src="{{ url_for('static', filename='js/story/show.js') }}"></script>
-   <a  href= "/story/update"> <button id = "createstory" class= "btn-primary">Create Story</button></a>
+   <a  href= "/story/update"> <button id = "createstory" class= "btn btn-primary">Create Story</button></a>
+<br> <br><a href= "/story/help"><button id= "createstory" class = "btn btn-primary">How To Create a Story</button></a>
     <h2 id = "mystory">My Stories:</h2>
     <div class="row">
         {% for story in stories %}
         <div class="col-sm-4 storycard">
-            <a href= "/story/update" ><button id= "story" class="btn btn-light" onclick= "editStory('{{story_id}}')">{{ story.story_title }}</button></a>
+            <a href= "/story/update" ><button  id= "story" class="btn btn-light" onclick= "editStory('{{story_id}}')">{{ story.story_title }}</button></a>
         </div>
         {% endfor %}
     </div>

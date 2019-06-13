@@ -123,4 +123,11 @@ lable {
 	text-align: center;
 
 }
-	
+.title{
+	text-align: center !important; 
+	font-family: "Helvetica" sans-serif;
+}
+.body{
+	text-align: left;
+	font-family: "Helvetica" sans-serif;
+}

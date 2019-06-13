@@ -385,5 +385,10 @@ def load_user(user_id):
     usr = User()
     return usr.get(user_id)
 
+@app.route("/story/help")
+def help():
+    return render_template("story/help.html")
+
 if __name__=='__main__':
 	app.run()
+

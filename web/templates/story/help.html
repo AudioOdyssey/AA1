@@ -1,0 +1,43 @@
+{%extends "template.html" %}
+{% block content%}
+<div>
+    <h1 class= "title">Story Creation Instructions</h1>
+    <br><hr>
+    <h2 class= "title">Location Entry</h2>
+    <body class ="body">Locations contain the main audio messages that are played each time the user enters a new
+        "location" in the game. Locations do not necessarily need to be literal locations as you would think of them
+        in real life (ex "the grocery store" "school" etc.). They can also be abstract "locations" that represent
+        points in the your story (anywhere a new description is required)
+    </body>
+    <br><br>
+    <h6 class= "title">Fields you are required to fill out for each location are: </h6>
+    <br>
+    <div class= "body">
+    <body><b>Original Description: </b> this will be read the first time a player goes to this location</body>
+    <br>
+    <body><b>Short Description: </b>this will be read any subsequent time a player enters this location (can be the same as above if desired) 
+    <br>
+    <body><b>Post Event Description: </b>this will be read when the user enters this location after it has been affected by an event</body>
+    <br>
+    <body><b>Event Name: </b>the name of the event which occurs upon entering this location</body>
+    <br>
+    <body><b>Auto Go To: </b>if auto go to is checked the user will automatically be sent to the next location without being provided with decisions</body>
+    <br>
+    <body><b>Next Location: </b>only needs to be filled out if auto go to is checked. name of next location</body>
+    <br>
+    <body>use the blue "edit decision" link at the bottom of the page to add decisions if auto go to is not checked</body>
+    </div><br><hr><br>
+<h2 class = "title">Decision Entry</h2>
+<body class = "body">Decisions are the options which users are presented with everytime they enter a new location. Each location can 
+    have as many of as few decisions as you would like. The decision entry page can be accessed throught the blue "edit decision" link at 
+    the bottom of the location entry page but will only be available while auto go to is unchecked.
+</body>
+<br><br>
+<h6 class = "title">Fields you are required to enter for each decision are: </h6>
+<div class= "body">
+
+
+</div>
+
+
+{% endblock %}

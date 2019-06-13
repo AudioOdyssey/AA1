@@ -105,7 +105,7 @@
     {%endfor%}
 <br><hr><br>
 
-     <label>Suggested Rating:</label>
+     <label>Suggested Rating:</label> <!--where do we want to store this info @sonny @brian-->
     <select class= "form-control">
         <option>G</option>
         <option>PG</option>
@@ -113,6 +113,14 @@
         <option>R</option>
     </select>
     <br><hr>
-    <button class = "btn btn-light">Verify Story</button>
-    <button class = "btn btn-light">Report Story</button>
+    <form>
+    <label>Name of Verifier</label>
+    <input type= "text" class= "form-control" onchange="">
+    <label>Today's Date</label>
+    <input type= "date"class="form-control" onchange="">
+    <br><hr>
+    <button class = "btn btn-light" onclick="verify_story('story_id')">Verify Story</button>
+    <button class = "btn btn-light" onclick="report_story('story_id')">Report Story</button>
+    </form>
+    
 {% endblock %}
