@@ -5,9 +5,9 @@
 
 <section class="row">
     <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
-</section>
+</section> 
+<form id="ev-template" class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/changed">
 
-<form id="ev-template" onclick="set_focus(this)" method="POST" action="{{ url_for('event_update') }}">
     <input name="story_id" readonly class="hidden-in">
     <input name="event_id" readonly class="hidden-in">
     <button type= "button" onclick= "delete_btn_pressed('{{story_id , event_id}}')" class="trash"><i class="fa fa-minus"></i></button>
@@ -45,7 +45,7 @@
 <div id="content-marker"></div>
 
 {% for event in events %}
-<form action="{{ url_for('event_update') }}" class="event-main-row" onclick="set_focus(this)" method="POST">
+<form class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/changed">
     <input name="story_id" value="{{ event.story_id }}" readonly class="hidden-in">
     <input name="event_id" value="{{ event.event_id }}" readonly class="hidden-in">
     <button type= "button" onclick= "delete_btn_pressed('{{story_id , event_id}}')" class="trash"><i class="fa fa-minus"></i></button>
@@ -83,6 +83,7 @@
         <br>
 
     </section>
+    
 </form>
 {% endfor %}
 
