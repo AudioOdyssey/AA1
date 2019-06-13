@@ -44,8 +44,8 @@
         <hr>
         <label>Auto Goto</label>
         <input type="checkbox" autocomplete="off" name="auto_goto">
-<label>Next Location ID</label>
-        <slect type="text" autocomplete="off" name="next_loc_id">
+<label>Next Location Name</label>
+        <select type="text" autocomplete="off" name="next_loc_id">
                 {%for locations in location%}
                 <option>{{location.location_name}}</option>
             {%endfor%}
@@ -98,7 +98,7 @@
         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" checked>
         {% endif %}
         <br>
-        <label>Next Location ID</label> <!--CHeck this out wtf-->
+        <label>Next Location Name</label> <!--CHeck this out wtf-->
         <select type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
               
    </select> 

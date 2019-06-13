@@ -6,7 +6,7 @@
 <section class="row">
     <h3>Decisions</h3>
     <hr>
-    <h3>Location ID: '{{location_id}}'</h3>
+    <h3>Location name: '{{location_name}}'</h3>
     
     <button type="button" onclick="add_btn_pressed('{{ story_id }}', '{{ location_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
@@ -73,6 +73,9 @@
                 </select>
 
         <hr>
+        <label>Can occur only ONCE?</label>
+        <input type="checkbox" autocomplete="off" name="once" onchange="decision_changed(this)">
+        <hr>
 
         <label>Is Hidden?</label>
         <input type="checkbox" autocomplete="off" name="hidden" onchange="decision_changed(this)">
@@ -83,7 +86,9 @@
                 {%for events in event%}
                     <option>{{event.event_name}}</option>
                 {%endfor%}
-        </select>
+        </select> 
+
+
         <label>Object to show decision:</label>
         <select class="form-control" type="text" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
                 {%for objects in object%}
@@ -96,8 +101,17 @@
         <input type="checkbox" autocomplete="off" name="locked" onchange="decision_changed(this)">
         <br>
 
-        <label>Description when locked:</label>
+   <label>Object to unlock decision:</label>
+        <select class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+                {%for objects in object%}
+                <option>{{object.obj_name}}</option>
+            {%endfor%}
+        </select>
+
+        <label>Description when locked (NOT by an event):</label>
         <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
+
+     
 
         <label>Event to unlock decision:</label>
         <select class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
@@ -111,6 +125,11 @@
                 <option>{{object.obj_name}}</option>
             {%endfor%}
         </select>
+
+        <label>Description when locked by event:</label>
+        <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
+
+     
         <hr>
 
         <label>Description of decision aftermath:</label>
@@ -126,6 +145,7 @@
                 <option>{{event.event_name}}</option>
             {%endfor%}
     </select>
+    
         </section>
 </form>
 
@@ -196,6 +216,13 @@
                     {%endfor%}
                 </select>
         <hr>
+        <label>Can Occur only ONCE?</label>
+        {% if decision.can_occur_once %}
+        <input type="checkbox" autocomplete="off" name="once" onchange="decision_changed(this)" checked>
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="once" onchange="decision_changed(this)">
+        {% endif %}
+        <hr>
 
         <label>Is Hidden?</label>
         {% if decision.hidden %}
@@ -204,6 +231,7 @@
         <input type="checkbox" autocomplete="off" name="hidden" onchange="decision_changed(this)">
         {% endif %}
         <br>
+
 
         <label>Event to show decision:</label>
         <select type="text" class="form-control" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
@@ -227,9 +255,16 @@
         <input type="checkbox" autocomplete="off" name="locked" onchange="decision_changed(this)">
         {% endif %}
         <br>
-
-        <label>Description when locked:</label>
-        <textarea class="form-control" autocomplete="off" name="locked_descr"></textarea>
+ <label>Object to unlock decision:</label>
+        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+                {%for objects in object%}
+                <option>{{object.obj_name}}</option>
+            {%endfor%}
+    </select>
+        <label>Description when locked (NOT by an event):</label>
+        <textarea class="form-control" autocomplete="off" name="locked_descr" onchange="decision_changed(this)"></textarea>
+        
+       
 
         <label>Event to unlock decision:</label>
         <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
@@ -237,12 +272,10 @@
                 <option>{{event.event_name}}</option>
             {%endfor%}
     </select>
-        <label>Object to unlock decision:</label>
-        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-                {%for objects in object%}
-                <option>{{object.obj_name}}</option>
-            {%endfor%}
-    </select>
+
+    <label>Description when locked by event:</label>
+    <textarea class="form-control" autocomplete="off" name="locked_descr" onchange="decision_changed(this)"></textarea>
+       
         <hr>
 
         <label>Description of decision aftermath:</label>
