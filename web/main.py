@@ -257,8 +257,8 @@ def location_update():
     if loc_id is None:
         loc_id = StoryLocation.get_last_id(story_id)
     name = details['location-name']
-    original_desc = details['loc_origin_description']
-    short_desc = details['loc_short_description']
+    original_desc = details['location_origin_description']
+    short_desc = details['location_short_description']
     post_event_description = details['location_post_event_description']
     event_id = details.get("location_event_id")
     if event_id is None:
@@ -281,7 +281,7 @@ def location_new():
 
 @app.route("/story/location/decision/show")
 def decision_show():
-    decisions = StoryDecision(story_id)
+    decisions = StoryDecision.dec_list(story_id)
     return render_template("story/location/decision/show.html", decisions=decisions, story_id=story_id, location_id=1)
 
 @app.route("/story/location/decision/update", methods = ['POST'])
