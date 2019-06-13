@@ -26,3 +26,11 @@ function event_show(activ) {
     else
         elem.style.display = "block";
 }
+function verify_story(story_id)
+{
+
+}
+function report_story(story_id)
+{
+    
+}
