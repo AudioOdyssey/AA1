@@ -32,7 +32,7 @@ class User(UserMixin):
     is_authenticated = False
     is_active = True
     is_anonymous = True
-    user_id = ""
+    user_id = 0
 
     REGION = 'us-east-2b'
 
@@ -104,8 +104,7 @@ class User(UserMixin):
             conn.commit()
             cur.execute("SELECT `user_id` FROM users WHERE `username` = %s", (self.username))
             result = cur.fetchone()
-            raw_user_id = result['user_id']
-            self.user_id = str(raw_user_id).encode('utf-8').decode('utf-8')
+            self.user_id = result['user_id']
         conn.close()
         return True
 
@@ -118,6 +117,8 @@ class User(UserMixin):
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
+        if user_id == 0 or user_id == '':
+            return None
         int_user_id = int(user_id)
         conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
         cur = conn.cursor()
@@ -133,12 +134,5 @@ class User(UserMixin):
         return result
 
     def authenticate(self, password_input):
-        result = self.encrypt_password(password_input, self.password_salt)
-        if result == self.password:
-            self.is_authenticated = True
-            self.is_anonymous = False
-        else:
-            self.is_authenticated = False
-            self.is_anonymous = True
-        
-        return self.is_authenticated
+        self.is_authenticated = self.encrypt_password(password_input, self.password_salt)
+        return self.is_authenticated 
