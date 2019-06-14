@@ -6,7 +6,7 @@ from models.storylocation import StoryLocation
 from models.storydecision import StoryDecision
 from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
 
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 
 import pymysql
 import pymysql.cursors
@@ -25,6 +25,8 @@ app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = "session/new.html"
+#login_manager.login_message = "Please login"
 
 REGION = 'us-east-2b'
 
@@ -129,8 +131,7 @@ def authenticate(details):
         else:
             usr = load_user(str(result['user_id']).encode('utf-8').decode('utf-8'))
             if(usr.authenticate(details['password'])):
-                session['username'] = username
-                return True
+                login_user(usr)
             else:
                 return False
     return True
@@ -143,13 +144,24 @@ def app_session_new():
         return {'message': 'log-in is successful'},201
     return {'message': 'username/password not successful'},400
 
+@app.route("/app/session/logout")
+def app_logout():
+    logout_user()
+
+@app.route("/session/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
 
 @app.route("/story/show")
+@login_required
 def story_show():
     stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction", 3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
     return render_template("story/show.html", stories=stories)
 
 @app.route("/story/update")
+@login_required
 def story_update():
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
@@ -164,17 +176,23 @@ def story_update():
 #     new_story.add_to_server()
 #     return redirect(url_for("story_update"))
 
+
+
+#### THIS WORKS #####
 @app.route("/story/object/show")
+@login_required
 def object_show():
     objects = StoryObject.obj_list(story_id)
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
 @app.route("/app/story/object/show", methods = ["GET"])
+@login_required
 def app_object_show():
     objects = StoryObject.obj_list_json(story_id)
     return make_response(objects, 200)
 
 @app.route("/story/object/update", methods = ['POST'])
+@login_required
 def object_update():
     details = request.form
     object_id = details['obj_id']
@@ -201,6 +219,7 @@ def object_update():
     return redirect(url_for("object_show"))
 
 @app.route("/story/object/new", methods = ['POST'])
+@login_required
 def object_new():
     details = request.form
     story_id = details['story_id']
@@ -208,12 +227,17 @@ def object_new():
     obj.add_to_server()
     return redirect(url_for("object_show"))
 
+
+
+#### STILL NEEDS WORK ####
 @app.route("/story/event/show", methods = ['GET'])
+@login_required
 def event_show():
     events= StoryEvent.event_list(story_id)
     return render_template("story/event/show.html", events=events, story_id=story_id)
 
 @app.route('/story/event/update', methods = ['POST'])
+@login_required
 def event_update():
     if request.method == 'POST':
         details = request.form
@@ -235,6 +259,7 @@ def event_update():
     return redirect(url_for('event_show'))
 
 @app.route('/story/event/new', methods = ['POST'])
+@login_required
 def event_new():
     details = request.form
     story_id = details['story_id']
@@ -243,12 +268,17 @@ def event_new():
     events = StoryEvent.event_list(story_id)
     return render_template("story/event/show.html", events = events, story_id = story_id)
 
+
+
+### LOCATION STILL NEEDS WORK ###
 @app.route("/story/location/show")
+@login_required
 def location_show():
     locations= StoryLocation.loc_list(story_id)
     return render_template("story/location/show.html", locations=locations, story_id=story_id)
 
 @app.route('/story/location/update', methods = ['POST'])
+@login_required
 def location_update():
     details = request.form
     in_story_id = details['story_id']
@@ -273,6 +303,7 @@ def location_update():
     return redirect(url_for("location_show"))
 
 @app.route('/story/location/new', methods = ['POST'])
+@login_required
 def location_new():
     details = request.form
     in_story_id = details['story_id']
@@ -280,6 +311,9 @@ def location_new():
     loc.add_to_server()
     return redirect(url_for("location_show"))
 
+
+
+#### DECISIONS WORK ####
 @app.route("/story/location/decision/show")
 def decision_show():
     decisions = StoryDecision.dec_list(story_id)
@@ -382,6 +416,8 @@ def verification_review():
     #decisions = [StoryDecision()]
     #return render_template("verification/review.html", objects=objects, events=events, locations=locations, decisions=decisions)
     return render_template("verification/review.html")
+
+
 @login_manager.user_loader
 def load_user(user_id):
     usr = User()
@@ -390,6 +426,10 @@ def load_user(user_id):
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for("session_new"))
 
 if __name__=='__main__':
 	app.run()

@@ -112,10 +112,14 @@ class User(UserMixin):
     def get_id(self):
         return self.user_id
 
-
-    def get(self, user_id):
+    @classmethod
+    def get(cls, user_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
         int_user_id = int(user_id)
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd = self.rds_password, db= self.db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
+        conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(("SELECT `user_id` FROM users WHERE `user_id` = %s"), (int_user_id))
         result = cur.fetchone()
