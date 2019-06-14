@@ -14,6 +14,12 @@ function set_focus(elem) {
     }
     elem.id = "active";
 }
+//function show_events(){
+//    if(document.getElementById("ishidden").checked)
+//    {
+//     document.getElementById("unhide_event").style.visibility="visible"
+//    }
+//}
 
 function object_changed(elem) {
     elem.form.submit()
