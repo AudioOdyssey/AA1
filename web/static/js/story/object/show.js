@@ -14,12 +14,17 @@ function set_focus(elem) {
     }
     elem.id = "active";
 }
-//function show_events(){
-//    if(document.getElementById("ishidden").checked)
-//    {
-//     document.getElementById("unhide_event").style.visibility="visible"
-//    }
-//}
+function show_events(){
+   var checkbox = document.getElementById("chk");
+   var hiddenInputs = document.getElementsByClassName("hidden");
+   for(var i=0; i< hiddenInputs.length; i++)
+   {
+       if(checkbox.checked)
+       {
+           hiddenInputs[i].style.display="block";
+       }
+   }
+}
 
 function object_changed(elem) {
     elem.form.submit()

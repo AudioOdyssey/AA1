@@ -13,10 +13,12 @@
 <button type= "button" onclick= "delete_btn_pressed('{{story_id , obj_id}}')" class="trash btn btn-light"><i class="fa fa-minus"></i></button>
     <section class="object-row row">
         <section class="row flex-1">
+
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" onchange="object_changed(this)" name="obj_name">
             </div>
+
             <div class="col-sm-8">
                 <label><b>Starting Location:</b></label>
                 <select class="form-control" type="text" onchange="object_changed(this)" name="obj_starting_loc">
@@ -25,21 +27,26 @@
                     {% endfor %}
                 </select>
             </div>
+
         </section>
+
         <section class="flex-0" onclick="object_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
+
     <section class="row details" style="display: none">
         <hr>
         <label>Description</label>
         <textarea class="form-control" rows="3" onchange="object_changed(this)" name="obj_description"></textarea>
         <br>
+
         <label>Is Hidden? </label>
-        <input  type="checkbox" autocomplete="off" onchange= "show_event()"onchange="object_changed(this)" name="is_hidden">
-        <div id= "unhide_event" ><!--style= "visibility: hidden;"-->
+        <input type="checkbox" autocomplete="off" onclick= "show_event()"onchange="object_changed(this)" name="is_hidden">
+        
+        <div class= "hidden" style= "display: none;">
         <label>Unhide Event Name</label>
-        <select  type="text" onchange="object_changed(this)" name="obj_unhide_event_ID">
+        <select   type="text" onchange="object_changed(this)" name="obj_unhide_event_ID">
                 {% for events in event %}
                 <option>{{event.event_name}}</option>
             {% endfor %}
@@ -80,15 +87,15 @@
         <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed(this)">{{ object.obj_description }}</textarea>
         <br>
         <label>Is Hidden? </label>
-        {% if object.is_hidden %}
-        <input id = "ishidden" type="checkbox" checked = '' autocomplete="off" name="can_pickup_obj" onchange="show_event()" onchange="object_changed(this)">
+        {% if object.is_hidden==0 %}
+        <input id = "chk" type="checkbox" checked = '' autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)">
         {% else %}
-        <input id= "ishidden" type="checkbox" autocomplete="off" name="can_pickup_obj" onchange="show_event()" onchange="object_changed(this)"checked>
+        <input id= "chk" type="checkbox" autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)"checked>
         {% endif %}
-        <div id= "unhide_event" > <!--style= "visibility: hidden;"-->
+        <div class= "hidden" style= "display: none;">
         <br>
         <label>Unhide Event Name</label>
-            <select class="form-control" type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
+            <select class= "form-control"  type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
                     {%for events in event%}
                         <option>{{event.event_name}}</option>
                     {%endfor%}
