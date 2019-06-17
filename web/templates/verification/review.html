@@ -18,18 +18,22 @@
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
-    
+
     <section class="row details" style="display: none">
         <hr>
+
         <h6><b>Original Description</b></h6>
-        <p>{{location.original_description}}</p>
+            <p>{{location.original_description}}</p>
         <hr>
+
         <h6><b>Short Description</b></h6>
-        <p>{{location.short_description}}</p>
+            <p>{{location.short_description}}</p>
         <hr>
+
         <h6><b>Post Event Description</b></h6>
-        <p>{{location.post_event_description}}</p>
+            <p>{{location.post_event_description}}</p>
         <hr>
+
         <h6><b>Event Name (will occur upon entry)</b></h6>
             <p>{{location.location_event_id.event_name}}</p>
         <hr>
@@ -40,7 +44,7 @@
     <hr>
     <h2 class= "text">Decisions:</h2>
     <br>
-    {%for decision in decisions%}
+{%for decision in decisions%}
     <section class="decision-row row">
             <div>
                 <h6><b>Name:</b></h6>
@@ -50,19 +54,20 @@
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
+
     <section class="row details" style="display: none">
        <hr>
         <h6><b>Decision Description:</b></h6>
-        <p>{{decision.decision_description}}</p>
+            <p>{{decision.decision_description}}</p>
         <hr>
         <h6><b>Description when locked:</b></h6>
-        <p>{{decision.locked_descr}}</p>
+            <p>{{decision.locked_descr}}</p>
         <hr>
         <h6><b>Description of decision aftermath:</b></h6>
-        <p>{{decision.aftermath_descr}}</p>
+            <p>{{decision.aftermath_descr}}</p>
      </section>
 
-    {%endfor%}
+{%endfor%}
     <hr>
     <h2>Objects:</h2>
     <br>
@@ -70,34 +75,40 @@
     <section class="object-row row">
             <div>
                 <h6><b>Name:</b></h6>
-                <p>{{object.obj_name}}</p>
+                    <p>{{object.obj_name}}</p>
             </div>
         <section class="flex-0" onclick="object_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
     </section>
+
     <section class="row details" style="display: none">
         <hr>
         <h6>Description</h6>
-       <p>{{object.obj_description}}</p>
+            <p>{{object.obj_description}}</p>
 
         <br>
     </section>
 
     {%endfor%}
+
     <hr><br>
+
     <h2>Events:</h2>
     {%for event in events%}
     <section class="event-row row">
-      
+
             <div>
                 <h6><b>Name:</b></h6>
                 <p>{{event.event_name}}</p>
             </div>
+
         <section class="flex-0" onclick="event_show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
+
     </section>
+
     <section class="row details" style="display: none">
         <hr>
         <h6>Description:</h6>
@@ -106,22 +117,27 @@
     {%endfor%}
 <br><hr><br>
 
-     <label>Suggested Rating:</label> <!--where do we want to store this info @sonny @brian-->
-    <select class= "form-control">
-        <option>G</option>
-        <option>PG</option>
-        <option>PG-13</option>
-        <option>R</option>
-    </select>
+    <label>Suggested Rating:</label> <!--where do we want to store this info @sonny @brian-->
+        <select class= "form-control">
+            <option>G</option>
+            <option>PG</option>
+            <option>PG-13</option>
+            <option>R</option>
+        </select>
+
     <br><hr>
+
     <form>
-    <label>Name of Verifier</label>
-    <input type= "text" class= "form-control" onchange="">
-    <label>Today's Date</label>
-    <input type= "date"class="form-control" onchange="">
+        <label>Name of Verifier</label>
+        <input type= "text" class= "form-control" onchange="">
+
+        <label>Today's Date</label>
+        <input type= "date"class="form-control" onchange="">
+
     <br><hr>
-    <button class = "btn btn-light" onclick="verify_story('story_id')">Verify Story</button>
-    <button class = "btn btn-light" onclick="report_story('story_id')">Report Story</button>
+
+        <button class = "btn btn-light" onclick="verify_story('story_id')">Verify Story</button>
+        <button class = "btn btn-light" onclick="report_story('story_id')">Report Story</button>
     </form>
     
 {% endblock %}
