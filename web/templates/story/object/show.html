@@ -7,7 +7,9 @@
   <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
-<button onclick = "show_event()" ><h1 id="test" style="visibility: hidden;" >Invisible</h1></button>
+<input id= "testchk"  type= "checkbox" onclick= "show_test()">
+<h1 class="test" >Invisible</h1>
+<h2 class=test>Invisible</h2>
 
 <form id="obj-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" readonly class="hidden-in">
@@ -44,11 +46,11 @@
         <br>
 
         <label>Is Hidden? </label>
-        <input type="checkbox" class= "chk" autocomplete="off" onclick= "show_event()"onchange="object_changed(this)" name="is_hidden">
+        <input type="checkbox" id= "chk1" autocomplete="off" onclick= "show_event()"onchange="object_changed(this)" name="is_hidden">
         
-        <div class= "hidden" style= "visibility: hidden;">
-        <label class = "hidden">Unhide Event Name</label>
-        <select   class = "hidden" type="text" onchange="object_changed(this)" name="obj_unhide_event_ID">
+        <div class= "hidden">
+        <label>Unhide Event Name</label>
+        <select type="text" onchange="object_changed(this)" name="obj_unhide_event_ID">
                 {% for events in event %}
                 <option>{{event.event_name}}</option>
             {% endfor %}
@@ -90,11 +92,11 @@
         <br>
         <label>Is Hidden? </label>
         {% if object.is_hidden==0 %}
-        <input class = "chk" type="checkbox" checked = '' autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)">
+        <input id = "chk2" type="checkbox" checked = '' autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)">
         {% else %}
-        <input class = "chk" type="checkbox" autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)"checked>
+        <input id = "chk3" type="checkbox" autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)"checked>
         {% endif %}
-        <div class= "hidden" style= "visibility: hidden;">
+        <div class= "hidden">
         <br>
         <label class="hidden">Unhide Event Name</label>
             <select class= "form-control hidden"  type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">

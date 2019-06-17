@@ -87,3 +87,9 @@
     width: 100%;
     height: 10px;
  }
+.test{
+    display: none;
+}
+.hidden{
+    display: none;
+}

@@ -15,19 +15,38 @@ function set_focus(elem) {
     elem.id = "active";
 }
 function show_events(){
-   var checkbox = document.getElementByClassName("chk");
+   var checkbox1 = document.getElementById("chk1");
+   var checkbox2 = document.getElementById("chk2");
+   var checkbox3 = document.getElementById("chk3");
    var hiddenInputs = document.getElementsByClassName("hidden");
-   var test = document.getElementsById("test");
-   test.style.visibility="visible";
    for(var i=0; i< hiddenInputs.length; i++)
    {
-       if(checkbox[1].checked || checkbox[0].checked || checkbox[2].checked)
+       if(checkbox1.checked || checkbox2.checked || checkbox3.checked)
        {
-           hiddenInputs[i].style.visibility="visible";
+           hiddenInputs[i].style.display="inline";
+       }
+       else
+       {
+            hiddenInputs[i].style.display="none";
        }
    }
 }
+function show_test(){
+    var testy = document.getElementById("testchk");
+    var word = document.getElementsByClassName("test")
+    for(var i=0; i<word.length; i++)
+    {
+        if (testy.checked)
+        {
+        word[i].style.display="inline";
+        }
+        else
+        {
+        word[i].style.display="none";
+        }
+    }
 
+}
 function object_changed(elem) {
     elem.form.submit()
 }
