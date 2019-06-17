@@ -15,13 +15,15 @@ function set_focus(elem) {
     elem.id = "active";
 }
 function show_events(){
-   var checkbox = document.getElementById("chk");
+   var checkbox = document.getElementByClassName("chk");
    var hiddenInputs = document.getElementsByClassName("hidden");
+   var test = document.getElementsById("test");
+   test.style.visibility="visible";
    for(var i=0; i< hiddenInputs.length; i++)
    {
-       if(checkbox.checked)
+       if(checkbox[1].checked || checkbox[0].checked || checkbox[2].checked)
        {
-           hiddenInputs[i].style.display="block";
+           hiddenInputs[i].style.visibility="visible";
        }
    }
 }

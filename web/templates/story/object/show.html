@@ -7,6 +7,8 @@
   <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
+<button onclick = "show_event()" ><h1 id="test" style="visibility: hidden;" >Invisible</h1></button>
+
 <form id="obj-template" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" readonly class="hidden-in">
     <input name="obj_id" readonly class="hidden-in">
@@ -42,11 +44,11 @@
         <br>
 
         <label>Is Hidden? </label>
-        <input type="checkbox" autocomplete="off" onclick= "show_event()"onchange="object_changed(this)" name="is_hidden">
+        <input type="checkbox" class= "chk" autocomplete="off" onclick= "show_event()"onchange="object_changed(this)" name="is_hidden">
         
-        <div class= "hidden" style= "display: none;">
-        <label>Unhide Event Name</label>
-        <select   type="text" onchange="object_changed(this)" name="obj_unhide_event_ID">
+        <div class= "hidden" style= "visibility: hidden;">
+        <label class = "hidden">Unhide Event Name</label>
+        <select   class = "hidden" type="text" onchange="object_changed(this)" name="obj_unhide_event_ID">
                 {% for events in event %}
                 <option>{{event.event_name}}</option>
             {% endfor %}
@@ -88,14 +90,14 @@
         <br>
         <label>Is Hidden? </label>
         {% if object.is_hidden==0 %}
-        <input id = "chk" type="checkbox" checked = '' autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)">
+        <input class = "chk" type="checkbox" checked = '' autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)">
         {% else %}
-        <input id= "chk" type="checkbox" autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)"checked>
+        <input class = "chk" type="checkbox" autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)"checked>
         {% endif %}
-        <div class= "hidden" style= "display: none;">
+        <div class= "hidden" style= "visibility: hidden;">
         <br>
-        <label>Unhide Event Name</label>
-            <select class= "form-control"  type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
+        <label class="hidden">Unhide Event Name</label>
+            <select class= "form-control hidden"  type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
                     {%for events in event%}
                         <option>{{event.event_name}}</option>
                     {%endfor%}
