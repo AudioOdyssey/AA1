@@ -78,11 +78,11 @@ def app_user_new():
     if user_id:
         result = {}
         result['user_id']=user_id
-        return make_response(json.dumps(result),201)
+        return make_response(json.dumps(result)) #,201)
     else:
         result = {}
         result['message']='Username already exists'
-        return make_response(json.dumps(result),409)
+        return make_response(json.dumps(result))#,409)
 
 def sign_up(details_dict):
     username = details_dict['username']
