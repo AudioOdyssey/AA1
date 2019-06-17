@@ -58,6 +58,8 @@ function add_btn_pressed(story_id) {
 }
 
 function delete_btn_pressed(story_id, obj_id) {
-    var element = document.getElementById("obj-template");
+    var element = document.getElementByClassName("object-main-row");
     element.parentNode.removeChild(element);
+    var element1 = document.getElementByID("obj-template");
+    element.parentNode.removeChild(element1);
 }

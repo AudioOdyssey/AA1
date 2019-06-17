@@ -6,7 +6,7 @@
 <section class="row">
     <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section> 
-<form id="ev-template" class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/changed">
+<form id="ev-template" class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
 
     <input name="story_id" readonly class="hidden-in">
     <input name="event_id" readonly class="hidden-in">
@@ -15,11 +15,11 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="event_name">
+                <input class="form-control" type="text" name="event_name" onchange="event_changed(this)">
             </div>
             <div class = "col-sm-8">
                 <label for = "locations"><b>Location:</b></label>
-                <select id= "locations">
+                <select id= "locations" onchange="event_changed(this)">
                     {% for locations in location %}
                         <option>{{location.location_name}}</option>
                     {%endfor%}
@@ -33,10 +33,10 @@
     <section class="row details" style="display: none">
         <hr>
         <label>Description</label>
-        <textarea class="form-control" rows="3" name="ev_description"></textarea>
+        <textarea class="form-control" rows="3" name="ev_description" onchange="event_changed(this)"></textarea>
 
         <label>Is global?</label>
-        <input type="checkbox" autocomplete="off" name="is_global">
+        <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)">
 
         <br>
     </section>
@@ -45,7 +45,7 @@
 <div id="content-marker"></div>
 
 {% for event in events %}
-<form class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/changed">
+<form class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
     <input name="story_id" value="{{ event.story_id }}" readonly class="hidden-in">
     <input name="event_id" value="{{ event.event_id }}" readonly class="hidden-in">
     <button type= "button" onclick= "delete_btn_pressed('{{story_id , event_id}}')" class="trash"><i class="fa fa-minus"></i></button>
