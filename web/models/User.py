@@ -6,7 +6,7 @@ import random
 import hashlib
 import binascii
 
-from datetime import date
+from datetime import datetime, date
 
 from flask_login import UserMixin
 
@@ -135,4 +135,4 @@ class User(UserMixin):
 
     def authenticate(self, password_input):
         self.is_authenticated = self.encrypt_password(password_input, self.password_salt)
-        return self.is_authenticated 
+        return self.is_authenticated

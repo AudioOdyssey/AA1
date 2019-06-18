@@ -20,8 +20,10 @@ import json
 
 from datetime import datetime
 
+import jwt
+
 app = Flask(__name__)
-app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
+secret_key = app.config.get('SECRET_KEY')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -81,6 +83,9 @@ def app_user_new():
         user_id = sign_up(details)
         if user_id:
             result['user_id']=user_id
+            result['message'] = "Successfully registered"
+            auth_token = encode_auth_token(user_id)
+            result['auth_token'] = decode_auth_token(auth_token)
         else:
             result['message']='Username already exists'
     return make_response(json.dumps(result))
@@ -142,12 +147,48 @@ def authenticate(details):
 
 @app.route("/app/session/new", methods =['POST', 'GET'])
 def app_session_new():
-    details = request.json
-    details_dict = json.loads(details)
-    if authenticate(details_dict):
-        session['platform'] = 'app'
-        return {'message': 'log-in is successful'},201
-    return {'message': 'username/password not successful'},400
+    message = None
+    result = None
+    if request.method == 'POST':
+        details = request.json
+        if authenticate(details):
+            session['platform'] = 'app'
+            message = 'log-in is successful'
+        else:
+            message = "Username and/or password is not valid"
+    if message=='log-in is successful':
+        auth_token = str(encode_auth_token(session['user_id']))
+        result = {
+            'message' : message,
+            'user_id' : str(session['user_id']),
+            'token' : decode_auth_token(auth_token)
+        }
+    else:
+        result = {
+            'message' : message
+        }
+    return jsonify(result)
+
+def encode_auth_token(user_id):
+    payload = {
+        'exp' : datetime.datetime.utcnow() + datetime.timedelta(days = 7, second = 5),
+        'iat' : datetime.datetime.utcnow(),
+        'sub' : user_id
+    }
+    return jwt.encode(
+        payload,
+        app.config.get('SECRET_KEY'),
+        algorithm='HS256'
+    )
+
+def decode_auth_token(auth_token):
+    try:
+        payload = jwt.decode(auth_token, secret_key)
+        return payload['sub']
+    except jwt.ExpiredSignatureError:
+        return 'Signature expired. Please log in again.'
+    except jwt.InvalidTokenError:
+        return 'Invalid token. please log in again'
 
 @app.route("/app/session/logout")
 def app_logout():
@@ -163,6 +204,10 @@ def logout():
         return redirect(url_for("home"))
     else:
         return redirect(url_for("session_new"))
+
+@app.route("/app/story/show", methods=['POST', 'GET'])
+def get_story():
+    pass
 
 @app.route("/story/show")
 #@login_required
@@ -248,8 +293,6 @@ def object_new():
     obj = StoryObject(story_id)
     obj.add_to_server()
     return redirect(url_for("object_show"))
-
-
 
 #### STILL NEEDS WORK ####
 @app.route("/story/event/show", methods = ['GET'])
