@@ -313,7 +313,9 @@ def location_update():
     loc_id = details['loc_id']
     if loc_id is None:
         loc_id = StoryLocation.get_last_id(story_id)
-    name = details.get('location_name')
+    name = details.get('loc_name')
+    if name is None:
+        name = ""
     original_desc = details['location_origin_description']
     short_desc = details['location_short_description']
     post_event_description = details['location_post_event_description']

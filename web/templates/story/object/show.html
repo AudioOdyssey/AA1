@@ -24,7 +24,7 @@
             </div>
 
             <div class="col-sm-8">
-                <label><b>Starting Location:</b></label>
+                <label><b>Select Starting Location: or <a href = "/story/location/show"> Add New Location</a></b></label>
                 <select class="form-control" type="text" onchange="object_changed(this)" name="obj_starting_loc">
                         {% for locations in location %}
                         <option>{{location.location_name}}</option>
@@ -50,8 +50,8 @@
 
         
         <div class= "hidden">
-        <label class="hidden">Unhide Event Name</label>
-        <select class="hidden" onchange="object_changed(this)" name="obj_unhide_event_ID">
+        <label class="hidden">Select Unhide Event Name: or <a href = "/story/event/show"> Add New Event</a></label>
+        <select class="hidden" onchange="object_changed(this)" name="unhide_event_ID">
                 {% for events in event %}
                 <option>{{event.event_name}}</option>
             {% endfor %}
@@ -74,7 +74,7 @@
                 <input class="form-control" type="text" name="obj_name" onchange="object_changed(this)" value="{{ object.obj_name }}">
             </div>
             <div class="col-sm-8">
-            <label><b>Starting Location:</b></label>
+            <label><b>Select Starting Location: or <a href = "/story/location/show"> Add New Location</a></b></label>
             <select class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)" value="{{ object.obj_location}}">
                     {%for locations in location%}
                         <option>{{location.location_name}}</option>
@@ -95,11 +95,11 @@
        
         
         
-        <input id = "chk2" type="checkbox" autocomplete="off"  onclick="show_event()" onchange="object_changed(this)" value="{{object.is_hidden}}">
+        <input id = "chk2" type="checkbox" name= "is_hidden" autocomplete="off"  onclick="show_event()" onchange="object_changed(this)" value="{{object.is_hidden}}">
         
         <div class= "hidden">
         <br>
-        <label class="hidden">Unhide Event Name</label>
+        <label class="hidden">Select Unhide Event Name: or <a href = "/story/event/show"> Add New Event</a></label>
             <select class= "form-control hidden"  type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
                     {%for events in event%}
                         <option>{{event.event_name}}</option>
