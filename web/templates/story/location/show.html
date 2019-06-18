@@ -33,8 +33,8 @@
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="location_post_event_description"  onchange="location_changed(this)"></textarea>
         <hr>
-        <label>Event Name (will occur upon entry)</label>
-        <select type="text" autocomplete="off" name="event_id"  onchange="location_changed(this)">
+        <label>Select Event Name (will occur upon entry): or <a href = "/story/event/show"> Add New Event</a></label>
+        <select type="text" autocomplete="off" name="location_event_id"  onchange="location_changed(this)">
                 {%for events in event%}
                 <option>{{event.event_name}}</option>
             {%endfor%}
@@ -44,7 +44,7 @@
         <hr>
         <label>Auto Goto</label>
         <input type="checkbox" autocomplete="off" name="auto_goto"  onchange="location_changed(this)">
-<label>Next Location Name</label>
+<label>Select Next Location Name:</label>
         <select type="text" autocomplete="off" name="next_loc_id"  onchange="location_changed(this)">
                 {%for locations in location%}
                 <option>{{location.location_name}}</option>
@@ -66,7 +66,7 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="location-name" onchange="location_changed(this)" value="{{ location.location_name }}">
+                <input class="form-control" type="text" name="loc_name" onchange="location_changed(this)" value="{{ location.location_name }}">
             </div>
         </section>
         <section class="flex-0" onclick="location_show(this)">
@@ -84,7 +84,7 @@
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="location_post_event_description" onchange="location_changed(this)">{{ location.post_event_description }}</textarea>
        <hr>
-        <label>Event Name (will occur upon entry)</label>
+        <label>Select Event Name (will occur upon entry): or <a href = "/story/event/show">Add New Event</a></label>
         <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
             {%for events in event%}
             <option>{{event.event_name}}</option>

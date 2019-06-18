@@ -65,7 +65,7 @@
         <input type="checkbox" autocomplete="off" name="transition" onchange="decision_changed(this)">
         <br>
        
-        <label>Transition Location:</label>
+        <label>Select Transition Location: or <a href = "/story/location/show"> Add New Location</a></label>
         <select class="form-control" type="text" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
                     {% for locations in location %}
                         <option>{{location.location_name}}</option>
@@ -74,14 +74,14 @@
 
         <hr>
         <label>Can occur only ONCE?</label>
-        <input type="checkbox" autocomplete="off" name="once" onchange="decision_changed(this)">
+        <input type="checkbox" autocomplete="off" name="can_occur_once" onchange="decision_changed(this)">
         <hr>
 
         <label>Is Hidden?</label>
         <input type="checkbox" autocomplete="off" name="hidden" onchange="decision_changed(this)">
         <br>
 
-        <label>Event to show decision:</label>
+        <label>Select Event to show decision: or <a href = "/story/event/show"> Add New Event</a></label>
         <select class="form-control" type="text" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
                 {%for events in event%}
                     <option>{{event.event_name}}</option>
@@ -89,7 +89,7 @@
         </select> 
 
 
-        <label>Object to show decision:</label>
+        <label>Select Object to show decision: or <a href = "/story/object/show"> Add New Object</a></label>
         <select class="form-control" type="text" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
                 {%for objects in object%}
                 <option>{{object.obj_name}}</option>
@@ -101,7 +101,7 @@
         <input type="checkbox" autocomplete="off" name="locked" onchange="decision_changed(this)">
         <br>
 
-   <label>Object to unlock decision:</label>
+   <label>Select Object to unlock decision: or <a href = "/story/object/show"> Add New Object</a></label>
         <select class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
                 {%for objects in object%}
                 <option>{{object.obj_name}}</option>
@@ -113,13 +113,13 @@
 
      
 
-        <label>Event to unlock decision:</label>
+        <label>Event to unlock decision: or <a href = "/story/event/show"> Add New Event</a></label>
         <select class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
                 {%for events in event%}
                 <option>{{event.event_name}}</option>
             {%endfor%}
         </select>
-        <label>Object to unlock decision:</label>
+        <label>Object to unlock decision: or <a href = "/story/object/show"> Add New Object</a></label>
         <select class="form-control" type="text" autocomplete="off" name="unlock_obj_id" onchange="decision_changed(this)">
                 {%for objects in object%}
                 <option>{{object.obj_name}}</option>
@@ -139,7 +139,7 @@
         <input type="checkbox" autocomplete="off" onchange="decision_changed(this)" name="cause_event">
         <br>
 
-        <label>Event triggered by this decision:</label>
+        <label>Select Event triggered by this decision: or <a href = "/story/event/show"> Add New Event</a></label>
         <select class="form-control" type="text" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
                 {%for events in event%}
                 <option>{{event.event_name}}</option>
@@ -154,8 +154,8 @@
 {% for decision in decisions %}
 <form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
-    <input name="location_id" value="{{ decision.location_id}}" readonly class = "hidden-in">
-    <input name="obj_id" value="{{ decision.obj_id }}" readonly class="hidden-in">
+    <input name="location_id" value="{{ decision.loc_id}}" readonly class = "hidden-in">
+    <input name="decision_id" value="{{ decision.decision_id }}" readonly class="hidden-in">
     <button type= "button" onclick= "delete_btn_pressed('{{story_id , decision_id}}')" class="trash"><i class="fa fa-minus"></i></button>
     <section class="decision-row row">
         <section class="row flex-1">
@@ -194,11 +194,11 @@
     </section>
     <section class="row details" style="display: none">
             <label>Decision Sequence Number:</label>
-            <input class="form-control" min = "1" type= "number" onchange="decision_changed(this)">
+            <input class="form-control" name= "sequence_number" min = "1" type= "number" onchange="decision_changed(this)">
         <hr>
 
         <label>Decision Description:</label>
-        <textarea class="form-control" rows="3" name="obj_description" onchange="decision_changed(this)">{{ decision.obj_description }}</textarea>
+        <textarea class="form-control" rows="3" name="dec_description" onchange="decision_changed(this)">{{ decision.decision_description }}</textarea>
 
         <hr>
 
@@ -210,7 +210,7 @@
         {% endif %}
         <br>
 
-        <label>Transition Location:</label>
+        <label>Select Transition Location: or <a href = "/story/location/show"> Add New Location</a></label>
         <select type="text" class="form-control" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
                     {% for locations in location %}
                         <option>{{location.location_name}}</option>
@@ -219,9 +219,9 @@
         <hr>
         <label>Can Occur only ONCE?</label>
         {% if decision.can_occur_once %}
-        <input type="checkbox" autocomplete="off" name="once" onchange="decision_changed(this)" checked>
+        <input type="checkbox" autocomplete="off" name="can_occur_once" onchange="decision_changed(this)" checked>
         {% else %}
-        <input type="checkbox" autocomplete="off" name="once" onchange="decision_changed(this)">
+        <input type="checkbox" autocomplete="off" name="can_occur_once" onchange="decision_changed(this)">
         {% endif %}
         <hr>
 
@@ -234,14 +234,14 @@
         <br>
 
 
-        <label>Event to show decision:</label>
+        <label>Select Event to show decision: or <a href = "/story/event/show"> Add New Event</a></label>
         <select type="text" class="form-control" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
                 {%for events in event%}
                 <option>{{event.event_name}}</option>
             {%endfor%}
         </select>
 
-        <label>Object to show decision:</label>
+        <label>Object to show decision: or <a href = "/story/object/show"> Add New Object</a></label>
         <select type="text" class="form-control" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
                 {%for objects in object%}
                 <option>{{object.obj_name}}</option>
@@ -256,7 +256,7 @@
         <input type="checkbox" autocomplete="off" name="locked" onchange="decision_changed(this)">
         {% endif %}
         <br>
- <label>Object to unlock decision:</label>
+ <label>Object to unlock decision: or <a href = "/story/object/show"> Add New Object</a></label>
         <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
                 {%for objects in object%}
                 <option>{{object.obj_name}}</option>
@@ -267,7 +267,7 @@
         
        
 
-        <label>Event to unlock decision:</label>
+        <label>Select Event to unlock decision: or <a href = "/story/event/show"> Add New Event</a></label>
         <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
                 {%for events in event%}
                 <option>{{event.event_name}}</option>
@@ -280,7 +280,7 @@
         <hr>
 
         <label>Description of decision aftermath:</label>
-        <textarea name="aftermath_desc" class="form-control" autocomplete="off" onchange="decision_changed(this)"></textarea>
+        <textarea name="aftermath_desc" class="form-control"  autocomplete="off" onchange="decision_changed(this)"></textarea>
 
         <label>Does this decision trigger an event?</label>
         {% if decision.cause_event %}
@@ -290,7 +290,7 @@
         {% endif %}
         <br>
 
-        <label>Event triggered by this decision:</label>
+        <label>Select Event triggered by this decision: or <a href = "/story/event/show"> Add New Event</a></label>
         <select type="text" class="form-control" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
                 {%for events in event%}
                 <option>{{event.event_name}}</option>

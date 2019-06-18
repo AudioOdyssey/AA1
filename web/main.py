@@ -4,7 +4,7 @@ from models.story import Story
 from models.storyevent import StoryEvent
 from models.storylocation import StoryLocation
 from models.storydecision import StoryDecision
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify
+from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
 
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 
@@ -27,10 +27,8 @@ secret_key = app.config.get('SECRET_KEY')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-#login_manager.login_view = "session/new.html"
+login_manager.login_view = "session/new.html"
 #login_manager.login_message = "Please login"
-
-session = {}
 
 REGION = 'us-east-2b'
 
@@ -75,7 +73,7 @@ def user_new(): #fix later
         usr.add_to_server()
     return render_template("user/new.html")
 
-@app.route("/app/user/new", methods=['POST', 'GET'])
+@app.route("/app/user/new", methods=['POST'])
 def app_user_new():
     result = {}
     if request.method == "POST":
@@ -120,7 +118,6 @@ def session_new():
     if request.method == 'POST':
         details = request.form
         if authenticate(details):
-            session['platform'] = 'web'
             return redirect(url_for("story_show"))
         else:
             error = "Username and/or password not valid"
@@ -139,13 +136,12 @@ def authenticate(details):
             usr = load_user(result['user_id'])
             if(usr.authenticate(details['password'])):
                 session['logged_in'] = True
-                session['user_id'] = result['user_id']
                 return True
             else:
                 return False
     return True
 
-@app.route("/app/session/new", methods =['POST', 'GET'])
+@app.route("/app/session/new", methods =['POST'])
 def app_session_new():
     message = None
     result = None
@@ -193,8 +189,6 @@ def decode_auth_token(auth_token):
 @app.route("/app/session/logout")
 def app_logout():
     session.pop("logged_in", None)
-    session.pop("user_id", None)
-    session.pop("platform", None)
 
 @app.route("/session/logout")
 #@login_required
@@ -362,7 +356,9 @@ def location_update():
     loc_id = details['loc_id']
     if loc_id is None:
         loc_id = StoryLocation.get_last_id(story_id)
-    name = details.get('location_name')
+    name = details.get('loc_name')
+    if name is None:
+        name = ""
     original_desc = details['location_origin_description']
     short_desc = details['location_short_description']
     post_event_description = details['location_post_event_description']
