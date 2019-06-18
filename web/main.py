@@ -201,7 +201,10 @@ def logout():
 
 @app.route("/app/story/show", methods=['POST', 'GET'])
 def get_story():
-    pass
+    if request.method == 'POST':
+        details = request.json
+        story_id = details['story_id']
+    return Story.get_info(story_id)
 
 @app.route("/story/show")
 #@login_required

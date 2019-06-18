@@ -4,6 +4,11 @@ import sys
 
 import json
 
+from models.storyobject import StoryObject
+from models.storyevent import StoryEvent
+from models.storylocation import StoryLocation
+from models.storydecision import StoryDecision
+
 class Story:
     story_id = 0
     story_title = ''
@@ -177,3 +182,21 @@ class Story:
             last_id = result[0]
         conn.close()
         return last_id
+
+    @classmethod
+    def get_info(cls, story_id):
+        stry = Story.get(story_id)
+        result = {
+            'story_title' : stry.story_title,
+            'story_author' : stry.story_author,
+            'story_synopsis' : stry.story_synopsis,
+            'length_of_story' : stry.length_of_story,
+            'number_of_locations' : stry.number_of_locations,
+            'number_of_decision' : stry.number_of_decisions,
+            'genre' : stry.genre,
+            'objects' : StoryObject.obj_list_json(story_id),
+            'locations' : StoryLocation.loc_list_json(story_id),
+            'events' : StoryEvent.event_list_json(story_id),
+            'decisions' : StoryDecision.decs_list_json(story_id)
+        }
+        return json.dumps(result)
