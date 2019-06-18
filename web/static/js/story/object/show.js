@@ -17,11 +17,10 @@ function set_focus(elem) {
 function show_events(){
    var checkbox1 = document.getElementById("chk1");
    var checkbox2 = document.getElementById("chk2");
-   var checkbox3 = document.getElementById("chk3");
    var hiddenInputs = document.getElementsByClassName("hidden");
    for(var i=0; i< hiddenInputs.length; i++)
    {
-       if(checkbox1.checked || checkbox2.checked || checkbox3.checked)
+       if(checkbox1.checked || checkbox2.checked)
        {
            hiddenInputs[i].style.display="inline";
        }
@@ -33,7 +32,7 @@ function show_events(){
 }
 function show_test(){
     var testy = document.getElementById("testchk");
-    var word = document.getElementsByClassName("test")
+    var word = document.getElementsByClassName("test");
     for(var i=0; i<word.length; i++)
     {
         if (testy.checked)

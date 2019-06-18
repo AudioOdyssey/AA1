@@ -46,7 +46,8 @@
         <br>
 
         <label>Is Hidden? </label>
-        <input type="checkbox" id= "chk1" autocomplete="off" onclick= "show_event()"onchange="object_changed(this)" name="is_hidden">
+        <input type="checkbox" id= "chk1" autocomplete="off" onclick= "show_event()" onchange="object_changed(this)" name="is_hidden" >
+
         
         <div class= "hidden">
         <label class="hidden">Unhide Event Name</label>
@@ -91,11 +92,11 @@
         <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed(this)">{{ object.obj_description }}</textarea>
         <br>
         <label>Is Hidden? </label>
-        {% if object.is_hidden==0 %}
-        <input id = "chk2" type="checkbox" checked = '' autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)">
-        {% else %}
-        <input id = "chk3" type="checkbox" autocomplete="off" name="can_pickup_obj" onclick="show_event()" onchange="object_changed(this)"checked>
-        {% endif %}
+       
+        
+        
+        <input id = "chk2" type="checkbox" autocomplete="off"  onclick="show_event()" onchange="object_changed(this)" value="{{object.is_hidden}}">
+        
         <div class= "hidden">
         <br>
         <label class="hidden">Unhide Event Name</label>
