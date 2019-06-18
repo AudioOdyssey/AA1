@@ -30,7 +30,7 @@ function show_events(){
        }
    }
 }
-function show_test(){
+/*function show_test(){
     var testy = document.getElementById("testchk");
     var word = document.getElementsByClassName("test");
     for(var i=0; i<word.length; i++)
@@ -45,7 +45,7 @@ function show_test(){
         }
     }
 
-}
+}*/
 function object_changed(elem) {
     elem.form.submit()
 }
