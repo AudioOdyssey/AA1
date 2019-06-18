@@ -4,7 +4,7 @@ from models.story import Story
 from models.storyevent import StoryEvent
 from models.storylocation import StoryLocation
 from models.storydecision import StoryDecision
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify
+from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
 
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 
@@ -25,10 +25,8 @@ app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-#login_manager.login_view = "session/new.html"
+login_manager.login_view = "session/new.html"
 #login_manager.login_message = "Please login"
-
-session = {}
 
 REGION = 'us-east-2b'
 
@@ -73,17 +71,18 @@ def user_new(): #fix later
         usr.add_to_server()
     return render_template("user/new.html")
 
-@app.route("/app/user/new", methods=['POST', 'GET'])
+@app.route("/app/user/new", methods=['POST'])
 def app_user_new():
-    result = {}
-    if request.method == "POST":
-        details = request.get_json(force=True)
-        user_id = sign_up(details)
-        if user_id:
-            result['user_id']=user_id
-        else:
-            result['message']='Username already exists'
-    return make_response(json.dumps(result))
+    details = request.get_json(force=True)
+    user_id = sign_up(details)
+    if user_id:
+        result = {}
+        result['user_id']=user_id
+        return make_response(json.dumps(result)) #,201)
+    else:
+        result = {}
+        result['message']='Username already exists'
+        return make_response(json.dumps(result))#,409)
 
 def sign_up(details_dict):
     username = details_dict['username']
@@ -115,7 +114,6 @@ def session_new():
     if request.method == 'POST':
         details = request.form
         if authenticate(details):
-            session['platform'] = 'web'
             return redirect(url_for("story_show"))
         else:
             error = "Username and/or password not valid"
@@ -134,26 +132,22 @@ def authenticate(details):
             usr = load_user(result['user_id'])
             if(usr.authenticate(details['password'])):
                 session['logged_in'] = True
-                session['user_id'] = result['user_id']
                 return True
             else:
                 return False
     return True
 
-@app.route("/app/session/new", methods =['POST', 'GET'])
+@app.route("/app/session/new", methods =['POST'])
 def app_session_new():
     details = request.json
     details_dict = json.loads(details)
     if authenticate(details_dict):
-        session['platform'] = 'app'
         return {'message': 'log-in is successful'},201
     return {'message': 'username/password not successful'},400
 
 @app.route("/app/session/logout")
 def app_logout():
     session.pop("logged_in", None)
-    session.pop("user_id", None)
-    session.pop("platform", None)
 
 @app.route("/session/logout")
 #@login_required
