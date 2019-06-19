@@ -187,6 +187,7 @@ class Story:
     def get_info(cls, story_id):
         stry = Story.get(story_id)
         result = {
+            'story_id' : story_id,
             'story_title' : stry.story_title,
             'story_author' : stry.story_author,
             'story_synopsis' : stry.story_synopsis,
@@ -194,9 +195,21 @@ class Story:
             'number_of_locations' : stry.number_of_locations,
             'number_of_decision' : stry.number_of_decisions,
             'genre' : stry.genre,
-            'objects' : StoryObject.obj_list_json(story_id),
-            'locations' : StoryLocation.loc_list_json(story_id),
-            'events' : StoryEvent.event_list_json(story_id),
-            'decisions' : StoryDecision.decs_list_json(story_id)
+            'story_price' : stry.story_price,
+            'author_paid' : stry.author_paid,
+            'story_in_store' : stry.story_in_store,
+            'story_verification_date' : stry.story_verification_date,
+            'story_ratings' : stry.story_ratings,
+            'storage_size' : stry.storage_size,
+            'obj_verification_status' : stry.obj_verification_status,
+            'event_verification_status' : stry.event_verification_status,
         }
         return json.dumps(result)
+
+    # @classmethod
+    # def get_entities(cls, story_id):
+    #     stry = Story.get(story_id)
+    #     result = {
+    #         'story_id' : story_id,
+    #         'objects' : 
+    #     }
