@@ -1,10 +1,10 @@
-from models.storyobject import StoryObject
-from models.User import User
-from models.story import Story
-from models.storyevent import StoryEvent
-from models.storylocation import StoryLocation
-from models.storydecision import StoryDecision
-from flask import Flask, redirect, render_template, request, session, url_for, make_response, jsonify
+from .models.storyobject import StoryObject
+from .models.User import User
+from .models.story import Story
+from .models.storyevent import StoryEvent
+from .models.storylocation import StoryLocation
+from .models.storydecision import StoryDecision
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify
 
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 
@@ -18,7 +18,7 @@ import binascii
 
 import json
 
-from datetime import datetime
+import datetime
 
 import jwt
 
@@ -27,8 +27,10 @@ secret_key = app.config.get('SECRET_KEY')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "session/new.html"
+#login_manager.login_view = "session/new.html"
 #login_manager.login_message = "Please login"
+
+session = {}
 
 REGION = 'us-east-2b'
 
@@ -73,17 +75,15 @@ def user_new(): #fix later
         usr.add_to_server()
     return render_template("user/new.html")
 
-@app.route("/app/user/new", methods=['POST'])
+@app.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
     result = {}
     if request.method == "POST":
         details = request.get_json(force=True)
         user_id = sign_up(details)
         if user_id:
-            result['user_id']=user_id
+            result['user_id']= str(user_id)
             result['message'] = "Successfully registered"
-            auth_token = encode_auth_token(user_id)
-            result['auth_token'] = decode_auth_token(auth_token)
         else:
             result['message']='Username already exists'
     return make_response(json.dumps(result))
@@ -103,10 +103,10 @@ def sign_up(details_dict):
     language = int(details_dict['language_id'])
     first_name = details_dict['first_name']
     last_name = details_dict['last_name']
-    date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
+    #date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
     usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
             profession_input=profession, disabilities_input=disabilities_bool, 
-            first_name_input=first_name, last_name_input=last_name, language=language, date_of_birth_input=date_of_birth)
+            first_name_input=first_name, last_name_input=last_name, language=language)
     if usr.add_to_server():
         return usr.get_id()
     else:
@@ -118,6 +118,7 @@ def session_new():
     if request.method == 'POST':
         details = request.form
         if authenticate(details):
+            session['platform'] = 'web'
             return redirect(url_for("story_show"))
         else:
             error = "Username and/or password not valid"
@@ -136,12 +137,13 @@ def authenticate(details):
             usr = load_user(result['user_id'])
             if(usr.authenticate(details['password'])):
                 session['logged_in'] = True
+                session['user_id'] = result['user_id']
                 return True
             else:
                 return False
     return True
 
-@app.route("/app/session/new", methods =['POST'])
+@app.route("/app/session/new", methods =['POST', 'GET'])
 def app_session_new():
     message = None
     result = None
@@ -149,15 +151,12 @@ def app_session_new():
         details = request.json
         if authenticate(details):
             session['platform'] = 'app'
-            message = 'log-in is successful'
         else:
             message = "Username and/or password is not valid"
-    if message=='log-in is successful':
-        auth_token = str(encode_auth_token(session['user_id']))
+    if message is None:
+        auth_token = encode_auth_token(session['user_id']).decode("utf-8")
         result = {
-            'message' : message,
-            'user_id' : str(session['user_id']),
-            'token' : decode_auth_token(auth_token)
+            'user_id' : str(session['user_id'])
         }
     else:
         result = {
@@ -167,7 +166,7 @@ def app_session_new():
 
 def encode_auth_token(user_id):
     payload = {
-        'exp' : datetime.datetime.utcnow() + datetime.timedelta(days = 7, second = 5),
+        'exp' : datetime.datetime.utcnow() + datetime.timedelta(days = 7, seconds = 5),
         'iat' : datetime.datetime.utcnow(),
         'sub' : user_id
     }
@@ -189,6 +188,8 @@ def decode_auth_token(auth_token):
 @app.route("/app/session/logout")
 def app_logout():
     session.pop("logged_in", None)
+    session.pop("user_id", None)
+    session.pop("platform", None)
 
 @app.route("/session/logout")
 #@login_required
@@ -198,13 +199,6 @@ def logout():
         return redirect(url_for("home"))
     else:
         return redirect(url_for("session_new"))
-
-@app.route("/app/story/show", methods=['POST', 'GET'])
-def get_story():
-    if request.method == 'POST':
-        details = request.json
-        story_id = details['story_id']
-    return Story.get_info(story_id)
 
 @app.route("/story/show")
 #@login_required
@@ -291,6 +285,8 @@ def object_new():
     obj.add_to_server()
     return redirect(url_for("object_show"))
 
+
+
 #### STILL NEEDS WORK ####
 @app.route("/story/event/show", methods = ['GET'])
 #@login_required
@@ -359,9 +355,7 @@ def location_update():
     loc_id = details['loc_id']
     if loc_id is None:
         loc_id = StoryLocation.get_last_id(story_id)
-    name = details.get('loc_name')
-    if name is None:
-        name = ""
+    name = details.get('location_name')
     original_desc = details['location_origin_description']
     short_desc = details['location_short_description']
     post_event_description = details['location_post_event_description']
