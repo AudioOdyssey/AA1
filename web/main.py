@@ -1,9 +1,9 @@
-from .models.storyobject import StoryObject
-from .models.User import User
-from .models.story import Story
-from .models.storyevent import StoryEvent
-from .models.storylocation import StoryLocation
-from .models.storydecision import StoryDecision
+from models.storyobject import StoryObject
+from models.User import User
+from models.story import Story
+from models.storyevent import StoryEvent
+from models.storylocation import StoryLocation
+from models.storydecision import StoryDecision
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify
 
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
@@ -506,7 +506,12 @@ def help():
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for("session_new"))
+    
+@app.route("/user/newcorp")
+def newcorp():
+    return render_template("user/newcorp.html")
 
 if __name__=='__main__':
 	app.run()
+
 
