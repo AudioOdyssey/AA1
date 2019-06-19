@@ -511,6 +511,13 @@ def unauthorized():
 def newcorp():
     return render_template("user/newcorp.html")
 
+@app.route("/story/treeview")
+def treeview():
+    return render_template("story/treeview.html")
+
+
+
+
 if __name__=='__main__':
 	app.run()
 
