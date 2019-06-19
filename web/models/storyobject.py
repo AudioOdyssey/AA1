@@ -120,9 +120,9 @@ class StoryObject:
             if query_data is None:
                 return None
             for row in query_data:
-                obj_dict = {'story_id' : row[0], "obj_id" : row[1], "obj_starting_loc" : row[2], "obj_name" : row[3], "obj_description" : row[4], 
-                "can_pickup" : row[5], "is_hidden" : row[6], "unhide_event_id" : row[7]}
-                result.append(obj_dict)
+                obj_info = {str(row[1]) : {"obj_starting_loc" : str(row[2]), "obj_name" : row[3], "obj_description" : row[4], 
+                "can_pickup" : str(row[5]), "is_hidden" : str(row[6]), "unhide_event_id" : str(row[7])}}
+                result.append(obj_info)
         return json.dumps(result)
 
     @classmethod

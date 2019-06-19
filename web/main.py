@@ -18,12 +18,12 @@ import binascii
 
 import json
 
-import datetime
+from datetime import datetime, timedelta
 
 import jwt
 
 app = Flask(__name__)
-secret_key = app.config.get('SECRET_KEY')
+secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -154,9 +154,9 @@ def app_session_new():
         else:
             message = "Username and/or password is not valid"
     if message is None:
-        auth_token = encode_auth_token(session['user_id']).decode("utf-8")
         result = {
-            'user_id' : str(session['user_id'])
+            'user_id' : str(session['user_id']),
+            'auth_token' : encode_auth_token(str(session['user_id']))
         }
     else:
         result = {
@@ -166,13 +166,13 @@ def app_session_new():
 
 def encode_auth_token(user_id):
     payload = {
-        'exp' : datetime.datetime.utcnow() + datetime.timedelta(days = 7, seconds = 5),
-        'iat' : datetime.datetime.utcnow(),
+        'exp' : datetime.utcnow() + timedelta(days = 7, seconds = 5),
+        'iat' : datetime.utcnow(),
         'sub' : user_id
     }
     return jwt.encode(
         payload,
-        app.config.get('SECRET_KEY'),
+        secret_key,
         algorithm='HS256'
     )
 
