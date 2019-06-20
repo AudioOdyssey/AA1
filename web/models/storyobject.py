@@ -123,7 +123,7 @@ class StoryObject:
                 obj_info = {str(row[1]) : {"obj_starting_loc" : str(row[2]), "obj_name" : row[3], "obj_description" : row[4], 
                 "can_pickup" : str(row[5]), "is_hidden" : str(row[6]), "unhide_event_id" : str(row[7])}}
                 result.append(obj_info)
-        return json.dumps(result)
+        return result
 
     @classmethod
     def get_last_id(cls, story_id):

@@ -107,10 +107,10 @@ class StoryEvent:
             if query_data is None:
                 return None
             for row in query_data:
-                event_dict = {'story_id' : row[0], "event_id" : row[1], "event_name" : row[2], "event_description" : row[3], "event_location_id" : row[4], 
-                "event_is_global" : row[5]}
+                event_dict = {str(row[1]) : {"event_name" : row[2], "event_description" : row[3], "event_location_id" : row[4], 
+                "event_is_global" : row[5]}}
                 result.append(event_dict)
-        return json.dumps(result)
+        return result
 
     @classmethod
     def get_last_id(cls, story_id):

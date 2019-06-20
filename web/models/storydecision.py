@@ -137,7 +137,7 @@ class StoryDecision:
         return decs_list
 
     @classmethod
-    def decs_list_json(cls, story_id):
+    def decs_list_json(cls, story_id, loc_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -145,14 +145,19 @@ class StoryDecision:
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         result = []
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s"), (story_id))
+            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND loc_id = %s"), (story_id, loc_id))
             query_data = cur.fetchall()
             if query_data is None:
                 return None
             for row in query_data:
-                desc_dict = {'story_id' : row[0], 'loc_id'  : row[1], 'sequence_num'  :row[2], 'decision_id'  : row[3], 'decision_name'  :row[4], 'transition'  :row[5], 'transition_loc_id'  : row[6], 'hidden'  :row[7], 'locked'  :row[8], 'decision_description'  : row[9], 'show_event_id'  :row[10], 'show_object_id'  : row[11], 'unlock_event_id'  : row[12], 'unlock_object_id'  :row[13], 'locked_descr'  :row[14], 'aftermath_descr'  :row[15], 'cause_event' : row[16], 'effect_event_id'  :row[17], 'can_occur_once'  :row[18], 'is_locked_by_event_id'  :row[19], 'locked_by_event_description'  :row[20]}
+                desc_dict = {str(row[3]) : {'sequence_num'  :row[2], 'decision_name'  :row[4], 'transition'  :row[5], 
+                'transition_loc_id'  : row[6], 'hidden'  :row[7], 'locked'  :row[8], 
+                'decision_description'  : row[9], 'show_event_id'  :row[10], 'show_object_id'  : row[11], 
+                'unlock_event_id'  : row[12], 'unlock_object_id'  :row[13], 'locked_descr'  :row[14], 'aftermath_descr'  :row[15], 
+                'cause_event' : row[16], 'effect_event_id'  :row[17], 'can_occur_once'  :row[18], 'is_locked_by_event_id'  :row[19], 
+                'locked_by_event_description'  :row[20]}}
                 result.append(desc_dict)
-        return json.dumps(result)
+        return result
 
     @classmethod
     def get_last_id(cls, story_id):
