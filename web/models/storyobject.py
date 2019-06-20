@@ -97,22 +97,6 @@ class StoryObject:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
-        objs_list = []
-        with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `objects` WHERE story_id = %s"), (story_id))
-            results = cur.fetchall()
-            for row in results:
-                objs_list.append(cls(row[0], row[1], row[3], row[4], row[5], row[2], row[6], row[7]))
-        conn.close()
-        return objs_list
-
-    @classmethod
-    def obj_list_json(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         result = []
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM `objects` WHERE story_id = %s"), (story_id))
@@ -123,7 +107,7 @@ class StoryObject:
                 obj_info = {str(row[1]) : {"obj_starting_loc" : str(row[2]), "obj_name" : row[3], "obj_description" : row[4], 
                 "can_pickup" : str(row[5]), "is_hidden" : str(row[6]), "unhide_event_id" : str(row[7])}}
                 result.append(obj_info)
-        return json.dumps(result)
+        return result
 
     @classmethod
     def get_last_id(cls, story_id):

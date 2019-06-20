@@ -237,13 +237,13 @@ def object_show():
     objects = StoryObject.obj_list(story_id)
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
-@app.route("/app/story/object/show", methods = ["GET"])
-#@login_required
-def app_object_show():
-    #if "logged in" not in session:
-     #   return redirect(url_for("session_new"))
-    objects = StoryObject.obj_list_json(story_id)
-    return make_response(objects, 200)
+@app.route("/app/story/info", methods = ['GET', 'POST'])
+def app_story_logistics():
+    in_story_id = 0
+    if request.method == 'POST':
+        details = request.json
+        in_story_id = details.get("story_id")
+    return Story.get_entities(in_story_id)
 
 @app.route("/story/object/update", methods = ['POST'])
 #@login_required

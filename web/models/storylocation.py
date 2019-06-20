@@ -6,6 +6,8 @@ import json
 
 from datetime import datetime
 
+from models.storydecision import StoryDecision
+
 class StoryLocation:
     story_id = 0
     location_id = 0
@@ -129,21 +131,6 @@ class StoryLocation:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
-        objs_list = []
-        with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM locations WHERE story_id = %s"),(story_id))
-            results = cur.fetchall()
-            for row in results:
-                objs_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]))
-        return objs_list
-
-    @classmethod
-    def loc_list_json(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         result = []
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM locations WHERE story_id = %s"), (story_id))
@@ -151,10 +138,11 @@ class StoryLocation:
             if query_data is None:
                 return None
             for row in query_data:
-                obj_dict = {'story_id' : row[0], 'location_id' : row[1], 'location_name' : row[2], 'original_description' : row[3], 'short_description' : row[4], 'post_event_description' : row[5],
-                            'location_event_id' : row[6], 'auto_goto' : row[7], 'next_loc_id' : row[8]}
-                result.append(obj_dict)
-        return obj_dict
+                loc_dict = {str(row[1]) : {'location_name' : row[2], 'original_description' : row[3], 'short_description' : row[4], 
+                        'post_event_description' : row[5], 'location_event_id' : str(row[6]), 'auto_goto' : str(row[7]), 'next_loc_id' : str(row[8]), 
+                        'decisions' : StoryDecision.decs_list_json(story_id, row[1])}}
+                result.append(loc_dict)
+        return result
 
     @classmethod
     def get_last_id(cls, story_id):
