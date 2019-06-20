@@ -201,8 +201,8 @@ class Story:
     def get_entities(cls, story_id):
         result = {
             'story_id' : story_id,
-            'objects' : StoryObject.obj_list(story_id),
-            'events' : StoryEvent.event_list(story_id),
-            'locations' : StoryLocation.loc_list(story_id)
+            'objects' : StoryObject.obj_list_json(story_id),
+            'events' : StoryEvent.event_list_json(story_id),
+            'locations' : StoryLocation.loc_list_json(story_id)
         }
         return json.dumps(result)

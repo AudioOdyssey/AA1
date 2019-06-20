@@ -97,6 +97,22 @@ class StoryObject:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
+        objs_list = []
+        with conn.cursor() as cur:
+            cur.execute(("SELECT * FROM `objects` WHERE story_id = %s"), (story_id))
+            results = cur.fetchall()
+            for row in results:
+                objs_list.append(cls(row[0], row[1], row[3], row[4], row[5], row[2], row[6], row[7]))
+        conn.close()
+        return objs_list
+
+    @classmethod
+    def obj_list_json(cls, story_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         result = []
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM `objects` WHERE story_id = %s"), (story_id))
