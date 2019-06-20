@@ -341,7 +341,7 @@ def location_show():
     #if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     locations= StoryLocation.loc_list(story_id)
-    return render_template("story/location/show.html", locations=locations, story_id=story_id)
+    return render_template("story/location/show.html", user = user.getuser(), locations=locations, story_id=story_id)
 
 @app.route('/story/location/update', methods = ['POST'])
 #@login_required
