@@ -41,12 +41,21 @@
 								</li>
 							</ul>
 							<ul class="navbar-nav ml-auto">
+								   <!---put if and sign out option  @brian-->
+								{%if true%}
 								<li class="nav-item">
 									<a class="nav-link" href="/session/new">Login</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="/user/new">Register</a>
 								</li>
+								{%else%}
+									<li class="nav-item">
+										<a class="nav-link" href="/session/new">Signout</a>
+									</li>
+								{%endif%}
+
+								
 							</ul>
 						</div>
 					</div>
