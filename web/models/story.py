@@ -206,3 +206,23 @@ class Story:
             'locations' : StoryLocation.loc_list_json(story_id)
         }
         return json.dumps(result)
+
+    @classmethod
+    def display_for_store(cls):
+        result = []
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+             cur.execute(("SELECT count(*) FROM `master_stories`"))
+             result = cur.fetchone()
+             count = result['count(*)']
+             for i in range(count):
+                 cur.execute(("SELECT count(*) FROM `master_stories` WHERE story_id = %s"), (story_id))
+                 result = cur.fetchone()
+                 result = {
+                     "story_id" : result['story_id'],
+                     
+                 }
