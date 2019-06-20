@@ -196,6 +196,8 @@ def app_logout():
 def logout():
     if "logged_in" in session:
         session.pop("logged_in", None)
+        usr = User.get(session.get('user_id'))
+        usr.is_authenticated = False
         return redirect(url_for("home"))
     else:
         return redirect(url_for("session_new"))
@@ -237,13 +239,18 @@ def object_show():
     objects = StoryObject.obj_list(story_id)
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
-@app.route("/app/story/info", methods = ['GET', 'POST'])
+@app.route("/app/story/info", methods = ['GET'])
 def app_story_logistics():
-    in_story_id = 0
-    if request.method == 'POST':
-        details = request.json
-        in_story_id = details.get("story_id")
+    details = request.json
+    in_story_id = details.get("story_id")
     return Story.get_entities(in_story_id)
+
+@app.route("/store/story/info", methods = ['GET'])
+def app_store_expand():
+    in_story_id = 0
+    details = request.json
+    in_story_id = details.get("story_id")
+    return Story.get_info(in_story_id)
 
 @app.route("/story/object/update", methods = ['POST'])
 #@login_required
