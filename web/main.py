@@ -506,7 +506,19 @@ def help():
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for("session_new"))
+    
+@app.route("/user/newcorp")
+def newcorp():
+    return render_template("user/newcorp.html")
+
+@app.route("/story/treeview")
+def treeview():
+    return render_template("story/treeview.html")
+
+
+
 
 if __name__=='__main__':
 	app.run()
+
 
