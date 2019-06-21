@@ -210,7 +210,7 @@ def story_show():
     stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction", 3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
     return render_template("story/show.html", stories=stories)
 
-@app.route("/story/update")
+@app.route("/story/update") # THIS NEEDS TO BE FINISHED
 #@login_required
 def story_update():
   #  if "logged in" not in session:
