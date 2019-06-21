@@ -4,6 +4,7 @@
 <script src="{{ url_for('static', filename='js/story/location/show.js') }}"></script>
 
 <section class="row">
+    <h3>Locations</h3>
     <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
@@ -17,7 +18,7 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label for = "loc_name"><b>Name:</b></label>
-                <input id ="loc_name" class="form-control" type="text" name="loc_name" onchange="location_changed(this)">
+                <input id ="loc_name" class="form-control" type="text" name="location_name" onchange="location_changed(this)">
             </div>
         </section>
 
@@ -39,25 +40,26 @@
         <textarea id= "post_desc" class="form-control" rows="3" name="location_post_event_description"  onchange="location_changed(this)"></textarea>
         <hr>
         <label for = "loc_ev_name">Select Event Name (will occur upon entry): or <a href = "/story/event/show"> Add New Event</a></label>
-        <select id = "loc_ev_name" type="text" autocomplete="off" name="location_event_id"  onchange="location_changed(this)">
+        <select id = "loc_ev_name" class = "form-control" type="text" autocomplete="off" name="location_event_id"  onchange="location_changed(this)">
                 {%for events in event%}
                     <option>{{event.event_name}}</option>
                 {%endfor%}
          </select>
         <hr>
         
-        <hr>
+       
         <label for= "autogo">Auto Goto</label>
         <input id = "autogo" type="checkbox" autocomplete="off" name="auto_goto"  onchange="location_changed(this)">
-
+         <br>
          <!---should only display if "autogo" is checked  @brian-->
         <label>Select Next Location Name:</label>
-        <select type="text" autocomplete="off" name="next_loc_id"  onchange="location_changed(this)">
+        <select class = "form-control" type="text" autocomplete="off" name="next_loc_id"  onchange="location_changed(this)">
                 {%for locations in location%}
                    <option>{{location.location_name}}</option>
                 {%endfor%}
         </select> 
-        <br>
+        <br><hr>
+
 
     </section>
 </form>
@@ -75,7 +77,7 @@
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="loc_name" onchange="location_changed(this)" value="{{ location.location_name }}">
+                <input class="form-control" type="text" name="location_name" onchange="location_changed(this)" value="{{ location.location_name }}">
             </div>
         </section>
 
@@ -102,21 +104,25 @@
             <option>{{event.event_name}}</option>
              {%endfor%}
          </select>
-        <br>
+        <br><hr>
 
         <label>Auto Go To</label>
         {% if location.auto_goto %}
          <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)"checked>
         {% else %}
-         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" 
+         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" >
          {% endif %} 
          <br>
 
          <!---should only display if "autogo" is checked @brian-->
         <label>Next Location Name</label> <!--CHeck this out wtf-->
-        <select type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
-              
-   </select> 
+        
+        <select class= "form-control"type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
+        {%for loc in locations%}
+        <option >{{loc.location_name}}</option>
+        {%endfor%}
+         </select> 
+       <hr>  <br>
         <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}">Edit Decisions</a>
     </section>
 </form>

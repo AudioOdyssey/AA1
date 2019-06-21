@@ -14,7 +14,7 @@ function set_focus(elem) {
     }
     elem.id = "active";
 }
-function show_events(){
+function show_events(){ //does not work
    var checkbox1 = document.getElementById("chk1");
    var checkbox2 = document.getElementById("chk2");
    var hiddenInputs = document.getElementsByClassName("hidden");
@@ -30,7 +30,7 @@ function show_events(){
        }
    }
 }
-/*function show_test(){
+/*THIS WORKS function show_test(){
     var testy = document.getElementById("testchk");
     var word = document.getElementsByClassName("test");
     for(var i=0; i<word.length; i++)
@@ -77,7 +77,7 @@ function add_btn_pressed(story_id) {
     xhttp.send("desc=&name=&obj_start_location=0&story_id=" + story_id);
 }
 
-function delete_btn_pressed(story_id, obj_id) {
+function delete_btn_pressed(story_id, obj_id) { //does not work
     var element = document.getElementByClassName("object-main-row");
     element.parentNode.removeChild(element);
     var element1 = document.getElementByID("obj-template");

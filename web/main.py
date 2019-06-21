@@ -373,7 +373,7 @@ def location_update():
     next_location_id = details.get('next_loc_id')
     if next_location_id is None:
         next_location_id = 0
-    loc = StoryLocation.get(in_story_id, loc_id) #issue these arent set right 
+    loc = StoryLocation.get(in_story_id, loc_id) 
     loc.update(in_story_id, loc_id, name, original_desc, short_desc, post_event_description, event_id, auto_goto, next_location_id)
     return redirect(url_for("location_show"))
 
