@@ -80,11 +80,11 @@
         <label>Description</label>
          <textarea class="form-control" rows="3" name="ev_description" onchange="event_changed(this)">{{ event.event_description }}</textarea>
 
-        <label>Is global?</label>
-        {% if event.is_global %}
-         <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)">
+        <label>Is Global?</label>
+        {% if event.event_is_global %}
+        <input type = "checkbox" autocomplete="off"  name= "is_global" onchange="event_changed(this)" checked>
         {% else %}
-         <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)" checked>
+        <input type = "checkbox" autocomplete="off" name = "is_global" onchange="event_changed(this)" >
         {% endif %}
         <br>
 
@@ -93,5 +93,7 @@
 </form>
 
 {% endfor %}
-
+<br>
+<a href = "#add-btn"><button class = "btn btn-light">Back to Top</button></a>
+<a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
 {% endblock %}

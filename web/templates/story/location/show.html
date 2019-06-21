@@ -103,14 +103,14 @@
              {%endfor%}
          </select>
         <br>
-        
+
         <label>Auto Go To</label>
         {% if location.auto_goto %}
-         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)">
+         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)"checked>
         {% else %}
-         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" checked>
-        {% endif %}
-        <br>
+         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" 
+         {% endif %} 
+         <br>
 
          <!---should only display if "autogo" is checked @brian-->
         <label>Next Location Name</label> <!--CHeck this out wtf-->
@@ -122,5 +122,7 @@
 </form>
 <br>
 {% endfor %}
-
+<br>
+<a href = "#add-btn"><button class = "btn btn-light">Back to Top</button></a>
+<a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
 {% endblock %}
