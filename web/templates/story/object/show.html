@@ -3,6 +3,12 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/object/show.css') }}" type="text/css"/>
 <script src="{{ url_for('static', filename='js/story/object/show.js') }}"></script>
 
+       
+        <a href = "#bottom"><button class= "btn btn-light">Bottom of Page</button></a>
+         <a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
+         <a href = "/story/location/show"><button class = "btn btn-light">Edit Locations</button></a>
+         <a href = "/story/event/show"><button class = "btn btn-light">Edit Events</button></a>
+
 <section class="row">
     <h3>Objects</h3>
   <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
@@ -121,6 +127,5 @@
 </form>
 {% endfor %}
 <br>
-<a href = "#add-btn"><button class = "btn btn-light">Back to Top</button></a>
-<a href = "/story/update"><button type = "submit" class = "btn btn-light">Back to Main Story Page</button></a>
+<a href = "#add-btn"><button id = "bottom" class = "btn btn-light">Back to Top</button></a>
 {% endblock %}

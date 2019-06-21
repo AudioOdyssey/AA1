@@ -2,7 +2,11 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/show.css') }}" type="text/css"/>
 <script src="{{ url_for('static', filename='js/story/location/show.js') }}"></script>
-
+        <a href = "#bottom"><button class= "btn btn-light">Bottom of Page</button></a>
+        <a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
+        <a href = "/story/event/show"><button class = "btn btn-light">Edit Events</button></a>
+        <a href = "/story/object/show"><button class = "btn btn-light">Edit Objects</button></a>
+       
 <section class="row">
     <h3>Locations</h3>
     <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
@@ -106,7 +110,7 @@
          </select>
         <br><hr>
 
-        <label>Auto Go To</label>
+        <label>Auto Go To</label> <!--DOENST WORK-->
         {% if location.auto_goto %}
          <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)"checked>
         {% else %}
@@ -115,7 +119,7 @@
          <br>
 
          <!---should only display if "autogo" is checked @brian-->
-        <label>Next Location Name</label> <!--CHeck this out wtf-->
+        <label>Next Location Name</label>
         
         <select class= "form-control"type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
         {%for loc in locations%}
@@ -129,6 +133,5 @@
 <br>
 {% endfor %}
 <br>
-<a href = "#add-btn"><button class = "btn btn-light">Back to Top</button></a>
-<a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
+<a href = "#add-btn"><button id = "bottom" class = "btn btn-light">Back to Top</button></a>
 {% endblock %}
