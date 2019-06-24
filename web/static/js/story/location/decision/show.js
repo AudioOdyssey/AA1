@@ -45,6 +45,8 @@ function add_btn_pressed(story_id, location_id) {
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("decision_name=&loc_id=" + location_id + "&story_id=" + story_id);
 }
-function delete_btn_pressed(story_id, location_id, decision_id) { //BRIAN
-   
+
+function delete_btn_pressed(btn) {
+    // TODO: Send destroy to server
+    btn.parentNode.parentNode.removeChild(btn.parentNode);
 }

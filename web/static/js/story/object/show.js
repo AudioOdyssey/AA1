@@ -77,9 +77,7 @@ function add_btn_pressed(story_id) {
     xhttp.send("desc=&name=&obj_start_location=0&story_id=" + story_id);
 }
 
-function delete_btn_pressed(story_id, obj_id) { //does not work
-    var element = document.getElementByClassName("object-main-row");
-    element.parentNode.removeChild(element);
-    var element1 = document.getElementByID("obj-template");
-    element.parentNode.removeChild(element1);
+function delete_btn_pressed(btn) {
+    // TODO: Send destroy to server
+    btn.parentNode.parentNode.removeChild(btn.parentNode);
 }
