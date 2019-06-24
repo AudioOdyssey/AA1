@@ -20,22 +20,7 @@ function checkbox_visability_check(elem) { //does not work
     else
         elem.parentNode.getElementsByClassName("checkbox_hide")[0].style.display = "none";
 }
-/*THIS WORKS function show_test(){
-    var testy = document.getElementById("testchk");
-    var word = document.getElementsByClassName("test");
-    for(var i=0; i<word.length; i++)
-    {
-        if (testy.checked)
-        {
-        word[i].style.display="inline";
-        }
-        else
-        {
-        word[i].style.display="none";
-        }
-    }
 
-}*/
 function object_changed(elem) {
     // elem.form.submit()
     var xhttp = new XMLHttpRequest();
