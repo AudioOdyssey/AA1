@@ -14,21 +14,11 @@ function set_focus(elem) {
     }
     elem.id = "active";
 }
-function show_events(){ //does not work
-   var checkbox1 = document.getElementById("chk1");
-   var checkbox2 = document.getElementById("chk2");
-   var hiddenInputs = document.getElementsByClassName("hidden");
-   for(var i=0; i< hiddenInputs.length; i++)
-   {
-       if(checkbox1.checked || checkbox2.checked)
-       {
-           hiddenInputs[i].style.display="inline";
-       }
-       else
-       {
-            hiddenInputs[i].style.display="none";
-       }
-   }
+function checkbox_visability_check(elem) { //does not work
+    if (elem.checked)
+        elem.parentNode.getElementsByClassName("checkbox_hide")[0].style.display = "block";
+    else
+        elem.parentNode.getElementsByClassName("checkbox_hide")[0].style.display = "none";
 }
 /*THIS WORKS function show_test(){
     var testy = document.getElementById("testchk");

@@ -55,17 +55,19 @@
         <textarea class="form-control" rows="3" onchange="object_changed(this)" name="obj_description"></textarea>
         <br>
 
-        <label>Is Hidden? </label>
-        <input type="checkbox" id= "chk1" autocomplete="off" onclick= "show_event()" onchange="object_changed(this)" name="is_hidden" >
+        <div>
+            <label>Is Hidden? </label>
+            <input type="checkbox" autocomplete="off" onclick="checkbox_visability_check(this)" onchange="object_changed(this)" name="is_hidden" >
 
-           <!---should only display if "is hidden" is checked  @brian-->
-        <div class= "hidden">
-        <label class="hidden">Select Unhide Event Name: or <a href = "/story/event/show"> Add New Event</a></label>
-        <select class="hidden" onchange="object_changed(this)" name="unhide_event_ID">
-                {% for events in event %}
+            <!---should only display if "is hidden" is checked  @brian-->
+            <div class="checkbox_hide" style="display: none;">
+                <label>Select Unhide Event Name: or <a href = "/story/event/show"> Add New Event</a></label>
+                <select onchange="object_changed(this)" name="unhide_event_ID">
+                    {% for events in event %}
                     <option>{{event.event_name}}</option>
-                {% endfor %}
-        </select>   
+                    {% endfor %}
+                </select>   
+            </div>
         </div>
     </section>
 </form> 
@@ -107,21 +109,22 @@
         <textarea class="form-control" rows="3" name="obj_description" onchange="object_changed(this)">{{ object.obj_description }}</textarea>
         <br>
 
-        <label>Is Hidden? </label>
-        {%if object.is_hidden%}
-        <input  id = "chk1" type="checkbox" name= "is_hidden" autocomplete="off"  onclick="show_event()" onchange="object_changed(this)" checked>
-        {%else%}
-        <input  id= "chk2" type="checkbox" name= "is_hidden" autocomplete="off"  onclick="show_event()" onchange="object_changed(this)" >
-        {%endif%}
-         <!---should only display if "is hidden" is checked  @brian-->
-        <div class= "hidden">
-        <br>
-        <label class="hidden">Select Unhide Event Name: or <a href = "/story/event/show"> Add New Event</a></label>
-            <select class= "form-control hidden"  type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
+        <div>
+            <label>Is Hidden? </label>
+            {%if object.is_hidden%}
+            <input  id = "chk1" type="checkbox" name= "is_hidden" autocomplete="off"  onclick="checkbox_visability_check(this)" onchange="object_changed(this)" checked>
+            {%else%}
+            <input  id= "chk2" type="checkbox" name= "is_hidden" autocomplete="off"  onclick="checkbox_visability_check(this)" onchange="object_changed(this)" >
+            {%endif%}
+            
+            <div class="checkbox_hide" {%if not object.is_hidden%}style="display: none;"{%endif%}>
+                <label>Select Unhide Event Name: or <a href = "/story/event/show"> Add New Event</a></label>
+                <select class="form-control" type="text" name="obj_unhide_event" onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
                     {%for events in event%}
-                        <option>{{event.event_name}}</option>
+                    <option>{{event.event_name}}</option>
                     {%endfor%}
-            </select>
+                </select>
+            </div>
         </div>
     </section>
 </form>
