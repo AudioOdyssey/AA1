@@ -52,16 +52,19 @@
         <hr>
         
        
-        <label for= "autogo">Auto Goto</label>
-        <input id = "autogo" type="checkbox" autocomplete="off" name="auto_goto"  onchange="location_changed(this)">
-         <br>
-         <!---should only display if "autogo" is checked  @brian-->
-        <label>Select Next Location Name:</label>
-        <select class = "form-control" type="text" autocomplete="off" name="next_loc_id"  onchange="location_changed(this)">
-                {%for locations in location%}
-                   <option>{{location.location_name}}</option>
-                {%endfor%}
-        </select> 
+        <div>
+            <label for="autogo">Auto Goto</label>
+            <input id="autogo" type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)" onchange="location_changed(this)">
+            <br>
+            <div class="checkbox_hide" style="display: none;">
+                <label>Select Next Location Name:</label>
+                <select class="form-control" type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)">
+                    {%for locations in location%}
+                    <option>{{location.location_name}}</option>
+                    {%endfor%}
+                </select> 
+            </div>
+        </div>
         <br><hr>
 
 
@@ -75,7 +78,7 @@
     <input name="story_id" value="{{ location.story_id }}" readonly class="hidden-in">
     <input name="loc_id" value="{{ location.location_id }}" readonly class="hidden-in"> 
 
-    <button type= "button" onclick= "delete_btn_pressed(this)" class="trash  btn btn-light"><i class="fa fa-trash-alt fa-xs"></i></button>
+    <button type= "button" onclick= "delete_btn_pressed(this)" class="trash btn btn-light"><i class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="location-row row">
         <section class="row flex-1">
@@ -110,23 +113,28 @@
          </select>
         <br><hr>
 
-        <label>Auto Go To</label> <!--DOENST WORK-->
-        {% if location.auto_goto %}
-         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)"checked>
-        {% else %}
-         <input type="checkbox" autocomplete="off" name="auto_goto" onchange="location_changed(this)" >
-         {% endif %} 
-         <br>
+        <div>
+            <label>Auto Go To</label> <!--DOENST WORK-->
+            {% if location.auto_goto %}
+            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)" onchange="location_changed(this)"checked>
+            {% else %}
+            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)" onchange="location_changed(this)">
+            {% endif %} 
+            <br>
 
-         <!---should only display if "autogo" is checked @brian-->
-        <label>Next Location Name</label>
-        
-        <select class= "form-control"type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
-        {%for loc in locations%}
-        <option >{{loc.location_name}}</option>
-        {%endfor%}
-         </select> 
-       <hr>  <br>
+            <!---should only display if "autogo" is checked @brian-->
+            <div class="checkbox_hide" style="display: none;">
+                <label>Next Location Name</label>
+                
+                <select class= "form-control"type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
+                    {%for loc in locations%}
+                    <option >{{loc.location_name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+        </div>
+        <hr>
+        <br>
         <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}">Edit Decisions</a>
     </section>
 </form>

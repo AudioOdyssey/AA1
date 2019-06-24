@@ -14,7 +14,8 @@ function set_focus(elem) {
     }
     elem.id = "active";
 }
-function checkbox_visability_check(elem) { //does not work
+
+function checkbox_visability_check(elem) {
     if (elem.checked)
         elem.parentNode.getElementsByClassName("checkbox_hide")[0].style.display = "block";
     else
