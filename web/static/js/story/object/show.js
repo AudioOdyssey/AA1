@@ -64,6 +64,15 @@ function add_btn_pressed(story_id) {
 }
 
 function delete_btn_pressed(btn) {
-    // TODO: Send destroy to server
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", "/story/object/destroy", true);
+    xhttp.send(new FormData(btn.form));
     btn.parentNode.parentNode.removeChild(btn.parentNode);
 }
