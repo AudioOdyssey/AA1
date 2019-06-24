@@ -69,15 +69,10 @@
 #loc-template {
     display: none;
 }
-.trash{
+.trash {
     border: 1px solid RGBA(0,0,0,.5);
-    background-color: #fffff1;
-    margin-left: auto; 
-    margin-bottom: .5em;
-    margin-left: 97%;
-    width: 25px ;
-    height: 25px ; 
-  /* background-image:url("/web/static/image/trash.png") !important; */
+    float: right; 
+    padding: 0.2rem 0.4rem;
 }
 .fa-minus{
      top: 40%;
