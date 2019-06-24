@@ -41,7 +41,7 @@
 								</li>
 							</ul>
 							<ul class="navbar-nav ml-auto">
-								   <!---put if and sign out option  @brian-->
+								<!-- TODO: If statement based on login status -->
 								{%if true%}
 								<li class="nav-item">
 									<a class="nav-link" href="/session/new">Login</a>
@@ -50,9 +50,9 @@
 									<a class="nav-link" href="/user/new">Register</a>
 								</li>
 								{%else%}
-									<li class="nav-item">
-										<a class="nav-link" href="/session/new">Signout</a>
-									</li>
+								<form class="nav-item" action="/session/destroy" method="post">
+									<input style="background: none; border: 0px;" type="submit" class="nav-link" name="Logout" value="Logout" />
+								</form>
 								{%endif%}
 
 								
