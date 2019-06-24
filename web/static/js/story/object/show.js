@@ -47,7 +47,18 @@ function show_events(){ //does not work
 
 }*/
 function object_changed(elem) {
-    elem.form.submit()
+    // elem.form.submit()
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", "/story/object/update", true);
+    // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(new FormData(elem.form));
 }
 
 function add_btn_pressed(story_id) {

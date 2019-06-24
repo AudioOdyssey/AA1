@@ -279,7 +279,8 @@ def object_update():
     #unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
     obj.update(story_id, object_id, name=name, starting_loc=starting_loc, desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
-    return redirect(url_for("object_show"))
+    #return redirect(url_for("object_show"))
+    return "ok"
 
 @app.route("/story/object/new", methods = ['POST'])
 #@login_required
