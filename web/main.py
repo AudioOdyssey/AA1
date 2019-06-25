@@ -248,6 +248,14 @@ def story_update_post():
                  length_of_story, genre, story_synopsis)
     return '{"status":"ok"}'
 
+
+@app.route("/story/new", methods=["POST"])
+def story_new():
+    details = request.form
+    story = Story()
+    story.add_to_server()
+    return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
+
 # @app.route("/story/new", methods = ['POST'])
 # def story_new():
 #     details = request.form
@@ -269,7 +277,7 @@ def object_show():
 
 @app.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
-    details = request.json
+    details = request.args
     in_story_id = details.get("story_id")
     return Story.get_entities(in_story_id)
 
