@@ -10,9 +10,9 @@
 <section class="row">
     <h3>Decisions</h3>
     <hr>
-    <h3>Location Name: '{{location_name}}'</h3>
+    <h3>Location Name: '<i>{{ location.location_name }}</i>'</h3>
 
-    <button type="button" onclick="add_btn_pressed('{{ story_id }}', '{{ location_id }}')" id="add-btn"
+    <button type="button" onclick="add_btn_pressed({{ story_id }}, {{ location.location_id }})" id="add-btn"
         class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
@@ -67,7 +67,7 @@
                         Location</a></label>
                 <select id="trans_loc" class="form-control" type="text" autocomplete="off" name="transition_loc_id"
                     onchange="decision_changed(this)">
-                    {% for locations in location %}
+                    {% for location in locations %}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
                 </select>
@@ -93,7 +93,7 @@
                                 Event</a></label>
                         <select id="show_event" class="form-control" type="text" autocomplete="off" name="show_event_id"
                             onchange="decision_changed(this)">
-                            {%for events in event%}
+                            {%for event in events%}
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
@@ -104,7 +104,7 @@
                                 Object</a></label>
                         <select id="show_obj" class="form-control" type="text" autocomplete="off" name="show_object_id"
                             onchange="decision_changed(this)">
-                            {%for objects in object%}
+                            {%for object in objects%}
                             <option>{{object.obj_name}}</option>
                             {%endfor%}
                         </select>
@@ -128,7 +128,7 @@
                                 New Object</a></label>
                         <select class="form-control" type="text" autocomplete="off" name="unlock_event_id"
                             onchange="decision_changed(this)">
-                            {%for objects in object%}
+                            {%for object in objects%}
                             <option>{{object.obj_name}}</option>
                             {%endfor%}
                         </select>
@@ -139,7 +139,7 @@
                                 New Event</a></label>
                         <select id="unlock_event" class="form-control" type="text" autocomplete="off"
                             name="unlock_event_id" onchange="decision_changed(this)">
-                            {%for events in event%}
+                            {%for event in events%}
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
@@ -170,7 +170,7 @@
                         Event</a></label>
                 <select id="trig_ev" class="form-control" type="text" autocomplete="off" name="effect_event_id"
                     onchange="decision_changed(this)">
-                    {%for events in event%}
+                    {%for event in events%}
                     <option>{{event.event_name}}</option>
                     {%endfor%}
                 </select>
@@ -256,7 +256,7 @@
                         Location</a></label>
                 <select type="text" class="form-control" autocomplete="off" name="transition_loc_id"
                     onchange="decision_changed(this)">
-                    {% for locations in location %}
+                    {% for location in locations %}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
                 </select>
@@ -290,7 +290,7 @@
                                 Add New Event</a></label>
                         <select type="text" class="form-control" autocomplete="off" name="show_event_id"
                             onchange="decision_changed(this)">
-                            {%for events in event%}
+                            {%for event in events%}
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
@@ -301,7 +301,7 @@
                                 Object</a></label>
                         <select type="text" class="form-control" autocomplete="off" name="show_object_id"
                             onchange="decision_changed(this)">
-                            {%for objects in object%}
+                            {%for object in objects%}
                             <option>{{object.obj_name}}</option>
                             {%endfor%}
                         </select>
@@ -332,7 +332,7 @@
                                 Object</a></label>
                         <select type="text" class="form-control" autocomplete="off" name="unlock_event_id"
                             onchange="decision_changed(this)">
-                            {%for objects in object%}
+                            {%for object in objects%}
                             <option>{{object.obj_name}}</option>
                             {%endfor%}
                         </select>
@@ -343,7 +343,7 @@
                                 Event</a></label>
                         <select type="text" class="form-control" autocomplete="off" name="unlock_event_id"
                             onchange="decision_changed(this)">
-                            {%for events in event%}
+                            {%for event in events%}
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
@@ -380,7 +380,7 @@
                         Event</a></label>
                 <select type="text" class="form-control" autocomplete="off" name="effect_event_id"
                     onchange="decision_changed(this)">
-                    {%for events in event%}
+                    {%for event in events%}
                     <option>{{event.event_name}}</option>
                     {%endfor%}
                 </select>
@@ -389,7 +389,7 @@
             <label>Event that locks this decision:</label>
             <select type="text" class="form-control" autocomplete="off" name="is_locked_by_event_id"
                 onchange="decision_changed(this)">
-                {%for events in event%}
+                {%for event in events%}
                 <option>{{event.event_name}}</option>
                 {%endfor%}
             </select>

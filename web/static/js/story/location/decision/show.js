@@ -49,6 +49,7 @@ function add_btn_pressed(story_id, location_id) {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             // Successful Request
+            console.log(this.responseText)
             var obj = JSON.parse(this.responseText);
             if (obj.status == "ok") {
                 newelem.childNodes[1].value = obj.response.decision_id;
@@ -61,7 +62,7 @@ function add_btn_pressed(story_id, location_id) {
     };
     xhttp.open("POST", "/story/location/decision/new", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("decision_name=&loc_id=" + location_id + "&story_id=" + story_id);
+    xhttp.send("decision_name=&location_id=" + location_id + "&story_id=" + story_id);
 }
 
 function delete_btn_pressed(btn) {

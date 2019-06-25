@@ -415,8 +415,11 @@ def location_new():
 def decision_show():
     # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
-    decisions = StoryDecision.dec_list(story_id)
-    return render_template("story/location/decision/show.html", decisions=decisions, story_id=story_id, location_id=1)
+    decisions = StoryDecision.dec_list(
+        request.args['story_id'], request.args['location_id'])
+    location = StoryLocation.get(
+        request.args['story_id'], request.args['location_id'])
+    return render_template("story/location/decision/show.html", decisions=decisions, story_id=request.args['story_id'], location=location)
 
 
 @app.route("/story/location/decision/update", methods=['POST'])
@@ -424,6 +427,8 @@ def decision_update():
     # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     details = request.form
+    story_id = details["story_id"]
+    location_id = details["location_id"]
     decision_id = details['decision_id']
     if decision_id == '':
         decision_id = StoryDecision.get_last_id(story_id)
@@ -493,10 +498,11 @@ def decision_update():
 
 @app.route("/story/location/decision/new", methods=['POST'])
 def decision_new():
-    if "logged in" not in session:
-        return redirect(url_for("session_new"))
+    #if "logged in" not in session:
+    #    return redirect(url_for("session_new"))
     details = request.form
-    location_id = details.get('loc_id')
+    story_id = details["story_id"]
+    location_id = details["location_id"]
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
     return redirect(url_for("decision_show"))
