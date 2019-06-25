@@ -44,16 +44,18 @@ location_id = 1
 
 random.seed()
 
+
 @app.route("/")
 @app.route("/home")
 @app.route("/index")
 def home():
     return render_template("index.html")
 
+
 @app.route("/user/new", methods=['GET', 'POST'])
-def user_new(): #fix later
+def user_new():  # fix later
     if request.method == "POST":
-        details = request.form 
+        details = request.form
         username = details['username']
         raw_password = details['password']
         email = details['email_address']
@@ -69,11 +71,12 @@ def user_new(): #fix later
         first_name = details['first_name']
         last_name = details['last_name']
         date_of_birth = datetime.strptime(details['date_of_birth'], '%Y-%m-%d')
-        usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
-                profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth, 
-                first_name_input=first_name, last_name_input=last_name, language=language)
+        usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
+                   profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth,
+                   first_name_input=first_name, last_name_input=last_name, language=language)
         usr.add_to_server()
     return render_template("user/new.html")
+
 
 @app.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
@@ -82,11 +85,12 @@ def app_user_new():
         details = request.get_json(force=True)
         user_id = sign_up(details)
         if user_id:
-            result['user_id']= str(user_id)
+            result['user_id'] = str(user_id)
             result['message'] = "Successfully registered"
         else:
-            result['message']='Username already exists'
+            result['message'] = 'Username already exists'
     return make_response(json.dumps(result))
+
 
 def sign_up(details_dict):
     username = details_dict['username']
@@ -99,20 +103,21 @@ def sign_up(details_dict):
     if disabilities:
         disabilities_bool = 1
     else:
-        disabilities_bool =0
+        disabilities_bool = 0
     language = int(details_dict['language_id'])
     first_name = details_dict['first_name']
     last_name = details_dict['last_name']
     #date_of_birth = datetime.strptime(details_dict['date_of_birth'], '%Y-%m-%d')
-    usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin, 
-            profession_input=profession, disabilities_input=disabilities_bool, 
-            first_name_input=first_name, last_name_input=last_name, language=language)
+    usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
+               profession_input=profession, disabilities_input=disabilities_bool,
+               first_name_input=first_name, last_name_input=last_name, language=language)
     if usr.add_to_server():
         return usr.get_id()
     else:
-        return None        
+        return None
 
-@app.route("/session/new", methods =['GET', 'POST'])
+
+@app.route("/session/new", methods=['GET', 'POST'])
 def session_new():
     error = None
     if request.method == 'POST':
@@ -124,9 +129,10 @@ def session_new():
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
+
 def authenticate(details):
-    conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, 
-                            cursorclass = pymysql.cursors.DictCursor)
+    conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
+                           cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cur:
         username = details['username']
         cur.execute(("SELECT * FROM users WHERE username = %s"), username)
@@ -143,7 +149,8 @@ def authenticate(details):
                 return False
     return True
 
-@app.route("/app/session/new", methods =['POST', 'GET'])
+
+@app.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
     message = None
     result = None
@@ -155,26 +162,28 @@ def app_session_new():
             message = "Username and/or password is not valid"
     if message is None:
         result = {
-            'user_id' : str(session['user_id']),
-            'auth_token' : encode_auth_token(str(session['user_id']))
+            'user_id': str(session['user_id']),
+            'auth_token': encode_auth_token(str(session['user_id']))
         }
     else:
         result = {
-            'message' : message
+            'message': message
         }
     return jsonify(result)
 
+
 def encode_auth_token(user_id):
     payload = {
-        'exp' : datetime.utcnow() + timedelta(days = 7, seconds = 5),
-        'iat' : datetime.utcnow(),
-        'sub' : user_id
+        'exp': datetime.utcnow() + timedelta(days=7, seconds=5),
+        'iat': datetime.utcnow(),
+        'sub': user_id
     }
     return jwt.encode(
         payload,
         secret_key,
         algorithm='HS256'
     )
+
 
 def decode_auth_token(auth_token):
     try:
@@ -185,14 +194,16 @@ def decode_auth_token(auth_token):
     except jwt.InvalidTokenError:
         return 'Invalid token. please log in again'
 
+
 @app.route("/app/session/logout")
 def app_logout():
     session.pop("logged_in", None)
     session.pop("user_id", None)
     session.pop("platform", None)
 
+
 @app.route("/session/logout")
-#@login_required
+# @login_required
 def logout():
     if "logged_in" in session:
         session.pop("logged_in", None)
@@ -202,22 +213,24 @@ def logout():
     else:
         return redirect(url_for("session_new"))
 
+
 @app.route("/story/show")
-#@login_required
+# @login_required
 def story_show():
    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    stories = Story.story_list(1) # TODO: Real UID
+    stories = Story.story_list(1)  # TODO: Real UID
     return render_template("story/show.html", stories=stories)
 
-@app.route("/story/update") # THIS NEEDS TO BE FINISHED
-#@login_required
+
+@app.route("/story/update")  # THIS NEEDS TO BE FINISHED
+# @login_required
 def story_update():
   #  if "logged in" not in session:
    #     return redirect(url_for("session_new"))
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
-    locations= StoryLocation.loc_list(request.args['story_id'])
+    locations = StoryLocation.loc_list(request.args['story_id'])
     return render_template("story/update.html", objects=objects, events=events, locations=locations)
 
 # @app.route("/story/new", methods = ['POST'])
@@ -229,33 +242,35 @@ def story_update():
 #     return redirect(url_for("story_update"))
 
 
-
 #### THIS WORKS #####
 @app.route("/story/object/show")
-#@login_required
+# @login_required
 def object_show():
    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
     objects = StoryObject.obj_list(story_id)
     return render_template("story/object/show.html", objects=objects, story_id=1)
 
-@app.route("/app/story/info", methods = ['GET'])
+
+@app.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
     details = request.json
     in_story_id = details.get("story_id")
     return Story.get_entities(in_story_id)
 
-@app.route("/store/story/info", methods = ['GET'])
+
+@app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
     in_story_id = 0
     details = request.json
     in_story_id = details.get("story_id")
     return Story.get_info(in_story_id)
 
-@app.route("/story/object/update", methods = ['POST'])
-#@login_required
+
+@app.route("/story/object/update", methods=['POST'])
+# @login_required
 def object_update():
-    #if "logged in" not in session:
+    # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     details = request.form
     object_id = details['obj_id']
@@ -278,12 +293,14 @@ def object_update():
         is_hidden = 0
     #unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
-    obj.update(story_id, object_id, name=name, starting_loc=starting_loc, desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
-    #return redirect(url_for("object_show"))
+    obj.update(story_id, object_id, name=name, starting_loc=starting_loc,
+               desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
+    # return redirect(url_for("object_show"))
     return "ok"
 
-@app.route("/story/object/new", methods = ['POST'])
-#@login_required
+
+@app.route("/story/object/new", methods=['POST'])
+# @login_required
 def object_new():
  #   if "logged in" not in session:
   #      return redirect(url_for("session_new"))
@@ -294,20 +311,20 @@ def object_new():
     return redirect(url_for("object_show"))
 
 
-
 #### STILL NEEDS WORK ####
-@app.route("/story/event/show", methods = ['GET'])
-#@login_required
+@app.route("/story/event/show", methods=['GET'])
+# @login_required
 def event_show():
   #  if "logged in" not in session:
    #     return redirect(url_for("session_new"))
-    events= StoryEvent.event_list(story_id)
+    events = StoryEvent.event_list(story_id)
     return render_template("story/event/show.html", events=events, story_id=story_id)
 
-@app.route('/story/event/update', methods = ['POST'])
-#@login_required
+
+@app.route('/story/event/update', methods=['POST'])
+# @login_required
 def event_update():
-    #if "logged in" not in session:
+    # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     if request.method == 'POST':
         details = request.form
@@ -328,31 +345,32 @@ def event_update():
         evnt.update(story_id, event_id, name, location, desc, is_global)
     return redirect(url_for('event_show'))
 
-@app.route('/story/event/new', methods = ['POST'])
-#@login_required
+
+@app.route('/story/event/new', methods=['POST'])
+# @login_required
 def event_new():
-    #if "logged in" not in session:
+    # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
     evnt = StoryEvent(story_id)
     evnt.add_to_server()
     events = StoryEvent.event_list(story_id)
-    return render_template("story/event/show.html", events = events, story_id = story_id)
-
+    return render_template("story/event/show.html", events=events, story_id=story_id)
 
 
 ### LOCATION STILL NEEDS WORK ###
 @app.route("/story/location/show")
-#@login_required
+# @login_required
 def location_show():
-    #if "logged in" not in session:
+    # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
-    locations= StoryLocation.loc_list(story_id)
+    locations = StoryLocation.loc_list(story_id)
     return render_template("story/location/show.html", locations=locations, story_id=story_id)
 
-@app.route('/story/location/update', methods = ['POST'])
-#@login_required
+
+@app.route('/story/location/update', methods=['POST'])
+# @login_required
 def location_update():
   #  if "logged in" not in session:
    #     return redirect(url_for("session_new"))
@@ -374,12 +392,14 @@ def location_update():
     next_location_id = details.get('next_loc_id')
     if next_location_id is None:
         next_location_id = 0
-    loc = StoryLocation.get(in_story_id, loc_id) 
-    loc.update(in_story_id, loc_id, name, original_desc, short_desc, post_event_description, event_id, auto_goto, next_location_id)
+    loc = StoryLocation.get(in_story_id, loc_id)
+    loc.update(in_story_id, loc_id, name, original_desc, short_desc,
+               post_event_description, event_id, auto_goto, next_location_id)
     return redirect(url_for("location_show"))
 
-@app.route('/story/location/new', methods = ['POST'])
-#@login_required
+
+@app.route('/story/location/new', methods=['POST'])
+# @login_required
 def location_new():
    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
@@ -390,18 +410,18 @@ def location_new():
     return redirect(url_for("location_show"))
 
 
-
 #### DECISIONS WORK ####
 @app.route("/story/location/decision/show")
 def decision_show():
-    #if "logged in" not in session:
+    # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     decisions = StoryDecision.dec_list(story_id)
     return render_template("story/location/decision/show.html", decisions=decisions, story_id=story_id, location_id=1)
 
-@app.route("/story/location/decision/update", methods = ['POST'])
+
+@app.route("/story/location/decision/update", methods=['POST'])
 def decision_update():
-    #if "logged in" not in session:
+    # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     details = request.form
     decision_id = details['decision_id']
@@ -416,7 +436,7 @@ def decision_update():
         transition = False
     else:
         transition = True
-    transition_loc_id = details.get("transition_loc_id") 
+    transition_loc_id = details.get("transition_loc_id")
     if transition_loc_id is None:
         transition_loc_id = 0
     is_hidden = details.get('hidden')
@@ -466,10 +486,12 @@ def decision_update():
     if locked_by_event_desc is None:
         locked_by_event_desc = ""
     dec = StoryDecision.get(story_id, location_id, decision_id)
-    dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id, show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
+    dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,
+               show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
     return redirect(url_for("decision_show"))
 
-@app.route("/story/location/decision/new", methods = ['POST'])
+
+@app.route("/story/location/decision/new", methods=['POST'])
 def decision_new():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -479,27 +501,32 @@ def decision_new():
     dec.add_to_server()
     return redirect(url_for("decision_show"))
 
+
 @app.route("/about")
 def about():
     return render_template("about.html")
+
 
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
 
+
 @app.route("/verification/view")
 def verification_view():
-    stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction", 3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
-    return render_template("verification/view.html" , stories=stories)
+    stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction",
+                     3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
+    return render_template("verification/view.html", stories=stories)
+
 
 @app.route("/verification/review")
 def verification_review():
-    #uncomment when all this stuff works
+    # uncomment when all this stuff works
     #objects = StoryObject.obj_list(story_id)
     #events = StoryEvent.event_list(story_id)
     #locations= StoryLocation.loc_list(story_id)
     #decisions = [StoryDecision()]
-    #return render_template("verification/review.html", objects=objects, events=events, locations=locations, decisions=decisions)
+    # return render_template("verification/review.html", objects=objects, events=events, locations=locations, decisions=decisions)
     return render_template("verification/review.html")
 
 
@@ -507,26 +534,26 @@ def verification_review():
 def load_user(user_id):
     return User.get(user_id)
 
+
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
 
+
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for("session_new"))
-    
+
+
 @app.route("/user/newcorp")
 def newcorp():
     return render_template("user/newcorp.html")
+
 
 @app.route("/story/treeview")
 def treeview():
     return render_template("story/treeview.html")
 
 
-
-
-if __name__=='__main__':
-	app.run()
-
-
+if __name__ == '__main__':
+    app.run()
