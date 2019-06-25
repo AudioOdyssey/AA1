@@ -1,36 +1,40 @@
 {% extends "template.html" %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/decision/show.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/decision/show.css') }}"
+    type="text/css" />
 <script src="{{ url_for('static', filename='js/story/location/decision/show.js') }}"></script>
 
-        <a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
-        <a href = "#bottom"><button class= "btn btn-light">Bottom of Page</button></a>
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a href="#bottom"><button class="btn btn-light">Bottom of Page</button></a>
 
 <section class="row">
     <h3>Decisions</h3>
     <hr>
     <h3>Location Name: '{{location_name}}'</h3>
-    
-    <button type="button" onclick="add_btn_pressed('{{ story_id }}', '{{ location_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
+
+    <button type="button" onclick="add_btn_pressed('{{ story_id }}', '{{ location_id }}')" id="add-btn"
+        class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
 <form id="dec-template" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" readonly class="hidden-in">
-    <input name="location_id" readonly class = "hidden-in">
+    <input name="location_id" readonly class="hidden-in">
     <input name="decision_id" readonly class="hidden-in">
 
-    <button type= "button" onclick= "delete_btn_pressed(this)" class="trash btn btn-light"><i class="fa fa-trash-alt fa-xs"></i></button>
+    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
+            class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="decision-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label for="dec_name"><b>Name:</b></label>
-                 <input id = "dec_name" class="form-control" type="text" name="decision-name" onchange="decision_changed(this)">
+                <input id="dec_name" class="form-control" type="text" name="decision-name"
+                    onchange="decision_changed(this)">
             </div>
 
             <div class="col-sm-8">
                 <label><b>Properties</b></label>
-                    <p id = "prop" class="form-control"> Not Hidden, Not Transtion, Not Locked</p>
+                <p id="prop" class="form-control"> Not Hidden, Not Transtion, Not Locked</p>
             </div>
         </section>
 
@@ -41,22 +45,28 @@
 
     <section class="row details" style="display: none">
 
-        <!---add max and min value--> 
-        <label for="dec_num">Decision Sequence Number:</label> 
-         <input id= "dec_num" class="form-control" type= "number" min= "1" name="sequence_number" onchange="decision_changed(this)">
+        <!---add max and min value-->
+        <label for="dec_num">Decision Sequence Number:</label>
+        <input id="dec_num" class="form-control" type="number" min="1" name="sequence_number"
+            onchange="decision_changed(this)">
         <hr>
-        <label for = "dec_desc">Decision Description:</label>
-         <textarea id = "dec_desc" class="form-control" rows="3" name="dec_description" onchange="decision_changed(this)"></textarea>
+        <label for="dec_desc">Decision Description:</label>
+        <textarea id="dec_desc" class="form-control" rows="3" name="dec_description"
+            onchange="decision_changed(this)"></textarea>
         <hr>
 
         <div>
-            <label for = "trans">Causes a transition?</label>
-            <input id ="trans" type="checkbox" autocomplete="off" name="transition" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
+            <label for="trans">Causes a transition?</label>
+            <input id="trans" type="checkbox" autocomplete="off" name="transition"
+                onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
             <br>
-            
+
             <div class="checkbox_hide">
-                <label for="trans_loc">Select Transition Location: or <a href="/story/location/show"> Add New Location</a></label>
-                <select id="trans_loc" class="form-control" type="text" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
+                <label for="trans_loc">Select Transition Location: or <a
+                        href="/story/location/show?story_id={{ story_id }}"> Add New
+                        Location</a></label>
+                <select id="trans_loc" class="form-control" type="text" autocomplete="off" name="transition_loc_id"
+                    onchange="decision_changed(this)">
                     {% for locations in location %}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
@@ -65,91 +75,112 @@
         </div>
 
         <hr>
-        <label for = "once">Can occur only ONCE?</label>
-         <input id = "once" type="checkbox" autocomplete="off" name="can_occur_once" onchange="decision_changed(this)">
+        <label for="once">Can occur only ONCE?</label>
+        <input id="once" type="checkbox" autocomplete="off" name="can_occur_once" onchange="decision_changed(this)">
         <hr>
 
         <div>
-            <label for = "hid">Is Hidden?</label>
-            <input id = "hid"type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
+            <label for="hid">Is Hidden?</label>
+            <input id="hid" type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)">
             <br>
 
             <div class="checkbox_hide">
-                <section class = "row flex-1">
-                    <div class = "col-sm-6">
-                        <label for = "show_event">Select Event to show decision: or <a href = "/story/event/show"> Add New Event</a></label>
-                        <select id = "show_event" class="form-control" type="text" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
-                                {%for events in event%}
-                                    <option>{{event.event_name}}</option>
-                                {%endfor%}
-                        </select> 
-                    </div>
-                    <div class = "col-sm-6"> 
-                        <label for = "show_obj">Select Object to show decision: or <a href = "/story/object/show"> Add New Object</a></label>
-                        <select id= "show_obj" class="form-control" type="text" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
-                                {%for objects in object%}
-                                <option>{{object.obj_name}}</option>
-                                {%endfor%}
-                        </select>      
-                    </div>
-                </section>
-            </div>
-        </div>
-        <hr>
-
-        <div>
-            <label for = "locked">Is Locked?</label>
-            <input id = "locked" type="checkbox" autocomplete="off" name="locked" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
-            <br>
-            
-            <div class="checkbox_hide">
-                <section class = "row flex-1">
-                    <div class = "col-sm-6">
-                        <label for = "unlock_obj">Select Object to unlock decision: or <a href = "/story/object/show"> Add New Object</a></label>
-                        <select class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-                                {%for objects in object%}
-                                <option>{{object.obj_name}}</option>
-                                {%endfor%}
-                        </select>
-                        <label>Description when locked (NOT by an event):</label>
-                        <textarea class="form-control" autocomplete="off" name="locked_descr" onchange="decision_changed(this)"></textarea>
-                    </div>
-                    <div class = "col-sm-6">
-                        <label for = "unlock_event">Select Event to unlock decision: or <a href = "/story/event/show"> Add New Event</a></label>
-                        <select id = "unlock_event" class="form-control" type="text" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
+                <section class="row flex-1">
+                    <div class="col-sm-6">
+                        <label for="show_event">Select Event to show decision: or <a
+                                href="/story/event/show?story_id={{ story_id }}"> Add New
+                                Event</a></label>
+                        <select id="show_event" class="form-control" type="text" autocomplete="off" name="show_event_id"
+                            onchange="decision_changed(this)">
                             {%for events in event%}
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
-                    
-                        <label for = "locked_ev_desc">Description when locked by event:</label>
-                        <textarea id = "locked_ev_desc" class="form-control" autocomplete="off" name="locked_descr" onchange="decision_changed(this)"></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="show_obj">Select Object to show decision: or <a
+                                href="/story/object/show?story_id={{ story_id }}"> Add New
+                                Object</a></label>
+                        <select id="show_obj" class="form-control" type="text" autocomplete="off" name="show_object_id"
+                            onchange="decision_changed(this)">
+                            {%for objects in object%}
+                            <option>{{object.obj_name}}</option>
+                            {%endfor%}
+                        </select>
                     </div>
                 </section>
             </div>
-        </div>   
-      
-        <hr>
-
-        <label for = "afer">Description of decision aftermath:</label>
-        <textarea id = "after" class="form-control" name="aftermath_desc" autocomplete="off" onchange="decision_changed(this)"></textarea>
+        </div>
         <hr>
 
         <div>
-            <label for = "trigger">Does this decision trigger an event?</label>
-            <input id = "trigger" type="checkbox" autocomplete="off" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)" name="cause_event">
+            <label for="locked">Is Locked?</label>
+            <input id="locked" type="checkbox" autocomplete="off" name="locked"
+                onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
             <br>
 
             <div class="checkbox_hide">
-                <label for = "trig_ev">Select Event triggered by this decision: or <a href = "/story/event/show"> Add New Event</a></label>
-                <select id = "trig_ev" class="form-control" type="text" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
-                        {%for events in event%}
-                        <option>{{event.event_name}}</option>
-                        {%endfor%}
+                <section class="row flex-1">
+                    <div class="col-sm-6">
+                        <label for="unlock_obj">Select Object to unlock decision: or <a
+                                href="/story/object/show?story_id={{ story_id }}"> Add
+                                New Object</a></label>
+                        <select class="form-control" type="text" autocomplete="off" name="unlock_event_id"
+                            onchange="decision_changed(this)">
+                            {%for objects in object%}
+                            <option>{{object.obj_name}}</option>
+                            {%endfor%}
+                        </select>
+                        <label>Description when locked (NOT by an event):</label>
+                        <textarea class="form-control" autocomplete="off" name="locked_descr"
+                            onchange="decision_changed(this)"></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="unlock_event">Select Event to unlock decision: or <a
+                                href="/story/event/show?story_id={{ story_id }}"> Add
+                                New Event</a></label>
+                        <select id="unlock_event" class="form-control" type="text" autocomplete="off"
+                            name="unlock_event_id" onchange="decision_changed(this)">
+                            {%for events in event%}
+                            <option>{{event.event_name}}</option>
+                            {%endfor%}
+                        </select>
+
+                        <label for="locked_ev_desc">Description when locked by event:</label>
+                        <textarea id="locked_ev_desc" class="form-control" autocomplete="off" name="locked_descr"
+                            onchange="decision_changed(this)"></textarea>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <hr>
+
+        <label for="afer">Description of decision aftermath:</label>
+        <textarea id="after" class="form-control" name="aftermath_desc" autocomplete="off"
+            onchange="decision_changed(this)"></textarea>
+        <hr>
+
+        <div>
+            <label for="trigger">Does this decision trigger an event?</label>
+            <input id="trigger" type="checkbox" autocomplete="off" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)" name="cause_event">
+            <br>
+
+            <div class="checkbox_hide">
+                <label for="trig_ev">Select Event triggered by this decision: or <a
+                        href="/story/event/show?story_id={{ story_id }}"> Add New
+                        Event</a></label>
+                <select id="trig_ev" class="form-control" type="text" autocomplete="off" name="effect_event_id"
+                    onchange="decision_changed(this)">
+                    {%for events in event%}
+                    <option>{{event.event_name}}</option>
+                    {%endfor%}
                 </select>
             </div>
         </div>
-    
+
     </section>
 </form>
 
@@ -158,16 +189,18 @@
 {% for decision in decisions %}
 <form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
-    <input name="location_id" value="{{ decision.loc_id}}" readonly class = "hidden-in">
+    <input name="location_id" value="{{ decision.loc_id}}" readonly class="hidden-in">
     <input name="decision_id" value="{{ decision.decision_id }}" readonly class="hidden-in">
 
-    <button type= "button" onclick= "delete_btn_pressed(this)" class="trash btn btn-light"><i class="fa fa-trash-alt fa-xs"></i></button>
+    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
+            class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="decision-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)" value="{{ decision.decision_name }}">
+                <input class="form-control" type="text" name="decision-name" onchange="decision_changed(this)"
+                    value="{{ decision.decision_name }}">
             </div>
             <hr>
             <div class="col-sm-8">
@@ -183,7 +216,7 @@
                     {%if decision.transition%}
                     Transition,
                     {%else%}
-                    Not Transtion, 
+                    Not Transtion,
                     {%endif%}
 
                     {%if decision.locked%}
@@ -201,27 +234,32 @@
 
     </section>
     <section class="row details" style="display: none">
-         <!---add max value-->
-            <label>Decision Sequence Number:</label>
-            <input class="form-control" name= "sequence_number" min = "1" type= "number" onchange="decision_changed(this)">
+        <!---add max value-->
+        <label>Decision Sequence Number:</label>
+        <input class="form-control" name="sequence_number" min="1" type="number" onchange="decision_changed(this)">
         <hr>
 
         <label>Decision Description:</label>
-        <textarea class="form-control" rows="3" name="dec_description" onchange="decision_changed(this)">{{ decision.decision_description }}</textarea>
+        <textarea class="form-control" rows="3" name="dec_description"
+            onchange="decision_changed(this)">{{ decision.decision_description }}</textarea>
         <hr>
 
         <div>
             <label>Causes a transition?</label>
             {% if decision.transition %}
-            <input type="checkbox" autocomplete="off" name="transition" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)" checked>
+            <input type="checkbox" autocomplete="off" name="transition" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)" checked>
             {% else %}
-            <input type="checkbox" autocomplete="off" name="transition" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
+            <input type="checkbox" autocomplete="off" name="transition" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)">
             {% endif %}
             <br>
 
-            <div class="checkbox_hide" {%if not decision.transition%}style="display: none;"{%endif%}>
-                <label>Select Transition Location: or <a href = "/story/location/show"> Add New Location</a></label>
-                <select type="text" class="form-control" autocomplete="off" name="transition_loc_id" onchange="decision_changed(this)">
+            <div class="checkbox_hide" {%if not decision.transition%}style="display: none;" {%endif%}>
+                <label>Select Transition Location: or <a href="/story/location/show?story_id={{ story_id }}"> Add New
+                        Location</a></label>
+                <select type="text" class="form-control" autocomplete="off" name="transition_loc_id"
+                    onchange="decision_changed(this)">
                     {% for locations in location %}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
@@ -241,70 +279,87 @@
         <div>
             <label>Is Hidden?</label>
             {% if decision.hidden %}
-            <input type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)" checked>
+            <input type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)" checked>
             {% else %}
-            <input type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
+            <input type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)">
             {% endif %}
             <br>
 
-            <div class="checkbox_hide" {%if not decision.hidden%}style="display: none;"{%endif%}>
-                <section class= "row flex-1">
-                    <div class = "col-sm-6">
-                        <label>Select Event to show decision: or <a href = "/story/event/show"> Add New Event</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="show_event_id" onchange="decision_changed(this)">
+            <div class="checkbox_hide" {%if not decision.hidden%}style="display: none;" {%endif%}>
+                <section class="row flex-1">
+                    <div class="col-sm-6">
+                        <label>Select Event to show decision: or <a href="/story/event/show?story_id={{ story_id }}">
+                                Add New Event</a></label>
+                        <select type="text" class="form-control" autocomplete="off" name="show_event_id"
+                            onchange="decision_changed(this)">
                             {%for events in event%}
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label>Select Object to show decision: or <a href = "/story/object/show"> Add New Object</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="show_object_id" onchange="decision_changed(this)">
+                        <label>Select Object to show decision: or <a href="/story/object/show?story_id={{ story_id }}">
+                                Add New
+                                Object</a></label>
+                        <select type="text" class="form-control" autocomplete="off" name="show_object_id"
+                            onchange="decision_changed(this)">
                             {%for objects in object%}
                             <option>{{object.obj_name}}</option>
                             {%endfor%}
                         </select>
-                    </div> 
+                    </div>
                 </section>
             </div>
         </div>
 
         <hr>
-        
+
         <div>
             <label>Is Locked?</label>
             {% if decision.locked %}
-            <input type="checkbox" autocomplete="off" name="locked" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)" checked>
+            <input type="checkbox" autocomplete="off" name="locked" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)" checked>
             {% else %}
-            <input type="checkbox" autocomplete="off" name="locked" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)">
+            <input type="checkbox" autocomplete="off" name="locked" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)">
             {% endif %}
             <br>
 
-            <div class="checkbox_hide" {%if not decision.locked%}style="display: none;"{%endif%}>
-                <section class = "row flex-1">
-                    <div class = "col-sm-6">
-                        
-                        <label>Select Object to unlock decision: or <a href = "/story/object/show"> Add New Object</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-                                {%for objects in object%}
-                                <option>{{object.obj_name}}</option>
-                                {%endfor%}
+            <div class="checkbox_hide" {%if not decision.locked%}style="display: none;" {%endif%}>
+                <section class="row flex-1">
+                    <div class="col-sm-6">
+
+                        <label>Select Object to unlock decision: or <a
+                                href="/story/object/show?story_id={{ story_id }}"> Add New
+                                Object</a></label>
+                        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id"
+                            onchange="decision_changed(this)">
+                            {%for objects in object%}
+                            <option>{{object.obj_name}}</option>
+                            {%endfor%}
                         </select>
 
                         <label>Description when locked (NOT by an event):</label>
-                        <textarea class="form-control" autocomplete="off" name="locked_descr" onchange="decision_changed(this)"></textarea>
+                        <textarea class="form-control" autocomplete="off" name="locked_descr"
+                            onchange="decision_changed(this)"></textarea>
                     </div>
-                    <div class = "col-sm-6">
-                        <label>Select Event to unlock decision: or <a href = "/story/event/show"> Add New Event</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id" onchange="decision_changed(this)">
-                                {%for events in event%}
-                                <option>{{event.event_name}}</option>
+                    <div class="col-sm-6">
+                        <label>Select Event to unlock decision: or <a href="/story/event/show?story_id={{ story_id }}">
+                                Add New
+                                Event</a></label>
+                        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id"
+                            onchange="decision_changed(this)">
+                            {%for events in event%}
+                            <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
- 
+
                         <label>Description when locked by event:</label>
-                        <textarea class="form-control" autocomplete="off" name="locked_descr" onchange="decision_changed(this)"></textarea>
-                    </div> 
+                        <textarea class="form-control" autocomplete="off" name="locked_descr"
+                            onchange="decision_changed(this)"></textarea>
+                    </div>
                 </section>
             </div>
         </div>
@@ -312,22 +367,28 @@
         <hr>
 
         <label>Description of decision aftermath:</label>
-        <textarea name="aftermath_desc" class="form-control"  autocomplete="off" onchange="decision_changed(this)"></textarea>
-        
+        <textarea name="aftermath_desc" class="form-control" autocomplete="off"
+            onchange="decision_changed(this)"></textarea>
+
         <hr>
 
         <div>
             <label>Does this decision trigger an event?</label>
             {% if decision.cause_event %}
-            <input type="checkbox" autocomplete="off" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)" name="cause_event" checked>
+            <input type="checkbox" autocomplete="off" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)" name="cause_event" checked>
             {% else %}
-            <input type="checkbox" autocomplete="off" onclick="checkbox_visability_check(this)" onchange="decision_changed(this)" name="cause_event">
+            <input type="checkbox" autocomplete="off" onclick="checkbox_visability_check(this)"
+                onchange="decision_changed(this)" name="cause_event">
             {% endif %}
             <br>
 
-            <div class="checkbox_hide" {%if not decision.cause_event%}style="display: none;"{%endif%}>
-                <label>Select Event triggered by this decision: or <a href = "/story/event/show"> Add New Event</a></label>
-                <select type="text" class="form-control" autocomplete="off" name="effect_event_id" onchange="decision_changed(this)">
+            <div class="checkbox_hide" {%if not decision.cause_event%}style="display: none;" {%endif%}>
+                <label>Select Event triggered by this decision: or <a href="/story/event/show?story_id={{ story_id }}">
+                        Add New
+                        Event</a></label>
+                <select type="text" class="form-control" autocomplete="off" name="effect_event_id"
+                    onchange="decision_changed(this)">
                     {%for events in event%}
                     <option>{{event.event_name}}</option>
                     {%endfor%}
@@ -339,6 +400,6 @@
 
 {% endfor %}
 <br>
-<a href = "#add-btn"><button id = "bottom" class = "btn btn-light">Back to Top</button></a>
-<a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
+<a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
 {% endblock %}

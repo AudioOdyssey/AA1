@@ -1,28 +1,32 @@
 {% extends "template.html" %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/show.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/show.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/story/location/show.js') }}"></script>
-        <a href = "#bottom"><button class= "btn btn-light">Bottom of Page</button></a>
-        <a href = "/story/update"><button class = "btn btn-light">Back to Main Story Page</button></a>
-        <a href = "/story/event/show"><button class = "btn btn-light">Edit Events</button></a>
-        <a href = "/story/object/show"><button class = "btn btn-light">Edit Objects</button></a>
-       
+
+<a href="#bottom"><button class="btn btn-light">Bottom of Page</button></a>
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a href="/story/event/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Events</button></a>
+<a href="/story/object/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Objects</button></a>
+
 <section class="row">
     <h3>Locations</h3>
-    <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i class="fas fa-plus"></i></button>
+    <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
+            class="fas fa-plus"></i></button>
 </section>
 
 <form id="loc-template" onclick="set_focus(this)" method="POST" action="/story/location/update">
     <input name="story_id" readonly class="hidden-in">
     <input name="loc_id" readonly class="hidden-in">
 
-    <button type= "button" onclick= "delete_btn_pressed(this)" class="trash  btn btn-light"><i class="fa fa-trash-alt fa-xs"></i></button>
+    <button type="button" onclick="delete_btn_pressed(this)" class="trash  btn btn-light"><i
+            class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="location-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
-                <label for = "loc_name"><b>Name:</b></label>
-                <input id ="loc_name" class="form-control" type="text" name="location_name" onchange="location_changed(this)">
+                <label for="loc_name"><b>Name:</b></label>
+                <input id="loc_name" class="form-control" type="text" name="location_name"
+                    onchange="location_changed(this)">
             </div>
         </section>
 
@@ -34,38 +38,47 @@
 
     <section class="row details" style="display: none">
         <hr>
-        <label for = "orig_desc">Original Description</label>
-        <textarea id = "orig_desc" class="form-control" rows="3" name="location_origin_description"  onchange="location_changed(this)"></textarea>
+        <label for="orig_desc">Original Description</label>
+        <textarea id="orig_desc" class="form-control" rows="3" name="location_origin_description"
+            onchange="location_changed(this)"></textarea>
         <hr>
-        <label for = "short_desc">Short Description</label>
-        <textarea class="form-control" rows="3" name="location_short_description"  onchange="location_changed(this)"></textarea>
+        <label for="short_desc">Short Description</label>
+        <textarea class="form-control" rows="3" name="location_short_description"
+            onchange="location_changed(this)"></textarea>
         <hr>
-        <label for = "post_desc">Post Event Description</label>
-        <textarea id= "post_desc" class="form-control" rows="3" name="location_post_event_description"  onchange="location_changed(this)"></textarea>
+        <label for="post_desc">Post Event Description</label>
+        <textarea id="post_desc" class="form-control" rows="3" name="location_post_event_description"
+            onchange="location_changed(this)"></textarea>
         <hr>
-        <label for = "loc_ev_name">Select Event Name (will occur upon entry): or <a href = "/story/event/show"> Add New Event</a></label>
-        <select id = "loc_ev_name" class = "form-control" type="text" autocomplete="off" name="location_event_id"  onchange="location_changed(this)">
-                {%for events in event%}
-                    <option>{{event.event_name}}</option>
-                {%endfor%}
-         </select>
+        <label for="loc_ev_name">Select Event Name (will occur upon entry): or <a
+                href="/story/event/show?story_id={{ story_id }}"> Add New
+                Event</a></label>
+        <select id="loc_ev_name" class="form-control" type="text" autocomplete="off" name="location_event_id"
+            onchange="location_changed(this)">
+            {%for events in event%}
+            <option>{{event.event_name}}</option>
+            {%endfor%}
+        </select>
         <hr>
-        
-       
+
+
         <div>
             <label for="autogo">Auto Goto</label>
-            <input id="autogo" type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)" onchange="location_changed(this)">
+            <input id="autogo" type="checkbox" autocomplete="off" name="auto_goto"
+                onclick="checkbox_visability_check(this)" onchange="location_changed(this)">
             <br>
             <div class="checkbox_hide" style="display: none;">
                 <label>Select Next Location Name:</label>
-                <select class="form-control" type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)">
+                <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
+                    onchange="location_changed(this)">
                     {%for locations in location%}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
-                </select> 
+                </select>
             </div>
         </div>
-        <br><hr>
+        <br>
+        <hr>
 
 
     </section>
@@ -76,15 +89,17 @@
 {% for location in locations %}
 <form class="location-main-row" onclick="set_focus(this)" method="POST" action="/story/location/update">
     <input name="story_id" value="{{ location.story_id }}" readonly class="hidden-in">
-    <input name="loc_id" value="{{ location.location_id }}" readonly class="hidden-in"> 
+    <input name="loc_id" value="{{ location.location_id }}" readonly class="hidden-in">
 
-    <button type= "button" onclick= "delete_btn_pressed(this)" class="trash btn btn-light"><i class="fa fa-trash-alt fa-xs"></i></button>
+    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
+            class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="location-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="location_name" onchange="location_changed(this)" value="{{ location.location_name }}">
+                <input class="form-control" type="text" name="location_name" onchange="location_changed(this)"
+                    value="{{ location.location_name }}">
             </div>
         </section>
 
@@ -97,49 +112,59 @@
     <section class="row details" style="display: none">
         <hr>
         <label> Original Description</label>
-         <textarea class="form-control" rows="3" name="location_origin_description" onchange="location_changed(this)">{{ location.original_description }}</textarea>
+        <textarea class="form-control" rows="3" name="location_origin_description"
+            onchange="location_changed(this)">{{ location.original_description }}</textarea>
         <hr>
         <label>Short Description</label>
-         <textarea class="form-control" rows="3" name="location_short_description" onchange="location_changed(this)">{{ location.short_description }}</textarea>
+        <textarea class="form-control" rows="3" name="location_short_description"
+            onchange="location_changed(this)">{{ location.short_description }}</textarea>
         <hr>
         <label>Post Event Description</label>
-         <textarea class="form-control" rows="3" name="location_post_event_description" onchange="location_changed(this)">{{ location.post_event_description }}</textarea>
+        <textarea class="form-control" rows="3" name="location_post_event_description"
+            onchange="location_changed(this)">{{ location.post_event_description }}</textarea>
         <hr>
-        <label>Select Event Name (will occur upon entry): or <a href = "/story/event/show">Add New Event</a></label>
-         <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
+        <label>Select Event Name (will occur upon entry): or <a href="/story/event/show?story_id={{ story_id }}">Add New
+                Event</a></label>
+        <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
             {%for events in event%}
             <option>{{event.event_name}}</option>
-             {%endfor%}
-         </select>
-        <br><hr>
+            {%endfor%}
+        </select>
+        <br>
+        <hr>
 
         <div>
-            <label>Auto Go To</label> <!--DOENST WORK-->
+            <label>Auto Go To</label>
+            <!--DOENST WORK-->
             {% if location.auto_goto %}
-            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)" onchange="location_changed(this)"checked>
+            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)"
+                onchange="location_changed(this)" checked>
             {% else %}
-            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)" onchange="location_changed(this)">
-            {% endif %} 
+            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)"
+                onchange="location_changed(this)">
+            {% endif %}
             <br>
 
             <!---should only display if "autogo" is checked @brian-->
             <div class="checkbox_hide" style="display: none;">
                 <label>Next Location Name</label>
-                
-                <select class= "form-control"type="text" autocomplete="off" name="next_loc_id" onchange="location_changed(this)"> {{location.next_loc_id}}
+
+                <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
+                    onchange="location_changed(this)"> {{location.next_loc_id}}
                     {%for loc in locations%}
-                    <option >{{loc.location_name}}</option>
+                    <option>{{loc.location_name}}</option>
                     {%endfor%}
                 </select>
             </div>
         </div>
         <hr>
         <br>
-        <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}">Edit Decisions</a>
+        <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}">Edit
+            Decisions</a>
     </section>
 </form>
 <br>
 {% endfor %}
 <br>
-<a href = "#add-btn"><button id = "bottom" class = "btn btn-light">Back to Top</button></a>
+<a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>
 {% endblock %}
