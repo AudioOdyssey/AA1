@@ -219,7 +219,7 @@ def logout():
 def story_show():
    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    stories = Story.story_list(1)  # TODO: Real UID
+    stories = Story.story_list(0)  # TODO: Real UID
     return render_template("story/show.html", stories=stories)
 
 
