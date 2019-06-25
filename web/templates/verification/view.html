@@ -1,16 +1,17 @@
 {%extends "template.html" %}
 {% block content%}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/verification/view.css') }}" type="text/css"/>
-    <h1 class= "text" >Story Verification</h1>
-     <hr>
-    <h2 class= "text">Stories Ready for Verification:</h2>
-    <br>
-    {% for story in stories %} <!---make this if about verification status-->>
-        {%if true%}
-    <div class="col-sm-4 storycard">
-        <a href= "/verification/review"><button id = "tbvs" class= "btn btn-light">{{ story.story_title }}</button> </a>
-    </div>
-  {%endif%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verification/view.css') }}" type="text/css" />
+<h1 class="text">Story Verification</h1>
+<hr>
+<h2 class="text">Stories Ready for Verification:</h2>
+<br>
+{% for story in stories %}
+<!---make this if about verification status-->>
+{%if true%}
+<div class="col-sm-4 storycard">
+    <a href="/verification/review"><button id="tbvs" class="btn btn-light">{{ story.story_title }}</button> </a>
+</div>
+{%endif%}
 
-    {% endfor %}
+{% endfor %}
 {% endblock %}

@@ -1,11 +1,12 @@
 {%extends "template.html" %}
 {% block content%}
+
 <body>
     <div id="pic">
-        <img class= "logo" src= "{{ url_for('static', filename='image/logoimage.jpg') }}">
+        <img class="logo" src="{{ url_for('static', filename='image/logoimage.jpg') }}">
     </div>
     <div class="row">
-        <a class="btn btn-primary" id= "signin" href= "/session/new">Sign In</a>
+        <a class="btn btn-primary" id="signin" href="/session/new">Sign In</a>
     </div>
 </body>
 

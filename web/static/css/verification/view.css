@@ -1,12 +1,13 @@
-#tbvs{
+#tbvs {
     background-color: #fffff1;
-    font-family: "Helvetica" sans-serif;
+    font-family: "Helvetica"sans-serif;
     font-style: bold;
     color: #734f96;
-    width:102%;
-    border-color:#fffff1;
+    width: 102%;
+    border-color: #fffff1;
 }
-.text{
+
+.text {
     text-align: center;
-    font-family: "Helvetica" sans-serif
+    font-family: "Helvetica"sans-serif
 }

@@ -8,9 +8,9 @@
 }
 
 .object-main-row {
-    border-top: 1px solid RGBA(0,0,0,.5);
-    border-left: 1px solid RGBA(0,0,0,.5);
-    border-right: 1px solid RGBA(0,0,0,.5);
+    border-top: 1px solid RGBA(0, 0, 0, .5);
+    border-left: 1px solid RGBA(0, 0, 0, .5);
+    border-right: 1px solid RGBA(0, 0, 0, .5);
     padding: 0.5em;
 }
 
@@ -18,11 +18,11 @@
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
-  
+
 .object-main-row:last-of-type {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    border-bottom: 1px solid RGBA(0,0,0,.5);
+    border-bottom: 1px solid RGBA(0, 0, 0, .5);
 }
 
 .down-arrow {
@@ -57,8 +57,8 @@
 }
 
 #add-btn {
-    border: 1px solid RGBA(0,0,0,.5);
-    margin-left: auto; 
+    border: 1px solid RGBA(0, 0, 0, .5);
+    margin-left: auto;
     margin-bottom: .5em;
 }
 
@@ -69,19 +69,22 @@
 #obj-template {
     display: none;
 }
+
 .trash {
-    border: 1px solid RGBA(0,0,0,.5);
-    float: right; 
+    border: 1px solid RGBA(0, 0, 0, .5);
+    float: right;
     padding: 0.2rem 0.4rem;
 }
-.fa-minus{
-     top: 40%;
+
+.fa-minus {
+    top: 40%;
     left: 100%;
     height: 50%;
     transform: translate(-10%, -25%);
     width: 100%;
     height: 10px;
- }
-.test{
+}
+
+.test {
     display: none;
 }

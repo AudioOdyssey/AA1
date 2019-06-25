@@ -1,133 +1,159 @@
 html {
-    height: 100%;
+	height: 100%;
 }
+
 body {
-	background-color: #734f96 /* #e9ecef */;
-	
+	background-color: #734f96;
+
 	display: flex;
-  	flex-flow: column;
-  	min-height: 100%;
+	flex-flow: column;
+	min-height: 100%;
 }
+
 header {
 	flex: 0 1 auto;
 }
+
 .navbar {
 	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
 	background-color: #fffff1;
 }
+
 .footer {
 	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
 	background-color: #dcd0ff;
 	padding-top: 2em;
 	padding-bottom: 2em;
 	display: block;
-	
+
 	flex: 0 1 40px;
 }
+
 #footer-title {
 	width: 100%;
 	text-align: center;
 }
+
 #footer-left {
 	width: 100%;
 	text-align: right;
 }
+
 #main-site {
 	box-shadow: 0 0 4px 4px RGBA(255, 255, 255, 0.25);
 	padding: 2em;
 	background-color: #dcd0ff;
-  	margin: 2em auto;
-  	min-height: 100%;
-  	flex: 1 1 auto;
+	margin: 2em auto;
+	min-height: 100%;
+	flex: 1 1 auto;
 }
+
 .ml-auto {
 	margin-left: auto;
 }
+
 blockquote {
 	margin-left: 0.3em;
 	padding-left: 0.6em;
 	border-left: solid 0.3em #ccc;
 }
+
 pre {
 	background-color: #eee;
 	padding: 0.3em;
 	border-radius: 5px;
 	border: solid 2px #ddd;
 }
+
 lable {
 	font-weight: bold;
 }
+
 .input-group-text {
 	background-color: #fffff1;
 	border-right: 0px;
 	color: #888;
 }
+
 .icon-input input {
 	border-left: 0px;
 }
+
 .btn-primary {
 	background-color: #734f96;
 	color: #fffff1;
 	border-color: #dcd0ff;
 }
+
 .btn-primary:hover {
-	background-color: #fffff1;  
+	background-color: #fffff1;
 	border-color: #734f96;
 	color: #734f96;
 }
+
 .form-control {
 	transition: box-shadow 0.35s, border 0.35s !important;
 	background-color: #fffff1;
 }
+
 .form-control:focus {
 	border: 0px;
 	box-shadow: 0 0 0.2rem 0.2rem RGBA(160, 153, 168, .5);
 }
-.logo{
-	width:100%;
-	margin-left:0px;
+
+.logo {
+	width: 100%;
+	margin-left: 0px;
 	margin-top: 0px;
 	margin-right: 0px;
 	padding: 0px;
 }
-#signin{
+
+#signin {
 	width: 80%;
-	margin:0 auto;
+	margin: 0 auto;
 	margin-top: 20px;
 }
-.about{
+
+.about {
 	text-align: center;
-	font-family: "Helvetica" sans-serif;
+	font-family: "Helvetica"sans-serif;
 }
-.contact{
+
+.contact {
 	text-align: center;
-	font-family: "Helvetica" sans-serif;
+	font-family: "Helvetica"sans-serif;
 }
-#createstory{
+
+#createstory {
 	width: 75%;
 	align-self: center;
 	margin-left: 12.5%;
 }
-#mystory{
+
+#mystory {
 	margin-top: 100px;
 	text-align: center;
-	color:#734f96;
-	font-family:"Helvetica" sans-serif;
+	color: #734f96;
+	font-family: "Helvetica"sans-serif;
 }
-.storycard{
-	border:5px solid;
-	border-color:#734f96;
-	background-color:#fffff1;
-	color:#734f96;
-	font-family: "Helvetica" sans-serif;
+
+.storycard {
+	border: 5px solid;
+	border-color: #734f96;
+	background-color: #fffff1;
+	color: #734f96;
+	font-family: "Helvetica"sans-serif;
 	text-align: center;
 
 }
-.title{
-	text-align: center !important; 
-	font-family: "Helvetica" sans-serif;
+
+.title {
+	text-align: center !important;
+	font-family: "Helvetica"sans-serif;
 }
-.body{
+
+.body {
 	text-align: left;
-	font-family: "Helvetica" sans-serif;
+	font-family: "Helvetica"sans-serif;
 }

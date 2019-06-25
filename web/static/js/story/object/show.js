@@ -25,7 +25,7 @@ function checkbox_visability_check(elem) {
 function object_changed(elem) {
     // elem.form.submit()
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
         } else if (this.readyState == 4) {
@@ -46,7 +46,7 @@ function add_btn_pressed(story_id) {
     document.getElementById("main-site").insertBefore(newelem, document.getElementById("content-marker"));
 
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             // Successful Request
             var obj = JSON.parse(this.responseText);
@@ -66,7 +66,7 @@ function add_btn_pressed(story_id) {
 
 function delete_btn_pressed(btn) {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
         } else if (this.readyState == 4) {
