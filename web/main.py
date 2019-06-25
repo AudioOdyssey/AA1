@@ -207,7 +207,7 @@ def logout():
 def story_show():
    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction", 3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
+    stories = Story.story_list(1) # TODO: Real UID
     return render_template("story/show.html", stories=stories)
 
 @app.route("/story/update") # THIS NEEDS TO BE FINISHED
@@ -215,9 +215,9 @@ def story_show():
 def story_update():
   #  if "logged in" not in session:
    #     return redirect(url_for("session_new"))
-    objects = StoryObject.obj_list(story_id)
-    events = StoryEvent.event_list(story_id)
-    locations= StoryLocation.loc_list(story_id)
+    objects = StoryObject.obj_list(request.args['story_id'])
+    events = StoryEvent.event_list(request.args['story_id'])
+    locations= StoryLocation.loc_list(request.args['story_id'])
     return render_template("story/update.html", objects=objects, events=events, locations=locations)
 
 # @app.route("/story/new", methods = ['POST'])
