@@ -35,7 +35,7 @@ class Story:
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', name_of_verifier='', verification_status='',
                  story_ratings=0, story_language_id=1, storage_size=0, obj_verification_status='', event_verification_status='', user_creator_id=0):
-        if story_id > 0:
+        if int(story_id) > 0:
             self.story_id = story_id
         self.story_title = story_title
         self.story_author = story_author
@@ -64,10 +64,12 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM master_stories WHERE `user_creator_id` = %s"), (self.user_creator_id))
+            cur.execute(
+                ("SELECT count(*) FROM master_stories WHERE `user_creator_id` = %s"), (self.user_creator_id))
             result = cur.fetchone()
             self.story_id = result['count(*)'] + 1
-            cur.execute(("INSERT INTO master_stories(story_id, user_creator_id) VALUES (%s, %s)"), (self.story_id, self.user_creator_id))
+            cur.execute(("INSERT INTO master_stories(story_id, user_creator_id) VALUES (%s, %s)"),
+                        (self.story_id, self.user_creator_id))
             conn.commit()
         conn.close()
 

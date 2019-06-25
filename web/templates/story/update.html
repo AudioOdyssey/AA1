@@ -9,6 +9,7 @@
         <hr>
 
         <form id="edit-story-details" method="POST" action="/story/update">
+            <input name="story_id" value="{{ story.story_id }}" readonly class="hidden-in">
 
             <div class="form-group update-form-group">
                 <label>Title:</label>
@@ -50,7 +51,7 @@
             <div class="form-group">
                 <label>Length:</label>
                 <input autocomplete="none" class="form-control" type="number" min="0" step="1"
-                    onchange="story_changed(this)" name="story_length" placeholder="Number of Hours">
+                    onchange="story_changed(this)" name="length_of_story" placeholder="Number of Hours">
             </div>
         </form>
     </section>
