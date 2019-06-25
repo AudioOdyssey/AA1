@@ -132,9 +132,6 @@
                             <option>{{object.obj_name}}</option>
                             {%endfor%}
                         </select>
-                        <label>Description when locked (NOT by an event):</label>
-                        <textarea class="form-control" autocomplete="off" name="locked_descr"
-                            onchange="decision_changed(this)"></textarea>
                     </div>
                     <div class="col-sm-6">
                         <label for="unlock_event">Select Event to unlock decision: or <a
@@ -146,11 +143,10 @@
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
-
-                        <label for="locked_ev_desc">Description when locked by event:</label>
-                        <textarea id="locked_ev_desc" class="form-control" autocomplete="off" name="locked_descr"
-                            onchange="decision_changed(this)"></textarea>
                     </div>
+                    <label>Description when initally locked:</label>
+                    <textarea class="form-control" autocomplete="off" name="locked_descr"
+                        onchange="decision_changed(this)"></textarea>
                 </section>
             </div>
         </div>
@@ -234,7 +230,7 @@
 
     </section>
     <section class="row details" style="display: none">
-        <!---add max value-->
+        <!-- TODO: add max value -->
         <label>Decision Sequence Number:</label>
         <input class="form-control" name="sequence_number" min="1" type="number" onchange="decision_changed(this)">
         <hr>
@@ -340,10 +336,6 @@
                             <option>{{object.obj_name}}</option>
                             {%endfor%}
                         </select>
-
-                        <label>Description when locked (NOT by an event):</label>
-                        <textarea class="form-control" autocomplete="off" name="locked_descr"
-                            onchange="decision_changed(this)"></textarea>
                     </div>
                     <div class="col-sm-6">
                         <label>Select Event to unlock decision: or <a href="/story/event/show?story_id={{ story_id }}">
@@ -355,11 +347,10 @@
                             <option>{{event.event_name}}</option>
                             {%endfor%}
                         </select>
-
-                        <label>Description when locked by event:</label>
-                        <textarea class="form-control" autocomplete="off" name="locked_descr"
-                            onchange="decision_changed(this)"></textarea>
                     </div>
+                    <label>Description when initally locked:</label>
+                    <textarea class="form-control" autocomplete="off" name="locked_descr"
+                        onchange="decision_changed(this)"></textarea>
                 </section>
             </div>
         </div>
@@ -394,6 +385,17 @@
                     {%endfor%}
                 </select>
             </div>
+            <hr>
+            <label>Event that locks this decision:</label>
+            <select type="text" class="form-control" autocomplete="off" name="is_locked_by_event_id"
+                onchange="decision_changed(this)">
+                {%for events in event%}
+                <option>{{event.event_name}}</option>
+                {%endfor%}
+            </select>
+            <label>Description when newly locked:</label>
+            <textarea class="form-control" autocomplete="off" name="locked_by_event_description"
+                onchange="decision_changed(this)"></textarea>
         </div>
     </section>
 </form>
