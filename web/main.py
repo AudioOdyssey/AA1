@@ -223,7 +223,7 @@ def story_show():
     return render_template("story/show.html", stories=stories)
 
 
-@app.route("/story/update")  # THIS NEEDS TO BE FINISHED
+@app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 # @login_required
 def story_update():
   #  if "logged in" not in session:
@@ -232,6 +232,21 @@ def story_update():
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
     return render_template("story/update.html", objects=objects, events=events, locations=locations)
+
+
+@app.route("/story/update", methods=["POST"])
+def story_update_post():
+    details = request.form
+    story_id = details['story_id']
+    story_title = details['story_title']
+    story_synopsis = details['story_synopsis']
+    story_price = details['story_price']
+    genre = details['genre']
+    length_of_story = details['length_of_story']
+    story = Story.get(story_id)
+    story.update(story_title, "", story_price, 0,
+                 length_of_story, genre, story_synopsis)
+    return '{"status":"ok"}'
 
 # @app.route("/story/new", methods = ['POST'])
 # def story_new():
@@ -498,7 +513,7 @@ def decision_update():
 
 @app.route("/story/location/decision/new", methods=['POST'])
 def decision_new():
-    #if "logged in" not in session:
+    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
     details = request.form
     story_id = details["story_id"]
