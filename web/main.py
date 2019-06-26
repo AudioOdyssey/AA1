@@ -245,6 +245,7 @@ def story_update_post():
     genre = details['genre']
     length_of_story = details['length_of_story']
     story = Story.get(story_id)
+    story.story_id = story_id
     story.update(story_title, "", story_price, 0,
                  length_of_story, genre, story_synopsis)
     return '{"status":"ok"}'
@@ -278,7 +279,7 @@ def object_show():
 
 @app.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
-    details = request.json
+    details = request.get_json(force=True)
     in_story_id = details.get("story_id")
     return Story.get_entities(in_story_id)
 
