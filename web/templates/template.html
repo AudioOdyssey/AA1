@@ -52,7 +52,7 @@
 					</ul>
 					<ul class="navbar-nav ml-auto">
 						<!-- TODO: If statement based on login status -->
-						{%if true%}
+						{%if false%}
 						<li class="nav-item">
 							<a class="nav-link" href="/session/new">Login</a>
 						</li>
@@ -60,6 +60,9 @@
 							<a class="nav-link" href="/user/new">Register</a>
 						</li>
 						{%else%}
+						<li class="nav-item">
+							<a class="nav-link" href="/story/show">My Stories</a>
+						</li>
 						<form class="nav-item" action="/session/logout" method="post">
 							<input style="background: none; border: 0px;" type="submit" class="nav-link" name="Logout"
 								value="Logout" />
