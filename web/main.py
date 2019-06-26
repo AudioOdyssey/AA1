@@ -39,8 +39,8 @@ name = "AA_admin"
 rds_password = "z9QC3pvQ"
 db_name = "audio_adventures_dev"
 
-story_id = 1
-location_id = 1
+# story_id = 1          # BEGONE THOT!!!!!
+#location_id = 1
 
 random.seed()
 
@@ -273,8 +273,11 @@ def story_new():
 def object_show():
    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
     objects = StoryObject.obj_list(story_id)
-    return render_template("story/object/show.html", objects=objects, story_id=1)
+    locations = StoryLocation.loc_list(story_id)
+    events = StoryEvent.event_list(story_id)
+    return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
 @app.route("/app/story/info", methods=['GET'])
@@ -298,6 +301,7 @@ def object_update():
     # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
     details = request.form
+    story_id = details['story_id']
     object_id = details['obj_id']
     if object_id == '':
         object_id = StoryObject.get_last_id(story_id)
@@ -342,8 +346,10 @@ def object_new():
 def event_show():
   #  if "logged in" not in session:
    #     return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
     events = StoryEvent.event_list(story_id)
-    return render_template("story/event/show.html", events=events, story_id=story_id)
+    locations = StoryLocation.loc_list(story_id)
+    return render_template("story/event/show.html", locations=locations, events=events, story_id=story_id)
 
 
 @app.route('/story/event/update', methods=['POST'])
@@ -353,6 +359,7 @@ def event_update():
      #   return redirect(url_for("session_new"))
     if request.method == 'POST':
         details = request.form
+        story_id = details['story_id']
         event_id = details['event_id']
         if event_id == '':
             event_id = StoryEvent.get_last_id(story_id)
@@ -368,7 +375,7 @@ def event_update():
             is_global = True
         evnt = StoryEvent.get(story_id, event_id)
         evnt.update(story_id, event_id, name, location, desc, is_global)
-    return redirect(url_for('event_show'))
+    return '{"status":"ok"}'
 
 
 @app.route('/story/event/new', methods=['POST'])
@@ -390,6 +397,7 @@ def event_new():
 def location_show():
     # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/location/show.html", locations=locations, story_id=story_id)
 
@@ -400,9 +408,7 @@ def location_update():
   #  if "logged in" not in session:
    #     return redirect(url_for("session_new"))
     details = request.form
-    in_story_id = details['story_id']
-    if story_id is None:
-        in_story_id = story_id
+    story_id = details['story_id']
     loc_id = details['loc_id']
     if loc_id is None:
         loc_id = StoryLocation.get_last_id(story_id)
@@ -417,10 +423,10 @@ def location_update():
     next_location_id = details.get('next_loc_id')
     if next_location_id is None:
         next_location_id = 0
-    loc = StoryLocation.get(in_story_id, loc_id)
-    loc.update(in_story_id, loc_id, name, original_desc, short_desc,
+    loc = StoryLocation.get(story_id, loc_id)
+    loc.update(story_id, loc_id, name, original_desc, short_desc,
                post_event_description, event_id, auto_goto, next_location_id)
-    return redirect(url_for("location_show"))
+    return '{"status":"ok"}'
 
 
 @app.route('/story/location/new', methods=['POST'])
@@ -442,9 +448,17 @@ def decision_show():
      #   return redirect(url_for("session_new"))
     decisions = StoryDecision.dec_list(
         request.args['story_id'], request.args['location_id'])
+    locations = StoryLocation.loc_list(
+        request.args['story_id'])
     location = StoryLocation.get(
         request.args['story_id'], request.args['location_id'])
-    return render_template("story/location/decision/show.html", decisions=decisions, story_id=request.args['story_id'], location=location)
+    objects = StoryObject.obj_list(
+        request.args['story_id'])
+    print(objects)
+    print(objects[0].obj_name)
+    events = StoryEvent.event_list(
+        request.args['story_id'])
+    return render_template("story/location/decision/show.html", decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
 
 @app.route("/story/location/decision/update", methods=['POST'])
@@ -518,7 +532,7 @@ def decision_update():
     dec = StoryDecision.get(story_id, location_id, decision_id)
     dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
-    return redirect(url_for("decision_show"))
+    return '{"status":"ok"}'
 
 
 @app.route("/story/location/decision/new", methods=['POST'])

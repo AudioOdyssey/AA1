@@ -104,8 +104,8 @@
                                 Object</a></label>
                         <select id="show_obj" class="form-control" type="text" autocomplete="off" name="show_object_id"
                             onchange="decision_changed(this)">
-                            {%for object in objects%}
-                            <option>{{object.obj_name}}</option>
+                            {%for obj in objects%}
+                            <option>{{obj.obj_name}}</option>
                             {%endfor%}
                         </select>
                     </div>
@@ -128,8 +128,8 @@
                                 New Object</a></label>
                         <select class="form-control" type="text" autocomplete="off" name="unlock_event_id"
                             onchange="decision_changed(this)">
-                            {%for object in objects%}
-                            <option>{{object.obj_name}}</option>
+                            {%for obj in objects%}
+                            <option>{{obj.obj_name}}</option>
                             {%endfor%}
                         </select>
                     </div>
@@ -301,9 +301,9 @@
                                 Object</a></label>
                         <select type="text" class="form-control" autocomplete="off" name="show_object_id"
                             onchange="decision_changed(this)">
-                            {%for object in objects%}
-                            <option>{{object.obj_name}}</option>
-                            {%endfor%}
+                            {% for obj in objects %}
+                            <option>{{ obj.obj_name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </section>
@@ -332,8 +332,8 @@
                                 Object</a></label>
                         <select type="text" class="form-control" autocomplete="off" name="unlock_event_id"
                             onchange="decision_changed(this)">
-                            {%for object in objects%}
-                            <option>{{object.obj_name}}</option>
+                            {%for obj in objects%}
+                            <option>{{obj.obj_name}}</option>
                             {%endfor%}
                         </select>
                     </div>

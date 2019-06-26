@@ -15,7 +15,7 @@
 </section>
 
 <form id="loc-template" onclick="set_focus(this)" method="POST" action="/story/location/update">
-    <input name="story_id" readonly class="hidden-in">
+    <input name="story_id" value="{{story_id}}" readonly class="hidden-in">
     <input name="loc_id" readonly class="hidden-in">
 
     <button type="button" onclick="delete_btn_pressed(this)" class="trash  btn btn-light"><i
@@ -51,7 +51,7 @@
                 Event</a></label>
         <select id="loc_ev_name" class="form-control" type="text" autocomplete="off" name="location_event_id"
             onchange="location_changed(this)">
-            {%for events in event%}
+            {%for event in events%}
             <option>{{event.event_name}}</option>
             {%endfor%}
         </select>
@@ -71,7 +71,7 @@
                 <label>Select Next Location Name:</label>
                 <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
                     onchange="location_changed(this)">
-                    {%for locations in location%}
+                    {%for location in locations%}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
                 </select>
@@ -125,7 +125,7 @@
                 Event</a></label>
 
         <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
-            {%for events in event%}
+            {%for event in events%}
             <option>{{event.event_name}}</option>
             {%endfor%}
         </select>
@@ -165,7 +165,6 @@
             Decisions</a>
     </section>
 </form>
-<br>
 {% endfor %}
 <br>
 <a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>

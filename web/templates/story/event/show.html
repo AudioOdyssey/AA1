@@ -34,7 +34,7 @@
                         Add New
                         Location</a></label>
                 <select name="event_loc" id="locations" onchange="event_changed(this)">
-                    {% for locations in location %}
+                    {% for location in locations %}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
                 </select>
@@ -79,8 +79,8 @@
                 <label><b>Select Location or:</b><a href="/story/location/show?story_id={{ story_id }}"> Add New
                         Location</a></label>
                 <select class="form-control" type="text" name="event_loc" onchange="event_changed(this)">
-                    {% for locations in location %}
-                    <option>{{location.location_name}}</option>
+                    {% for location in locations %}
+                    <option>{{ location.location_name }}</option>
                     {%endfor%}
                 </select>
             </div>

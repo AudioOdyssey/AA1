@@ -37,7 +37,7 @@
                             Location</a></b></label>
                 <select id="starting_loc" class="form-control" type="text" onchange="object_changed(this)"
                     name="obj_starting_loc">
-                    {% for locations in location %}
+                    {% for location in locations %}
                     <option>{{location.location_name}}</option>
                     {% endfor %}
                 </select>
@@ -66,7 +66,7 @@
                 <label>Select Unhide Event Name: or <a href="/story/event/show?story_id={{ story_id }}"> Add New
                         Event</a></label>
                 <select onchange="object_changed(this)" name="unhide_event_ID">
-                    {% for events in event %}
+                    {% for event in events %}
                     <option>{{event.event_name}}</option>
                     {% endfor %}
                 </select>
@@ -97,7 +97,7 @@
                             Location</a></b></label>
                 <select class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)"
                     value="{{ object.obj_location}}">
-                    {%for locations in location%}
+                    {%for location in locations%}
                     <option>{{location.location_name}}</option>
                     {%endfor%}
                 </select>
@@ -132,7 +132,7 @@
                         Event</a></label>
                 <select class="form-control" type="text" name="obj_unhide_event" onchange="object_changed(this)"
                     value="{{ object.unhide_event_id}}">
-                    {%for events in event%}
+                    {%for event in events%}
                     <option>{{event.event_name}}</option>
                     {%endfor%}
                 </select>
