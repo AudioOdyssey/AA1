@@ -14,16 +14,17 @@
             <div class="form-group update-form-group">
                 <label>Title:</label>
                 <input autocomplete="none" class="form-control col" onchange="story_changed(this)" type="text"
-                    name="story_title" placeholder="Story Title...">
+                    name="story_title" value="{{story.story_title}}" placeholder="Story Title...">
             </div>
             <div class="form-group update-form-group">
                 <label>Synopsis:</label>
                 <textarea autocomplete="none" class="form-control" onchange="story_changed(this)" name="story_synopsis"
-                    placeholder="Story Synopsis..." rows="3"></textarea>
+                    placeholder="Story Synopsis..." rows="3">{{story.story_synopsis}}</textarea>
             </div>
             <div class="form-group">
                 <label>Genre:</label>
-                <select autocomplete="none" class="form-control" onchange="story_changed(this)" name="genre">
+                <select autocomplete="none" class="form-control" value="{{story.genre}}" onchange="story_changed(this)"
+                    name="genre">
                     <option value="" selected disabled>Select a genre...</option>
                     <option value="Mystery">Mystery</option>
                     <option value="Romance">Romance</option>
@@ -45,13 +46,15 @@
             <div class="form-group">
                 <label>Price:</label>
                 <input autocomplete="none" class="form-control" type="number" min="0" step="0.01"
-                    onchange="story_changed(this)" name="story_price" placeholder="Price in USD">
+                    onchange="story_changed(this)" value="{{story.story_price}}" name="story_price"
+                    placeholder="Price in USD">
             </div>
 
             <div class="form-group">
                 <label>Length:</label>
                 <input autocomplete="none" class="form-control" type="number" min="0" step="1"
-                    onchange="story_changed(this)" name="length_of_story" placeholder="Number of Hours">
+                    onchange="story_changed(this)" value="{{story.length_of_story}}" name="length_of_story"
+                    placeholder="Number of Hours">
             </div>
         </form>
     </section>
