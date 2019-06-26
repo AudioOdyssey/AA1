@@ -10,6 +10,7 @@
     height: 100%;
     text-align: left;
     padding: 0.25rem;
+    border-radius: 0.5rem;
 }
 .col-sm-4 {
     padding: 0.5rem;

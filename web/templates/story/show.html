@@ -15,13 +15,13 @@
 <h2 id="mystory">My Stories:</h2>
 <div class="row">
     {% for story in stories %}
-    <div class="col-sm-4">
-        <div class="storycard" href="/story/update?story_id={{story.story_id}}">
+    <a class="col-sm-4" href="/story/update?story_id={{story.story_id}}">
+        <div class="storycard">
             <h3>{{ story.story_title }}&nbsp;</h3>
             <hr>
             <p>{{ story.story_synopsis }}</p>
         </div>
-    </div>
+    </a>
     {% endfor %}
 </div>
 
