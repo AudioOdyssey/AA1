@@ -111,8 +111,8 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s WHERE story_id = %s"),
-                        (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_id, self.story_synopsis))
+            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s WHERE story_id = %s"),
+                        (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_synopsis, self.story_id))
             conn.commit()
         conn.close()
 
