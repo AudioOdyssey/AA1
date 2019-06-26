@@ -15,11 +15,12 @@
 <h2 id="mystory">My Stories:</h2>
 <div class="row">
     {% for story in stories %}
-    <div class="col-sm-4 storycard">
-        <a href="/story/update?story_id={{story.story_id}}">
-            <button id="story" class="btn btn-light"
-                onclick="editStory('{{story.story_id}}')">{{ story.story_title }}</button>
-        </a>
+    <div class="col-sm-4">
+        <div class="storycard" href="/story/update?story_id={{story.story_id}}">
+            <h3>{{ story.story_title }}&nbsp;</h3>
+            <hr>
+            <p>{{ story.story_synopsis }}</p>
+        </div>
     </div>
     {% endfor %}
 </div>
