@@ -51,8 +51,9 @@
                 Event</a></label>
         <select id="loc_ev_name" class="form-control" type="text" autocomplete="off" name="location_event_id"
             onchange="location_changed(this)">
+            <option value="0">None</option>
             {%for event in events%}
-            <option>{{event.event_name}}</option>
+            <option value="{{event.event_id}}">{{event.event_name}}</option>
             {%endfor%}
         </select>
         <label for="post_desc">Post Event Description</label>
@@ -71,8 +72,9 @@
                 <label>Select Next Location Name:</label>
                 <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
                     onchange="location_changed(this)">
-                    {%for location in locations%}
-                    <option>{{location.location_name}}</option>
+                    <option value="0">None</option>
+                    {%for loc in locations%}
+                    <option value="{{loc.location_id}}">{{loc.location_name}}</option>
                     {%endfor%}
                 </select>
             </div>
@@ -125,8 +127,10 @@
                 Event</a></label>
 
         <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
+            <option value="0">None</option>
             {%for event in events%}
-            <option>{{event.event_name}}</option>
+            <option {%if location.location_event_id == event.event_id%}selected{%endif%} value="{{event.event_id}}">
+                {{event.event_name}}</option>
             {%endfor%}
         </select>
 
@@ -151,8 +155,10 @@
 
                 <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
                     onchange="location_changed(this)">
+                    <option value="0">None</option>
                     {%for loc in locations%}
-                    <option>{{loc.location_name}}</option>
+                    <option {%if location.next_loc_id == loc.location_id%}selected{%endif%} value="{{loc.location_id}}">
+                        {{loc.location_name}}</option>
                     {%endfor%}
                 </select>
             </div>

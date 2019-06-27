@@ -399,7 +399,8 @@ def location_show():
      #   return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     locations = StoryLocation.loc_list(story_id)
-    return render_template("story/location/show.html", locations=locations, story_id=story_id)
+    events = StoryEvent.event_list(story_id)
+    return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
 
 @app.route('/story/location/update', methods=['POST'])
@@ -475,7 +476,7 @@ def decision_update():
     decision_id = details['decision_id']
     if decision_id == '':
         decision_id = StoryDecision.get_last_id(story_id)
-    decision_name = details['decision-name']
+    decision_name = details['decision_name']
     sequence = details['sequence_number']
     if sequence == '':
         sequence = 0
@@ -509,7 +510,7 @@ def decision_update():
     unlock_event_id = details.get('unlock_event_id')
     if unlock_event_id is None:
         unlock_event_id = 0
-    unlock_obj_id = details.get("unlock_obj_id")
+    unlock_obj_id = details.get("unlock_object_id")
     if unlock_obj_id is None:
         unlock_obj_id = 0
     aftermath_desc = details['aftermath_desc']

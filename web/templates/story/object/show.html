@@ -37,8 +37,9 @@
                             Location</a></b></label>
                 <select id="starting_loc" class="form-control" type="text" onchange="object_changed(this)"
                     name="obj_starting_loc">
+                    <option value="0">None</option>
                     {% for location in locations %}
-                    <option>{{location.location_name}}</option>
+                    <option value="{{location.location_id}}">{{location.location_name}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -66,8 +67,9 @@
                 <label>Select Unhide Event Name: or <a href="/story/event/show?story_id={{ story_id }}"> Add New
                         Event</a></label>
                 <select onchange="object_changed(this)" name="unhide_event_ID">
+                    <option value="0">None</option>
                     {% for event in events %}
-                    <option>{{event.event_name}}</option>
+                    <option value="{{event.event_id}}">{{event.event_name}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -97,9 +99,10 @@
                             Location</a></b></label>
                 <select class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)"
                     value="{{ object.obj_location}}">
-                    {%for location in locations%}
-                    <option>{{location.location_name}}</option>
-                    {%endfor%}
+                    <option value="0">None</option>
+                    {% for location in locations %}
+                    <option value="{{location.location_id}}">{{location.location_name}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </section>
@@ -132,9 +135,10 @@
                         Event</a></label>
                 <select class="form-control" type="text" name="obj_unhide_event" onchange="object_changed(this)"
                     value="{{ object.unhide_event_id}}">
-                    {%for event in events%}
-                    <option>{{event.event_name}}</option>
-                    {%endfor%}
+                    <option value="0">None</option>
+                    {% for event in events %}
+                    <option value="{{event.event_id}}">{{event.event_name}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
