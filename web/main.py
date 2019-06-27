@@ -258,14 +258,6 @@ def story_new():
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
-# @app.route("/story/new", methods = ['POST'])
-# def story_new():
-#     details = request.form
-#     creator_id = details['user_creator_id']
-#     new_story = Story(user_creator_id = creator_id)
-#     new_story.add_to_server()
-#     return redirect(url_for("story_update"))
-
 
 #### THIS WORKS #####
 @app.route("/story/object/show")
@@ -338,6 +330,12 @@ def object_new():
     obj = StoryObject(story_id)
     obj.add_to_server()
     return redirect(url_for("object_show"))
+
+
+@app.route("/story/object/destroy", methods=['POST'])
+def object_destroy():
+    StoryObject.obj_del(request.form['obj_id'])
+    return '{"status":"ok"}'
 
 
 #### STILL NEEDS WORK ####
@@ -589,6 +587,7 @@ def load_user(user_id):
 def help():
     return render_template("story/help.html")
 
+
 @app.route("/story/treeview_help")
 def treeview_help():
     story_id = request.args['story_id']
@@ -615,7 +614,7 @@ def treeview():
     decisions = []
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
-    location = StoryLocation.get(story_id,loc_id)
+    location = StoryLocation.get(story_id, loc_id)
     return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
 
 
