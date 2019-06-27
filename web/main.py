@@ -597,7 +597,15 @@ def newcorp():
 
 @app.route("/story/treeview")
 def treeview():
-    return render_template("story/treeview.html")
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    loc_id = request.args.get('location_id')
+    decisions = []
+    if loc_id is not None:
+        decisions = StoryDecision.dec_list(story_id, loc_id)
+    print(loc_id)
+    return render_template("story/treeview.html", locations=locations, starting_loc = loc_id, decisions=decisions, story=story)
 
 
 if __name__ == '__main__':
