@@ -24,6 +24,7 @@ function checkbox_visability_check(elem) { //does not work
 
 function decision_changed(elem) {
     // elem.form.submit()
+   
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -35,6 +36,17 @@ function decision_changed(elem) {
     xhttp.open("POST", "/story/location/decision/update", true);
     // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send(new FormData(elem.form));
+}
+function check_exclusivity(elem){
+    if (elem.options[elem.selectedIndex].value!==0)
+    {
+        elems = elem.parentNode.parentNode.getElementsByClassName("exclusive")
+        for (var i = 0; i < elems.length; i++) {
+            if (elems[i] != elem && elems[i].selectedIndex != 0) {
+                elems[i].selectedIndex = 0;
+            }
+        }
+    }
 }
 
 function add_btn_pressed(story_id, location_id) {

@@ -92,8 +92,8 @@
                         <label for="show_event">Select Event to show decision: or <a
                                 href="/story/event/show?story_id={{ story_id }}"> Add New
                                 Event</a></label>
-                        <select id="show_event" class="form-control" type="text" autocomplete="off" name="show_event_id"
-                            onchange="decision_changed(this)">
+                        <select id="show_event" class="form-control exclusive" type="text" autocomplete="off" name="show_event_id"
+                            onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {%for event in events%}
                             <option value="event.event_id">{{event.event_name}}</option>
@@ -104,8 +104,8 @@
                         <label for="show_obj">Select Object to show decision: or <a
                                 href="/story/object/show?story_id={{ story_id }}"> Add New
                                 Object</a></label>
-                        <select id="show_obj" class="form-control" type="text" autocomplete="off" name="show_object_id"
-                            onchange="decision_changed(this)">
+                        <select id="show_obj" class="form-control exclusive" type="text" autocomplete="off" name="show_object_id"
+                            onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {%for obj in objects%}
                             <option value="{{obj.obj_id}}">{{obj.obj_name}}</option>
@@ -129,8 +129,8 @@
                         <label for="unlock_obj">Select Object to unlock decision: or <a
                                 href="/story/object/show?story_id={{ story_id }}"> Add
                                 New Object</a></label>
-                        <select class="form-control" type="text" autocomplete="off" name="unlock_event_id"
-                            onchange="decision_changed(this)">
+                        <select class="form-control exclusive type="text" autocomplete="off" name="unlock_event_id"
+                            onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {%for obj in objects%}
                             <option value="{{obj.obj_id}}">{{obj.obj_name}}</option>
@@ -141,8 +141,8 @@
                         <label for="unlock_event">Select Event to unlock decision: or <a
                                 href="/story/event/show?story_id={{ story_id }}"> Add
                                 New Event</a></label>
-                        <select id="unlock_event" class="form-control" type="text" autocomplete="off"
-                            name="unlock_event_id" onchange="decision_changed(this)">
+                        <select id="unlock_event" class="form-control exclusive" type="text" autocomplete="off"
+                            name="unlock_event_id" onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {%for event in events%}
                             <option value="{{event.event_id}}">{{event.event_name}}</option>
@@ -296,8 +296,8 @@
                     <div class="col-sm-6">
                         <label>Select Event to show decision: or <a href="/story/event/show?story_id={{ story_id }}">
                                 Add New Event</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="show_event_id"
-                            onchange="decision_changed(this)">
+                        <select type="text" class="form-control exclusive" autocomplete="off" name="show_event_id"
+                            onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {%for event in events%}
                             <option {%if decision.show_event_id == event.event_id%}selected{%endif%}
@@ -309,8 +309,8 @@
                         <label>Select Object to show decision: or <a href="/story/object/show?story_id={{ story_id }}">
                                 Add New
                                 Object</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="show_object_id"
-                            onchange="decision_changed(this)">
+                        <select type="text" class="form-control exclusive" autocomplete="off" name="show_object_id"
+                            onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {% for obj in objects %}
                             <option {%if decision.show_object_id == obj.obj_id%}selected{%endif%}
@@ -342,8 +342,8 @@
                         <label>Select Object to unlock decision: or <a
                                 href="/story/object/show?story_id={{ story_id }}"> Add New
                                 Object</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="unlock_object_id"
-                            onchange="decision_changed(this)">
+                        <select type="text" class="form-control exclusive" autocomplete="off" name="unlock_object_id"
+                            onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {% for obj in objects %}
                             <option {%if decision.unlock_object_id == obj.obj_id%}selected{%endif%}
@@ -355,8 +355,8 @@
                         <label>Select Event to unlock decision: or <a href="/story/event/show?story_id={{ story_id }}">
                                 Add New
                                 Event</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="unlock_event_id"
-                            onchange="decision_changed(this)">
+                        <select type="text" class="form-control exclusive" autocomplete="off" name="unlock_event_id"
+                            onchange="decision_changed(this);check_exclusivity(this)">
                             <option value="0">None</option>
                             {%for event in events%}
                             <option {%if decision.unlock_event_id == event.event_id%}selected{%endif%}
