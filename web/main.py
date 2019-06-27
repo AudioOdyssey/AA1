@@ -584,6 +584,12 @@ def load_user(user_id):
 def help():
     return render_template("story/help.html")
 
+@app.route("/story/treeview_help")
+def treeview_help():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("story/treeview_help.html", story=story)
+
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -604,8 +610,8 @@ def treeview():
     decisions = []
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
-    print(loc_id)
-    return render_template("story/treeview.html", locations=locations, starting_loc = loc_id, decisions=decisions, story=story)
+    location = StoryLocation.get(story_id,loc_id)
+    return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
 
 
 if __name__ == '__main__':

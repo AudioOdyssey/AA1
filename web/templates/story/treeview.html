@@ -12,17 +12,22 @@
         <option value="{{location.location_id}}">{{location.location_name}}</option>
         {% endfor %}
    </select>
- 
+   <br>
+   <section class="row">
+      <label>Current Location</label>
+      <div class = "col-sm-4 small-card">
+          <p>{{location.location_name}}</p>
+        </div>
+    </section>
+    <br>
    <section class="row">
         {% for dec in decisions %}
-        <a class="col-sm-4 small-card">
-            <p>{{dec.decision_name}}</p>
-        </a>
-       {% endfor %}
+          <a class="col-sm-4 small-card" href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">{{dec.decision_name}}</a>
+        {% endfor %}
     </section>
 
     <br><hr>
-    <a href = ""><button class= "btn btn-primary" >How to Use Treeview</button></a>
+    <a href = "/story/treeview_help?story_id={{story.story_id}}"><button class= "btn btn-primary" >How to Use Treeview</button></a>
 </body>
 
 
