@@ -27,8 +27,7 @@
 
             <div class="col-sm-4">
                 <label for="obj_name"><b>Name:</b></label>
-                <input id="obj_name" class="form-control" type="text" onchange="object_changed(this)" name="obj_name"
-                    required>
+                <input id="obj_name" class="form-control" type="text" onchange="object_changed(this);namegiven(this)" name="obj_name">
             </div>
 
             <div class="col-sm-8">
@@ -47,7 +46,7 @@
         </section>
 
         <section class="flex-0" onclick="object_show(this)">
-            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+            <i id= "down" style= "display: hidden" class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
 
     </section>

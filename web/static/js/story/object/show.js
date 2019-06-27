@@ -79,3 +79,10 @@ function delete_btn_pressed(btn) {
     xhttp.send(new FormData(btn.form));
     btn.parentNode.parentNode.removeChild(btn.parentNode);
 }
+function namegiven(elem) //TODO FIX THIS FUNCTION AND ADD IT TO THE OTHER FORMS SO WE CAN REQUIRE NAMES
+{
+    if (elem.value !== "")
+    {
+        getElementById("down").style.display="inline";
+    }
+}

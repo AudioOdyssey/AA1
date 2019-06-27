@@ -631,6 +631,20 @@ def treeview():
     location = StoryLocation.get(story_id, loc_id)
     return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('500.html'), 500
+
+@app.route("/saving")
+def saving():
+    return render_template("saving.html")
+
 
 if __name__ == '__main__':
     app.run()
