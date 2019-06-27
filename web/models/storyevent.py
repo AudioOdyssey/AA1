@@ -78,6 +78,20 @@ class StoryEvent:
                 return json.dumps(results)
 
     @classmethod
+    def event_del(cls, event_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(
+                ("DELETE FROM `events` WHERE `event_id` = %s"), (event_id))
+            conn.commit()
+        conn.close()
+    
+    @classmethod
     def event_list(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"

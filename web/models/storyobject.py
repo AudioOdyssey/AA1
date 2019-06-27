@@ -91,6 +91,18 @@ class StoryObject:
                 return json.dumps(results)
 
     @classmethod
+    def obj_del(cls, obj_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
+        with conn.cursor() as cur:
+            cur.execute(("DELETE FROM `objects` WHERE `obj_id` = %s"), (obj_id))
+            conn.commit()
+        conn.close()
+
+    @classmethod
     def obj_list(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
