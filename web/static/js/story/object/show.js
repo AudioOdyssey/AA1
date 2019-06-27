@@ -53,10 +53,12 @@ function add_btn_pressed(story_id) {
             if (obj.status == "ok") {
                 newelem.childNodes[1].value = obj.response.obj_id;
             } else {
-                console.log("Bad Response, what do we do now?")
+                console.log("Bad Response, what do we do now?");
+                console.log(this.responseText);
             }
         } else if (this.readyState == 4) {
             console.log("Bad Response, what do we do now?")
+            console.log(this.responseText);
         }
     };
     xhttp.open("POST", "/story/object/new", true);

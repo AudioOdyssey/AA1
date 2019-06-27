@@ -328,8 +328,8 @@ def object_new():
     details = request.form
     story_id = details['story_id']
     obj = StoryObject(story_id)
-    obj.add_to_server()
-    return redirect(url_for("object_show"))
+    obj_id = obj.add_to_server()
+    return '{"status":"ok","response":{"obj_id":' + str(obj_id) + '}}'
 
 
 @app.route("/story/object/destroy", methods=['POST'])
