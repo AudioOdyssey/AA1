@@ -420,6 +420,10 @@ def location_update():
     if event_id is None:
         event_id = 0
     auto_goto = details.get('auto_goto')
+    if auto_goto is None:
+        auto_goto = 0
+    else:
+        auto_goto = 1
     next_location_id = details.get('next_loc_id')
     if next_location_id is None:
         next_location_id = 0

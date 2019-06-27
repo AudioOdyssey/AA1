@@ -137,7 +137,6 @@
 
         <div>
             <label>Auto Go To</label>
-            <!--DOENST WORK-->
             {% if location.auto_goto %}
             <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)"
                 onchange="location_changed(this)" checked>
@@ -147,12 +146,11 @@
             {% endif %}
             <br>
 
-            <!---should only display if "autogo" is checked @brian-->
-            <div class="checkbox_hide" style="display: none;">
+            <div class="checkbox_hide" {%if not location.auto_goto%}style="display: none;" {%endif%}>
                 <label>Next Location Name</label>
 
                 <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
-                    onchange="location_changed(this)"> {{location.next_loc_id}}
+                    onchange="location_changed(this)">
                     {%for loc in locations%}
                     <option>{{loc.location_name}}</option>
                     {%endfor%}
