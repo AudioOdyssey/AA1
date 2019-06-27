@@ -135,6 +135,20 @@ class StoryLocation:
                 return json.dumps(result)
 
     @classmethod
+    def loc_del(cls, location_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(
+                ("DELETE FROM `locations` WHERE `location_id` = %s"), (location_id))
+            conn.commit()
+        conn.close()
+
+    @classmethod
     def loc_list(cls, story_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"

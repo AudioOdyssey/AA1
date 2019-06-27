@@ -121,6 +121,20 @@ class StoryDecision:
                 return json.dumps(results)
 
     @classmethod
+    def dec_del(cls, dec_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(
+                ("DELETE FROM `decisions` WHERE `decision_id` = %s"), (dec_id))
+            conn.commit()
+        conn.close()
+    
+    @classmethod
     def dec_list(cls, story_id, loc_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"

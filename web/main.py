@@ -388,6 +388,10 @@ def event_new():
     events = StoryEvent.event_list(story_id)
     return render_template("story/event/show.html", events=events, story_id=story_id)
 
+@app.route("/story/event/destroy", methods=['POST'])
+def event_destroy():
+    StoryEvent.event_del(request.form['event_id'])
+    return '{"status":"ok"}'
 
 ### LOCATION STILL NEEDS WORK ###
 @app.route("/story/location/show")
@@ -442,6 +446,12 @@ def location_new():
     loc = StoryLocation(in_story_id)
     loc.add_to_server()
     return redirect(url_for("location_show"))
+
+
+@app.route("/story/location/destroy", methods=['POST'])
+def location_destroy():
+    StoryLocation.loc_del(request.form['loc_id'])
+    return '{"status":"ok"}'
 
 
 #### DECISIONS WORK ####
@@ -549,6 +559,10 @@ def decision_new():
     dec.add_to_server()
     return redirect(url_for("decision_show"))
 
+@app.route("/story/location/decision/destroy", methods=['POST'])
+def decision_destroy():
+    StoryDecision.dec_del(request.form['decision_id'])
+    return '{"status":"ok"}'
 
 @app.route("/about")
 def about():
