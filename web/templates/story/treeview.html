@@ -1,8 +1,33 @@
 {%extends "template.html" %}
 {% block content%}
-
+<script src="{{ url_for('static', filename='js/story/treeview.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/treeview.css') }}" type="text/css" />
 <body>
+    <h1 style = "text-align: center">Treeview</h1>
+    <br><hr>
+    <label for = "start">Select starting location</label>
+    <select onchange="get_starting_loc('{{story.story_id}}', this)" id = "start" class = "form-control" type="text" autocomplete="off" name="starting_loc_id">
+        <option disabled selected>-----</option>
+        {% for location in locations %}
+        <option value="{{location.location_id}}">{{location.location_name}}</option>
+        {% endfor %}
+   </select>
+   <br>
+   <section class="row">
+      <label>Current Location</label>
+      <div class = "col-sm-4 small-card">
+          <p>{{location.location_name}}</p>
+        </div>
+    </section>
+    <br>
+   <section class="row">
+        {% for dec in decisions %}
+          <a class="col-sm-4 small-card" href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">{{dec.decision_name}}</a>
+        {% endfor %}
+    </section>
 
+    <br><hr>
+    <a href = "/story/treeview_help?story_id={{story.story_id}}"><button class= "btn btn-primary" >How to Use Treeview</button></a>
 </body>
 
 

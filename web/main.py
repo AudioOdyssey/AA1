@@ -589,6 +589,12 @@ def load_user(user_id):
 def help():
     return render_template("story/help.html")
 
+@app.route("/story/treeview_help")
+def treeview_help():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("story/treeview_help.html", story=story)
+
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -602,7 +608,15 @@ def newcorp():
 
 @app.route("/story/treeview")
 def treeview():
-    return render_template("story/treeview.html")
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    loc_id = request.args.get('location_id')
+    decisions = []
+    if loc_id is not None:
+        decisions = StoryDecision.dec_list(story_id, loc_id)
+    location = StoryLocation.get(story_id,loc_id)
+    return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
 
 
 if __name__ == '__main__':
