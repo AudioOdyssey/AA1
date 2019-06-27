@@ -89,18 +89,6 @@
             <div class="checkbox_hide">
                 <section class="row flex-1">
                     <div class="col-sm-6">
-                        <label for="show_event">Select Event to show decision: or <a
-                                href="/story/event/show?story_id={{ story_id }}"> Add New
-                                Event</a></label>
-                        <select id="show_event" class="form-control" type="text" autocomplete="off" name="show_event_id"
-                            onchange="decision_changed(this)">
-                            <option value="0">None</option>
-                            {%for event in events%}
-                            <option value="event.event_id">{{event.event_name}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                    <div class="col-sm-6">
                         <label for="show_obj">Select Object to show decision: or <a
                                 href="/story/object/show?story_id={{ story_id }}"> Add New
                                 Object</a></label>
@@ -109,6 +97,18 @@
                             <option value="0">None</option>
                             {%for obj in objects%}
                             <option value="{{obj.obj_id}}">{{obj.obj_name}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="show_event">Select Event to show decision: or <a
+                                href="/story/event/show?story_id={{ story_id }}"> Add New
+                                Event</a></label>
+                        <select id="show_event" class="form-control" type="text" autocomplete="off" name="show_event_id"
+                            onchange="decision_changed(this)">
+                            <option value="0">None</option>
+                            {%for event in events%}
+                            <option value="event.event_id">{{event.event_name}}</option>
                             {%endfor%}
                         </select>
                     </div>
@@ -294,18 +294,6 @@
             <div class="checkbox_hide" {%if not decision.hidden%}style="display: none;" {%endif%}>
                 <section class="row flex-1">
                     <div class="col-sm-6">
-                        <label>Select Event to show decision: or <a href="/story/event/show?story_id={{ story_id }}">
-                                Add New Event</a></label>
-                        <select type="text" class="form-control" autocomplete="off" name="show_event_id"
-                            onchange="decision_changed(this)">
-                            <option value="0">None</option>
-                            {%for event in events%}
-                            <option {%if decision.show_event_id == event.event_id%}selected{%endif%}
-                                value="{{event.event_id}}">{{event.event_name}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                    <div class="col-sm-6">
                         <label>Select Object to show decision: or <a href="/story/object/show?story_id={{ story_id }}">
                                 Add New
                                 Object</a></label>
@@ -316,6 +304,18 @@
                             <option {%if decision.show_object_id == obj.obj_id%}selected{%endif%}
                                 value="{{obj.obj_id}}">{{ obj.obj_name }}</option>
                             {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Select Event to show decision: or <a href="/story/event/show?story_id={{ story_id }}">
+                                Add New Event</a></label>
+                        <select type="text" class="form-control" autocomplete="off" name="show_event_id"
+                            onchange="decision_changed(this)">
+                            <option value="0">None</option>
+                            {%for event in events%}
+                            <option {%if decision.show_event_id == event.event_id%}selected{%endif%}
+                                value="{{event.event_id}}">{{event.event_name}}</option>
+                            {%endfor%}
                         </select>
                     </div>
                 </section>
