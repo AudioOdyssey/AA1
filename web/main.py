@@ -587,7 +587,8 @@ def verification_review():
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
-  #  decisions = StoryDecision.dec_list(
+    #TODO talk to brian about the best way to get decisions in. New web page to view decisions?
+  #decisions = StoryDecision.dec_list(
    #     request.args['story_id'], request.args['location_id'])
     return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events)
 

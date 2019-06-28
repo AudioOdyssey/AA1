@@ -6,8 +6,8 @@
 <h2 class="text">Stories Ready for Verification:</h2>
 <br>
 {% for story in stories %}
-<!---TODO make this if about verification status-->
-{%if true%}
+
+{%if story.name_of_verifier == ''%}
 <div class="col-sm-4 storycard">
     <a href="/verification/review?story_id={{story.story_id}}"><button id="tbvs" class="btn btn-light">{{ story.story_title }}</button> </a>
    
