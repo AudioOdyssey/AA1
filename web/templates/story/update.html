@@ -111,7 +111,7 @@
     </section>
 </section>
 <hr>
-<a href="/story/show"><button class="btn btn-light" onclick="save('{{story.story_id}}')">Save For Later</button></a>
+<a href="/savingstory?story_id={{story.story_id}}"><button class="btn btn-light" onclick="save('{{story.story_id}}')">Save For Later</button></a>
 <a href="/story/show"> <button class="btn btn-light" onclick="publishStory('{{story.story_id}}')">Publish
         Story</button></a>
 <button class="btn btn-danger" onclick="story_delete('{{story.story_id}}')">Delete Story</button>

@@ -643,7 +643,16 @@ def page_not_found(e):
 
 @app.route("/saving")
 def saving():
-    return render_template("saving.html")
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("saving.html", story=story)
+
+@app.route("/savingstory")
+def savingstory():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("savingstory.html", story=story)
+
 
 
 if __name__ == '__main__':
