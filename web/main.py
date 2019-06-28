@@ -641,17 +641,17 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('500.html'), 500
 
-@app.route("/saving")
+@app.route("/save/saving")
 def saving():
     story_id = request.args['story_id']
     story = Story.get(story_id)
-    return render_template("saving.html", story=story)
+    return render_template("save/saving.html", story=story)
 
-@app.route("/savingstory")
+@app.route("/save/savingstory")
 def savingstory():
     story_id = request.args['story_id']
     story = Story.get(story_id)
-    return render_template("savingstory.html", story=story)
+    return render_template("/save/savingstory.html", story=story)
 
 
 
