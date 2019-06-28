@@ -576,20 +576,20 @@ def contact():
 
 @app.route("/verification/view")
 def verification_view():
-    stories = [Story(5, "Story Title", "Brian", "Short Synopsis", 50, True, "Fiction",
-                     3, 30, 50, False, None, None, "not verified", 0.0, 1, 16.3, False, False)]
+    #TODO same as story show
+    stories = Story.story_list(0)
     return render_template("verification/view.html", stories=stories)
 
 
 @app.route("/verification/review")
 def verification_review():
-    # uncomment when all this stuff works
-    #objects = StoryObject.obj_list(story_id)
-    #events = StoryEvent.event_list(story_id)
-    #locations= StoryLocation.loc_list(story_id)
-    #decisions = [StoryDecision()]
-    # return render_template("verification/review.html", objects=objects, events=events, locations=locations, decisions=decisions)
-    return render_template("verification/review.html")
+    story_id = request.args["story_id"]
+    objects = StoryObject.obj_list(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    events = StoryEvent.event_list(story_id)
+  #  decisions = StoryDecision.dec_list(
+   #     request.args['story_id'], request.args['location_id'])
+    return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events)
 
 
 @login_manager.user_loader
@@ -652,6 +652,13 @@ def savingstory():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/savingstory.html", story=story)
+
+@app.route("/save/verifying")
+def verifying():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("/save/verifying.html", story=story)
+
 
 
 

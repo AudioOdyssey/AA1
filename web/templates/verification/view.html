@@ -6,11 +6,12 @@
 <h2 class="text">Stories Ready for Verification:</h2>
 <br>
 {% for story in stories %}
-<!---make this if about verification status-->>
+<!---TODO make this if about verification status-->
 {%if true%}
 <div class="col-sm-4 storycard">
-    <a href="/verification/review"><button id="tbvs" class="btn btn-light">{{ story.story_title }}</button> </a>
-</div>
+    <a href="/verification/review?story_id={{story.story_id}}"><button id="tbvs" class="btn btn-light">{{ story.story_title }}</button> </a>
+   
+</div> <br>
 {%endif%}
 
 {% endfor %}
