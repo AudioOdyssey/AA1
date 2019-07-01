@@ -182,9 +182,14 @@ class StoryLocation:
             if query_data is None:
                 return None
             for row in query_data:
-                loc_dict = {str(row[1]): {'location_name': row[2], 'original_description': row[3], 'short_description': row[4],
-                                          'post_event_description': row[5], 'location_event_id': str(row[6]), 'auto_goto': str(row[7]), 'next_loc_id': str(row[8]),
-                                          'decisions': StoryDecision.decs_list_json(story_id, row[1])}}
+                auto_goto_bool = False
+                if row[7] == 0:
+                    auto_goto_bool = False
+                else:
+                    auto_goto_bool = True
+                loc_dict = {'loc_id' : row[1], 'location_name': row[2], 'original_description': row[3], 'short_description': row[4],
+                                          'post_event_description': row[5], 'location_event_id': row[6], 'auto_goto': auto_goto_bool, 'next_loc_id': row[8],
+                                          'decisions': StoryDecision.decs_list_json(story_id, row[1])}
                 result.append(loc_dict)
         return result
 

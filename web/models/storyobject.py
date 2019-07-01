@@ -132,8 +132,18 @@ class StoryObject:
             if query_data is None:
                 return None
             for row in query_data:
-                obj_info = {str(row[1]) : {"obj_starting_loc" : str(row[2]), "obj_name" : row[3], "obj_description" : row[4], 
-                "can_pickup" : str(row[5]), "is_hidden" : str(row[6]), "unhide_event_id" : str(row[7])}}
+                is_hidden_bool = False
+                if row[6] == 0:
+                    is_hidden_bool = False
+                else:
+                    is_hidden_bool = True
+                can_pickup_bool = False
+                if row[5] == 0:
+                    can_pickup_bool = False
+                else:
+                    can_pickup_bool = True
+                obj_info = {"obj_id" : row[1], "obj_starting_loc" : row[2], "obj_name" : row[3], "obj_description" : row[4], 
+                "can_pickup" : can_pickup_bool, "is_hidden" : is_hidden_bool, "unhide_event_id" : row[7]}
                 result.append(obj_info)
         return result
 
