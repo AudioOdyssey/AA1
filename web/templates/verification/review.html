@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/verification/review.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/verification/review.js') }}"></script>
 <!--TODO put all this info into server somehow-->
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
 <h1 class="text" style = "text-align: center;">Story Verification</h1>
 <hr>
 <h2 class="text">Locations:</h2>
@@ -43,10 +44,11 @@
 
 {% endfor %}
 <label>Locations Verified</label>
-<input type = "checkbox" autocomplete= "off" onchange= "">
+<input type = "checkbox" class= "details" name= "loc_verified" autocomplete= "off" onchange= "verify_changed(this)">
 <hr>
 <h2 class="text">Decisions:</h2>
 <br>
+
 {%for decision in decisions%}
 <section class="decision-row row">
     <div>
@@ -72,7 +74,7 @@
 
 {%endfor%}
 <label>Decisions Verified</label>
-<input type = "checkbox" onchange= "">
+<input type = "checkbox" class= "details"  name="dec_verified" onchange= "verify_changed(this)">
 <hr>
 <h2>Objects:</h2>
 <br>
@@ -96,7 +98,7 @@
 
 {%endfor%}
 <label>Objects Verified</label>
-<input type = "checkbox" onchange= "">
+<input type = "checkbox" class= "details"  name= "obj_verified" onchange= "verify_changed(this)">
 <hr><br>
 
 <h2>Events:</h2>
@@ -122,13 +124,13 @@
 </section>
 {%endfor%}
 <label>Events Verified</label>
-<input type = "checkbox" onchange= "">
+<input type = "checkbox" class= "details"  name= "ev_verified" onchange= "verify_changed(this)">
 <br>
 <hr><br>
 
 <label>Suggested Rating:</label>
 <!--where do we want to store this info @sonny @brian-->
-<select class="form-control">
+<select class="form-control details" onchange="verify_changed(this)" name="rating">
     <option>G</option>
     <option>PG</option>
     <option>PG-13</option>
@@ -138,18 +140,19 @@
 <br>
 <hr>
 
-<form>
+
     <label>Name of Verifier</label>
-    <input type="text" class="form-control" onchange="">
+    <input type="text" class="form-control details" name = "name_of_verifier" onchange="verify_changed(this)">
 
     <label>Today's Date</label>
-    <input type="date" class="form-control" onchange="">
+    <input type="date" class="form-control details" name= "verification_date" onchange="verify_changed(this)">
 
     <br>
     <hr>
 
-   <a href= "/save/verifying?story_id={{story_id}}" <button class="btn btn-light" onclick="verify_story('story_id')">Verify Story</button></a>
-  <a href= "/verification/view"  <button class="btn btn-light" onclick="report_story('story_id')">Report Story</button>
+   <a href= "/save/verifying?story_id={{story_id}}" ><button class="btn btn-light" onclick="verify_story('story_id')">Verify Story</button></a>
+  <a href= "/verification/view">  <button class="btn btn-light" onclick="report_story('story_id')">Report Story</button>
+
 </form>
 
 {% endblock %}

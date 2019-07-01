@@ -592,6 +592,14 @@ def verification_review():
    #     request.args['story_id'], request.args['location_id'])
     return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events)
 
+@app.route("/verification/review/update", methods=['POST'])
+# @login_required
+def review_update():
+
+    details = request.form
+    # sonny finish this
+
+    return "ok"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -659,6 +667,9 @@ def verifying():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
+
+
+
 
 if __name__ == '__main__':
     app.run()
