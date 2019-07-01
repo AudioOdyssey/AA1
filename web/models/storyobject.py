@@ -41,9 +41,7 @@ class StoryObject:
     def add_to_server(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM `objects`"), ())
-            results = cur.fetchone()
-            self.obj_id = results["count(*)"] + 1
+            self.obj_id = self.get_last_id(self.story_id)
             cur.execute(("INSERT INTO objects(story_id, obj_id) VALUES (%s, %s)"), (self.story_id, self.obj_id))
             conn.commit()
         conn.close()

@@ -58,9 +58,7 @@ class StoryDecision:
     def add_to_server(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM `decisions`"), ())
-            results = cur.fetchone()
-            self.decision_id = results["count(*)"] + 1
+            self.decision_id = self.get_last_id(self.story_id, self.loc_id)
             cur.execute(("INSERT INTO decisions(story_id, loc_id, decision_id) VALUES (%s, %s, %s)"), (self.story_id, self.loc_id, self.decision_id))
             conn.commit()
         conn.close()  

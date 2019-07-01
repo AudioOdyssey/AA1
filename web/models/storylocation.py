@@ -52,9 +52,7 @@ class StoryLocation:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM `locations`"), ())
-            results = cur.fetchone()
-            self.location_id = results["count(*)"] + 1
+            self.location_id = self.get_last_id(self.story_id)
             cur.execute(("INSERT INTO locations(story_id, location_id) VALUES (%s, %s)"),
                         (self.story_id, self.location_id))
             conn.commit()
