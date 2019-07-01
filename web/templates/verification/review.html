@@ -35,9 +35,6 @@
     <h6><b>Post Event Description</b></h6>
     <p>{{location.post_event_description}}</p>
     <hr>
-
-    <h6><b>Event Name (will occur upon entry)</b></h6>
-    <p>{{location.location_event_id.event_name}}</p>
     <hr>
     <br>
 </section>
@@ -139,18 +136,20 @@
 
 <br>
 <hr>
-
-
+<section class= "row">
+<div class = "col-sm-8">
     <label>Name of Verifier</label>
-    <input type="text" class="form-control details" name = "name_of_verifier" onchange="verify_changed(this)">
-
+    <input type="text" class="form-control details" name = "name_of_verifier" onchange="verify_changed(this)" required>
+</div>
+<div class = "col-sm-4">
     <label>Today's Date</label>
-    <input type="date" class="form-control details" name= "verification_date" onchange="verify_changed(this)">
-
+    <input type="date" class="form-control details" name= "verification_date" onchange="verify_changed(this)" required>
+</div>
+</section>
     <br>
     <hr>
 
-   <a href= "/save/verifying?story_id={{story_id}}" ><button class="btn btn-light" onclick="verify_story('story_id')">Submit Verification Info</button></a>
+   <a href= "/save/verifying?story_id={{story_id}}" ><button class="btn btn-light"  onclick="verify_story('story_id')">Submit Verification Info</button></a>
  
 </form>
 
