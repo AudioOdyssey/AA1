@@ -204,7 +204,7 @@ class StoryLocation:
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT count(*) FROM locations WHERE story_id = %s"), (story_id))
+                ("SELECT MAX(loc_id)+1 FROM locations WHERE story_id = %s"), (story_id))
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()

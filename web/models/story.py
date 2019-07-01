@@ -222,7 +222,7 @@ class Story:
         return json.dumps(result)
 
     @classmethod
-    def display_for_store(cls):
+    def display_for_store(cls, story_id):
         result = []
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
