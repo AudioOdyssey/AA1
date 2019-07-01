@@ -404,6 +404,17 @@ def location_show():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
+@app.route("/story/location/indiv")
+# @login_required
+def location_indiv():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    location_id = request.args["location_id"]
+    location = StoryLocation.get(story_id, location_id)
+    locations = StoryLocation.loc_list(story_id)
+    events = StoryEvent.event_list(story_id)
+    return render_template("story/location/indiv.html", location=location,locations=locations, events=events, story_id=story_id, location_id=location_id)
 
 @app.route('/story/location/update', methods=['POST'])
 # @login_required
@@ -435,6 +446,7 @@ def location_update():
                post_event_description, event_id, auto_goto, next_location_id)
     return '{"status":"ok"}'
 
+  
 
 @app.route('/story/location/new', methods=['POST'])
 # @login_required

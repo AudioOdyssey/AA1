@@ -16,7 +16,7 @@
 
 <form id="loc-template" onclick="set_focus(this)" method="POST" action="/story/location/update">
     <input name="story_id" value="{{story_id}}" readonly class="hidden-in">
-    <input name="loc_id" readonly class="hidden-in">
+    <input name="loc_id" value="{{location_id}}" readonly class="hidden-in">
 
     <button type="button" onclick="delete_btn_pressed(this)" class="trash  btn btn-light"><i
             class="fa fa-trash-alt fa-xs"></i></button>

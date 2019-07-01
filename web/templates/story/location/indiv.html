@@ -1,0 +1,89 @@
+{% extends "template.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/show.css') }}" type="text/css" />
+<script src="{{ url_for('static', filename='js/story/location/show.js') }}"></script>
+<form class="location-main-row" onclick="set_focus(this)" method="POST" action="/story/location/update">
+    <input name="story_id" value="{{ story_id }}" readonly class="hidden-in">
+    <input name="loc_id" value="{{ location_id }}" readonly class="hidden-in">
+
+
+
+    <section class="location-row row">
+        <section class="row flex-1">
+            <div class="col-sm-4">
+                <label><b>Name:</b></label>
+                <input class="form-control" type="text" name="location_name" onchange="location_changed(this)"
+                    value="{{ location.location_name }}">
+            </div>
+        </section>
+
+        <section class="flex-0" onclick="location_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+
+    </section>
+
+    <section class="row details" style="display: none">
+        <hr>
+        <label> Original Description</label>
+        <textarea class="form-control" rows="3" name="location_origin_description"
+            onchange="location_changed(this)">{{ location.original_description }}</textarea>
+        <hr>
+        <label>Short Description</label>
+        <textarea class="form-control" rows="3" name="location_short_description"
+            onchange="location_changed(this)">{{ location.short_description }}</textarea>
+        <hr>
+
+
+        <label>Select Event Name (changes description): or <a href="/story/event/show?story_id={{ story_id }}">Add New
+                Event</a></label>
+
+        <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
+            <option value="0">None</option>
+            {%for event in events%}
+            <option {%if location.location_event_id == event.event_id%}selected{%endif%} value="{{event.event_id}}">
+                {{event.event_name}}</option>
+            {%endfor%}
+        </select>
+
+        <label>Post Event Description</label>
+        <textarea class="form-control" rows="3" name="location_post_event_description"
+            onchange="location_changed(this)">{{ location.post_event_description }}</textarea>
+        <hr>
+
+        <div>
+            <label>Auto Go To</label>
+            {% if location.auto_goto %}
+            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)"
+                onchange="location_changed(this)" checked>
+            {% else %}
+            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)"
+                onchange="location_changed(this)">
+            {% endif %}
+            <br>
+
+            <div class="checkbox_hide" {%if not location.auto_goto%}style="display: none;" {%endif%}>
+                <label>Next Location Name</label>
+
+                <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
+                    onchange="location_changed(this)">
+                    <option value="0">None</option>
+                    {%for loc in locations%}
+                    <option {%if location.next_loc_id == loc.location_id%}selected{%endif%} value="{{loc.location_id}}">
+                        {{loc.location_name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+        </div>
+        <hr>
+        <br>
+        <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}">Edit
+            Decisions</a>
+    </section>
+</form>
+
+<br>
+
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
+{% endblock %}
