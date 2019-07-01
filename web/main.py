@@ -609,7 +609,9 @@ def load_user(user_id):
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
-
+@app.route("/verification/help")
+def vhelp():
+    return render_template("verification/help.html")
 
 @app.route("/story/treeview_help")
 def treeview_help():
@@ -667,9 +669,6 @@ def verifying():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
-
-
-
 
 if __name__ == '__main__':
     app.run()

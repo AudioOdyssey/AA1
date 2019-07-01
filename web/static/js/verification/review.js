@@ -18,6 +18,7 @@ function verify_changed(elem) {
     xhttp.open("POST", "/verification/review/update", true);
     // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send(new FormData(elem.form));
+}
 
 function set_focus(elem) {
         try {
@@ -26,11 +27,8 @@ function set_focus(elem) {
     
         }
         elem.id = "active";
-    }
+}
 function verify_story(story_id) {
 
 }
 
-function report_story(story_id) {
-
-}

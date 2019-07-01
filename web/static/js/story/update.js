@@ -25,3 +25,7 @@ function story_delete(story_id) {
     xhttp.open("POST", "/story/destroy", true);
     xhttp.send("story_id=" + story_id);
 }
+function publish_story(story_id) //TODO ??
+{
+
+}

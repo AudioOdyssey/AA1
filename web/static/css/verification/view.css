@@ -11,3 +11,8 @@
     text-align: center;
     font-family: "Helvetica"sans-serif
 }
+#createstory {
+	width: 50%;
+	align-self: center;
+	margin-left: 25%;
+}
