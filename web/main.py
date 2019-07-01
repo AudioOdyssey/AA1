@@ -586,9 +586,12 @@ def verification_review():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     #TODO talk to brian about the best way to get decisions in. New web page to view decisions?
-  #decisions = StoryDecision.dec_list(
-   #     request.args['story_id'], request.args['location_id'])
-    return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events)
+    decisions = []
+   #i = 0
+    #for loc in locations:
+     #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
+      #  i+=1
+    return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 @app.route("/verification/review/update", methods=['POST'])
 # @login_required
@@ -597,7 +600,7 @@ def review_update():
     details = request.form
     # sonny finish this
 
-    return "ok"
+    return '{"status":"ok"}'
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -607,7 +610,7 @@ def load_user(user_id):
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
-    
+
 @app.route("/verification/help")
 def vhelp():
     return render_template("verification/help.html")
@@ -662,6 +665,12 @@ def savingstory():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/savingstory.html", story=story)
+
+@app.route("/save/publishing")
+def publishing():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("/save/publishing.html", story=story)
 
 @app.route("/save/verifying")
 def verifying():
