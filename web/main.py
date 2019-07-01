@@ -590,6 +590,14 @@ def verification_review():
    #     request.args['story_id'], request.args['location_id'])
     return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events)
 
+@app.route("/verification/review/update", methods=['POST'])
+# @login_required
+def review_update():
+
+    details = request.form
+    # sonny finish this
+
+    return "ok"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -599,7 +607,10 @@ def load_user(user_id):
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
-
+    
+@app.route("/verification/help")
+def vhelp():
+    return render_template("verification/help.html")
 
 @app.route("/story/treeview_help")
 def treeview_help():

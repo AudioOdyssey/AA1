@@ -34,7 +34,7 @@
                 <label for="starting_loc"><b>Select Starting Location: or <a
                             href="/story/location/show?story_id={{ story_id }}"> Add New
                             Location</a></b></label>
-                <select id="starting_loc" class="form-control" type="text" onchange="object_changed(this)"
+                <select id="starting_loc" autocomplete = "off" type = "text" class="form-control"  onchange="object_changed(this)"
                     name="obj_starting_loc">
                     <option value="0">None</option>
                     {% for location in locations %}
@@ -65,7 +65,7 @@
             <div class="checkbox_hide" style="display: none;">
                 <label>Select Unhide Event Name: or <a href="/story/event/show?story_id={{ story_id }}"> Add New
                         Event</a></label>
-                <select onchange="object_changed(this)" name="unhide_event_ID">
+                <select onchange="object_changed(this)" autocomplete= "off" name="unhide_event_ID">
                     <option value="0">None</option>
                     {% for event in events %}
                     <option value="{{event.event_id}}">{{event.event_name}}</option>
@@ -96,8 +96,7 @@
             <div class="col-sm-8">
                 <label><b>Select Starting Location: or <a href="/story/location/show?story_id={{ story_id }}"> Add New
                             Location</a></b></label>
-                <select class="form-control" type="text" name="obj_starting_loc" onchange="object_changed(this)"
-                    value="{{ object.obj_location}}">
+                <select class="form-control" autocomplete= "off" name="obj_starting_loc" value="{{object.obj_starting_loc}}"onchange="object_changed(this)">
                     <option value="0">None</option>
                     {% for location in locations %}
                     <option value="{{location.location_id}}">{{location.location_name}}</option>
@@ -132,7 +131,7 @@
             <div class="checkbox_hide" {%if not object.is_hidden%}style="display: none;" {%endif%}>
                 <label>Select Unhide Event Name: or <a href="/story/event/show?story_id={{ story_id }}"> Add New
                         Event</a></label>
-                <select class="form-control" type="text" name="obj_unhide_event" onchange="object_changed(this)"
+                <select class="form-control" type="text" autocomplete= "off" name="obj_unhide_event" onchange="object_changed(this)"
                     value="{{ object.unhide_event_id}}">
                     <option value="0">None</option>
                     {% for event in events %}
