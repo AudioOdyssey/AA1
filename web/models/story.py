@@ -30,12 +30,12 @@ class Story:
     event_verification_status = ''
     genre = ''
     user_creator_id = 0
-
+    reviewer_comments = ''
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', name_of_verifier='', verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, obj_verification_status='', event_verification_status='', user_creator_id=0):
-        if int(story_id) > 0:
+                 story_ratings=0, story_language_id=1, storage_size=0, obj_verification_status='', event_verification_status='', user_creator_id=0, reviewer_comments = ''):
+        if int(story_id) == 0:
             self.story_id = story_id
         self.story_title = story_title
         self.story_author = story_author
@@ -55,6 +55,7 @@ class Story:
         self.obj_verification_status = obj_verification_status
         self.event_verification_status = event_verification_status
         self.user_creator_id = user_creator_id
+        self.reviewer_comments = reviewer_comments
 
     def add_to_server(self):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -62,7 +63,7 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT count(*) FROM master_stories WHERE `user_creator_id` = %s"), (self.user_creator_id))
@@ -116,13 +117,13 @@ class Story:
             conn.commit()
         conn.close()
 
-    def update_admin(self, story_ratings, story_verification_date, obj_verification_status, event_verification_status, storage_size):
+    def update_admin(self, story_ratings, story_verification_date, obj_verification_status, event_verification_status, storage_size, reviewer_comments):
         self.story_ratings = story_ratings
         self.story_verification_date = story_verification_date
         self.obj_verification_status = obj_verification_status
         self.event_verification_status = event_verification_status
         self.storage_size = storage_size
-
+        self.reviewer_comments = reviewer_comments
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -131,8 +132,8 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s WHERE story_id = %s"),
-                        (self.story_ratings, self.story_verification_date, self.obj_verification_status, self.event_verification_status, self.storage_size, self.story_id))
+            cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s WHERE story_id = %s"),
+                        (self.story_ratings, self.story_verification_date, self.obj_verification_status, self.event_verification_status, self.storage_size, self.reviewer_comments, self.story_id))
             conn.commit()
         conn.close()
 

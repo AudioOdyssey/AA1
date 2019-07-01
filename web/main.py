@@ -326,8 +326,8 @@ def object_new():
     details = request.form
     story_id = details['story_id']
     obj = StoryObject(story_id)
-    obj_id = obj.add_to_server()
-    return '{"status":"ok","response":{"obj_id":' + str(obj_id) + '}}'
+    obj.add_to_server()
+    return '{"status":"ok","response":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
 @app.route("/story/object/destroy", methods=['POST'])
@@ -481,7 +481,7 @@ def decision_update():
     location_id = details["location_id"]
     decision_id = details['decision_id']
     if decision_id == '':
-        decision_id = StoryDecision.get_last_id(story_id)
+        decision_id = StoryDecision.get_last_id(story_id, location_id)
     decision_name = details['decision_name']
     sequence = details['sequence_number']
     if sequence == '':
@@ -591,6 +591,8 @@ def verification_review():
     #for loc in locations:
      #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
       #  i+=1
+    stry = Story.get(story_id)
+    #stry.update()
     return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 @app.route("/verification/review/update", methods=['POST'])
@@ -650,7 +652,7 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 @app.errorhandler(500)
-def page_not_found(e):
+def page_not_found_500(e):
     # note that we set the 404 status explicitly
     return render_template('500.html'), 500
 
