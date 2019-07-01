@@ -156,7 +156,7 @@ class StoryObject:
         last_id = 0
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM `objects` WHERE story_id = %s"), (story_id))
+            cur.execute(("SELECT MAX(obj_id)+1 FROM `objects` WHERE story_id = %s"), (story_id))
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()
