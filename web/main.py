@@ -660,8 +660,5 @@ def verifying():
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
 
-
-
-
 if __name__ == '__main__':
     app.run()

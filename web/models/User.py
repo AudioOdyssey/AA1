@@ -28,7 +28,6 @@ class User(UserMixin):
     last_name = ""
     date_of_birth = date.min
     language_id = 0
-
     is_authenticated = False
     is_active = True
     is_anonymous = True
@@ -134,5 +133,8 @@ class User(UserMixin):
         return result
 
     def authenticate(self, password_input):
-        self.is_authenticated = self.encrypt_password(password_input, self.password_salt)
+        if self.password == self.encrypt_password(password_input, self.password_salt):
+            self.is_authenticated = True
+        else:
+            self.is_authenticated = False
         return self.is_authenticated
