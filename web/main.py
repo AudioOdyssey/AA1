@@ -609,6 +609,7 @@ def load_user(user_id):
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
+    
 @app.route("/verification/help")
 def vhelp():
     return render_template("verification/help.html")
