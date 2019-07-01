@@ -164,12 +164,35 @@ class StoryDecision:
             if query_data is None:
                 return None
             for row in query_data:
-                desc_dict = {str(row[3]) : {'sequence_num'  :row[2], 'decision_name'  :row[4], 'transition'  :row[5], 
-                'transition_loc_id'  : row[6], 'hidden'  :row[7], 'locked'  :row[8], 
-                'decision_description'  : row[9], 'show_event_id'  :row[10], 'show_object_id'  : row[11], 
-                'unlock_event_id'  : row[12], 'unlock_object_id'  :row[13], 'locked_descr'  :row[14], 'aftermath_descr'  :row[15], 
-                'cause_event' : row[16], 'effect_event_id'  :row[17], 'can_occur_once'  :row[18], 'is_locked_by_event_id'  :row[19], 
-                'locked_by_event_description'  :row[20]}}
+                is_hidden_bool = False
+                if row[7] == 1:
+                    is_hidden_bool = True
+                else:
+                    is_hidden_bool = False
+                is_locked_bool = False
+                if row[8] == 1:
+                    is_locked_bool = True
+                else:
+                    is_locked_bool = False
+                cause_event_bool = False
+                if row[16] == 0:
+                    cause_event_bool = False
+                else:
+                    cause_event_bool = True
+                can_occur_once_bool = False
+                if row[18] == 0:
+                    can_occur_once_bool = False
+                else:
+                    can_occur_once_bool = True
+                transition_bool = True
+                if row[5] == 0:
+                    transition_bool = False
+                desc_dict = {'dec_id' : row[3], 'sequence_num' : row[2], 'decision_name' : row[4], 'transition' : transition_bool, 
+                'transition_loc_id'  : row[6], 'hidden' : is_hidden_bool, 'locked' : is_locked_bool, 
+                'decision_description' : row[9], 'show_event_id' : row[10], 'show_object_id' : row[11], 
+                'unlock_event_id'  : row[12], 'unlock_object_id'  :row[13], 'locked_descr' :row[14], 'aftermath_descr'  :row[15], 
+                'cause_event' : cause_event_bool, 'effect_event_id'  :row[17], 'can_occur_once'  : can_occur_once_bool, 'is_locked_by_event_id'  :row[19], 
+                'locked_by_event_description'  :row[20]}
                 result.append(desc_dict)
         return result
 

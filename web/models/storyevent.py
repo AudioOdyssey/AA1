@@ -121,8 +121,13 @@ class StoryEvent:
             if query_data is None:
                 return None
             for row in query_data:
-                event_dict = {str(row[1]) : {"event_name" : row[2], "event_description" : row[3], "event_location_id" : row[4], 
-                "event_is_global" : row[5]}}
+                event_is_global_bool = False
+                if row[5] == 0:
+                    event_is_global_bool = False
+                else:
+                    event_is_global_bool = True
+                event_dict = {"event_id" : row[1], "event_name" : row[2], "event_description" : row[3], "event_location_id" : row[4], 
+                "event_is_global" : event_is_global_bool}
                 result.append(event_dict)
         return result
 

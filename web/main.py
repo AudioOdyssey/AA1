@@ -272,11 +272,9 @@ def object_show():
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
-@app.route("/app/story/info", methods=['GET'])
+@app.route("/app/story/info", methods=['GET', 'POST'])
 def app_story_logistics():
-    details = request.get_json(force=True)
-    in_story_id = details.get("story_id")
-    return Story.get_entities(in_story_id)
+    return Story.get_entities(int(request.args.get("story_id")))
 
 
 @app.route("/store/story/info", methods=['GET'])
