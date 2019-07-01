@@ -272,9 +272,11 @@ def object_show():
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
-@app.route("/app/story/info", methods=['GET', 'POST'])
+@app.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
-    return Story.get_entities(int(request.args.get("story_id")))
+    details = request.get_json(force=True)
+    in_story_id = details.get("story_id")
+    return Story.get_entities(in_story_id)
 
 
 @app.route("/store/story/info", methods=['GET'])
@@ -598,7 +600,7 @@ def verification_review():
 def review_update():
 
     details = request.form
-    # sonny finish this
+    # TODO sonny finish this
 
     return '{"status":"ok"}'
 
