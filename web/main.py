@@ -31,16 +31,13 @@ login_manager.init_app(app)
 #login_manager.login_message = "Please login"
 
 session = {}
-
+session['user_id'] = 1
 REGION = 'us-east-2b'
 
 rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
 name = "AA_admin"
 rds_password = "z9QC3pvQ"
 db_name = "audio_adventures_dev"
-
-# story_id = 1          # BEGONE THOT!!!!!
-#location_id = 1
 
 random.seed()
 
@@ -219,7 +216,7 @@ def logout():
 def story_show():
    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    stories = Story.story_list(0)  # TODO: Real UID
+    stories = Story.story_list(session['user_id'])  # TODO: Real UID
     return render_template("story/show.html", stories=stories)
 
 
@@ -253,8 +250,7 @@ def story_update_post():
 
 @app.route("/story/new", methods=["POST"])
 def story_new():
-    details = request.form
-    story = Story()
+    story = Story(session['user_id'])
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
@@ -276,6 +272,9 @@ def object_show():
 def app_story_logistics():
     return Story.get_entities(int(request.args.get('story_id')))
 
+@app.route("/app/store", methods = ["GET"])
+def app_store_info():
+    return Story.display_for_store()
 
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
