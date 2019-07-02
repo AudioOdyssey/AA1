@@ -414,6 +414,28 @@ def location_indiv():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location,locations=locations, events=events, story_id=story_id, location_id=location_id)
 
+@app.route("/story/object/indiv")
+# @login_required
+def object_indiv():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    object_id = request.args["object_id"]
+    obj = StoryObject.get(story_id, object_id)
+    locations = StoryLocation.loc_list(story_id)
+    return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id)
+
+@app.route("/story/event/indiv")
+# @login_required
+def event_indiv():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    event_id = request.args["story_id"]
+    event_id = request.args["event_id"]
+    event = StoryObject.get(story_id, event_id)
+    locations = StoryLocation.loc_list(story_id)
+    return render_template("story/object/indiv.html", event=event, locations=locations, story_id=story_id, event_id=event_id)
+
 @app.route('/story/location/update', methods=['POST'])
 # @login_required
 def location_update():
