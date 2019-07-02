@@ -4,18 +4,19 @@ import sys
 
 import simplejson as json
 
-from models.storyobject import StoryObject
-from models.storyevent import StoryEvent
-from models.storylocation import StoryLocation
-from models.storydecision import StoryDecision
+from .storyobject import StoryObject
+from .storyevent import StoryEvent
+from .storylocation import StoryLocation
+from .storydecision import StoryDecision
 
+from decimal import Decimal 
 
 class Story:
     story_id = 0
     story_title = ''
     story_author = ''
     story_synopsis = ''
-    story_price = 0
+    story_price = Decimal(0)
     author_paid = False
     length_of_story = 0
     number_of_locations = 0
@@ -40,7 +41,7 @@ class Story:
         self.story_title = story_title
         self.story_author = story_author
         self.story_synopsis = story_synopsis
-        self.story_price = story_price
+        self.story_price = Decimal(story_price)
         self.author_paid = author_paid
         self.genre = genre
         self.length_of_story = length_of_story
@@ -65,8 +66,8 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                 db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(("INSERT INTO master_stories(story_title, story_author, story_synposis, story_price)"), 
-            (self.story_title, self.story_author, self.story_synopsis, self.story_price))
+            cur.execute(("INSERT INTO master_stories(story_title, story_author, story_price, user_creator_id) VALUES(%s, %s, %s, %s)"), 
+            (self.story_title, self.story_author, self.story_price, self.user_creator_id))
             conn.commit()
             cur.execute(("SELECT MAX(story_id)+1 FROM master_stories"))
             query_data = cur.fetchone()
