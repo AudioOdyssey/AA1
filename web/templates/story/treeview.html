@@ -25,7 +25,7 @@
     <br>
    <section class="row">
         {% for dec in decisions %}
-          <a class="col-sm-4 small-card" href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">{{dec.decision_name}}</a>
+          <a class="col-sm-4 small-card" href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">{{dec.decision_name}} leads to {{StoryLocation.get(story.story_id, dec.transition_loc_id).location_name}}</a>
         {% endfor %}
     </section>
 

@@ -679,6 +679,8 @@ def treeview():
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
+  #  environment = jinja2.Environment(whatever)
+  #  environment.filters['timesince'] = timesince
     return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
 
 @app.errorhandler(404)
