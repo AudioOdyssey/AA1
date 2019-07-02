@@ -310,8 +310,12 @@ def object_update():
         is_hidden = 1
     else:
         is_hidden = 0
+    unhide_event_id = details.get('unhide_event_id')
+    if unhide_event_id is None:
+        is_hidden = 0
     #unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
+    obj.unhide_event_id = unhide_event_id
     obj.update(story_id, object_id, name=name, starting_loc=starting_loc,
                desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
     # return redirect(url_for("object_show"))
@@ -386,6 +390,7 @@ def event_new():
     events = StoryEvent.event_list(story_id)
     return render_template("story/event/show.html", events=events, story_id=story_id)
 
+
 @app.route("/story/event/destroy", methods=['POST'])
 def event_destroy():
     StoryEvent.event_del(request.form['event_id'])
@@ -402,6 +407,7 @@ def location_show():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
+
 @app.route("/story/location/indiv")
 # @login_required
 def location_indiv():
@@ -412,7 +418,8 @@ def location_indiv():
     location = StoryLocation.get(story_id, location_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("story/location/indiv.html", location=location,locations=locations, events=events, story_id=story_id, location_id=location_id)
+    return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
+
 
 @app.route("/story/object/indiv")
 # @login_required
@@ -426,6 +433,7 @@ def object_indiv():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
 
+
 @app.route("/story/event/indiv")
 # @login_required
 def event_indiv():
@@ -436,6 +444,7 @@ def event_indiv():
     event = StoryEvent.get(story_id, event_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", event=event, locations=locations, story_id=story_id, event_id=event_id)
+
 
 @app.route('/story/location/update', methods=['POST'])
 # @login_required
@@ -467,7 +476,6 @@ def location_update():
                post_event_description, event_id, auto_goto, next_location_id)
     return '{"status":"ok"}'
 
-  
 
 @app.route('/story/location/new', methods=['POST'])
 # @login_required
@@ -592,10 +600,12 @@ def decision_new():
     dec.add_to_server()
     return redirect(url_for("decision_show"))
 
+
 @app.route("/story/location/decision/destroy", methods=['POST'])
 def decision_destroy():
     StoryDecision.dec_del(request.form['decision_id'])
     return '{"status":"ok"}'
+
 
 @app.route("/about")
 def about():
@@ -609,7 +619,7 @@ def contact():
 
 @app.route("/verification/view")
 def verification_view():
-    #TODO same as story show
+    # TODO same as story show
     stories = Story.story_list(0)
     return render_template("verification/view.html", stories=stories)
 
@@ -620,15 +630,16 @@ def verification_review():
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
-    #TODO talk to brian about the best way to get decisions in. New web page to view decisions?
+    # TODO talk to brian about the best way to get decisions in. New web page to view decisions?
     decisions = []
    #i = 0
-    #for loc in locations:
-     #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
-      #  i+=1
+    # for loc in locations:
+    #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
+    #  i+=1
     stry = Story.get(story_id)
-    #stry.update()
-    return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+    # stry.update()
+    return render_template("verification/review.html", story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+
 
 @app.route("/verification/review/update", methods=['POST'])
 # @login_required
@@ -639,6 +650,7 @@ def review_update():
 
     return '{"status":"ok"}'
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
@@ -648,9 +660,11 @@ def load_user(user_id):
 def help():
     return render_template("story/help.html")
 
+
 @app.route("/verification/help")
 def vhelp():
     return render_template("verification/help.html")
+
 
 @app.route("/story/treeview_help")
 def treeview_help():
@@ -683,15 +697,18 @@ def treeview():
   #  environment.filters['timesince'] = timesince
     return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
+
 @app.errorhandler(500)
 def page_not_found_500(e):
     # note that we set the 404 status explicitly
     return render_template('500.html'), 500
+
 
 @app.route("/save/saving")
 def saving():
@@ -699,11 +716,13 @@ def saving():
     story = Story.get(story_id)
     return render_template("save/saving.html", story=story)
 
+
 @app.route("/save/savingstory")
 def savingstory():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/savingstory.html", story=story)
+
 
 @app.route("/save/publishing")
 def publishing():
@@ -711,11 +730,13 @@ def publishing():
     story = Story.get(story_id)
     return render_template("/save/publishing.html", story=story)
 
+
 @app.route("/save/verifying")
 def verifying():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
+
 
 if __name__ == '__main__':
     app.run()

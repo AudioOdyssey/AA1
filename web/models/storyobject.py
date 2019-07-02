@@ -73,8 +73,8 @@ class StoryObject:
         self.is_hidden = is_hidden
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `objects` SET obj_name = %s, obj_starting_loc = %s, obj_description = %s, can_pickup_obj=%s, is_hidden = %s WHERE story_id = %s AND obj_id= %s"),
-                        (self.obj_name, self.obj_starting_loc, self.obj_description, self.can_pickup_obj, self.is_hidden, story_id, object_id))
+            cur.execute(("UPDATE `objects` SET obj_name = %s, obj_starting_loc = %s, obj_description = %s, can_pickup_obj=%s, is_hidden = %s, unhide_event_id = %s WHERE story_id = %s AND obj_id= %s"),
+                        (self.obj_name, self.obj_starting_loc, self.obj_description, self.can_pickup_obj, self.is_hidden, self.unhide_event_id, story_id, object_id))
             conn.commit()
         conn.close()
         
