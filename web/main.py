@@ -422,8 +422,9 @@ def object_indiv():
     story_id = request.args["story_id"]
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
+    events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
-    return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id)
+    return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
 
 @app.route("/story/event/indiv")
 # @login_required
