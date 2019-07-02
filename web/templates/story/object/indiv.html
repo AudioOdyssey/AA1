@@ -16,7 +16,7 @@
             </div>
             <div class="col-sm-8">
                 <label><b>Select Starting Location: or <a href="/story/location/show?story_id={{ story_id }}"> Add New
-                            Location</a></b></label>s
+                            Location</a></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc" value="{{obj.obj_starting_loc}}"
                     onchange="object_changed(this)">
                     <option value="0">None</option>
@@ -26,12 +26,11 @@
                 </select>
             </div>
         </section>
-    </section>
+    </section> <hr>
     <section class="row details">
-        <hr>
-
-        <label>Description</label>
-        <textarea class="form-control" rows="3" name="obj_description"
+      
+        <label for="desc" style="text-align: left">Description</label>
+        <textarea id="desc" class="form-control" rows="3" name="obj_description"
             onchange="object_changed(this)">{{ obj.obj_description }}</textarea>
         <br>
 
