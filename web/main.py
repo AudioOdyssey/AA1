@@ -239,7 +239,7 @@ def story_update_post():
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
-    genre = details['genre']
+    genre = details.get('genre')
     length_of_story = details['length_of_story']
     story = Story.get(story_id)
     story.story_id = story_id
@@ -250,7 +250,8 @@ def story_update_post():
 
 @app.route("/story/new", methods=["POST"])
 def story_new():
-    story = Story(session['user_id'])
+    story = Story(user_creator_id = session['user_id'])
+    story.story_synopsis = ""
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
