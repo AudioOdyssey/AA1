@@ -26,11 +26,11 @@
                 </select>
             </div>
         </section>
-   
+
     </section>
- <hr>
+    <hr>
     <section class="row details">
-       
+
         <label>Description</label>
         <textarea class="form-control" rows="3" name="ev_description"
             onchange="event_changed(this)">{{ event.event_description }}</textarea>
@@ -50,8 +50,9 @@
 <br>
 
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a  href="/story/treeview?story_id={{story_id}}"><button id="bottom" class="btn btn-light">Back to TreeView</button></a> 
+<a href="/story/treeview?story_id={{story_id}}"><button id="bottom" class="btn btn-light">Back to TreeView</button></a>
 <a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
-<a href="/verification/event?story_id={{story_id}}&event_id={{event_id}}"><button id="bottom" class="btn btn-light">View Verification Info</button></a>
+<a href="/verification/event?story_id={{story_id}}&event_id={{event_id}}"><button id="bottom" class="btn btn-light">View
+        Verification Info</button></a>
 
 {% endblock %}
