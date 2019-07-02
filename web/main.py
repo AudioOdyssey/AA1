@@ -228,7 +228,7 @@ def story_show():
 def story_update():
   #  if "logged in" not in session:
    #     return redirect(url_for("session_new"))
-    story = Story.get(request.args['story_id'])
+    story = Story.get(int(request.args['story_id']))
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
