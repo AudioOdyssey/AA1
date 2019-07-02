@@ -508,8 +508,8 @@ def decision_show():
         request.args['story_id'], request.args['location_id'])
     objects = StoryObject.obj_list(
         request.args['story_id'])
-    print(objects)
-    print(objects[0].obj_name)
+  #  print(objects)
+   # print(objects[0].obj_name)
     events = StoryEvent.event_list(
         request.args['story_id'])
     return render_template("story/location/decision/show.html", decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
@@ -696,6 +696,21 @@ def treeview():
   #  environment = jinja2.Environment(whatever)
   #  environment.filters['timesince'] = timesince
     return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+
+@app.route("/verification/treeview")
+def verify_treeview():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    loc_id = request.args.get('location_id')
+    decisions = []
+    if loc_id is not None:
+        decisions = StoryDecision.dec_list(story_id, loc_id)
+    location = StoryLocation.get(story_id, loc_id)
+  #  environment = jinja2.Environment(whatever)
+  #  environment.filters['timesince'] = timesince
+    return render_template("verification/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+
 
 
 @app.errorhandler(404)
