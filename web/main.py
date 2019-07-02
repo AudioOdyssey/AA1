@@ -327,8 +327,7 @@ def object_update():
 def object_new():
  #   if "logged in" not in session:
   #      return redirect(url_for("session_new"))
-    details = request.form
-    story_id = details['story_id']
+    story_id = request.args["story_id"]
     obj = StoryObject(story_id)
     obj.add_to_server()
     return '{"status":"ok","response":{"obj_id":' + str(obj.obj_id) + '}}'
