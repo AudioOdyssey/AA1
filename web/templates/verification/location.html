@@ -1,0 +1,20 @@
+{%extends "template.html" %}
+{% block content%}
+<h3>Verification Status for Location {{ location.location_name }}</h3>
+<h6></h6> <!--verification status-->
+<h3>Comments:</h3>
+<p></p> <!--verifier comments-->
+<br>
+<h3>Decisions:</h3>
+<br><hr>
+{% for dec in decisions%}
+<h4>Verification Status for Decision {{ dec.decision_name }}</h4>
+<h6></h6> <!--verification status-->
+<h4>Comments:</h4>
+<p></p> <!--verifier comments-->
+<hr>
+{%endfor%}
+<a href = "/story/update?story_id={{story_id}}"><button class= "btn btn-primary" >Return to Story Form</button></a>
+<a href = "/story/location/indiv?story_id={{story_id}}&location_id={{location_id}}"><button class= "btn btn-primary" >Edit Location</button></a>
+<a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location_id}}"><button class= "btn btn-primary" >Edit Decisions</button></a>
+{% endblock %}
