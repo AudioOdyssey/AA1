@@ -430,11 +430,11 @@ def object_indiv():
 def event_indiv():
     # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
-    event_id = request.args["story_id"]
+    story_id = request.args["story_id"]
     event_id = request.args["event_id"]
-    event = StoryObject.get(story_id, event_id)
+    event = StoryEvent.get(story_id, event_id)
     locations = StoryLocation.loc_list(story_id)
-    return render_template("story/object/indiv.html", event=event, locations=locations, story_id=story_id, event_id=event_id)
+    return render_template("story/event/indiv.html", event=event, locations=locations, story_id=story_id, event_id=event_id)
 
 @app.route('/story/location/update', methods=['POST'])
 # @login_required
