@@ -51,7 +51,7 @@ class StoryEvent:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"])
+                return cls(story_id, event_id, results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"])
        
     def update(self, story_id, event_id, name, location_id, description, is_global):
         self.event_name = name
@@ -138,8 +138,8 @@ class StoryEvent:
         last_id = 0
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT MAX(event_id)+1 FROM `events` WHERE story_id = %s"), story_id)
+            cur.execute(("SELECT MAX(event_id)+1 FROM `events`"))
             query_data = cur.fetchall()
-            last_id = query_data[0]
+            last_id = query_data[0][0]
         conn.close()
         return last_id    

@@ -3,19 +3,25 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/verification/review.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/verification/review.js') }}"></script>
 <!--TODO put all this info into server somehow-->
+
 <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
 <h1 class="text" style = "text-align: center;">Story Verification</h1>
+<br>
+<a href="/verification/treeview?story_id={{story_id}}">Switch to treeview</a>
 <hr>
 <h2 class="text">Locations:</h2>
 <br>
 
 {% for location in locations %}
 <section class="location-row row">
-    <div>
+   
+            <label>Location Verified</label>
+            <input type = "checkbox" class= "details" name= "loc_verified" autocomplete= "off" onchange= "verify_changed(this)">
         <!--class="col-sm-4"-->
-        <h6><b>Name:</b></h6>
+        <br>
+       
         <p>{{location.location_name}}</p>
-    </div>
+   
     <section class="flex-0" onclick="show(this)">
         <i class="fas fa-chevron-down fa-lg down-arrow"></i>
     </section>
@@ -40,18 +46,18 @@
 </section>
 
 {% endfor %}
-<label>Locations Verified</label>
-<input type = "checkbox" class= "details" name= "loc_verified" autocomplete= "off" onchange= "verify_changed(this)">
+
 <hr>
 <h2 class="text">Decisions:</h2>
 <br>
 
 {%for decision in decisions%}
 <section class="decision-row row">
-    <div>
-        <h6><b>Name:</b></h6>
+        <label>Decision Verified</label>
+        <input type = "checkbox" class= "details"  name="dec_verified" onchange= "verify_changed(this)">
+   <br>
         <p>{{decision.decision_name}}</p>
-    </div>
+    
     <section class="flex-0" onclick="show(this)">
         <i class="fas fa-chevron-down fa-lg down-arrow"></i>
     </section>
@@ -70,17 +76,18 @@
 </section>
 
 {%endfor%}
-<label>Decisions Verified</label>
-<input type = "checkbox" class= "details"  name="dec_verified" onchange= "verify_changed(this)">
+
 <hr>
 <h2>Objects:</h2>
 <br>
 {%for object  in objects%}
 <section class="object-row row">
-    <div>
-        <h6><b>Name:</b></h6>
+        <label>Objects Verified</label>
+        <input type = "checkbox" class= "details"  name= "obj_verified" onchange= "verify_changed(this)">
+   <br>
+        
         <p>{{object.obj_name}}</p>
-    </div>
+  
     <section class="flex-0" onclick="show(this)">
         <i class="fas fa-chevron-down fa-lg down-arrow"></i>
     </section>
@@ -94,19 +101,19 @@
 </section>
 
 {%endfor%}
-<label>Objects Verified</label>
-<input type = "checkbox" class= "details"  name= "obj_verified" onchange= "verify_changed(this)">
+
 <hr><br>
 
 <h2>Events:</h2>
 <br>
 {%for event in events%}
 <section class="event-row row">
-
-    <div>
-        <h6><b>Name:</b></h6>
+        <label>Event Verified</label>
+        <input type = "checkbox" class= "details"  name= "ev_verified" onchange= "verify_changed(this)">
+    <br>
+  
         <p>{{event.event_name}}</p>
-    </div>
+  
 
     <section class="flex-0" onclick="show(this)">
         <i class="fas fa-chevron-down fa-lg down-arrow"></i>
@@ -120,8 +127,7 @@
     <p>{{event.event_description}}</p>
 </section>
 {%endfor%}
-<label>Events Verified</label>
-<input type = "checkbox" class= "details"  name= "ev_verified" onchange= "verify_changed(this)">
+
 <br>
 <hr><br>
 

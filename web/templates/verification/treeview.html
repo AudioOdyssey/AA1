@@ -1,5 +1,6 @@
 {%extends "template.html" %}
 {% block content%}
+<script src="{{ url_for('static', filename='js/verification/review.js') }}"></script>
 <script src="{{ url_for('static', filename='js/story/treeview.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/treeview.css') }}" type="text/css" />
 <body>
@@ -18,7 +19,12 @@
       <div class = "col-sm-4 small-card">
           <p>{{location.location_name}}</p>
           {% if location != None%}
-          <a href = "/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit</a>
+          <a href = "/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">View Details/Edit</a>
+          <br><label>Verify Location</label>
+          <input type = "checkbox" class= "details" name= "loc_verified" autocomplete= "off" onchange= "verify_changed(this)">
+          <br>
+          <label>Verfication Comments</label>
+          <input type ="text" class= "details" name= "loc_comments" autocomplete= "off" onchange= "verify_changed(this)">
           {% endif %}
         </div>
     </section>
@@ -26,10 +32,16 @@
    <section class="row">
         {% for dec in decisions %}
         <div class="col-sm-4 small-card">
-          <a  href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">{{dec.decision_name}} leads to</a>
-       <br><a href="/story/location/decision/show?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit
-          Decision</a> </div>
-          {% endfor %}
+                <a  href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">{{dec.decision_name}} leads to</a>
+             <br><a href="/story/location/decision/show?story_id={{story.story_id}}&location_id={{location.location_id}}">View Details/Edit</a>
+                <br> 
+          <label>Verify Decision</label>
+          <input type = "checkbox" class="details" name= "decision_verified" autocomplete= "off" onchange= "verify_changed(this)">
+          <br>
+          <label>Verfication Comments</label>
+          <input type = "text" class= "details" name= "decision_comments" autocomplete= "off" onchange= "verify_changed(this)">
+        </div>
+        {% endfor %}
     </section>
 
     <br><hr>

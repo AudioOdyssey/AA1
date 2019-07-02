@@ -278,10 +278,9 @@ def app_store_info():
 
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
-    in_story_id = 0
     details = request.json
-    in_story_id = details.get("story_id")
-    return Story.get_info(in_story_id)
+    story_id = details.get("story_id")
+    return Story.get_info(story_id)
 
 
 @app.route("/story/object/update", methods=['POST'])
@@ -309,8 +308,12 @@ def object_update():
         is_hidden = 1
     else:
         is_hidden = 0
+    unhide_event_id = details.get('unhide_event_id')
+    if unhide_event_id is None:
+        is_hidden = 0
     #unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
+    obj.unhide_event_id = unhide_event_id
     obj.update(story_id, object_id, name=name, starting_loc=starting_loc,
                desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
     # return redirect(url_for("object_show"))
@@ -322,11 +325,10 @@ def object_update():
 def object_new():
  #   if "logged in" not in session:
   #      return redirect(url_for("session_new"))
-    details = request.form
-    story_id = details['story_id']
+    story_id = request.args["story_id"]
     obj = StoryObject(story_id)
     obj.add_to_server()
-    return '{"status":"ok","response":{"obj_id":' + str(obj.obj_id) + '}}'
+    return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
 @app.route("/story/object/destroy", methods=['POST'])
@@ -378,12 +380,12 @@ def event_update():
 def event_new():
     # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
-    details = request.form
+    details = request.args
     story_id = details['story_id']
     evnt = StoryEvent(story_id)
     evnt.add_to_server()
-    events = StoryEvent.event_list(story_id)
-    return render_template("story/event/show.html", events=events, story_id=story_id)
+    return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
+
 
 @app.route("/story/event/destroy", methods=['POST'])
 def event_destroy():
@@ -401,6 +403,7 @@ def location_show():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
+
 @app.route("/story/location/indiv")
 # @login_required
 def location_indiv():
@@ -411,7 +414,8 @@ def location_indiv():
     location = StoryLocation.get(story_id, location_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("story/location/indiv.html", location=location,locations=locations, events=events, story_id=story_id, location_id=location_id)
+    return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
+
 
 @app.route("/story/object/indiv")
 # @login_required
@@ -421,8 +425,10 @@ def object_indiv():
     story_id = request.args["story_id"]
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
+    events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
-    return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id)
+    return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
+
 
 @app.route("/story/event/indiv")
 # @login_required
@@ -434,6 +440,7 @@ def event_indiv():
     event = StoryEvent.get(story_id, event_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", event=event, locations=locations, story_id=story_id, event_id=event_id)
+
 
 @app.route('/story/location/update', methods=['POST'])
 # @login_required
@@ -465,18 +472,16 @@ def location_update():
                post_event_description, event_id, auto_goto, next_location_id)
     return '{"status":"ok"}'
 
-  
 
 @app.route('/story/location/new', methods=['POST'])
 # @login_required
 def location_new():
-   # if "logged in" not in session:
+    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    details = request.form
-    in_story_id = details['story_id']
-    loc = StoryLocation(in_story_id)
+    story_id = request.args['story_id']
+    loc = StoryLocation(story_id)
     loc.add_to_server()
-    return redirect(url_for("location_show"))
+    return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
 
 @app.route("/story/location/destroy", methods=['POST'])
@@ -498,8 +503,8 @@ def decision_show():
         request.args['story_id'], request.args['location_id'])
     objects = StoryObject.obj_list(
         request.args['story_id'])
-    print(objects)
-    print(objects[0].obj_name)
+  #  print(objects)
+   # print(objects[0].obj_name)
     events = StoryEvent.event_list(
         request.args['story_id'])
     return render_template("story/location/decision/show.html", decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
@@ -583,17 +588,19 @@ def decision_update():
 def decision_new():
     # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    details = request.form
+    details = request.args
     story_id = details["story_id"]
     location_id = details["location_id"]
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
-    return redirect(url_for("decision_show"))
+    return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
+
 
 @app.route("/story/location/decision/destroy", methods=['POST'])
 def decision_destroy():
     StoryDecision.dec_del(request.form['decision_id'])
     return '{"status":"ok"}'
+
 
 @app.route("/about")
 def about():
@@ -607,7 +614,7 @@ def contact():
 
 @app.route("/verification/view")
 def verification_view():
-    #TODO same as story show
+    # TODO same as story show
     stories = Story.story_list(0)
     return render_template("verification/view.html", stories=stories)
 
@@ -618,15 +625,16 @@ def verification_review():
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
-    #TODO talk to brian about the best way to get decisions in. New web page to view decisions?
+    # TODO talk to brian about the best way to get decisions in. New web page to view decisions?
     decisions = []
    #i = 0
-    #for loc in locations:
-     #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
-      #  i+=1
+    # for loc in locations:
+    #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
+    #  i+=1
     stry = Story.get(story_id)
-    #stry.update()
-    return render_template("verification/review.html",story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+    # stry.update()
+    return render_template("verification/review.html", story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+
 
 @app.route("/verification/review/update", methods=['POST'])
 # @login_required
@@ -637,6 +645,7 @@ def review_update():
 
     return '{"status":"ok"}'
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
@@ -646,9 +655,11 @@ def load_user(user_id):
 def help():
     return render_template("story/help.html")
 
+
 @app.route("/verification/help")
 def vhelp():
     return render_template("verification/help.html")
+
 
 @app.route("/story/treeview_help")
 def treeview_help():
@@ -677,17 +688,37 @@ def treeview():
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
+  #  environment = jinja2.Environment(whatever)
+  #  environment.filters['timesince'] = timesince
     return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+
+@app.route("/verification/treeview")
+def verify_treeview():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    loc_id = request.args.get('location_id')
+    decisions = []
+    if loc_id is not None:
+        decisions = StoryDecision.dec_list(story_id, loc_id)
+    location = StoryLocation.get(story_id, loc_id)
+  #  environment = jinja2.Environment(whatever)
+  #  environment.filters['timesince'] = timesince
+    return render_template("verification/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
+
 @app.errorhandler(500)
 def page_not_found_500(e):
     # note that we set the 404 status explicitly
     return render_template('500.html'), 500
+
 
 @app.route("/save/saving")
 def saving():
@@ -695,11 +726,13 @@ def saving():
     story = Story.get(story_id)
     return render_template("save/saving.html", story=story)
 
+
 @app.route("/save/savingstory")
 def savingstory():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/savingstory.html", story=story)
+
 
 @app.route("/save/publishing")
 def publishing():
@@ -707,11 +740,43 @@ def publishing():
     story = Story.get(story_id)
     return render_template("/save/publishing.html", story=story)
 
+
 @app.route("/save/verifying")
 def verifying():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
+
+@app.route("/verification/object")
+# @login_required
+def verification_object():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    object_id = request.args["object_id"]
+    obj = StoryObject.get(story_id, object_id)
+    return render_template("verification/object.html", obj=obj,story_id=story_id, object_id=object_id)
+
+@app.route("/verification/location")
+# @login_required
+def verification_location():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    location_id = request.args["location_id"]
+    location = StoryLocation.get(story_id, location_id)
+    decisions = StoryDecision.dec_list(story_id, location_id)
+    return render_template("verification/location.html", location=location,story_id=story_id, location_id=location_id, decisions=decisions)
+
+@app.route("/verification/event")
+# @login_required
+def verfication_event():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    event_id = request.args["event_id"]
+    event = StoryEvent.get(story_id, event_id)
+    return render_template("verification/event.html", event=event,story_id=story_id, event_id=event_id)
 
 if __name__ == '__main__':
     app.run()
