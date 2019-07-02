@@ -736,6 +736,36 @@ def verifying():
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
 
+@app.route("/verification/object")
+# @login_required
+def verification_object():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    object_id = request.args["object_id"]
+    obj = StoryObject.get(story_id, object_id)
+    return render_template("verification/object.html", obj=obj,story_id=story_id, object_id=object_id)
+
+@app.route("/verification/location")
+# @login_required
+def verification_location():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    location_id = request.args["location_id"]
+    location = StoryLocation.get(story_id, location_id)
+    decisions = StoryDecision.dec_list(story_id, location_id)
+    return render_template("verification/location.html", location=location,story_id=story_id, location_id=location_id, decisions=decisions)
+
+@app.route("/verification/event")
+# @login_required
+def verfication_event():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    event_id = request.args["event_id"]
+    event = StoryEvent.get(story_id, event_id)
+    return render_template("verification/event.html", event=event,story_id=story_id, event_id=event_id)
 
 if __name__ == '__main__':
     app.run()
