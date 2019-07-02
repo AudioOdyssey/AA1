@@ -2,7 +2,7 @@ import pymysql
 import pymysql.cursors
 import sys
 
-import json
+import simplejson as json
 
 from models.storyobject import StoryObject
 from models.storyevent import StoryEvent
@@ -223,22 +223,21 @@ class Story:
         return json.dumps(result)
 
     @classmethod
-    def display_for_store(cls, story_id):
+    def display_for_store(cls):
         result = []
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+                               db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT count(*) FROM `master_stories`"))
-            result = cur.fetchone()
-            count = result['count(*)']
-            for i in range(count):
-                cur.execute(
-                    ("SELECT count(*) FROM `master_stories` WHERE story_id = %s"), (story_id))
-                result = cur.fetchone()
-                result = {
-                    "story_id": result['story_id'],
-                }
+            cur.execute(("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
+            query_data = cur.fetchall()
+            for row in query_data:
+                stry_info = {'story_id' : row[0], 'story_title' : row[1], 
+                'story_author' : row[2], 'story_synopsis' : row[3], 
+                'story_price' : row[4], 'genre' : row[5]}
+                result.append(stry_info)
+        storefront = {"stories" : result}
+        return json.dumps(storefront)
