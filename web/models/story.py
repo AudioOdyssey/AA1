@@ -35,7 +35,7 @@ class Story:
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', name_of_verifier='', verification_status='',
                  story_ratings=0, story_language_id=1, storage_size=0, obj_verification_status='', event_verification_status='', user_creator_id=0, reviewer_comments = ''):
-        if int(story_id) == 0:
+        if story_id:
             self.story_id = story_id
         self.story_title = story_title
         self.story_author = story_author
@@ -63,14 +63,14 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+                                db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(
-                ("SELECT count(*) FROM master_stories WHERE `user_creator_id` = %s"), (self.user_creator_id))
-            result = cur.fetchone()
-            self.story_id = result['count(*)'] + 1
-            cur.execute(("INSERT INTO master_stories(story_id, user_creator_id) VALUES (%s, %s)"),
-                        (self.story_id, self.user_creator_id))
+            cur.execute(("INSERT INTO master_stories(story_title, story_author, story_synposis, story_price)"), 
+            (self.story_title, self.story_author, self.story_synopsis, self.story_price))
+            conn.commit()
+            cur.execute(("SELECT MAX(story_id)+1 FROM master_stories"))
+            query_data = cur.fetchone()
+            self.story_id = query_data[0] 
             conn.commit()
         conn.close()
 
@@ -241,5 +241,4 @@ class Story:
                 result = cur.fetchone()
                 result = {
                     "story_id": result['story_id'],
-
                 }
