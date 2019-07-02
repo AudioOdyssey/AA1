@@ -626,11 +626,8 @@ def verification_review():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     # TODO talk to brian about the best way to get decisions in. New web page to view decisions?
-    decisions = []
-   #i = 0
-    # for loc in locations:
-    #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
-    #  i+=1
+    decisions = StoryDecision.dec_list_story(story_id)
+  
     stry = Story.get(story_id)
     # stry.update()
     return render_template("verification/review.html", story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
@@ -688,9 +685,8 @@ def treeview():
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
-  #  environment = jinja2.Environment(whatever)
-  #  environment.filters['timesince'] = timesince
-    return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+   
+    return render_template("story/treeview.html",StoryLocation=StoryLocation, locations=locations, location=location, decisions=decisions, story=story)
 
 @app.route("/verification/treeview")
 def verify_treeview():
@@ -704,7 +700,7 @@ def verify_treeview():
     location = StoryLocation.get(story_id, loc_id)
   #  environment = jinja2.Environment(whatever)
   #  environment.filters['timesince'] = timesince
-    return render_template("verification/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+    return render_template("verification/treeview.html", StoryLocation=StoryLocation,locations=locations, location=location, decisions=decisions, story=story)
 
 
 
