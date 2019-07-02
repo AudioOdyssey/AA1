@@ -43,7 +43,7 @@ function add_btn_pressed(story_id) {
         if (this.readyState == 4 && this.status == 200) {
             var json = JSON.parse(this.responseText);
             if (json.status == "ok") {
-                window.location.href = "/story/object/indiv?story_id=" + json.object.story_id + "&obj_id=" + json.object.obj_id;
+                window.location.href = "/story/object/indiv?story_id=" + story_id + "&object_id=" + json.object.obj_id;
             } else {
                 console.log(json);
             }
