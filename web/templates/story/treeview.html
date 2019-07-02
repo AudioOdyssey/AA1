@@ -17,7 +17,9 @@
       <label>Current Location</label>
       <div class = "col-sm-4 small-card">
           <p>{{location.location_name}}</p>
+          {% if location != None%}
           <a href = "/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit</a>
+          {% endif %}
         </div>
     </section>
     <br>
