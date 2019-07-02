@@ -38,30 +38,21 @@ function event_changed(elem) {
 }
 
 function add_btn_pressed(story_id) {
-    var template = document.getElementById("ev-template");
-    var newelem = template.cloneNode(true);
-    newelem.id = "";
-    newelem.classList.add("event-main-row");
-    newelem.childNodes[0].value = story_id;
-    document.getElementById("main-site").insertBefore(newelem, document.getElementById("content-marker"));
-
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            // Successful Request
-            var ev = JSON.parse(this.responseText);
-            if (ev.status == "ok") {
-                newelem.childNodes[1].value = ev.response.event_id;
+            var json = JSON.parse(this.responseText);
+            if (json.status == "ok") {
+                window.location.href = "/story/event/indiv?story_id=" + story_id + "&event_id=" + json.event.event_id;
             } else {
-                console.log("Bad Response, what do we do now?")
+                console.log(json);
             }
         } else if (this.readyState == 4) {
-            console.log("Bad Response, what do we do now?")
+            console.log(this.responseText);
         }
     };
-    xhttp.open("POST", "/story/event/new", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("desc=&name=&event_start_location=0&story_id=" + story_id);
+    xhttp.open("POST", "/story/event/new?story_id="+story_id, true);
+    xhttp.send();
 }
 
 function delete_btn_pressed(btn) {

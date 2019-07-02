@@ -38,30 +38,21 @@ function location_changed(elem) {
 }
 
 function add_btn_pressed(story_id) {
-    var template = document.getElementById("loc-template");
-    var newelem = template.cloneNode(true);
-    newelem.id = "";
-    newelem.classList.add("location-main-row");
-    newelem.childNodes[0].value = story_id;
-    document.getElementById("main-site").insertBefore(newelem, document.getElementById("content-marker"));
-
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            // Successful Request
-            var loc = JSON.parse(this.responseText);
-            if (loc.status == "ok") {
-                newelem.childNodes[1].value = loc.response.location_id;
+            var json = JSON.parse(this.responseText);
+            if (json.status == "ok") {
+                window.location.href = "/story/location/indiv?story_id=" + story_id + "&location_id=" + json.location.location_id;
             } else {
-                console.log("Bad Response, what do we do now?")
+                console.log(json);
             }
         } else if (this.readyState == 4) {
-            console.log("Bad Response, what do we do now?")
+            console.log(this.responseText);
         }
     };
-    xhttp.open("POST", "/story/location/new", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("desc=&name=&story_id=" + story_id);
+    xhttp.open("POST", "/story/location/new?story_id="+story_id, true);
+    xhttp.send();
 }
 
 function delete_btn_pressed(btn) {

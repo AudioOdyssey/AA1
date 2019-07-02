@@ -279,10 +279,9 @@ def app_story_logistics():
 
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
-    in_story_id = 0
     details = request.json
-    in_story_id = details.get("story_id")
-    return Story.get_info(in_story_id)
+    story_id = details.get("story_id")
+    return Story.get_info(story_id)
 
 
 @app.route("/story/object/update", methods=['POST'])
@@ -327,11 +326,10 @@ def object_update():
 def object_new():
  #   if "logged in" not in session:
   #      return redirect(url_for("session_new"))
-    details = request.form
-    story_id = details['story_id']
+    story_id = request.args["story_id"]
     obj = StoryObject(story_id)
     obj.add_to_server()
-    return '{"status":"ok","response":{"obj_id":' + str(obj.obj_id) + '}}'
+    return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
 @app.route("/story/object/destroy", methods=['POST'])
@@ -383,12 +381,11 @@ def event_update():
 def event_new():
     # if "logged in" not in session:
      #   return redirect(url_for("session_new"))
-    details = request.form
+    details = request.args
     story_id = details['story_id']
     evnt = StoryEvent(story_id)
     evnt.add_to_server()
-    events = StoryEvent.event_list(story_id)
-    return render_template("story/event/show.html", events=events, story_id=story_id)
+    return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
 
 
 @app.route("/story/event/destroy", methods=['POST'])
@@ -480,13 +477,12 @@ def location_update():
 @app.route('/story/location/new', methods=['POST'])
 # @login_required
 def location_new():
-   # if "logged in" not in session:
+    # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    details = request.form
-    in_story_id = details['story_id']
-    loc = StoryLocation(in_story_id)
+    story_id = request.args['story_id']
+    loc = StoryLocation(story_id)
     loc.add_to_server()
-    return redirect(url_for("location_show"))
+    return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
 
 @app.route("/story/location/destroy", methods=['POST'])
@@ -593,12 +589,12 @@ def decision_update():
 def decision_new():
     # if "logged in" not in session:
     #    return redirect(url_for("session_new"))
-    details = request.form
+    details = request.args
     story_id = details["story_id"]
     location_id = details["location_id"]
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
-    return redirect(url_for("decision_show"))
+    return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
 
 @app.route("/story/location/decision/destroy", methods=['POST'])
