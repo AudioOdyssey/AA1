@@ -26,12 +26,10 @@
                 </select>
             </div>
         </section>
-        <section class="flex-0" onclick="event_show(this)">
-            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
-        </section>
+   
     </section>
 
-    <section class="row details" style="display: none">
+    <section class="row details">
         <hr>
         <label>Description</label>
         <textarea class="form-control" rows="3" name="ev_description"
@@ -52,5 +50,7 @@
 <br>
 
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a  href="/story/treeview?story_id={{story_id}}"><button id="bottom" class="btn btn-light">Back to TreeView</button></a> 
 <a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
+
 {% endblock %}

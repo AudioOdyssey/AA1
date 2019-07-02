@@ -5,67 +5,66 @@
 <form class="object-main-row" onclick="set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" value="{{ obj.story_id }}" readonly class="hidden-in">
     <input name="obj_id" value="{{ obj.obj_id }}" readonly class="hidden-in">
-
-
-    <section class="object-row row">
-        <section class="row flex-1">
-            <div class="col-sm-4">
-                <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="obj_name" onchange="object_changed(this)"
-                    value="{{ obj.object_name }}" required>
-            </div>
-            <div class="col-sm-8">
-                <label><b>Select Starting Location: or <a href="/story/location/show?story_id={{ story_id }}"> Add New
-                            Location</a></b></label>
-                <select class="form-control" autocomplete= "off" name="obj_starting_loc" value="{{obj.obj_starting_loc}}"onchange="object_changed(this)">
-                    <option value="0">None</option>
-                    {% for location in locations %}
-                    <option value="{{location.location_id}}">{{location.location_name}}</option>
-                    {% endfor %}
-                </select>
+    
+    
+        <section class="object-row row">
+            <section class="row flex-1">
+                <div class="col-sm-4">
+                    <label><b>Name:</b></label>
+                    <input class="form-control" type="text" name="obj_name" onchange="object_changed(this)"
+                        value="{{ obj.obj_name }}" required>
+                </div>
+                <div class="col-sm-8">
+                    <label><b>Select Starting Location: or <a href="/story/location/show?story_id={{ story_id }}"> Add New
+                                Location</a></b></label>
+                    <select class="form-control" autocomplete= "off" name="obj_starting_loc" value="{{obj.obj_starting_loc}}"onchange="object_changed(this)">
+                        <option value="0">None</option>
+                        {% for location in locations %}
+                        <option value="{{location.location_id}}">{{location.location_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </section>
+    
+    
+        </section>
+        <section class="row details">
+            <hr>
+    
+            <label>Description</label>
+            <textarea class="form-control" rows="3" name="obj_description"
+                onchange="object_changed(this)">{{ obj.obj_description }}</textarea>
+            <br>
+    
+            <div>
+                <label>Is Hidden? </label>
+                {%if obj.is_hidden%}
+                <input id="chk1" type="checkbox" name="is_hidden" autocomplete="off"
+                    onclick="checkbox_visability_check(this)" onchange="object_changed(this)" checked>
+                {%else%}
+                <input id="chk2" type="checkbox" name="is_hidden" autocomplete="off"
+                    onclick="checkbox_visability_check(this)" onchange="object_changed(this)">
+                {%endif%}
+    
+                <div class="checkbox_hide" {%if not obj.is_hidden%}style="display: none;" {%endif%}>
+                    <label>Select Unhide Event Name: or <a href="/story/event/show?story_id={{ story_id }}"> Add New
+                            Event</a></label>
+                    <select class="form-control" type="text" autocomplete= "off" name="obj_unhide_event" onchange="object_changed(this)"
+                        value="{{ obj.unhide_event_id}}">
+                        <option value="0">None</option>
+                        {% for event in events %}
+                        <option value="{{event.event_id}}">{{event.event_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
         </section>
+    </form>
 
-        <section class="flex-0" onclick="object_show(this)">
-            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
-        </section>
-
-    </section>
-    <section class="row details" style="display: none">
-        <hr>
-
-        <label>Description</label>
-        <textarea class="form-control" rows="3" name="obj_description"
-            onchange="object_changed(this)">{{ obj.obj_description }}</textarea>
-        <br>
-
-        <div>
-            <label>Is Hidden? </label>
-            {%if obj.is_hidden%}
-            <input id="chk1" type="checkbox" name="is_hidden" autocomplete="off"
-                onclick="checkbox_visability_check(this)" onchange="object_changed(this)" checked>
-            {%else%}
-            <input id="chk2" type="checkbox" name="is_hidden" autocomplete="off"
-                onclick="checkbox_visability_check(this)" onchange="object_changed(this)">
-            {%endif%}
-
-            <div class="checkbox_hide" {%if not obj.is_hidden%}style="display: none;" {%endif%}>
-                <label>Select Unhide Event Name: or <a href="/story/event/show?story_id={{ story_id }}"> Add New
-                        Event</a></label>
-                <select class="form-control" type="text" autocomplete= "off" name="obj_unhide_event" onchange="object_changed(this)"
-                    value="{{ obj.unhide_event_id}}">
-                    <option value="0">None</option>
-                    {% for event in events %}
-                    <option value="{{event.event_id}}">{{event.event_name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-    </section>
-</form>
-
-<br>
+    <br>
 
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a  href="/story/treeview?story_id={{story_id}}"><button id="bottom" class="btn btn-light">Back to TreeView</button></a> 
 <a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
+
 {% endblock %}
