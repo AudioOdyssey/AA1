@@ -236,16 +236,16 @@ def story_update():
 def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
+    story = Story.get(story_id)
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
     genre = details.get('genre')
-    length_of_story = details['length_of_story']
-    inventory_size = details['inventory_size']
-    story = Story.get(story_id)
+    story.length_of_story = details['length_of_story']
+    story.inventory_size = details['inventory_size']
+    story.starting_loc = details['starting_loc']
     story.story_id = story_id
-    story.update(story_title, "", story_price, 0,
-                 length_of_story, genre, story_synopsis, inventory_size)
+    story.update(story_title, "", story_price, 0, genre, story_synopsis)
 
     #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
     return '{"status":"ok"}'

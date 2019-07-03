@@ -30,7 +30,8 @@
                     <option {%if story.genre=="Romance"%}selected{%endif%} value="Romance">Romance</option>
                     <option {%if story.genre=="Sci-Fi"%}selected{%endif%} value="Sci-Fi">Sci-Fi</option>
                     <option {%if story.genre=="Fantasy"%}selected{%endif%} value="Fantasy">Fantasy</option>
-                    <option {%if story.genre=="Historical Fiction"%}selected{%endif%} value="Historical Fiction">Historical Fiction</option>
+                    <option {%if story.genre=="Historical Fiction"%}selected{%endif%} value="Historical Fiction">
+                        Historical Fiction</option>
                     <option {%if story.genre=="Drama"%}selected{%endif%} value="Drama">Drama</option>
                     <option {%if story.genre=="Horror"%}selected{%endif%} value="Horror">Horror</option>
                     <option {%if story.genre=="Thriller"%}selected{%endif%} value="Thriller">Thriller</option>
@@ -38,7 +39,8 @@
                     <option {%if story.genre=="Adventure"%}selected{%endif%} value="Adventure">Adventure</option>
                     <option {%if story.genre=="Sports"%}selected{%endif%} value="Sports">Sports</option>
                     <option {%if story.genre=="Non-Fiction"%}selected{%endif%} value="Non-Fiction">Non-Fiction</option>
-                    <option {%if story.genre=="Other Fiction"%}selected{%endif%} value="Other Fiction">Other Fiction</option>
+                    <option {%if story.genre=="Other Fiction"%}selected{%endif%} value="Other Fiction">Other Fiction
+                    </option>
                 </select>
             </div>
             <div class="form-group">
@@ -53,22 +55,33 @@
                 <input autocomplete="none" class="form-control" type="number" min="0" step="1"
                     onchange="story_changed(this)" value="{{story.length_of_story}}" name="length_of_story"
                     placeholder="Number of Hours">
-            </div>  
+            </div>
             <div class="form-group">
-            <label>Inventory Size:</label>
+                <label>Inventory Size:</label>
                 <input autocomplete="none" class="form-control" type="number" min="0" step="1"
                     onchange="story_changed(this)" value="{{story.inventory_size}}" name="inventory_size"
                     placeholder="Inventory Size">
-                    </div>
+            </div>
+            <div class="form-group">
+                <label>Starting Location:</label>
+                <select autocomplete="none" class="form-control" onchange="story_changed(this)" name="starting_loc">
+                    <option value="0" disabled>Starting Location</option>
+                    {%for loc in locations%}
+                    <option {%if story.starting_loc|int == loc.location_id|int%}selected{%endif%} value="{{loc.location_id}}">
+                        {{loc.location_name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
         </form>
     </section>
 
     <br><br>
     <!-- Object Row -->
     <a href="/story/object/show?story_id={{ story.story_id }}">
-        <h3>Objects</h3></a>
-       
-    
+        <h3>Objects</h3>
+    </a>
+
+
     <button type="button" onclick="add_btn_obj('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
     <hr>
@@ -126,9 +139,12 @@
     </section>
 </section>
 <hr>
-<a href="/save/savingstory?story_id={{story.story_id}}"><button class="btn btn-light" onclick="save('{{story.story_id}}')">Save For Later</button></a>
-<a href="/save/publishing?story_id={{story.story_id}}"> <button class="btn btn-light" onclick="publishStory('{{story.story_id}}')">Submit for Verification</button></a>
-<a href="/verification/story?story_id={{story.story_id}}"> <button class="btn btn-light">View Verification Status</button></a>
+<a href="/save/savingstory?story_id={{story.story_id}}"><button class="btn btn-light"
+        onclick="save('{{story.story_id}}')">Save For Later</button></a>
+<a href="/save/publishing?story_id={{story.story_id}}"> <button class="btn btn-light"
+        onclick="publishStory('{{story.story_id}}')">Submit for Verification</button></a>
+<a href="/verification/story?story_id={{story.story_id}}"> <button class="btn btn-light">View Verification
+        Status</button></a>
 <button class="btn btn-danger" onclick="story_delete('{{story.story_id}}')">Delete Story</button>
 
 {% endblock %}
