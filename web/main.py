@@ -663,7 +663,7 @@ def review_update():
         parental_rating = details['parental_ratings']
         usr = User.get(session['user_id'])
         verifier_name = usr.username
-        stry = Story.get(stor87y_id)
+        stry = Story.get(story_id)
         stry.update_admin(reviewer_comment, parental_rating, verifier_name)
     else: 
         loc_id = details['loc_id']
@@ -706,8 +706,8 @@ def newcorp():
 
 @app.route("/story/treeview")
 def treeview():
-    if "logged in" not in session:
-        return redirect(url_for("session_new"))
+    # if "logged in" not in session:
+    #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
     locations = StoryLocation.loc_list(story_id)
@@ -721,13 +721,12 @@ def treeview():
 
 @app.route("/verification/treeview")
 def verify_treeview():
-    if "logged in" not in session:
-        return redirect(url_for("session_new"))
+    # if "logged in" not in session:
+    #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
     locations = StoryLocation.loc_list(story_id)
     loc_id = request.args.get('location_id')
-    decisions = []
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
