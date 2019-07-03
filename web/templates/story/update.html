@@ -26,21 +26,19 @@
                 <select autocomplete="none" class="form-control" value="{{story.genre}}" onchange="story_changed(this)"
                     name="genre">
                     <option value="" selected disabled>Select a genre...</option>
-                    <option value="Mystery">Mystery</option>
-                    <option value="Romance">Romance</option>
-                    <option value="Sci-Fi">Sci-Fi</option>
-                    <option value="Fantasy">Fantasy</option>
-                    <option value="Historical Fiction">Historical Fiction</option>
-                    <option value="Drama">Drama</option>
-                    <option value="Horror">Horror</option>
-                    <option value="True Crime">True Crime</option>
-                    <option value="Thriller">Thriller</option>
-                    <option value="Suspense">Suspense</option>
-                    <option value="Comedy">Comedy</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Sports">Sports</option>
-                    <option value="Non-Fiction">Non-Fiction</option>
-                    <option value="Other Fiction">Other Fiction</option>
+                    <option {%if story.genre=="Mystery"%}selected{%endif%} value="Mystery">Mystery</option>
+                    <option {%if story.genre=="Romance"%}selected{%endif%} value="Romance">Romance</option>
+                    <option {%if story.genre=="Sci-Fi"%}selected{%endif%} value="Sci-Fi">Sci-Fi</option>
+                    <option {%if story.genre=="Fantasy"%}selected{%endif%} value="Fantasy">Fantasy</option>
+                    <option {%if story.genre=="Historical Fiction"%}selected{%endif%} value="Historical Fiction">Historical Fiction</option>
+                    <option {%if story.genre=="Drama"%}selected{%endif%} value="Drama">Drama</option>
+                    <option {%if story.genre=="Horror"%}selected{%endif%} value="Horror">Horror</option>
+                    <option {%if story.genre=="Thriller"%}selected{%endif%} value="Thriller">Thriller</option>
+                    <option {%if story.genre=="Comedy"%}selected{%endif%} value="Comedy">Comedy</option>
+                    <option {%if story.genre=="Adventure"%}selected{%endif%} value="Adventure">Adventure</option>
+                    <option {%if story.genre=="Sports"%}selected{%endif%} value="Sports">Sports</option>
+                    <option {%if story.genre=="Non-Fiction"%}selected{%endif%} value="Non-Fiction">Non-Fiction</option>
+                    <option {%if story.genre=="Other Fiction"%}selected{%endif%} value="Other Fiction">Other Fiction</option>
                 </select>
             </div>
             <div class="form-group">

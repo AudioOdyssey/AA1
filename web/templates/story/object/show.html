@@ -32,8 +32,8 @@
             <!--;namegiven(this)-->
 
             <div class="col-sm-8">
-                <label for="starting_loc"><b>Select Starting Location: or <a
-                            href="/story/location/show?story_id={{ story_id }}"> Add New
+                <label for="starting_loc"><b>Select Starting Location: or <a href="#"
+                            onclick="add_btn_pressed_loc({{story_id}})"> Add New
                             Location</a></b></label>
                 <select id="starting_loc" autocomplete="off" type="text" class="form-control"
                     onchange="object_changed(this)" name="obj_starting_loc">
@@ -95,7 +95,7 @@
                     value="{{ object.obj_name }}" required>
             </div>
             <div class="col-sm-8">
-                <label><b>Select Starting Location: or <a href="/story/location/show?story_id={{ story_id }}"> Add New
+                <label><b>Select Starting Location: or <a href="#" onclick="add_btn_pressed_loc({{object.story_id}})"> Add New
                             Location</a></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc"
                     value="{{object.obj_starting_loc}}" onchange="object_changed(this)">

@@ -152,6 +152,6 @@ class StoryEvent:
         with conn.cursor() as cur:
             cur.execute(("SELECT MAX(event_id)+1 FROM `events`"))
             query_data = cur.fetchall()
-            last_id = query_data[0]
+            last_id = query_data[0][0]
         conn.close()
         return last_id    

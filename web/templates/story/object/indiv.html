@@ -15,13 +15,13 @@
                     value="{{ obj.obj_name }}" required>
             </div>
             <div class="col-sm-8">
-                <label><b>Select Starting Location: or <a href="/story/location/show?story_id={{ story_id }}"> Add New
+                <label><b>Select Starting Location: or <a  onclick="add_btn_pressed_loc({{story_id}})" href="#" > Add New
                             Location</a></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc" value="{{obj.obj_starting_loc}}"
                     onchange="object_changed(this)">
                     <option value="0">None</option>
                     {% for location in locations %}
-                    <option {% if location.location_id==object.obj_starting_loc %}selected{%endif%}
+                    <option {% if location.location_id==obj.obj_starting_loc %}selected{%endif%}
                         value="{{location.location_id}}">{{location.location_name}}</option>
                     {% endfor %}
                 </select>
@@ -53,7 +53,7 @@
                     onchange="object_changed(this)" value="{{ obj.unhide_event_id}}">
                     <option value="0">None</option>
                     {% for event in events %}
-                    <option {% if event.event_id==object.unhide_event_id %}selected{%endif%} value="{{event.event_id}}">
+                    <option {% if event.event_id==obj.unhide_event_id %}selected{%endif%} value="{{event.event_id}}">
                         {{event.event_name}}</option>
                     {% endfor %}
                 </select>
