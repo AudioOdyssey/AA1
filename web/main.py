@@ -639,8 +639,17 @@ def verification_review():
 def review_update():
     story_id = request.args.get('story_id')
     details = request.form
-    
-
+    entity_type = details['type']
+    if entity_type.lower() == 'object':
+        pass
+    elif entity_type.lower() == 'location':
+        pass
+    elif entity_type.lower() == 'event':
+        pass
+    elif entity_type.lower() == 'story':
+        pass
+    else: 
+        pass
     return '{"status":"ok"}'
 
 
