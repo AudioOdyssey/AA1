@@ -219,7 +219,7 @@ class StoryDecision:
         last_id = 0
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT MAX(decision_id)+1 FROM `decisions` WHERE story_id = %s AND loc_id = %s"), (story_id, loc_id))
+            cur.execute(("SELECT MAX(decision_id)+1 FROM `decisions`"))
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()

@@ -53,6 +53,7 @@ class StoryLocation:
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             self.location_id = self.get_last_id(self.story_id)
+            print(self.location_id)
             cur.execute(("INSERT INTO locations(story_id, location_id) VALUES (%s, %s)"),
                         (self.story_id, self.location_id))
             conn.commit()
@@ -202,7 +203,7 @@ class StoryLocation:
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT MAX(location_id)+1 FROM locations WHERE story_id = %s"), (story_id))
+                ("SELECT MAX(location_id)+1 FROM locations"))
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()
