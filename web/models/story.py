@@ -97,7 +97,11 @@ class Story:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["story_title"], results["story_author"], results["story_synopsis"], results["story_price"], results["author_paid"], results["length_of_story"], results["number_of_location"], results["number_of_decisions"], results["story_in_store"], results["story_verification_date"], results["name_of_verifier"], results["story_ratings"], results["story_language_id"], results["storage_size"], results["obj_verification_status"], results["event_verification_status"], results["genre"], results["user_creator_id"])
+                return cls(story_id, results["story_title"], results["story_author"], results["story_synopsis"], 
+                results["story_price"], results["author_paid"], results['genre'], results["length_of_story"], 
+                results["number_of_location"], results["number_of_decisions"], results["story_in_store"], 
+                results["story_verification_date"], results["name_of_verifier"], results['verification_status'], results["story_ratings"], 
+                results["story_language_id"], results["storage_size"], results["user_creator_id"], results['reviewer_comments'], results['inventory_size'], results['parental_ratings'])
 
     def update(self, story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis):
         self.story_title = story_title
@@ -147,8 +151,7 @@ class Story:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, CursorClass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
