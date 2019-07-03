@@ -11,7 +11,7 @@ from .storydecision import StoryDecision
 
 from decimal import Decimal
 
-
+from datetime import datetime, date
 class Story:
     story_id = 0
     story_title = ''
@@ -34,6 +34,7 @@ class Story:
     verification_status = 0
     inventory_size = 0
     parental_ratings = 0.0
+    updated_at = None
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
@@ -120,29 +121,29 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s WHERE story_id = %s"),
+            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s, updated_at = NOW() WHERE story_id = %s"),
                         (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_synopsis, self.story_id))
             conn.commit()
         conn.close()
 
-    def update_admin(self, story_ratings, story_verification_date, obj_verification_status, event_verification_status, storage_size, reviewer_comments):
-        self.story_ratings = story_ratings
-        self.story_verification_date = story_verification_date
-        self.obj_verification_status = obj_verification_status
-        self.event_verification_status = event_verification_status
-        self.storage_size = storage_size
+    def update_admin(self, reviewer_comments, parental_ratings, name_of_verifier):
         self.reviewer_comments = reviewer_comments
+        self.parental_ratings = parental_ratings
+        self.name_of_verifier = name_of_verifier
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s WHERE story_id = %s"),
-                        (self.story_ratings, self.story_verification_date, self.obj_verification_status, self.event_verification_status, self.storage_size, self.reviewer_comments, self.story_id))
+            cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s, updated_at = NOW(), story_verification_date = CURDATE(), name_of_verifier = %s WHERE story_id = %s"),
+                        (self.story_ratings, self.story_verification_date, self.storage_size, self.reviewer_comments, self.name_of_verifier, self.story_id))
             conn.commit()
+            cur.execute(("SELECT updated_at, story_verification_date WHERE story_id = %s"), (self.story_id))
+            query_data = cur.fetchall()
+            self.updated_at = query_data['updated_at']
+            self.story_verification_date = query_data['story_verification_date']
         conn.close()
 
     @classmethod

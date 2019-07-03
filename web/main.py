@@ -627,11 +627,7 @@ def verification_review():
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
-    # TODO talk to brian about the best way to get decisions in. New web page to view decisions?
     decisions = StoryDecision.dec_list_story(story_id)
-  
-    stry = Story.get(story_id)
-    # stry.update()
     return render_template("verification/review.html", story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
@@ -641,16 +637,32 @@ def review_update():
     story_id = request.args.get('story_id')
     details = request.form
     entity_type = details['type']
+    ent_id = details['ent_id']
+    is_verified = details.get('is_verified')
+    if is_verified is None:
+        is_verified = False
+    else:
+        is_verified = True
+    reviewer_comment = details['comment']
     if entity_type.lower() == 'object':
-        pass
+        obj = StoryObject.get(story_id, ent_id)
+        obj.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'location':
-        pass
+        loc = StoryLocation.get(story_id, ent_id)
+        loc.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'event':
-        pass
+        evnt = StoryEvent.get(story_id, ent_id)
+        evnt.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'story':
-        pass
+        parental_rating = details['parental_rating']
+        usr = User.get(session['user_id'])
+        verifier_name = usr.username
+        stry = Story.get(story_id)
+        stry.update_admin(reviewer_comment, parental_rating, verifier_name)
     else: 
-        pass
+        loc_id = details['loc_id']
+        dec = StoryDecision.get(story_id, loc_id, ent_id)
+        dec.update_admin(is_verified, reviewer_comment)
     return '{"status":"ok"}'
 
 
