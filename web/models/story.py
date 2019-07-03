@@ -39,7 +39,7 @@ class Story:
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', name_of_verifier='', verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', inventory_size=0, parental_ratings=0.0):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0):
         if story_id:
             self.story_id = story_id
         self.story_title = story_title
@@ -59,6 +59,7 @@ class Story:
         self.storage_size = storage_size
         self.user_creator_id = user_creator_id
         self.reviewer_comments = reviewer_comments
+        self.starting_loc = starting_loc
         self.inventory_size = inventory_size
         self.parental_ratings = parental_ratings
 
@@ -98,18 +99,17 @@ class Story:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["story_title"], results["story_author"], results["story_synopsis"], 
-                results["story_price"], results["author_paid"], results['genre'], results["length_of_story"], 
-                results["number_of_location"], results["number_of_decisions"], results["story_in_store"], 
-                results["story_verification_date"], results["name_of_verifier"], results['verification_status'], results["story_ratings"], 
-                results["story_language_id"], results["storage_size"], results["user_creator_id"], results['reviewer_comments'], results['inventory_size'], results['parental_ratings'])
+                return cls(story_id, results["story_title"], results["story_author"], results["story_synopsis"],
+                           results["story_price"], results["author_paid"], results['genre'], results["length_of_story"],
+                           results["number_of_location"], results["number_of_decisions"], results["story_in_store"],
+                           results["story_verification_date"], results["name_of_verifier"], results['verification_status'], results["story_ratings"],
+                           results["story_language_id"], results["storage_size"], results["user_creator_id"], results['reviewer_comments'], results['starting_loc'], results['inventory_size'], results['parental_ratings'])
 
-    def update(self, story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis):
+    def update(self, story_title, story_author, story_price, story_language_id, genre, story_synopsis):
         self.story_title = story_title
         self.story_author = story_author
         self.story_price = story_price
         self.story_language_id = story_language_id
-        self.length_of_story = length_of_story
         self.genre = genre
         self.story_synopsis = story_synopsis
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -120,8 +120,8 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s, updated_at = NOW() WHERE story_id = %s"),
-                        (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_synopsis, self.story_id))
+            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s, inventory_size = %s, starting_loc = %s, length_of_story = %s WHERE story_id = %s"),
+                        (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_synopsis, self.inventory_size, self.starting_loc, self.length_of_story, self.story_id))
             conn.commit()
         conn.close()
 
@@ -151,7 +151,8 @@ class Story:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
