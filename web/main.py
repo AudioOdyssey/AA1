@@ -223,8 +223,8 @@ def story_show():
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 # @login_required
 def story_update():
-  #  if "logged in" not in session:
-   #     return redirect(url_for("session_new"))
+    #  if "logged in" not in session:
+    #     return redirect(url_for("session_new"))
     story = Story.get(int(request.args['story_id']))
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
@@ -235,7 +235,8 @@ def story_update():
 @app.route("/story/update", methods=["POST"])
 def story_update_post():
     details = request.form
-    story_id = request.args.get('story_id')
+    print(request.form['story_id'])
+    story_id = request.form.get('story_id')
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
