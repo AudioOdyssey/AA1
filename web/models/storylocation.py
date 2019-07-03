@@ -105,7 +105,7 @@ class StoryLocation:
         self.reviewer_comments = reviewer_comments
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `objects` SET is_verified = %s, reviewer_comments = %s WHERE story_id = %s AND obj_id = %s"), (self.is_verified, self.reviewer_comments, self.story_id, self.location_id))
+            cur.execute(("UPDATE `locations` SET is_verified = %s, reviewer_comments = %s WHERE story_id = %s AND location_id = %s"), (self.is_verified, self.reviewer_comments, self.story_id, self.location_id))
             conn.commit()
         conn.close()
 
