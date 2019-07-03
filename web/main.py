@@ -637,9 +637,9 @@ def verification_review():
 @app.route("/verification/review/update", methods=['POST'])
 # @login_required
 def review_update():
-
+    story_id = request.args.get('story_id')
     details = request.form
-    # TODO sonny finish this
+    
 
     return '{"status":"ok"}'
 
@@ -774,6 +774,20 @@ def verfication_event():
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
     return render_template("verification/event.html", event=event,story_id=story_id, event_id=event_id)
+
+@app.route("/verification/story")
+# @login_required
+def verfication_story():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    locations = StoryLocation.loc_list(story_id)
+    decisions = StoryDecision.dec_list_story(story_id)
+    objects = StoryObject.obj_list(story_id)
+    events = StoryEvent.event_list(story_id)
+    return render_template("verification/story.html", events=events,story_id=story_id, locations=locations, decisions=decisions, objects=objects)
+
+
 
 if __name__ == '__main__':
     app.run()
