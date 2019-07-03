@@ -247,7 +247,7 @@ def story_update_post():
     story.update(story_title, "", story_price, 0,
                  length_of_story, genre, story_synopsis, inventory_size)
 
-                 #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
+    #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
     return '{"status":"ok"}'
 
 
@@ -654,7 +654,7 @@ def review_update():
         pass
     elif entity_type.lower() == 'story':
         pass
-    else: 
+    else:
         pass
     return '{"status":"ok"}'
 
