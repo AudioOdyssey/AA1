@@ -46,7 +46,7 @@
         <textarea class="form-control" rows="3" name="location_short_description"
             onchange="location_changed(this)"></textarea>
         <hr>
-        <label for="loc_ev_name">Select Event Name (will occur upon entry): or <a
+        <label for="loc_ev_name">Select Event Name (will occur upon entry): or <a href="#"
                 onclick="add_btn_pressed_evt({{story_id}})"> Add New
                 Event</a></label>
         <select id="loc_ev_name" class="form-control" type="text" autocomplete="off" name="location_event_id"
@@ -123,7 +123,7 @@
         <hr>
 
 
-        <label>Select Event Name (changes description): or <a onclick="add_btn_pressed_evt({{location.story_id}})">Add New
+        <label>Select Event Name (changes description): or <a href="#" onclick="add_btn_pressed_evt({{location.story_id}})">Add New
                 Event</a></label>
 
         <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">

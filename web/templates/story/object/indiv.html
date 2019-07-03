@@ -15,7 +15,7 @@
                     value="{{ obj.obj_name }}" required>
             </div>
             <div class="col-sm-8">
-                <label><b>Select Starting Location: or <a onclick="add_btn_pressed_loc({{story_id}})"> Add New
+                <label><b>Select Starting Location: or <a  onclick="add_btn_pressed_loc({{story_id}})" href="#" > Add New
                             Location</a></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc" value="{{obj.obj_starting_loc}}"
                     onchange="object_changed(this)">
