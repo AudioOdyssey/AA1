@@ -32,6 +32,7 @@ class User(UserMixin):
     is_active = True
     is_anonymous = True
     user_id = 0
+    is_editor = 0
 
     REGION = 'us-east-2b'
 
