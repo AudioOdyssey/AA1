@@ -4,7 +4,8 @@
 <script src="{{ url_for('static', filename='js/verification/review.js') }}"></script>
 <!--TODO put all this info into server somehow-->
 
-<form onclick="set_focus(this)" method="POST" action="/verification/review/update?story_id={{story_id}}">
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+    <input name="story_id" value="{{story_id}}" readonly class="hidden-in"> 
     <h1 class="text" style="text-align: center;">Story Verification</h1>
     <br>
     <a href="/verification/treeview?story_id={{story_id}}">Switch to treeview</a>
