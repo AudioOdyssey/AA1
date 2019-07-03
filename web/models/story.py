@@ -112,7 +112,6 @@ class Story:
         self.length_of_story = length_of_story
         self.genre = genre
         self.story_synopsis = story_synopsis
-
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
