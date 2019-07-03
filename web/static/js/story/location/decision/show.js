@@ -64,7 +64,7 @@ function add_btn_pressed_dec(story_id, location_id) {
             console.log(this.responseText)
             var obj = JSON.parse(this.responseText);
             if (obj.status == "ok") {
-                newelem.childNodes[2].value = obj.decision.decision_id;
+                newelem.children[2].value = obj.decision.decision_id;
             } else {
                 console.log("Bad Response, what do we do now?");
                 console.log(obj);
