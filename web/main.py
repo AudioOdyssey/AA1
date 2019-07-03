@@ -57,7 +57,7 @@ def user_new():  # fix later
         raw_password = details['password']
         email = details['email_address']
         gender = int(details['gender'])
-        country_of_origin = int(details['country_of_origin'])
+        country_of_origin = (details['country_of_origin'])
         profession = details['profession']
         disabilities = details.get('disabilities')
         if disabilities is None:
