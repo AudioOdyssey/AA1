@@ -160,11 +160,11 @@
 
     <label>Suggested Rating:</label>
     <!--where do we want to store this info @sonny @brian-->
-    <select class="form-control details" onchange="verify_changed(this)" name="rating">
-        <option>G</option>
-        <option>PG</option>
-        <option>PG-13</option>
-        <option>R</option>
+    <select class="form-control details" onchange="verify_changed(this)" name="parental_rating">
+        <option {% if story.parental_rating == "G" %}selected{%endif%}>G</option>
+        <option {% if story.parental_rating == "PG" %}selected{%endif%}>PG</option>
+        <option {% if story.parental_rating == "PG-13" %}selected{%endif%}>PG-13</option>
+        <option {% if story.parental_rating == "R" %}selected{%endif%}>R</option>
     </select>
 
     <br>
