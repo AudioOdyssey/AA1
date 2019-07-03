@@ -24,7 +24,7 @@ function checkbox_visability_check(elem) { //does not work
 
 function decision_changed(elem) {
     // elem.form.submit()
-   
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -37,9 +37,9 @@ function decision_changed(elem) {
     // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send(new FormData(elem.form));
 }
-function check_exclusivity(elem){
-    if (elem.options[elem.selectedIndex].value!==0)
-    {
+
+function check_exclusivity(elem) {
+    if (elem.options[elem.selectedIndex].value !== 0) {
         elems = elem.parentNode.parentNode.getElementsByClassName("exclusive")
         for (var i = 0; i < elems.length; i++) {
             if (elems[i] != elem && elems[i].selectedIndex != 0) {
@@ -64,17 +64,17 @@ function add_btn_pressed_dec(story_id, location_id) {
             console.log(this.responseText)
             var obj = JSON.parse(this.responseText);
             if (obj.status == "ok") {
-                newelem.childNodes[1].value = obj.response.decision_id;
+                newelem.childNodes[2].value = obj.decision.decision_id;
             } else {
-                console.log("Bad Response, what do we do now?")
+                console.log("Bad Response, what do we do now?");
+                console.log(obj);
             }
         } else if (this.readyState == 4) {
-            console.log("Bad Response, what do we do now?")
+            console.log("Bad Response, what do we do now?");
         }
     };
-    xhttp.open("POST", "/story/location/decision/new", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("decision_name=&location_id=" + location_id + "&story_id=" + story_id);
+    xhttp.open("POST", "/story/location/decision/new?story_id=" + story_id + "&location_id=" + location_id, true);
+    xhttp.send();
 }
 
 function delete_btn_pressed(btn) {
@@ -90,6 +90,7 @@ function delete_btn_pressed(btn) {
     xhttp.send(new FormData(btn.form));
     btn.parentNode.parentNode.removeChild(btn.parentNode);
 }
+
 function add_btn_pressed_obj(story_id) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -104,7 +105,7 @@ function add_btn_pressed_obj(story_id) {
             console.log(this.responseText);
         }
     };
-    xhttp.open("POST", "/story/object/new?story_id="+story_id, true);
+    xhttp.open("POST", "/story/object/new?story_id=" + story_id, true);
     xhttp.send();
 }
 
@@ -122,23 +123,24 @@ function add_btn_pressed_loc(story_id) {
             console.log(this.responseText);
         }
     };
-    xhttp.open("POST", "/story/location/new?story_id="+story_id, true);
+    xhttp.open("POST", "/story/location/new?story_id=" + story_id, true);
     xhttp.send();
 }
-    function add_btn_pressed_evt(story_id) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var json = JSON.parse(this.responseText);
-                if (json.status == "ok") {
-                    window.location.href = "/story/event/indiv?story_id=" + story_id + "&event_id=" + json.event.event_id;
-                } else {
-                    console.log(json);
-                }
-            } else if (this.readyState == 4) {
-                console.log(this.responseText);
+
+function add_btn_pressed_evt(story_id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var json = JSON.parse(this.responseText);
+            if (json.status == "ok") {
+                window.location.href = "/story/event/indiv?story_id=" + story_id + "&event_id=" + json.event.event_id;
+            } else {
+                console.log(json);
             }
-        };
-        xhttp.open("POST", "/story/event/new?story_id="+story_id, true);
-        xhttp.send();
-    }
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", "/story/event/new?story_id=" + story_id, true);
+    xhttp.send();
+}
