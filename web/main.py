@@ -616,13 +616,14 @@ def contact():
 @app.route("/verification/view")
 def verification_view():
     # TODO same as story show
-    stories = Story.story_list(0)
+    stories = Story.story_list_master()
     return render_template("verification/view.html", stories=stories)
 
 
 @app.route("/verification/review")
 def verification_review():
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
@@ -631,7 +632,7 @@ def verification_review():
   
     stry = Story.get(story_id)
     # stry.update()
-    return render_template("verification/review.html", story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+    return render_template("verification/review.html", story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
 @app.route("/verification/review/update", methods=['POST'])
@@ -639,8 +640,17 @@ def verification_review():
 def review_update():
     story_id = request.args.get('story_id')
     details = request.form
-    
-
+    entity_type = details['type']
+    if entity_type.lower() == 'object':
+        pass
+    elif entity_type.lower() == 'location':
+        pass
+    elif entity_type.lower() == 'event':
+        pass
+    elif entity_type.lower() == 'story':
+        pass
+    else: 
+        pass
     return '{"status":"ok"}'
 
 

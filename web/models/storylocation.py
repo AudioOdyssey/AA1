@@ -19,17 +19,15 @@ class StoryLocation:
     location_event_id = 0
     auto_goto = 0
     next_loc_id = 0
-    location_verified = False
-    location_verif_status = 0
-    location_timestamp = None
-    verification_userid = 0
+    reviewer_comments = ''
+    is_verified = False
 
     rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
     name = "AA_admin"
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
 
-    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, auto_goto=False, next_loc_id=0, location_verified=False, location_verif_status=0, location_timestamp=datetime.today(), verification_userid=0):
+    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, auto_goto=False, next_loc_id=0, reviewer_comments = '', is_verified = False):
         self.story_id = story_id
         self.location_id = location_id
         self.location_name = location_name
@@ -39,10 +37,8 @@ class StoryLocation:
         self.location_event_id = location_event_id
         self.auto_goto = auto_goto
         self.next_loc_id = next_loc_id
-        self.location_verified = location_verified
-        self.location_verif_status = location_verif_status
-        self.location_timestamp = location_timestamp
-        self.verification_userid = verification_userid
+        self.reviewer_comments = reviewer_comments
+        self.is_verified = is_verified
 
     def add_to_server(self):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -53,6 +49,7 @@ class StoryLocation:
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             self.location_id = self.get_last_id(self.story_id)
+            print(self.location_id)
             cur.execute(("INSERT INTO locations(story_id, location_id) VALUES (%s, %s)"),
                         (self.story_id, self.location_id))
             conn.commit()
@@ -78,7 +75,7 @@ class StoryLocation:
             if result is None:
                 return None
             result_location = cls(story_id, location_id, result['location_name'], result['original_description'], result['short_description'], result['post_event_description'],
-                                  result['location_event_id'], result['auto_goto'], result['next_loc_id'], result['location_verif_status'], result['location_timestamp'], result['verification_userid'])
+                                  result['location_event_id'], result['auto_goto'], result['next_loc_id'], result['reviewer_comments'], result['is_verified'])
         conn.close()
         return result_location
 
@@ -103,20 +100,12 @@ class StoryLocation:
             conn.commit()
         conn.close()
 
-    def update_admin(self, location_verified, location_verif_status, verification_userid):
-        self.location_verified = location_verified
-        self.location_verif_status = location_verif_status
-        self.verification_userid = verification_userid
-
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name,
-                               connection_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+    def update_admin(self, is_verified, reviewer_comments):
+        self.is_verified = is_verified
+        self.reviewer_comments = reviewer_comments
+        conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `locations` SET location_verified = %s, location_verif_status = %s, verification_userid = %s WHERE story_id = %s AND location_id = %s"),
-                        (self.location_verified, self.location_verif_status, self.verification_userid, self.story_id, self.location_id))
+            cur.execute(("UPDATE `objects` SET is_verified = %s, reviewer_comments = %s WHERE story_id = %s AND obj_id = %s"), (self.is_verified, self.reviewer_comments, self.story_id, self.location_id))
             conn.commit()
         conn.close()
 
@@ -202,7 +191,7 @@ class StoryLocation:
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT MAX(location_id)+1 FROM locations WHERE story_id = %s"), (story_id))
+                ("SELECT MAX(location_id)+1 FROM locations"))
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()

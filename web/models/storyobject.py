@@ -12,6 +12,8 @@ class StoryObject:
     obj_starting_loc = 0
     is_hidden = 0
     unhide_event_id = 0
+    reviewer_comments = ''
+    is_verified = False
 
     REGION = 'us-east-2b'
 
@@ -21,7 +23,7 @@ class StoryObject:
     db_name = "audio_adventures_dev"
     
 
-    def __init__(self, story_id = 0, obj_id = 0, obj_name = "", obj_description = "", can_pickup_obj = 0, obj_starting_loc = 0, is_hidden = 0, unhide_event_id = 0):
+    def __init__(self, story_id = 0, obj_id = 0, obj_name = "", obj_description = "", can_pickup_obj = 0, obj_starting_loc = 0, is_hidden = 0, unhide_event_id = 0, reviewer_comments = '', is_verified = False):
         self.story_id = story_id
 
         self.obj_id = obj_id
@@ -37,6 +39,10 @@ class StoryObject:
         self.is_hidden = is_hidden
 
         self.unhide_event_id = unhide_event_id
+
+        self.reviewer_comments = reviewer_comments
+
+        self.is_verified = is_verified
 
     def add_to_server(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
@@ -63,7 +69,7 @@ class StoryObject:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"])
+                return cls(story_id, results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"], results['reviewer_comments'], results['is_verified'])
     
     def update(self, story_id, object_id, name, starting_loc, desc, can_pickup_obj, is_hidden):
         self.obj_name = name
@@ -78,6 +84,15 @@ class StoryObject:
             conn.commit()
         conn.close()
         
+    def update_admin(self, is_verified, reviewer_comments):
+        self.is_verified = is_verified
+        self.reviewer_comments = reviewer_comments
+        conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE `objects` SET is_verified = %s, reviewer_comments = %s WHERE story_id = %s AND obj_id = %s"), (self.is_verified, self.reviewer_comments, self.story_id, self.obj_id))
+            conn.commit()
+        conn.close()
+
     def show_info(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
@@ -154,7 +169,7 @@ class StoryObject:
         last_id = 0
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT MAX(obj_id)+1 FROM `objects` WHERE story_id = %s"), (story_id))
+            cur.execute(("SELECT MAX(obj_id)+1 FROM `objects`"))
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()
