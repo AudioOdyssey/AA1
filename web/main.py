@@ -67,7 +67,8 @@ def user_new():  # fix later
         language = int(details['language-id'])
         first_name = details['first_name']
         last_name = details['last_name']
-        date_of_birth = datetime.strptime(details['date_of_birth'], '%Y-%m-%d')
+        date_of_birth = datetime.strptime(
+            details['birth-year'] + "-" + details['birth-month'] + "-" + details['birth-day'], '%Y-%m-%d')
         usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
                    profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth,
                    first_name_input=first_name, last_name_input=last_name, language=language)
@@ -200,7 +201,7 @@ def app_logout():
 
 
 @app.route("/session/logout")
-#@login_required
+# @login_required
 def logout():
     if "logged_in" in session:
         session.pop("logged_in", None)
@@ -212,16 +213,16 @@ def logout():
 
 
 @app.route("/story/show")
-#@login_required
+# @login_required
 def story_show():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     stories = Story.story_list(session['user_id'])  # TODO: Real UID
     return render_template("story/show.html", stories=stories)
 
 
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
-#@login_required
+# @login_required
 def story_update():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -261,10 +262,10 @@ def story_new():
 
 #### THIS WORKS #####
 @app.route("/story/object/show")
-#@login_required
+# @login_required
 def object_show():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
@@ -290,10 +291,10 @@ def app_store_expand():
 
 
 @app.route("/story/object/update", methods=['POST'])
-#@login_required
+# @login_required
 def object_update():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
     object_id = details['obj_id']
@@ -327,7 +328,7 @@ def object_update():
 
 
 @app.route("/story/object/new", methods=['POST'])
-#@login_required
+# @login_required
 def object_new():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -345,7 +346,7 @@ def object_destroy():
 
 #### STILL NEEDS WORK ####
 @app.route("/story/event/show", methods=['GET'])
-#@login_required
+# @login_required
 def event_show():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -356,10 +357,10 @@ def event_show():
 
 
 @app.route('/story/event/update', methods=['POST'])
-#@login_required
+# @login_required
 def event_update():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     if request.method == 'POST':
         details = request.form
         story_id = details['story_id']
@@ -382,10 +383,10 @@ def event_update():
 
 
 @app.route('/story/event/new', methods=['POST'])
-#@login_required
+# @login_required
 def event_new():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     details = request.args
     story_id = details['story_id']
     evnt = StoryEvent(story_id)
@@ -400,7 +401,7 @@ def event_destroy():
 
 ### LOCATION STILL NEEDS WORK ###
 @app.route("/story/location/show")
-#@login_required
+# @login_required
 def location_show():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -411,7 +412,7 @@ def location_show():
 
 
 @app.route("/story/location/indiv")
-#@login_required
+# @login_required
 def location_indiv():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -424,10 +425,10 @@ def location_indiv():
 
 
 @app.route("/story/object/indiv")
-#@login_required
+# @login_required
 def object_indiv():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
@@ -437,7 +438,7 @@ def object_indiv():
 
 
 @app.route("/story/event/indiv")
-#@login_required
+# @login_required
 def event_indiv():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -449,10 +450,10 @@ def event_indiv():
 
 
 @app.route('/story/location/update', methods=['POST'])
-#@login_required
+# @login_required
 def location_update():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
     loc_id = details['loc_id']
@@ -480,10 +481,10 @@ def location_update():
 
 
 @app.route('/story/location/new', methods=['POST'])
-#@login_required
+# @login_required
 def location_new():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     loc = StoryLocation(story_id)
     loc.add_to_server()
@@ -519,7 +520,7 @@ def decision_show():
 @app.route("/story/location/decision/update", methods=['POST'])
 def decision_update():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     details = request.form
     story_id = details["story_id"]
     location_id = details["location_id"]
@@ -638,7 +639,7 @@ def verification_review():
 
 
 @app.route("/verification/review/update", methods=['POST'])
-#@login_required
+# @login_required
 def review_update():
     details = request.form
     story_id = details['story_id']
@@ -665,7 +666,7 @@ def review_update():
         verifier_name = usr.username
         stry = Story.get(story_id)
         stry.update_admin(reviewer_comment, parental_rating, verifier_name)
-    else: 
+    else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
         dec.update_admin(is_verified, reviewer_comment)
@@ -774,10 +775,10 @@ def verifying():
 
 
 @app.route("/verification/object")
-#@login_required
+# @login_required
 def verification_object():
     if "logged in" not in session:
-       return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
@@ -785,7 +786,7 @@ def verification_object():
 
 
 @app.route("/verification/location")
-#@login_required
+# @login_required
 def verification_location():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -797,7 +798,7 @@ def verification_location():
 
 
 @app.route("/verification/event")
-#@login_required
+# @login_required
 def verfication_event():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
@@ -808,7 +809,7 @@ def verfication_event():
 
 
 @app.route("/verification/story")
-#@login_required
+# @login_required
 def verfication_story():
     if "logged in" not in session:
         return redirect(url_for("session_new"))
