@@ -9,7 +9,8 @@ from .storyevent import StoryEvent
 from .storylocation import StoryLocation
 from .storydecision import StoryDecision
 
-from decimal import Decimal 
+from decimal import Decimal
+
 
 class Story:
     story_id = 0
@@ -37,7 +38,7 @@ class Story:
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', name_of_verifier='', verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments = '', inventory_size = 0, parental_ratings = 0.0):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', inventory_size=0, parental_ratings=0.0):
         if story_id:
             self.story_id = story_id
         self.story_title = story_title
@@ -66,14 +67,14 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                                db=db_name, connect_timeout=5)
+                               db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(("INSERT INTO master_stories(story_title, story_author, story_price, user_creator_id) VALUES(%s, %s, %s, %s)"), 
-            (self.story_title, self.story_author, self.story_price, self.user_creator_id))
+            cur.execute(("INSERT INTO master_stories(story_title, story_author, story_price, user_creator_id) VALUES(%s, %s, %s, %s)"),
+                        (self.story_title, self.story_author, self.story_price, self.user_creator_id))
             conn.commit()
             cur.execute(("SELECT MAX(story_id)+1 FROM master_stories"))
             query_data = cur.fetchone()
-            self.story_id = query_data[0] 
+            self.story_id = query_data[0]
             conn.commit()
         conn.close()
 
@@ -157,7 +158,26 @@ class Story:
                 ("SELECT * FROM `master_stories` WHERE user_creator_id = %s"), (user_creator_id))
             results = cur.fetchall()
             for row in results:
-                story_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id = row[19]))
+                story_list.append(
+                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19]))
+        conn.close()
+        return story_list
+
+    @classmethod
+    def story_list_master(cls):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT story_id, story_title FROM `master_stories` WHERE verification_status = 1 ORDER BY updated_at ASC LIMIT 20")
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(cls(row[0], row[1]))
         conn.close()
         return story_list
 
@@ -237,12 +257,13 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
+            cur.execute(
+                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
             query_data = cur.fetchall()
             for row in query_data:
-                stry_info = {'story_id' : row[0], 'story_title' : row[1], 
-                'story_author' : row[2], 'story_synopsis' : row[3], 
-                'story_price' : row[4], 'genre' : row[5]}
+                stry_info = {'story_id': row[0], 'story_title': row[1],
+                             'story_author': row[2], 'story_synopsis': row[3],
+                             'story_price': row[4], 'genre': row[5]}
                 result.append(stry_info)
-        storefront = {"stories" : result}
+        storefront = {"stories": result}
         return json.dumps(storefront)
