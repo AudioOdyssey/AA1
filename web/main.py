@@ -638,9 +638,9 @@ def verification_review():
 @app.route("/verification/review/update", methods=['POST'])
 # @login_required
 def review_update():
-
+    story_id = request.args.get('story_id')
     details = request.form
-    # TODO sonny finish this
+    
 
     return '{"status":"ok"}'
 
