@@ -20,13 +20,15 @@
         <p><strong>{{location.location_name}}</strong></p>
         <label>Location Verified</label>
         {% if location.is_verified == 1%}
-        <input type="checkbox" class="details" name="loc_verified" autocomplete="off" onchange="verify_changed(this)" checked>
+        <input type="checkbox" class="details" name="loc_verified" autocomplete="off" onchange="verify_changed(this)"
+            checked>
         {% else %}
         <input type="checkbox" class="details" name="loc_verified" autocomplete="off" onchange="verify_changed(this)">
         {% endif %}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" value = "{{location.reviewer_comments}}" name="loc_comments" onchange="verify_changed(this)">
+        <input type="text" class="details" value="{{location.reviewer_comments}}" name="loc_comments"
+            onchange="verify_changed(this)">
         <!--class="col-sm-4"-->
         <br>
         <section class="flex-0" onclick="show(this)">
@@ -69,7 +71,8 @@
         {%endif%}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" name="dec_comments" value="{{decision.reviewer_comments}}"  onchange="verify_changed(this)">
+        <input type="text" class="details" name="dec_comments" value="{{decision.reviewer_comments}}"
+            onchange="verify_changed(this)">
         <br>
 
 
@@ -102,11 +105,12 @@
         {% if object.is_verified==1%}
         <input type="checkbox" class="details" name="obj_verified" onchange="verify_changed(this)" checked>
         {% else %}
-        <input type="checkbox" class="details" name="obj_verified" onchange="verify_changed(this)" >
+        <input type="checkbox" class="details" name="obj_verified" onchange="verify_changed(this)">
         {% endif %}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" name="obj_comments" value = "{{object.reviewer_comments}}"  onchange="verify_changed(this)">
+        <input type="text" class="details" name="obj_comments" value="{{object.reviewer_comments}}"
+            onchange="verify_changed(this)">
         <br>
 
 
@@ -136,11 +140,12 @@
         {% if event.is_verified%}
         <input type="checkbox" class="details" name="ev_verified" onchange="verify_changed(this)" checked>
         {% else %}
-        <input type="checkbox" class="details" name="ev_verified" onchange="verify_changed(this)" >
+        <input type="checkbox" class="details" name="ev_verified" onchange="verify_changed(this)">
         {%endif%}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" value = "{{event.reviewer_comments}}" name="event_comments" onchange="verify_changed(this)">
+        <input type="text" class="details" value="{{event.reviewer_comments}}" name="event_comments"
+            onchange="verify_changed(this)">
         <br>
         <section class="flex-0" onclick="show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
@@ -160,11 +165,11 @@
 
     <label>Suggested Rating:</label>
     <!--where do we want to store this info @sonny @brian-->
-    <select class="form-control details" onchange="verify_changed(this)" name="rating">
-        <option>G</option>
-        <option>PG</option>
-        <option>PG-13</option>
-        <option>R</option>
+    <select class="form-control details" onchange="verify_changed(this)" name="parental_ratings">
+        <option {% if story.parental_ratings == "G" %}selected{%endif%}>G</option>
+        <option {% if story.parental_ratings == "PG" %}selected{%endif%}>PG</option>
+        <option {% if story.parental_ratings == "PG-13" %}selected{%endif%}>PG-13</option>
+        <option {% if story.parental_ratings == "R" %}selected{%endif%}>R</option>
     </select>
 
     <br>
