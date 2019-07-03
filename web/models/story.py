@@ -150,7 +150,7 @@ class Story:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
