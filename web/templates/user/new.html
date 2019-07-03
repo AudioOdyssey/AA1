@@ -69,12 +69,26 @@
             </div>
 
             <label>Birthday:</label>
-            <div class="input-group mb-2 icon-input">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-calendar-day"></i></div>
-                </div>
-                <input name="date_of_birth" class="form-control" type="date" autocomplete="bday" required>
-            </div>
+            <section class="input-group row name-row">
+                <select name="birth-day" class="col-sm-4 form-control" required>
+                    <option selected disabled>Day</option>
+                    {%for i in range(1, 32)%}
+                    <option value="{{i}}">{{i}}</option>
+                    {%endfor%}
+                </select>
+                <select name="birth-month" class="col-sm-4 form-control" required>
+                    <option selected disabled>Month</option>
+                    {%for i in range(1, 13)%}
+                    <option value="{{i}}">{{i}}</option>
+                    {%endfor%}
+                </select>
+                <select name="birth-year" class="col-sm-4 form-control" required>
+                    <option selected disabled>Year</option>
+                    {%for i in range(2019, 1899, -1)%}
+                    <option value="{{i}}">{{i}}</option>
+                    {%endfor%}
+                </select>
+            </section>
 
             <label>Country:</label>
             <div class="input-group mb-2 icon-input">
