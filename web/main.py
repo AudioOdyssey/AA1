@@ -214,8 +214,8 @@ def logout():
 @app.route("/story/show")
 #@login_required
 def story_show():
-   # if "logged in" not in session:
-    #    return redirect(url_for("session_new"))
+    if "logged in" not in session:
+       return redirect(url_for("session_new"))
     stories = Story.story_list(session['user_id'])  # TODO: Real UID
     return render_template("story/show.html", stories=stories)
 
