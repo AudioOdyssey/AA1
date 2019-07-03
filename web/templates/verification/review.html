@@ -9,6 +9,9 @@
     <br>
     <a href="/verification/treeview?story_id={{story_id}}">Switch to treeview</a>
     <hr>
+    <h3><b>Title:</b> {{story.story_title}}</h3>
+    <h6><b>Synopsis:</b> {{story.story_synopsis}}</h6>
+    <hr><br>
     <h2 class="text">Locations:</h2>
     <br>
 
@@ -21,8 +24,9 @@
         {% else %}
         <input type="checkbox" class="details" name="loc_verified" autocomplete="off" onchange="verify_changed(this)">
         {% endif %}
+        <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" value = {{location.reviewer_comments}} name="loc_comments" autocomplete="off" onchange="verify_changed(this)">
+        <input type="text" class="details" value = "{{location.reviewer_comments}}" name="loc_comments" onchange="verify_changed(this)">
         <!--class="col-sm-4"-->
         <br>
         <section class="flex-0" onclick="show(this)">
@@ -63,8 +67,9 @@
         {% else %}
         <input type="checkbox" class="details" name="dec_verified" onchange="verify_changed(this)">
         {%endif%}
+        <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" name="dec_comments" value = {{decision.reviewer_comments}} autocomplete="off" onchange="verify_changed(this)">
+        <input type="text" class="details" name="dec_comments" value="{{decision.reviewer_comments}}"  onchange="verify_changed(this)">
         <br>
 
 
@@ -90,16 +95,18 @@
     <hr>
     <h2>Objects:</h2>
     <br>
-    {%for object  in objects%}
+    {%for object in objects%}
     <section class="object-row">
         <p><strong>{{object.obj_name}}</strong></p>
         <label>Objects Verified</label>
-        {% if obeject.is_verified==1%}
+        {% if object.is_verified==1%}
         <input type="checkbox" class="details" name="obj_verified" onchange="verify_changed(this)" checked>
         {% else %}
         <input type="checkbox" class="details" name="obj_verified" onchange="verify_changed(this)" >
+        {% endif %}
+        <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" name="obj_comments" value = {{object.reviewer_comments}} autocomplete="off" onchange="verify_changed(this)">
+        <input type="text" class="details" name="obj_comments" value = "{{object.reviewer_comments}}"  onchange="verify_changed(this)">
         <br>
 
 
@@ -133,7 +140,7 @@
         {%endif%}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" value = {{event.reviewer_comments}} name="event_comments" autocomplete="off" onchange="verify_changed(this)">
+        <input type="text" class="details" value = "{{event.reviewer_comments}}" name="event_comments" onchange="verify_changed(this)">
         <br>
         <section class="flex-0" onclick="show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
