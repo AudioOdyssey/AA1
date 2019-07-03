@@ -15,7 +15,8 @@
     <hr><br>
     <h2 class="text">Locations:</h2>
     <br>
-
+</form>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     {% for location in locations %}
     <section class="location-row">
             <input name="type" value="location" readonly class="hidden-in"> 
@@ -58,7 +59,8 @@
     </section>
 
     {% endfor %}
-
+</form>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <hr>
     <h2 class="text">Decisions:</h2>
     <br>
@@ -100,7 +102,8 @@
     </section>
 
     {%endfor%}
-
+</form>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <hr>
     <h2>Objects:</h2>
     <br>
@@ -136,9 +139,9 @@
     </section>
 
     {%endfor%}
-
+</form>
     <hr><br>
-
+    <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <h2>Events:</h2>
     <br>
     {%for event in events%}
@@ -169,10 +172,10 @@
         <p>{{event.event_description}}</p>
     </section>
     {%endfor%}
-
+</form>
     <br>
     <hr><br>
-
+    <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <label>Suggested Rating:</label>
     <!--where do we want to store this info @sonny @brian-->
     <select class="form-control details" onchange="verify_changed(this)" name="parental_ratings">
