@@ -235,7 +235,6 @@ def story_update():
 @app.route("/story/update", methods=["POST"])
 def story_update_post():
     details = request.form
-    print(request.form['story_id'])
     story_id = request.form.get('story_id')
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
