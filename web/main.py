@@ -239,7 +239,7 @@ def story_update_post():
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
-    genre = details['genre']
+    genre = details.get('genre')
     length_of_story = details['length_of_story']
     story = Story.get(story_id)
     story.story_id = story_id
@@ -250,7 +250,8 @@ def story_update_post():
 
 @app.route("/story/new", methods=["POST"])
 def story_new():
-    story = Story(session['user_id'])
+    story = Story(user_creator_id = session['user_id'])
+    story.story_synopsis = ""
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
@@ -626,11 +627,8 @@ def verification_review():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     # TODO talk to brian about the best way to get decisions in. New web page to view decisions?
-    decisions = []
-   #i = 0
-    # for loc in locations:
-    #   decisions[i] = StoryDecision.dec_list(story_id, loc.location_id)
-    #  i+=1
+    decisions = StoryDecision.dec_list_story(story_id)
+  
     stry = Story.get(story_id)
     # stry.update()
     return render_template("verification/review.html", story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
@@ -639,9 +637,9 @@ def verification_review():
 @app.route("/verification/review/update", methods=['POST'])
 # @login_required
 def review_update():
-
+    story_id = request.args.get('story_id')
     details = request.form
-    # TODO sonny finish this
+    
 
     return '{"status":"ok"}'
 
@@ -688,9 +686,8 @@ def treeview():
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
-  #  environment = jinja2.Environment(whatever)
-  #  environment.filters['timesince'] = timesince
-    return render_template("story/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+   
+    return render_template("story/treeview.html",StoryLocation=StoryLocation, locations=locations, location=location, decisions=decisions, story=story)
 
 @app.route("/verification/treeview")
 def verify_treeview():
@@ -704,7 +701,7 @@ def verify_treeview():
     location = StoryLocation.get(story_id, loc_id)
   #  environment = jinja2.Environment(whatever)
   #  environment.filters['timesince'] = timesince
-    return render_template("verification/treeview.html", locations=locations, location=location, decisions=decisions, story=story)
+    return render_template("verification/treeview.html", StoryLocation=StoryLocation,locations=locations, location=location, decisions=decisions, story=story)
 
 
 
@@ -777,6 +774,20 @@ def verfication_event():
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
     return render_template("verification/event.html", event=event,story_id=story_id, event_id=event_id)
+
+@app.route("/verification/story")
+# @login_required
+def verfication_story():
+    # if "logged in" not in session:
+     #   return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    locations = StoryLocation.loc_list(story_id)
+    decisions = StoryDecision.dec_list_story(story_id)
+    objects = StoryObject.obj_list(story_id)
+    events = StoryEvent.event_list(story_id)
+    return render_template("verification/story.html", events=events,story_id=story_id, locations=locations, decisions=decisions, objects=objects)
+
+
 
 if __name__ == '__main__':
     app.run()

@@ -4,10 +4,12 @@ import sys
 
 import simplejson as json
 
-from models.storyobject import StoryObject
-from models.storyevent import StoryEvent
-from models.storylocation import StoryLocation
-from models.storydecision import StoryDecision
+from .storyobject import StoryObject
+from .storyevent import StoryEvent
+from .storylocation import StoryLocation
+from .storydecision import StoryDecision
+
+from decimal import Decimal
 
 
 class Story:
@@ -15,7 +17,7 @@ class Story:
     story_title = ''
     story_author = ''
     story_synopsis = ''
-    story_price = 0
+    story_price = Decimal(0)
     author_paid = False
     length_of_story = 0
     number_of_locations = 0
@@ -26,21 +28,23 @@ class Story:
     story_ratings = 0
     story_language_id = 0
     storage_size = 0
-    obj_verification_status = ''
-    event_verification_status = ''
     genre = ''
     user_creator_id = 0
     reviewer_comments = ''
+    verification_status = 0
+    inventory_size = 0
+    parental_ratings = 0.0
+
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', name_of_verifier='', verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, obj_verification_status='', event_verification_status='', user_creator_id=0, reviewer_comments = ''):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', inventory_size=0, parental_ratings=0.0):
         if story_id:
             self.story_id = story_id
         self.story_title = story_title
         self.story_author = story_author
         self.story_synopsis = story_synopsis
-        self.story_price = story_price
+        self.story_price = Decimal(story_price)
         self.author_paid = author_paid
         self.genre = genre
         self.length_of_story = length_of_story
@@ -52,10 +56,10 @@ class Story:
         self.story_ratings = story_ratings
         self.story_language_id = story_language_id
         self.storage_size = storage_size
-        self.obj_verification_status = obj_verification_status
-        self.event_verification_status = event_verification_status
         self.user_creator_id = user_creator_id
         self.reviewer_comments = reviewer_comments
+        self.inventory_size = inventory_size
+        self.parental_ratings = parental_ratings
 
     def add_to_server(self):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -63,14 +67,14 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                                db=db_name, connect_timeout=5)
+                               db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(("INSERT INTO master_stories(story_title, story_author, story_synposis, story_price)"), 
-            (self.story_title, self.story_author, self.story_synopsis, self.story_price))
+            cur.execute(("INSERT INTO master_stories(story_title, story_author, story_price, user_creator_id) VALUES(%s, %s, %s, %s)"),
+                        (self.story_title, self.story_author, self.story_price, self.user_creator_id))
             conn.commit()
             cur.execute(("SELECT MAX(story_id)+1 FROM master_stories"))
             query_data = cur.fetchone()
-            self.story_id = query_data[0] 
+            self.story_id = query_data[0]
             conn.commit()
         conn.close()
 
@@ -93,7 +97,11 @@ class Story:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["story_title"], results["story_author"], results["story_synopsis"], results["story_price"], results["author_paid"], results["length_of_story"], results["number_of_location"], results["number_of_decisions"], results["story_in_store"], results["story_verification_date"], results["name_of_verifier"], results["story_ratings"], results["story_language_id"], results["storage_size"], results["obj_verification_status"], results["event_verification_status"], results["genre"], results["user_creator_id"])
+                return cls(story_id, results["story_title"], results["story_author"], results["story_synopsis"], 
+                results["story_price"], results["author_paid"], results['genre'], results["length_of_story"], 
+                results["number_of_location"], results["number_of_decisions"], results["story_in_store"], 
+                results["story_verification_date"], results["name_of_verifier"], results['verification_status'], results["story_ratings"], 
+                results["story_language_id"], results["storage_size"], results["user_creator_id"], results['reviewer_comments'], results['inventory_size'], results['parental_ratings'])
 
     def update(self, story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis):
         self.story_title = story_title
@@ -143,16 +151,33 @@ class Story:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT * FROM `master_stories` WHERE user_creator_id = %s"), (user_creator_id))
             results = cur.fetchall()
             for row in results:
-                story_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
-                                      row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18], row[19]))
+                story_list.append(
+                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19]))
+        conn.close()
+        return story_list
+
+    @classmethod
+    def story_list_master(cls):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT story_id, story_title FROM `master_stories` WHERE verification_status = 1 ORDER BY updated_at ASC LIMIT 20")
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(cls(row[0], row[1]))
         conn.close()
         return story_list
 
@@ -232,12 +257,13 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
+            cur.execute(
+                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
             query_data = cur.fetchall()
             for row in query_data:
-                stry_info = {'story_id' : row[0], 'story_title' : row[1], 
-                'story_author' : row[2], 'story_synopsis' : row[3], 
-                'story_price' : row[4], 'genre' : row[5]}
+                stry_info = {'story_id': row[0], 'story_title': row[1],
+                             'story_author': row[2], 'story_synopsis': row[3],
+                             'story_price': row[4], 'genre': row[5]}
                 result.append(stry_info)
-        storefront = {"stories" : result}
+        storefront = {"stories": result}
         return json.dumps(storefront)
