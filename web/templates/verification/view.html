@@ -8,7 +8,7 @@
 <br>
 {% for story in stories %}
 
-{%if true%} <!--TODO MAKE THIS WORK IDK HOW WE WANNA STORE THIS INFO-->
+{%if story.verification_status == 1%} 
 <div class="col-sm-4 storycard">
     <a href="/verification/review?story_id={{story.story_id}}"><button id="tbvs" class="btn btn-light">{{ story.story_title }}</button> </a>
    
