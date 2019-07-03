@@ -91,8 +91,7 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(
-                ("SELECT * FROM `master_stories` WHERE story_id = %s"), (story_id))
+            cur.execute(("SELECT * FROM `master_stories` WHERE story_id = %s"), (story_id))
             results = cur.fetchone()
             if results is None:
                 return None
@@ -103,7 +102,7 @@ class Story:
                 results["story_verification_date"], results["name_of_verifier"], results['verification_status'], results["story_ratings"], 
                 results["story_language_id"], results["storage_size"], results["user_creator_id"], results['reviewer_comments'], results['inventory_size'], results['parental_ratings'])
 
-    def update(self, story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis):
+    def update(self, story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size):
         self.story_title = story_title
         self.story_author = story_author
         self.story_price = story_price
@@ -120,7 +119,7 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s WHERE story_id = %s"),
+            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s, inventory_size = %s WHERE story_id = %s"),
                         (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_synopsis, self.story_id))
             conn.commit()
         conn.close()
