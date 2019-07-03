@@ -13,13 +13,13 @@
     <hr>
     <h3>Location Name: '<i>{{ location.location_name }}</i>'</h3>
 
-    <button type="button" onclick="add_btn_pressed_dec({{ story_id }}, {{ location.location_id }})" id="add-btn"
+    <button type="button" onclick="add_btn_pressed_dec('{{ story_id }}', '{{ location.location_id }}')" id="add-btn"
         class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 
 <form id="dec-template" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
-    <input name="story_id" readonly class="hidden-in">
-    <input name="location_id" readonly class="hidden-in">
+    <input name="story_id" readonly value="{{story_id}}" class="hidden-in">
+    <input name="location_id" readonly value="{{location.location_id}}" class="hidden-in">
     <input name="decision_id" readonly class="hidden-in">
 
     <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
@@ -64,7 +64,7 @@
 
             <div class="checkbox_hide">
                 <label for="trans_loc">Select Transition Location: or <a href="#"
-                        onclick="add_btn_pressed_loc({{ story_id }})"> Add New
+                        onclick="add_btn_pressed_loc('{{ story_id }}')"> Add New
                         Location</a></label>
                 <select id="trans_loc" class="form-control" type="text" autocomplete="off" name="transition_loc_id"
                     onchange="decision_changed(this)">
@@ -91,7 +91,7 @@
                 <section class="row flex-1">
                     <div class="col-sm-6">
                         <label for="show_obj">Select Object to show decision: or <a href="#"
-                                onclick="add_btn_pressed_obj({{story_id}})"> Add New
+                                onclick="add_btn_pressed_obj('{{story_id}}')"> Add New
                                 Object</a></label>
                         <select id="show_obj" class="form-control exclusive" type="text" autocomplete="off"
                             name="show_object_id" onchange="decision_changed(this);check_exclusivity(this)">
@@ -103,7 +103,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label for="show_event">Select Event to show decision: or <a href="#"
-                                onclick="add_btn_pressed_evt({{story_id}})"> Add New
+                                onclick="add_btn_pressed_evt('{{story_id}}')"> Add New
                                 Event</a></label>
                         <select id="show_event" class="form-control exclusive" type="text" autocomplete="off"
                             name="show_event_id" onchange="decision_changed(this);check_exclusivity(this)">
@@ -128,7 +128,7 @@
                 <section class="row flex-1">
                     <div class="col-sm-6">
                         <label for="unlock_obj">Select Object to unlock decision: or <a href="#"
-                                onclick="add_btn_pressed_obj({{ story_id }})"> Add
+                                onclick="add_btn_pressed_obj('{{ story_id }}')"> Add
                                 New Object</a></label>
                         <select class="form-control exclusive type=" text" autocomplete="off" name="unlock_event_id"
                             onchange="decision_changed(this);check_exclusivity(this)">
@@ -140,7 +140,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label for="unlock_event">Select Event to unlock decision: or <a href="#"
-                                onclick="add_btn_pressed_evt({{ story_id }})"> Add
+                                onclick="add_btn_pressed_evt('{{ story_id }}')"> Add
                                 New Event</a></label>
                         <select id="unlock_event" class="form-control exclusive" type="text" autocomplete="off"
                             name="unlock_event_id" onchange="decision_changed(this);check_exclusivity(this)">
@@ -172,7 +172,7 @@
 
             <div class="checkbox_hide">
                 <label for="trig_ev">Select Event triggered by this decision: or <a href="#"
-                        onclick="add_btn_pressed_evt({{ story_id }})"> Add New
+                        onclick="add_btn_pressed_evt('{{ story_id }}')"> Add New
                         Event</a></label>
                 <select id="trig_ev" class="form-control" type="text" autocomplete="off" name="effect_event_id"
                     onchange="decision_changed(this)">
@@ -259,7 +259,7 @@
             <br>
 
             <div class="checkbox_hide" {%if not decision.transition%}style="display: none;" {%endif%}>
-                <label>Select Transition Location: or <a  href="#" onclick="add_btn_pressed_loc({{ story_id }})"> Add New
+                <label>Select Transition Location: or <a href="#" onclick="add_btn_pressed_loc('{{ story_id }}')"> Add New
                         Location</a></label>
                 <select type="text" class="form-control" autocomplete="off" name="transition_loc_id"
                     onchange="decision_changed(this)">
@@ -295,7 +295,8 @@
             <div class="checkbox_hide" {%if not decision.hidden%}style="display: none;" {%endif%}>
                 <section class="row flex-1">
                     <div class="col-sm-6">
-                        <label>Select Object to show decision: or <a href="#" onclick="add_btn_pressed_obj({{ story_id }})">
+                        <label>Select Object to show decision: or <a href="#"
+                                onclick="add_btn_pressed_obj('{{ story_id }}')">
                                 Add New
                                 Object</a></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="show_object_id"
@@ -308,7 +309,8 @@
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label>Select Event to show decision: or <a href="#" onclick="add_btn_pressed_evt({{ story_id }})">
+                        <label>Select Event to show decision: or <a href="#"
+                                onclick="add_btn_pressed_evt('{{ story_id }}')">
                                 Add New Event</a></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="show_event_id"
                             onchange="decision_changed(this);check_exclusivity(this)">
@@ -341,7 +343,7 @@
                     <div class="col-sm-6">
 
                         <label>Select Object to unlock decision: or <a href="#"
-                                onclick="add_btn_pressed_obj({{ story_id }})"> Add New
+                                onclick="add_btn_pressed_obj('{{ story_id }}')"> Add New
                                 Object</a></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="unlock_object_id"
                             onchange="decision_changed(this);check_exclusivity(this)">
@@ -353,7 +355,8 @@
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label>Select Event to unlock decision: or <a href="#" onclick="add_btn_pressed_evt({{ story_id }})">
+                        <label>Select Event to unlock decision: or <a href="#"
+                                onclick="add_btn_pressed_evt('{{ story_id }}')">
                                 Add New
                                 Event</a></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="unlock_event_id"
@@ -392,7 +395,8 @@
             <br>
 
             <div class="checkbox_hide" {%if not decision.cause_event%}style="display: none;" {%endif%}>
-                <label>Select Event triggered by this decision: or <a href="#" onclick="add_btn_pressed_evt({{ story_id }})">
+                <label>Select Event triggered by this decision: or <a href="#"
+                        onclick="add_btn_pressed_evt('{{ story_id }}')">
                         Add New
                         Event</a></label>
                 <select type="text" class="form-control" autocomplete="off" name="effect_event_id"
@@ -405,7 +409,7 @@
                 </select>
             </div>
             <hr>
-            <label>Select Event that locks this decision: or <a href="#" onclick="add_btn_pressed_evt({{ story_id }})">
+            <label>Select Event that locks this decision: or <a href="#" onclick="add_btn_pressed_evt('{{ story_id }}')">
                     Add New
                     Event</a></label>
             <select type="text" class="form-control" autocomplete="off" name="is_locked_by_event_id"
