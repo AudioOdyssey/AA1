@@ -224,7 +224,7 @@ def story_show():
 #@login_required
 def story_update():
     if "logged in" not in session:
-      return redirect(url_for("session_new"))
+        return redirect(url_for("session_new"))
     story = Story.get(int(request.args['story_id']))
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
@@ -235,16 +235,19 @@ def story_update():
 @app.route("/story/update", methods=["POST"])
 def story_update_post():
     details = request.form
-    story_id = details['story_id']
+    story_id = request.form.get('story_id')
+    story = Story.get(story_id)
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
     genre = details.get('genre')
-    length_of_story = details['length_of_story']
-    story = Story.get(story_id)
+    story.length_of_story = details['length_of_story']
+    story.inventory_size = details['inventory_size']
+    story.starting_loc = details['starting_loc']
     story.story_id = story_id
-    story.update(story_title, "", story_price, 0,
-                 length_of_story, genre, story_synopsis)
+    story.update(story_title, "", story_price, 0, genre, story_synopsis)
+
+    #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
     return '{"status":"ok"}'
 
 
@@ -660,7 +663,7 @@ def review_update():
         parental_rating = details['parental_ratings']
         usr = User.get(session['user_id'])
         verifier_name = usr.username
-        stry = Story.get(story_id)
+        stry = Story.get(stor87y_id)
         stry.update_admin(reviewer_comment, parental_rating, verifier_name)
     else: 
         loc_id = details['loc_id']
