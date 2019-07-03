@@ -250,7 +250,7 @@ def story_update_post():
 
 @app.route("/story/new", methods=["POST"])
 def story_new():
-    story = Story(user_creator_id = session['user_id'])
+    story = Story(user_creator_id=session['user_id'])
     story.story_synopsis = ""
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
@@ -273,9 +273,11 @@ def object_show():
 def app_story_logistics():
     return Story.get_entities(int(request.args.get('story_id')))
 
-@app.route("/app/store", methods = ["GET"])
+
+@app.route("/app/store", methods=["GET"])
 def app_store_info():
     return Story.display_for_store()
+
 
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
@@ -629,7 +631,7 @@ def verification_review():
     events = StoryEvent.event_list(story_id)
     # TODO talk to brian about the best way to get decisions in. New web page to view decisions?
     decisions = StoryDecision.dec_list_story(story_id)
-  
+
     stry = Story.get(story_id)
     # stry.update()
     return render_template("verification/review.html", story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
@@ -696,8 +698,8 @@ def treeview():
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
-   
-    return render_template("story/treeview.html",StoryLocation=StoryLocation, locations=locations, location=location, decisions=decisions, story=story)
+    return render_template("story/treeview.html", StoryLocation=StoryLocation, locations=locations, location=location, decisions=decisions, story=story)
+
 
 @app.route("/verification/treeview")
 def verify_treeview():
@@ -711,8 +713,7 @@ def verify_treeview():
     location = StoryLocation.get(story_id, loc_id)
   #  environment = jinja2.Environment(whatever)
   #  environment.filters['timesince'] = timesince
-    return render_template("verification/treeview.html", StoryLocation=StoryLocation,locations=locations, location=location, decisions=decisions, story=story)
-
+    return render_template("verification/treeview.html", StoryLocation=StoryLocation, locations=locations, location=location, decisions=decisions, story=story)
 
 
 @app.errorhandler(404)
@@ -754,6 +755,7 @@ def verifying():
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
 
+
 @app.route("/verification/object")
 # @login_required
 def verification_object():
@@ -762,7 +764,8 @@ def verification_object():
     story_id = request.args["story_id"]
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
-    return render_template("verification/object.html", obj=obj,story_id=story_id, object_id=object_id)
+    return render_template("verification/object.html", obj=obj, story_id=story_id, object_id=object_id)
+
 
 @app.route("/verification/location")
 # @login_required
@@ -773,7 +776,8 @@ def verification_location():
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
     decisions = StoryDecision.dec_list(story_id, location_id)
-    return render_template("verification/location.html", location=location,story_id=story_id, location_id=location_id, decisions=decisions)
+    return render_template("verification/location.html", location=location, story_id=story_id, location_id=location_id, decisions=decisions)
+
 
 @app.route("/verification/event")
 # @login_required
@@ -783,7 +787,8 @@ def verfication_event():
     story_id = request.args["story_id"]
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
-    return render_template("verification/event.html", event=event,story_id=story_id, event_id=event_id)
+    return render_template("verification/event.html", event=event, story_id=story_id, event_id=event_id)
+
 
 @app.route("/verification/story")
 # @login_required
@@ -795,8 +800,7 @@ def verfication_story():
     decisions = StoryDecision.dec_list_story(story_id)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("verification/story.html", events=events,story_id=story_id, locations=locations, decisions=decisions, objects=objects)
-
+    return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
 
 if __name__ == '__main__':
