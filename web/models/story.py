@@ -27,15 +27,17 @@ class Story:
     story_ratings = 0
     story_language_id = 0
     storage_size = 0
-    obj_verification_status = ''
-    event_verification_status = ''
     genre = ''
     user_creator_id = 0
     reviewer_comments = ''
+    verification_status = 0
+    inventory_size = 0
+    parental_ratings = 0.0
+
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', name_of_verifier='', verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, obj_verification_status='', event_verification_status='', user_creator_id=0, reviewer_comments = ''):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments = '', inventory_size = 0, parental_ratings = 0.0):
         if story_id:
             self.story_id = story_id
         self.story_title = story_title
@@ -53,10 +55,10 @@ class Story:
         self.story_ratings = story_ratings
         self.story_language_id = story_language_id
         self.storage_size = storage_size
-        self.obj_verification_status = obj_verification_status
-        self.event_verification_status = event_verification_status
         self.user_creator_id = user_creator_id
         self.reviewer_comments = reviewer_comments
+        self.inventory_size = inventory_size
+        self.parental_ratings = parental_ratings
 
     def add_to_server(self):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -145,15 +147,14 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, CursorClass = pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT * FROM `master_stories` WHERE user_creator_id = %s"), (user_creator_id))
             results = cur.fetchall()
             for row in results:
-                story_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
-                                      row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18], row[19]))
+                story_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id = row[19]))
         conn.close()
         return story_list
 
