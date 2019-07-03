@@ -32,8 +32,8 @@
         {% endif %}
         <br>
         <label>Verification Comments</label>
-        <textarea type="text" class="details form-control" name="comment"
-            onchange="verify_changed(this)">{{location.reviewer_comments}}</textarea>
+        <input type="text" class="details" value="{{location.reviewer_comments}}" name="comment"
+            onchange="verify_changed(this)">
         <!--class="col-sm-4"-->
         <br>
         <section class="flex-0" onclick="show(this)">
