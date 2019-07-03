@@ -15,7 +15,9 @@
     <hr><br>
     <h2 class="text">Locations:</h2>
     <br>
-
+</form>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+    <input name="story_id" class = "details hidden-in" value="{{story_id}}" readonly> 
     {% for location in locations %}
     <section class="location-row">
             <input name="type" value="location" readonly class="hidden-in"> 
@@ -30,8 +32,8 @@
         {% endif %}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" value="{{location.reviewer_comments}}" name="comment"
-            onchange="verify_changed(this)">
+        <textarea type="text" class="details form-control" name="comment"
+            onchange="verify_changed(this)">{{location.reviewer_comments}}</textarea>
         <!--class="col-sm-4"-->
         <br>
         <section class="flex-0" onclick="show(this)">
@@ -58,7 +60,8 @@
     </section>
 
     {% endfor %}
-
+</form>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <hr>
     <h2 class="text">Decisions:</h2>
     <br>
@@ -100,7 +103,8 @@
     </section>
 
     {%endfor%}
-
+</form>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <hr>
     <h2>Objects:</h2>
     <br>
@@ -136,9 +140,9 @@
     </section>
 
     {%endfor%}
-
+</form>
     <hr><br>
-
+    <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <h2>Events:</h2>
     <br>
     {%for event in events%}
@@ -169,10 +173,10 @@
         <p>{{event.event_description}}</p>
     </section>
     {%endfor%}
-
+</form>
     <br>
     <hr><br>
-
+    <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <label>Suggested Rating:</label>
     <!--where do we want to store this info @sonny @brian-->
     <select class="form-control details" onchange="verify_changed(this)" name="parental_ratings">
