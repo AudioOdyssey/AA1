@@ -17,6 +17,7 @@
     <br>
 </form>
 <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+    <input name="story_id" class = "details hidden-in" value="{{story_id}}" readonly> 
     {% for location in locations %}
     <section class="location-row">
             <input name="type" value="location" readonly class="hidden-in"> 
