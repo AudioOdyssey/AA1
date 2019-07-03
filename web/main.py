@@ -728,6 +728,7 @@ def verify_treeview():
     story = Story.get(story_id)
     locations = StoryLocation.loc_list(story_id)
     loc_id = request.args.get('location_id')
+    decisions = []
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
