@@ -497,7 +497,7 @@ def location_destroy():
 @app.route("/story/location/decision/show")
 def decision_show():
     # if "logged in" not in session:
-     #   return redirect(url_for("session_new"))
+    #   return redirect(url_for("session_new"))
     decisions = StoryDecision.dec_list(
         request.args['story_id'], request.args['location_id'])
     locations = StoryLocation.loc_list(
@@ -506,8 +506,8 @@ def decision_show():
         request.args['story_id'], request.args['location_id'])
     objects = StoryObject.obj_list(
         request.args['story_id'])
-  #  print(objects)
-   # print(objects[0].obj_name)
+    #  print(objects)
+    # print(objects[0].obj_name)
     events = StoryEvent.event_list(
         request.args['story_id'])
     return render_template("story/location/decision/show.html", decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
