@@ -201,16 +201,17 @@ def app_logout():
     return redirect(url_for("home"))
 
 
-@app.route("/session/logout")
+@app.route("/session/logout", methods = ['POST', 'GET'])
 # @login_required
 def logout():
-    if "logged_in" in session:
-        session.pop("logged_in", None)
-        usr = User.get(session.get('user_id'))
-        usr.is_authenticated = False
-        return redirect(url_for("home"))
-    else:
-        return redirect(url_for("session_new"))
+    if request.method == 'POST':
+        if "logged_in" in session:
+            session.pop("logged_in", None)
+            usr = User.get(session.get('user_id'))
+            usr.is_authenticated = False
+            return redirect(url_for("home"))
+        else:
+            return redirect(url_for("session_new"))
 
 
 @app.route("/story/show")
