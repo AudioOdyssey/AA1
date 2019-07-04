@@ -168,13 +168,20 @@ class StoryDecision:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
+        conn = pymysql.connect(rds_host, user = name, passswd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         decs_list = []
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s"), (story_id))
             results = cur.fetchall()
             for row in results:
-                decs_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18], row[19], row[20], row[21], row[22]))
+                decs_list.append(cls(row['story_id'], row['loc_id'], row['sequence_num'], 
+                    row['decision_id'], row['decision_name'], row['transition'], 
+                    row['transition_loc_id'], row['hidden'], row['locked'], 
+                    row['decision_description'], row['show_event_id'], row['show_object_id'], 
+                    row['unlock_event_id'], row['unlock_object_id'], row['locked_descr'], row['aftermath_descr'],
+                    row['cause_event'], row['effect_event_id'], row['can_occur_once'], 
+                    row['is_locked_by_event_id'], row['locked_by_event_description'], 
+                    row['reviewer_comments'], row['is_verified']))
             conn.close()
         return decs_list
 

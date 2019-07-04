@@ -107,13 +107,13 @@ class StoryEvent:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         events_list = []
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM `events` WHERE story_id = %s"), (story_id))
             results = cur.fetchall()
             for row in results:
-                events_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[5]))
+                events_list.append(cls(row['story_id'], row['event_id'], row['event_name'], row['event_description'], row['event_location_id'], row['event_is_global'], row['reviewer_comments'], row['is_verified']))
         conn.close()
         return events_list
 

@@ -142,7 +142,7 @@ class StoryLocation:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
         loc_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -150,7 +150,7 @@ class StoryLocation:
             results = cur.fetchall()
             for row in results:
                 loc_list.append(
-                    cls(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]))
+                    cls(row['story_id'], row['location_id'], row['location_name'], row['original_description'], row['short_description'], row['post_event_description'], next_loc_id = row['next_loc_id'], reviewer_comments=row['reviewer_comments'], is_verified = row['is_verified']))
         return loc_list
 
     @classmethod
