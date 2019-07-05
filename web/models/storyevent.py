@@ -54,7 +54,7 @@ class StoryEvent:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"], results['reviewer_comments'], results['is_verified'])
+                return cls(story_id, results["event_id"], results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"], results['reviewer_comments'], results['is_verified'])
        
     def update(self, story_id, event_id, name, location_id, description, is_global):
         self.event_name = name
