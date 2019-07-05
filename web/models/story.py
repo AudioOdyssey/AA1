@@ -196,7 +196,7 @@ class Story:
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT * FROM `master_stories` WHERE story_id in (SELECT story_id FROM user_downloads WHERE user_id = %s)"), (user_id))
+                ("SELECT * FROM `master_stories` WHERE story_id in (SELECT story_id FROM user_downloads WHERE user_id = %s) union all SELECT * FROM `master_stories` WHERE story_id in (SELECT story_id FROM user_downloads WHERE company_id = (SELECT company_id FROM users WHERE user_id = %s))"), (user_id, user_id))
             results = cur.fetchall()
             for row in results:
                 story_list.append(

@@ -147,7 +147,7 @@ class StoryDecision:
         conn.close()
     
     @classmethod
-    def dec_list(cls, story_id, loc_id):
+    def dec_list_for_story_loc(cls, story_id, loc_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -155,7 +155,7 @@ class StoryDecision:
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5)
         decs_list = []
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND loc_id = %s"), (story_id, loc_id))
+            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND loc_id = %s ORDER BY sequence_num"), (story_id, loc_id))
             results = cur.fetchall()
             for row in results:
                 decs_list.append(cls(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18], row[19], row[20], row[21], row[22]))
