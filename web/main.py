@@ -462,7 +462,7 @@ def event_indiv():
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
     locations = StoryLocation.loc_list(story_id)
-    return render_template("story/event/indiv.html", event=event, locations=locations, story_id=story_id, event_id=event_id)
+    return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)
 
 
 @app.route('/story/location/update', methods=['POST'])
