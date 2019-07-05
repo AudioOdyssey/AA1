@@ -148,7 +148,7 @@ class Story:
         conn.close()
 
     @classmethod
-    def story_list(cls, user_creator_id):
+    def story_list_by_creator(cls, user_creator_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -167,7 +167,45 @@ class Story:
         return story_list
 
     @classmethod
-    def story_list_master(cls):
+    def story_list_for_purchase(cls):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT * FROM `master_stories` WHERE verification_status = 3"))
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(
+                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19]))
+        conn.close()
+        return story_list
+
+    @classmethod
+    def story_list_purchased_by_user(cls, user_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT * FROM `master_stories` WHERE story_id in (SELECT story_id FROM user_downloads WHERE user_id = %s)"), (user_id))
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(
+                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19]))
+        conn.close()
+        return story_list
+
+    @classmethod
+    def story_list_ready_for_verification(cls):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -185,7 +223,25 @@ class Story:
         return story_list
 
     @classmethod
-    def obj_list_json(cls, user_creator_id):
+    def story_list_master(cls):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT story_id, story_title FROM `master_stories`")
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(cls(row[0], row[1]))
+        conn.close()
+        return story_list
+
+    @classmethod
+    def story_list_json(cls, user_creator_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"

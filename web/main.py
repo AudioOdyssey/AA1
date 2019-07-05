@@ -217,7 +217,7 @@ def logout():
 def story_show():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
-    stories = Story.story_list(session['user_id'])  # TODO: Real UID
+    stories = Story.story_list_by_creator(session['user_id'])  # TODO: Real UID
     return render_template("story/show.html", stories=stories)
 
 
@@ -639,7 +639,7 @@ def contact():
 def verification_view():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
-    stories = Story.story_list_master()
+    stories = Story.story_list_ready_for_verification()
     return render_template("verification/view.html", stories=stories)
 
 
