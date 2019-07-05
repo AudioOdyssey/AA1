@@ -4,7 +4,7 @@ from models.story import Story
 from models.storyevent import StoryEvent
 from models.storylocation import StoryLocation
 from models.storydecision import StoryDecision
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session
 
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 
@@ -23,14 +23,12 @@ from datetime import datetime, timedelta
 import jwt
 
 app = Flask(__name__)
-secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
+app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "session/new.html"
 login_manager.login_message = "Please login"
-
-session = {}
 
 REGION = 'us-east-2b'
 
@@ -178,14 +176,14 @@ def encode_auth_token(user_id):
     }
     return jwt.encode(
         payload,
-        secret_key,
+        app.secret_key,
         algorithm='HS256'
     )
 
 
 def decode_auth_token(auth_token):
     try:
-        payload = jwt.decode(auth_token, secret_key)
+        payload = jwt.decode(auth_token, app.secret_key)
         return payload['sub']
     except jwt.ExpiredSignatureError:
         return 'Signature expired. Please log in again.'
@@ -217,7 +215,6 @@ def logout():
 @app.route("/story/show")
 # @login_required
 def story_show():
-    print(session)
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
     stories = Story.story_list(session['user_id'])  # TODO: Real UID
