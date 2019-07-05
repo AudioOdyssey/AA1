@@ -44,18 +44,17 @@
       
 
     </section>
-    <section class="row details" >
+    <section class="details" >
         <!-- TODO: add max value -->
         <label>Decision Sequence Number:</label>
         <input class="form-control" name="sequence_number" min="1" type="number" onchange="decision_changed(this)">
-        <hr>
+        
 
         <label>Decision Description:</label>
         <textarea class="form-control" rows="3" name="dec_description"
             onchange="decision_changed(this)">{{ decision.decision_description }}</textarea>
-        <hr>
-
-        <div>
+       
+        <div class= "row">
             <label>Causes a transition?</label>
             {% if decision.transition %}
             <input type="checkbox" autocomplete="off" name="transition" onclick="checkbox_visability_check(this)"
@@ -79,7 +78,7 @@
                 </select>
             </div>
         </div>
-        <hr>
+   
 
         <label>Can Occur only ONCE?</label>
         {% if decision.can_occur_once %}
@@ -87,9 +86,9 @@
         {% else %}
         <input type="checkbox" autocomplete="off" name="can_occur_once" onchange="decision_changed(this)">
         {% endif %}
-        <hr>
+        
 
-        <div>
+        <div class ="row"> 
             <label>Is Hidden?</label>
             {% if decision.hidden %}
             <input type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)"
@@ -133,7 +132,7 @@
             </div>
         </div>
 
-        <hr>
+ 
 
         <div>
             <label>Is Locked?</label>
@@ -183,13 +182,13 @@
             </div>
         </div>
 
-        <hr>
+   
 
         <label>Description of decision aftermath:</label>
         <textarea name="aftermath_desc" class="form-control" autocomplete="off"
             onchange="decision_changed(this)"></textarea>
 
-        <hr>
+      
 
         <div>
             <label>Does this decision trigger an event?</label>
@@ -237,7 +236,7 @@
 
 
 <br>
-<a href = "/story/location/decision/show?story_id={{story_id}}&location_id={{location_id}}"
+<a href = "/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Decision List</a>
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
 <a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
 {% endblock %}
