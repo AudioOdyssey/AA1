@@ -49,7 +49,7 @@
   <div class="row col-sm-4">
                 <p>
                     {%if decision.transition%}
-                    <b>ransition</b>T to {{StoryLocation.get(decision.transition_loc_id).location_name}}
+                    <b>Transition</b> to {{StoryLocation.get(story_id,decision.transition_loc_id).location_name}}
                     {%else%}
                     <b>Not a Transtion</b>
                     {%endif%}

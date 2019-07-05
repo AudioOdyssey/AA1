@@ -1,5 +1,21 @@
 {% extends "template.html" %}
 
 {% block content %}
+<body>
+    <h1>Running {{story.story_title}}</h1>
+    <br><hr>
+  <h6>{{StoryLocation.get(story_id, story.starting_loc).original_description}}</h6>
+  <p>(if already visited: {{StoryLocation.get(story_id, story.starting_loc).short_description}})</p>
+  {% if location_event_id is not none%}
+  <p>(if {{StoryEvent.get(story_id, story.starting_loc).event_name}} has been triggered:{{StoryLocation.get(story_id, story.starting_loc).post_event_description}} )</p>
+ {%endif%}
+ <hr>
+  <p>Would you like to ...</p>
 
+  {% for dec in StoryDecision.dec_list_for_story_loc(story_id, story.starting_loc)%}
+   <button class = "btn btn-light">{{dec.decision_description}}</button> 
+  {%endfor%}
+</body>
+<br><hr>
+<a href="/story/update?story_id={{story_id}}"><button class="btn btn-light">Back to Main Story Page</button></a>
 {% endblock %}
