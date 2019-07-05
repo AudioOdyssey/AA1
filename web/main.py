@@ -225,7 +225,7 @@ def story_show():
 # @login_required
 def story_update():
     if "logged_in" not in session:
-        return redirect(url_for("session_new"))
+        return redirect(url_for("session_new")) 
     story = Story.get(int(request.args['story_id']))
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
@@ -242,9 +242,11 @@ def story_update_post():
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
     genre = details.get('genre')
+    if genre is None:
+        genre = "Action/Adventure"
     story.length_of_story = details['length_of_story']
-    story.inventory_size = details['inventory_size']
-    story.starting_loc = details['starting_loc']
+    story.inventory_size = details.get('inventory_size')
+    story.starting_loc = details.get('starting_loc')
     story.story_id = story_id
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
 
