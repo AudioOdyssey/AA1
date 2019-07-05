@@ -38,7 +38,7 @@
             {%else%}
             <p>"{{dec.decision_name}}" leads to NOWHERE</p>
             {% endif%}
-            <a href="/story/location/decision/show?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit
+            <a class="edit" href="/story/location/decision/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}&decision_id={{dec.decision_id}}">Edit
                 Decision</a> </div>
         {% endfor %}
     </section>

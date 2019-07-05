@@ -92,7 +92,7 @@
             <h4>{{ object.obj_name }}</h4>
             <hr>
             <h5>{{ object.obj_starting_loc_name }}</h5>
-            <p>{{ object.obj_description }}</p>
+            <p>{{ StoryLocation.get(story.story_id,object.obj_starting_loc).location_name }}</p>
         </a>
         {% endfor %}
     </section>
