@@ -18,21 +18,16 @@
     <button type="button" onclick="add_btn_pressed_dec('{{ story_id }}', '{{ location.location_id }}')" id="add-btn"
         class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
-
-
-
-
 {% for decision in decisions %}
-
-    <a href = "/story/location/decision/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}&decision_id={{decision.decision_id}}">Edit Decision</a>
+<a href = "/story/location/decision/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}&decision_id={{decision.decision_id}}">Edit Decision</a>
+   <section class="row 1-3-left-row small-card">
    
-<section class="row 1-3-left-row small-card">
-    <section>
-        <section >
-            <div>
+        <section col-sm-4>
+            <div class= "row">
                 <h5><b>Name:</b></h5>
                 <p type="text" name="decision_name">{{ decision.decision_name }}</p>
             </div>
+            <div class = "row">
                 <label><b>Properties:</b></label>
                 <br>
                 <p>
@@ -42,12 +37,6 @@
                     Not Hidden,
                     {%endif%}
 
-                    {%if decision.transition%}
-                    Transition,
-                    {%else%}
-                    Not Transtion,
-                    {%endif%}
-
                     {%if decision.locked%}
                     Locked
                     {%else%}
@@ -55,17 +44,25 @@
                     {%endif%}
                 </p>
             </div>
-        </section>
-  <section>
+           
+        </section>  
+  <div class="row col-sm-4">
+                <p>
+                    {%if decision.transition%}
+                    <b>ransition</b>T to {{StoryLocation.get(decision.transition_loc_id).location_name}}
+                    {%else%}
+                    <b>Not a Transtion</b>
+                    {%endif%}
+                </p>
+                </div>
+  <section class = "col-sm-4 row">
         <!-- TODO: add max value -->
-        <h6>Decision Sequence Number:</h6>
-        <p name="sequence_number"  type="number" >{{decision.sequence_num}}</p>
-   
-
-        </section>
+        <h6><b>Decision Sequence Number: </b></h6>
+        <p name="sequence_number"  type="number" > {{decision.sequence_num}}</p>
     </section>
+    </section>  
   
-    </section>
+  
 
 
 {% endfor %}

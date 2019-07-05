@@ -230,7 +230,7 @@ def story_update():
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
-    return render_template("story/update.html", story=story, objects=objects, events=events, locations=locations)
+    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
 
 
 @app.route("/story/update", methods=["POST"])
@@ -530,7 +530,7 @@ def decision_show():
    # print(objects[0].obj_name)
     events = StoryEvent.event_list(
         request.args['story_id'])
-    return render_template("story/location/decision/show.html", decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
+    return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
 
 @app.route("/story/location/decision/update", methods=['POST'])
