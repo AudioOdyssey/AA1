@@ -21,7 +21,6 @@
 
 
 
-<div id="content-marker"></div>
 
 {% for decision in decisions %}
 
@@ -32,11 +31,11 @@
         <section >
             <div>
                 <h5><b>Name:</b></h5>
-                <p class="form-control" type="text" name="decision_name">{{ decision.decision_name }}</p>
+                <p type="text" name="decision_name">{{ decision.decision_name }}</p>
             </div>
                 <label><b>Properties:</b></label>
                 <br>
-                <p class="form-control">
+                <p>
                     {%if decision.hidden%}
                     Hidden,
                     {%else%}
@@ -60,7 +59,7 @@
   <section>
         <!-- TODO: add max value -->
         <h6>Decision Sequence Number:</h6>
-        <p class="form-control" name="sequence_number"  type="number" >{{decision.sequence_num}}</p>
+        <p name="sequence_number"  type="number" >{{decision.sequence_num}}</p>
    
 
         </section>
