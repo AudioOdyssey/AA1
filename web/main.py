@@ -436,6 +436,20 @@ def object_indiv():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
 
+@app.route("/story/location/decision/indiv")
+# @login_required
+def decision_indiv():
+    if "logged_in" not in session:
+        return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    location_id = request.args["location_id"]
+    decision_id = request.args["decision_id"]
+    decision = StoryDecision.get(story_id, location_id, decision_id)
+    objects = StoryObject.obj_list(story_id)
+    events = StoryEvent.event_list(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    return render_template("story/location/decision/indiv.html",locations=locations, decision=decision,story_id=story_id,decision_id=decision_id, events=events, objects=objects)
+
 
 @app.route("/story/event/indiv")
 # @login_required
