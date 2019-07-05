@@ -74,7 +74,8 @@ class Story:
             cur.execute(("INSERT INTO master_stories(story_title, story_author, story_price, user_creator_id) VALUES(%s, %s, %s, %s)"),
                         (self.story_title, self.story_author, self.story_price, self.user_creator_id))
             conn.commit()
-            cur.execute(("SELECT MAX(story_id)+1 FROM master_stories"))
+            #unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
+            cur.execute(("SELECT MAX(story_id) FROM master_stories")) 
             query_data = cur.fetchone()
             self.story_id = query_data[0]
             conn.commit()
@@ -218,8 +219,9 @@ class Story:
         conn = pymysql.connect(
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
+            #unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
             cur.execute(
-                ("SELECT count(*) FROM master_stories WHERE user_creator_id = %s"), (user_creator_id))
+                ("SELECT MAX(story_id) FROM master_stories"))
             result = cur.fetchone()
             last_id = result[0]
         conn.close()
