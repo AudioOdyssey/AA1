@@ -69,7 +69,7 @@ class StoryObject:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"], results['reviewer_comments'], results['is_verified'])
+                return cls(story_id, results['obj_id'], results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"], results['reviewer_comments'], results['is_verified'])
     
     def update(self, story_id, object_id, name, starting_loc, desc, can_pickup_obj, is_hidden):
         self.obj_name = name
