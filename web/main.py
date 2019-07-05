@@ -201,7 +201,7 @@ def app_logout():
     return redirect(url_for("home"))
 
 
-@app.route("/session/logout", methods = ['POST', 'GET'])
+@app.route("/session/logout", methods=['POST', 'GET'])
 # @login_required
 def logout():
     if request.method == 'POST':
@@ -401,6 +401,7 @@ def event_new():
 def event_destroy():
     StoryEvent.event_del(request.form['event_id'])
     return '{"status":"ok"}'
+
 
 @app.route("/story/location/show")
 # @login_required
