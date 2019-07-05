@@ -84,7 +84,7 @@ class StoryDecision:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["loc_id"], results["sequence_num"], results["decision_id"], results["transition"], results["transition_loc_id"], results["hidden"], results["locked"], results["decision_description"], results["show_event_id"], results["show_object_id"], results["unlock_event_id"], results["unlock_object_id"], results["locked_descr"], results["aftermath_descr"], results["cause_event"], results["effect_event_id"], results["can_occur_once"], results["is_locked_by_event_id"], results["locked_by_event_description"], results['reviewer_comments'], results['is_verified'])
+                return cls(story_id, results["loc_id"], results["sequence_num"], results["decision_id"], results['decision_name'], results["transition"], results["transition_loc_id"], results["hidden"], results["locked"], results["decision_description"], results["show_event_id"], results["show_object_id"], results["unlock_event_id"], results["unlock_object_id"], results["locked_descr"], results["aftermath_descr"], results["cause_event"], results["effect_event_id"], results["can_occur_once"], results["is_locked_by_event_id"], results["locked_by_event_description"], results['reviewer_comments'], results['is_verified'])
     
     def update(self, story_id, decision_id, loc_id, sequence_num, decision_name, transition, transition_loc_id, hidden, locked, decision_description, show_event_id, show_object_id, unlock_event_id, unlock_object_id, locked_descr, aftermath_descr, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_description):
         self.sequence_num =  sequence_num
