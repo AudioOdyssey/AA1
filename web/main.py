@@ -842,6 +842,14 @@ def verfication_story():
     events = StoryEvent.event_list(story_id)
     return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
+@app.route("/story/run")
+# @login_required
+def story_run():
+    if "logged_in" not in session:
+        return redirect(url_for("session_new"))
+    story_id = request.args["story_id"]
+    return render_template("story/run.html", StoryDecision=StoryDecision, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story_id=story_id)
+
 
 if __name__ == '__main__':
     app.run()
