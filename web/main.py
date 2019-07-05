@@ -719,8 +719,10 @@ def treeview():
     decisions = []
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
-    location = StoryLocation.get(story_id, loc_id)
-    return render_template("story/treeview.html", StoryLocation=StoryLocation, locations=locations, location=location, decisions=decisions, story=story)
+        location = StoryLocation.get(story_id, loc_id)
+    else:
+        location = StoryLocation.get(story_id, 0)
+    return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
 
 
 @app.route("/verification/treeview")
@@ -734,8 +736,11 @@ def verify_treeview():
     decisions = []
     if loc_id is not None:
         decisions = StoryDecision.dec_list(story_id, loc_id)
+
     location = StoryLocation.get(story_id, loc_id)
-    return render_template("verification/treeview.html", StoryLocation=StoryLocation, locations=locations, location=location, decisions=decisions, story=story)
+
+    
+    return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
 
 
 @app.errorhandler(404)

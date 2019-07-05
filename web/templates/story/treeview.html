@@ -10,11 +10,11 @@
     <label for="start">Select starting location</label>
     <select onchange="get_starting_loc('{{story.story_id}}', this)" id="start" class="form-control" type="text"
         autocomplete="off" name="starting_loc_id">
-        <option value="0" disabled>-----</option>
+        <option value="0" disabled selected>-----</option>
         {% for loc in locations %}
-        <option {% if loc is not none and loc.location_id|int == location.location_id|int %}selected{%endif%}
-            value="{{loc.location_id}}">
-            {{loc.location_name}}</option>
+        
+        <option value = "{{loc.location_id}}">{{loc.location_name}}</option>
+       
         {% endfor %}
     </select>
     <br>
