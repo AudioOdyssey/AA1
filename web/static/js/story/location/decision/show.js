@@ -50,45 +50,21 @@ function check_exclusivity(elem) {
 }
 
 function add_btn_pressed_dec(story_id, location_id) {
-    var template = document.getElementById("dec-template");
-    var newelem = template.cloneNode(true);
-    newelem.id = "";
-    newelem.classList.add("decision-main-row");
-    newelem.childNodes[0].value = story_id;
-    document.getElementById("main-site").insertBefore(newelem, document.getElementById("content-marker"));
-
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            // Successful Request
-            console.log(this.responseText)
-            var obj = JSON.parse(this.responseText);
-            if (obj.status == "ok") {
-                newelem.children[2].value = obj.decision.decision_id;
+            var json = JSON.parse(this.responseText);
+            if (json.status == "ok") { 
+                window.location.href = "/story/location/decision/indiv?story_id=" + story_id + "&location_id=" + location_id + "&decision_id=" + json.decision.decision_id;
             } else {
-                console.log("Bad Response, what do we do now?");
-                console.log(obj);
+                console.log(json);
             }
         } else if (this.readyState == 4) {
-            console.log("Bad Response, what do we do now?");
+            console.log(this.responseText);
         }
     };
     xhttp.open("POST", "/story/location/decision/new?story_id=" + story_id + "&location_id=" + location_id, true);
     xhttp.send();
-}
-
-function delete_btn_pressed(btn) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
-        } else if (this.readyState == 4) {
-            console.log(this.responseText);
-        }
-    };
-    xhttp.open("POST", "/story/location/decision/destroy", true);
-    xhttp.send(new FormData(btn.form));
-    btn.parentNode.parentNode.removeChild(btn.parentNode);
 }
 
 function add_btn_pressed_obj(story_id) {
@@ -108,6 +84,21 @@ function add_btn_pressed_obj(story_id) {
     xhttp.open("POST", "/story/object/new?story_id=" + story_id, true);
     xhttp.send();
 }
+function delete_btn_pressed(btn) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", "/story/location/decision/destroy", true);
+    xhttp.send(new FormData(btn.form));
+    btn.parentNode.parentNode.removeChild(btn.parentNode);
+}
+
+
 
 function add_btn_pressed_loc(story_id) {
     var xhttp = new XMLHttpRequest();
