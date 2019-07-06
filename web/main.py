@@ -749,9 +749,29 @@ def verify_treeview():
     if loc_id is not None:
         decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
     location = StoryLocation.get(story_id, loc_id)
-
-    
     return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
+
+@app.route("/verification/treeview/update", methods = ['POST'])
+def verify_treeview_update():
+    details = request.form
+    story_id = details.get('story_id')
+    ent_type = details['type']
+    ent_id = details['ent_id']
+    reviewer_comment = details['comment']
+    is_verified = details.get("is_verified")
+    if is_verified is None:
+        is_verified = False
+    else:
+        is_verified = True
+    if ent_type.lower() == 'location':
+        loc = StoryLocation.get(story_id, ent_id)
+        loc.update_admin(is_verified, reviewer_comment)
+    else:
+        loc_id = details['loc_id']
+        dec = StoryDecision.get(story_id, loc_id, ent_id)
+        dec.update_admin(is_verified, reviewer_comment)
+    return '{"status":"ok"}'
+
 
 
 @app.errorhandler(404)
