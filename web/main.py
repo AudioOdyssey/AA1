@@ -731,7 +731,7 @@ def treeview():
     loc_id = request.args.get('location_id')
     decisions = []
     if loc_id is not None:
-        decisions = StoryDecision.dec_list(story_id, loc_id)
+        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
         location = StoryLocation.get(story_id, loc_id)
     else:
         location = StoryLocation.get(story_id, 0)

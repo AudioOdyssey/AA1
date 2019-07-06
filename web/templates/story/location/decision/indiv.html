@@ -173,7 +173,7 @@
                     </div>
                     <label>Description when initally locked:</label>
                     <textarea class="form-control" autocomplete="off" name="locked_descr"
-                        onchange="decision_changed(this)"></textarea>
+                        onchange="decision_changed(this)">{{decision.locked_descr}}</textarea>
                 </section>
             </div>
         </div>
@@ -182,7 +182,7 @@
 
         <label>Description of decision aftermath:</label>
         <textarea name="aftermath_desc" class="form-control" autocomplete="off"
-            onchange="decision_changed(this)"></textarea>
+            onchange="decision_changed(this)">{{decision.aftermath_descr}}</textarea>
 
       
 
@@ -212,6 +212,7 @@
                 </select>
             </div>
             <hr>
+            <!--TODO add checkbox here?-->
             <label>Select Event that locks this decision: or <a href="#" onclick="add_btn_pressed_evt('{{ story_id }}')">
                     Add New
                     Event</a></label>
@@ -225,7 +226,7 @@
             </select>
             <label>Description when newly locked:</label>
             <textarea class="form-control" autocomplete="off" name="locked_by_event_description"
-                onchange="decision_changed(this)"></textarea>
+                onchange="decision_changed(this)">{{decision.locked_by_event_description}}</textarea>
         </div>
     </section>
 </form>
