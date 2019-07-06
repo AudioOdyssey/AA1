@@ -262,16 +262,6 @@ def story_new():
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
 
-@app.route("/app/story/info", methods=['GET'])
-def app_story_logistics():
-    return Story.get_entities(int(request.args.get('story_id')))
-
-
-@app.route("/app/store", methods=["GET"])
-def app_store_info():
-    return Story.display_for_store()
-
-
 #### THIS WORKS #####
 @app.route("/story/object/show")
 # @login_required
@@ -283,6 +273,17 @@ def object_show():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
+
+
+@app.route("/app/story/info", methods=['GET'])
+def app_story_logistics():
+    return Story.get_entities(int(request.args.get('story_id')))
+
+
+@app.route("/app/store", methods=["GET"])
+def app_store_info():
+    return Story.display_for_store()
+
 
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
@@ -730,7 +731,7 @@ def treeview():
     loc_id = request.args.get('location_id')
     decisions = []
     if loc_id is not None:
-        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+        decisions = StoryDecision.dec_list(story_id, loc_id)
         location = StoryLocation.get(story_id, loc_id)
     else:
         location = StoryLocation.get(story_id, 0)
@@ -747,7 +748,8 @@ def verify_treeview():
     loc_id = request.args.get('location_id')
     decisions = []
     if loc_id is not None:
-        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+        decisions = StoryDecision.dec_list(story_id, loc_id)
+
     location = StoryLocation.get(story_id, loc_id)
     return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
 
@@ -833,7 +835,7 @@ def verification_location():
     story_id = request.args["story_id"]
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
-    decisions = StoryDecision.dec_list_for_story_loc(story_id, location_id)
+    decisions = StoryDecision.dec_list(story_id, location_id)
     return render_template("verification/location.html", location=location, story_id=story_id, location_id=location_id, decisions=decisions)
 
 
@@ -866,7 +868,8 @@ def story_run():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
-    return render_template("story/run.html", StoryDecision=StoryDecision, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story_id=story_id)
+    story = Story.get(story_id)
+    return render_template("story/run.html", StoryDecision=StoryDecision, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story_id=story_id, story=story)
 
 
 if __name__ == '__main__':

@@ -39,6 +39,7 @@
     <br>
     </form>
     <form onclick="set_focus(this)" method="POST" action="/verification/treeview/update">
+      <input name="story_id" class = "details hidden-in" value="{{story_id}}" readonly> 
    <section class="row">
         {% for dec in decisions %}
         <input name="type" value="decision" readonly class="hidden-in"> 
