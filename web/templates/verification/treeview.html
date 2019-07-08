@@ -30,11 +30,17 @@
                 <a href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">View
                     Details/Edit</a>
                 <br><label>Verify Location</label>
+                {%if location.is_verified%}
+                <input type="checkbox" class="details" name="is_verified" autocomplete="off"
+                    onchange="verify_changed(this)" checked>
+                {%else%}
                 <input type="checkbox" class="details" name="is_verified" autocomplete="off"
                     onchange="verify_changed(this)">
+                {%endif%}
                 <br>
                 <label>Verfication Comments</label>
-                <input type="text" class="details" name="comment" autocomplete="off" onchange="verify_changed(this)">
+                <input type="text" class="details" name="comment" value="{{location.reviewer_comments}}"
+                    autocomplete="off" onchange="verify_changed(this)">
                 {% endif %}
             </div>
         </section>
@@ -60,11 +66,17 @@
                     Details/Edit</a>
                 <br>
                 <label>Verify Decision</label>
+                {%if dec.is_verified%}
                 <input type="checkbox" class="details" name="is_verified" autocomplete="off"
                     onchange="verify_changed(this)">
+                {%else%}
+                <input type="checkbox" class="details" name="is_verified" autocomplete="off"
+                    onchange="verify_changed(this)" checked>
+                {%endif%}
                 <br>
                 <label>Verfication Comments</label>
-                <input type="text" class="details" name="comment" autocomplete="off" onchange="verify_changed(this)">
+                <input type="text" class="details" name="comment" value="{{dec.reviewer_comments}}" autocomplete="off"
+                    onchange="verify_changed(this)">
             </div>
             {% endfor %}
         </section>
