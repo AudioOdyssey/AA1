@@ -45,8 +45,8 @@
         <section class="row">
             {% for dec in decisions %}
             <input name="type" value="decision" readonly class="hidden-in">
-            <input name="ent_id" value="{{decision.decision_id}}" readonly class="hidden-in">
-            <input name="loc_id" value="{{decision.loc_id}}" readonly class="hidden-in">
+            <input name="ent_id" value="{{dec.decision_id}}" readonly class="hidden-in">
+            <input name="loc_id" value="{{dec.loc_id}}" readonly class="hidden-in">
             <div class="col-sm-4 small-card">
                 {% if dec.transition_loc_id > 0%}
                 <a href="/verification/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">"{{dec.decision_name}}"
