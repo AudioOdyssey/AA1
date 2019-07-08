@@ -673,6 +673,7 @@ def review_update():
         obj.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
+        print(story_id)
         loc.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
@@ -736,6 +737,7 @@ def verfication_story():
     events = StoryEvent.event_list(story_id)
     return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
+
 @app.route("/story/treeview")
 def treeview():
     # if "logged_in" not in session:
@@ -752,6 +754,7 @@ def treeview():
     else:
         loc_id = 0
     return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
+
 
 @app.route("/verification/treeview")
 def verify_treeview():
@@ -790,6 +793,7 @@ def verify_treeview():
 #         dec.update_admin(is_verified, reviewer_comment)
 #     return '{"status":"ok"}'
 
+
 @app.route("/story/run")
 # @login_required
 def story_run():
@@ -827,6 +831,7 @@ def verifying():
     story = Story.get(story_id)
     return render_template("/save/verifying.html", story=story)
 
+
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
@@ -843,6 +848,7 @@ def treeview_help():
     story = Story.get(story_id)
     return render_template("story/treeview_help.html", story=story)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
@@ -858,6 +864,7 @@ def page_not_found_500(e):
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
+
 
 @login_manager.unauthorized_handler
 def unauthorized():

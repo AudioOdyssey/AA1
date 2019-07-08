@@ -6,7 +6,7 @@
 
 <body>
     <form onclick="set_focus(this)" method="POST" action="/verification/treeview/update">
-        <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
+        <input name="story_id" class="details hidden-in" value="{{story.story_id}}" readonly>
         <h1 style="text-align: center">Treeview</h1>
         <br>
         <hr>
@@ -15,8 +15,6 @@
             autocomplete="off" name="starting_loc_id">
             <option value="0">-----</option>
             {% for loc in locations %}
-            <input name="type" value="location" readonly class="hidden-in">
-            <input name="ent_id" value="{{location.location_id}}" readonly class="hidden-in">
             <option {% if loc_id|int == loc.location_id|int %}selected{%endif%} value="{{loc.location_id}}">
                 {{loc.location_name}}</option>
             {% endfor %}
@@ -27,6 +25,8 @@
             <div class="col-sm-4 small-card">
                 <p>{{location.location_name}}</p>
                 {% if location != None%}
+                <input name="type" value="location" readonly class="hidden-in">
+                <input name="ent_id" value="{{location.location_id}}" readonly class="hidden-in">
                 <a href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">View
                     Details/Edit</a>
                 <br><label>Verify Location</label>
