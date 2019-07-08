@@ -6,14 +6,12 @@
     <input name="story_id" value="{{ story_id }}" readonly class="hidden-in">
     <input name="loc_id" value="{{ location_id }}" readonly class="hidden-in">
 
-
-
     <section class="location-row row">
         <section class="row flex-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="location_name" onchange="location_changed(this)"
-                    value="{{ location.location_name }}">
+                    value="{{ location.location_name|e }}">
             </div>
         </section>
 
@@ -24,29 +22,28 @@
 
         <label> Original Description</label>
         <textarea class="form-control" rows="3" name="location_origin_description"
-            onchange="location_changed(this)">{{ location.original_description }}</textarea>
+            onchange="location_changed(this)">{{ location.original_description|e }}</textarea>
 
         <label>Short Description</label>
         <textarea class="form-control" rows="3" name="location_short_description"
-            onchange="location_changed(this)">{{ location.short_description }}</textarea>
+            onchange="location_changed(this)">{{ location.short_description|e }}</textarea>
 
 
 
-        <label>Select Event Name (changes description): or <a href="#" onclick="add_btn_pressed_evt({{story_id}})">Add
-                New
-                Event</a></label>
+        <label>Select Event Name (changes description): or <a href="#" onclick="add_btn_pressed_evt('{{story_id}}')">Add
+                New Event</a></label>
 
         <select class="form-control" rows="3" name="location_event_id" onchange="location_changed(this)">
             <option value="0">None</option>
             {%for event in events%}
-            <option {%if location.location_event_id == event.event_id%}selected{%endif%} value="{{event.event_id}}">
-                {{event.event_name}}</option>
+            <option {%if location.location_event_id|int==event.event_id|int%}selected{%endif%}
+                value="{{event.event_id}}">{{event.event_name|e}}</option>
             {%endfor%}
         </select>
 
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="location_post_event_description"
-            onchange="location_changed(this)">{{ location.post_event_description }}</textarea>
+            onchange="location_changed(this)">{{ location.post_event_description|e }}</textarea>
 
 
         <div>
@@ -67,8 +64,8 @@
                     onchange="location_changed(this)">
                     <option value="0">None</option>
                     {%for loc in locations%}
-                    <option {%if location.next_loc_id == loc.location_id%}selected{%endif%} value="{{loc.location_id}}">
-                        {{loc.location_name}}</option>
+                    <option {%if location.next_loc_id|int==loc.location_id|int%}selected{%endif%}
+                        value="{{loc.location_id}}">{{loc.location_name|e}}</option>
                     {%endfor%}
                 </select>
             </div>

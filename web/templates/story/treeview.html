@@ -12,15 +12,15 @@
         autocomplete="off" name="starting_loc_id">
         <option value="0">-----</option>
         {% for loc in locations %}
-        <option {% if loc_id|int == loc.location_id|int %}selected{%endif%} value="{{loc.location_id}}">
-            {{loc.location_name}}</option>
+        <option {%if loc_id|int==loc.location_id|int%}selected{%endif%} value="{{loc.location_id}}">
+            {{loc.location_name|e}}</option>
         {% endfor %}
     </select>
     <br>
     <section class="row">
         <label>Current Location</label>
         <div class="col-sm-4 small-card">
-            <p>{{location.location_name}}</p>
+            <p>{{location.location_name|e}}</p>
             {% if location != None%}
             <a href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit</a>
             {% endif %}
@@ -30,12 +30,12 @@
     <section class="row">
         {% for dec in decisions %}
         <div class="col-sm-4 small-card">
-            {% if dec.transition_loc_id > 0%}
-            <a href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">"{{dec.decision_name}}"
-                leads to "{{StoryLocation.get(story.story_id,dec.transition_loc_id).location_name}}"</a>
+            {% if dec.transition_loc_id > 0 %}
+            <a href="/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">"{{dec.decision_name|e}}"
+                leads to "{{StoryLocation.get(story.story_id,dec.transition_loc_id).location_name|e}}"</a>
             <br>
             {%else%}
-            <p>"{{dec.decision_name}}" leads to NOWHERE</p>
+            <p>"{{dec.decision_name|e}}" leads to NOWHERE</p>
             {% endif%}
             <a class="edit"
                 href="/story/location/decision/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}&decision_id={{dec.decision_id}}">Edit

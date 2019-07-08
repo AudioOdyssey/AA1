@@ -17,9 +17,9 @@
     {% for story in stories %}
     <a class="col-sm-4" href="/story/update?story_id={{story.story_id}}">
         <div class="storycard">
-            <h3>{{ story.story_title }}&nbsp;</h3>
+            <h3>{{ story.story_title|e }}&nbsp;</h3>
             <hr>
-            <p>{{ story.story_synopsis }}</p>
+            <p>{{ story.story_synopsis|e }}</p>
         </div>
     </a>
     {% endfor %}

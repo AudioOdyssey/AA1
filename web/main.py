@@ -716,7 +716,6 @@ def review_update():
         obj.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
-        print(story_id)
         loc.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
@@ -730,7 +729,7 @@ def review_update():
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
-        dec.update_admin(is_verified, reviewer_comment)
+        dec.update_admin(reviewer_comment, is_verified)
     return '{"status":"ok"}'
 
 
@@ -844,7 +843,13 @@ def story_run():
         return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    return render_template("story/run.html", StoryDecision=StoryDecision, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story_id=story_id, story=story)
+    loc_id = request.args.get("location_id")
+    location = None
+    if loc_id is None:
+        loc_id = story.starting_loc
+    location = StoryLocation.get(story_id, loc_id)
+    decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+    return render_template("story/run.html", decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
 @app.route("/save/saving")
