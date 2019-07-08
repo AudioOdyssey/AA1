@@ -10,8 +10,8 @@
     <br>
     <a href="/verification/treeview?story_id={{story_id}}">Switch to treeview</a>
     <hr>
-    <h3><b>Title:</b> {{story.story_title}}</h3>
-    <h6><b>Synopsis:</b> {{story.story_synopsis}}</h6>
+    <h3><b>Title:</b> {{story.story_title|e}}</h3>
+    <h6><b>Synopsis:</b> {{story.story_synopsis|e}}</h6>
     <hr><br>
     <h2 class="text">Locations:</h2>
     <br>
@@ -22,7 +22,7 @@
     <section class="location-row">
         <input name="type" value="location" readonly class="hidden-in">
         <input name="ent_id" value="{{location.location_id}}" readonly class="hidden-in">
-        <p><strong>{{location.location_name}}</strong></p>
+        <p><strong>{{location.location_name|e}}</strong></p>
         <label>Location Verified</label>
         {% if location.is_verified == 1%}
         <input type="checkbox" class="details" name="is_verified" autocomplete="off" onchange="verify_changed(this)"
@@ -32,7 +32,7 @@
         {% endif %}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" value="{{location.reviewer_comments}}" name="comment"
+        <input type="text" class="details" value="{{location.reviewer_comments|e}}" name="comment"
             onchange="verify_changed(this)">
         <!--class="col-sm-4"-->
         <br>
@@ -45,15 +45,15 @@
         <hr>
 
         <h6><b>Original Description</b></h6>
-        <p>{{location.original_description}}</p>
+        <p>{{location.original_description|e}}</p>
         <hr>
 
         <h6><b>Short Description</b></h6>
-        <p>{{location.short_description}}</p>
+        <p>{{location.short_description|e}}</p>
         <hr>
 
         <h6><b>Post Event Description</b></h6>
-        <p>{{location.post_event_description}}</p>
+        <p>{{location.post_event_description|e}}</p>
         <hr>
         <hr>
         <br>
@@ -71,7 +71,7 @@
         <input name="type" value="decision" readonly class="hidden-in">
         <input name="ent_id" value="{{decision.decision_id}}" readonly class="hidden-in">
         <input name="loc_id" value="{{decision.loc_id}}" readonly class="hidden-in">
-        <p><strong>{{decision.decision_name}}</strong></p>
+        <p><strong>{{decision.decision_name|e}}</strong></p>
         <label>Decision Verified</label>
         {% if decision.is_verified == 1%}
         <input type="checkbox" class="details" name="is_verified" onchange="verify_changed(this)" checked>
@@ -80,7 +80,7 @@
         {%endif%}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" name="comment" value="{{decision.reviewer_comments}}"
+        <input type="text" class="details" name="comment" value="{{decision.reviewer_comments|e}}"
             onchange="verify_changed(this)">
         <br>
 
@@ -93,13 +93,13 @@
     <section class="row details" style="display: none">
         <hr>
         <h6><b>Decision Description:</b></h6>
-        <p>{{decision.decision_description}}</p>
+        <p>{{decision.decision_description|e}}</p>
         <hr>
         <h6><b>Description when locked:</b></h6>
-        <p>{{decision.locked_descr}}</p>
+        <p>{{decision.locked_descr|e}}</p>
         <hr>
         <h6><b>Description of decision aftermath:</b></h6>
-        <p>{{decision.aftermath_descr}}</p>
+        <p>{{decision.aftermath_descr|e}}</p>
     </section>
 
     {%endfor%}
@@ -112,7 +112,7 @@
     <section class="object-row">
         <input name="type" value="object" readonly class="hidden-in">
         <input name="ent_id" value="{{object.object_id}}" readonly class="hidden-in">
-        <p><strong>{{object.obj_name}}</strong></p>
+        <p><strong>{{object.obj_name|e}}</strong></p>
         <label>Objects Verified</label>
         {% if object.is_verified==1%}
         <input type="checkbox" class="details" name="is_verified" onchange="verify_changed(this)" checked>
@@ -121,7 +121,7 @@
         {% endif %}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" name="comment" value="{{object.reviewer_comments}}"
+        <input type="text" class="details" name="comment" value="{{object.reviewer_comments|e}}"
             onchange="verify_changed(this)">
         <br>
 
@@ -135,7 +135,7 @@
     <section class="row details" style="display: none">
         <hr>
         <h6>Description</h6>
-        <p>{{object.obj_description}}</p>
+        <p>{{object.obj_description|e}}</p>
 
     </section>
 
@@ -148,8 +148,8 @@
     {%for event in events%}
     <section class="event-row">
         <input name="type" value="event" readonly class="hidden-in">
-        <input name="ent_id" value="{{event.event_id}}" readonly class="hidden-in">
-        <p><strong>{{event.event_name}}</strong></p>
+        <input name="ent_id" value="{{event.event_id|e}}" readonly class="hidden-in">
+        <p><strong>{{event.event_name|e}}</strong></p>
         <label>Event Verified</label>
         {% if event.is_verified%}
         <input type="checkbox" class="details" name="is_verified" onchange="verify_changed(this)" checked>
@@ -158,7 +158,7 @@
         {%endif%}
         <br>
         <label>Verification Comments</label>
-        <input type="text" class="details" value="{{event.reviewer_comments}}" name="comment"
+        <input type="text" class="details" value="{{event.reviewer_comments|e}}" name="comment"
             onchange="verify_changed(this)">
         <br>
         <section class="flex-0" onclick="show(this)">
@@ -170,7 +170,7 @@
     <section class="row details" style="display: none">
         <hr>
         <h6>Description:</h6>
-        <p>{{event.event_description}}</p>
+        <p>{{event.event_description|e}}</p>
     </section>
     {%endfor%}
 </form>
@@ -193,7 +193,7 @@
         <input name="type" value="story" readonly class="hidden-in">
         <label>Additional Comments: </label>
         <textarea class="details form-control" name="comment"
-            onchange="verify_changed(this)">{{story.reviewer_comments}}</textarea>
+            onchange="verify_changed(this)">{{story.reviewer_comments|e}}</textarea>
 
     </section>
     <br>

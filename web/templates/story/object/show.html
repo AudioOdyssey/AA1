@@ -33,13 +33,12 @@
 
             <div class="col-sm-8">
                 <label for="starting_loc"><b>Select Starting Location: or <a href="#"
-                            onclick="add_btn_pressed_loc({{story_id}})"> Add New
-                            Location</a></b></label>
+                            onclick="add_btn_pressed_loc('{{story_id}}')"> Add New Location</a></b></label>
                 <select id="starting_loc" autocomplete="off" type="text" class="form-control"
                     onchange="object_changed(this)" name="obj_starting_loc">
                     <option value="0">None</option>
                     {% for location in locations %}
-                    <option value="{{location.location_id}}">{{location.location_name}}</option>
+                    <option value="{{location.location_id}}">{{location.location_name|e}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -69,7 +68,7 @@
                 <select onchange="object_changed(this)" autocomplete="off" name="unhide_event_ID">
                     <option value="0">None</option>
                     {% for event in events %}
-                    <option value="{{event.event_id}}">{{event.event_name}}</option>
+                    <option value="{{event.event_id}}">{{event.event_name|e}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -92,18 +91,17 @@
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="obj_name" onchange="object_changed(this)"
-                    value="{{ object.obj_name }}" required>
+                    value="{{ object.obj_name|e }}" required>
             </div>
             <div class="col-sm-8">
-                <label><b>Select Starting Location: or <a href="#" onclick="add_btn_pressed_loc({{object.story_id}})">
-                            Add New
-                            Location</a></b></label>
+                <label><b>Select Starting Location: or <a href="#" onclick="add_btn_pressed_loc('{{object.story_id}}')">
+                            Add New Location</a></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc"
                     value="{{object.obj_starting_loc}}" onchange="object_changed(this)">
                     <option value="0">None</option>
                     {% for location in locations %}
-                    <option {% if location.location_id==object.obj_starting_loc %}selected{%endif%}
-                        value="{{location.location_id}}">{{location.location_name}}</option>
+                    <option {% if location.location_id|int==object.obj_starting_loc|int%}selected{%endif%}
+                        value="{{location.location_id}}">{{location.location_name|e}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -119,7 +117,7 @@
 
         <label>Description</label>
         <textarea class="form-control" rows="3" name="obj_description"
-            onchange="object_changed(this)">{{ object.obj_description }}</textarea>
+            onchange="object_changed(this)">{{ object.obj_description|e }}</textarea>
         <br>
 
         <div>
@@ -139,8 +137,8 @@
                     onchange="object_changed(this)" value="{{ object.unhide_event_id}}">
                     <option value="0">None</option>
                     {% for event in events %}
-                    <option {% if event.event_id==object.unhide_event_id %}selected{%endif%} value="{{event.event_id}}">
-                        {{event.event_name}}</option>
+                    <option {% if event.event_id|int==object.unhide_event_id|int%}selected{%endif%}
+                        value="{{event.event_id}}">{{event.event_name|e}}</option>
                     {% endfor %}
                 </select>
             </div>

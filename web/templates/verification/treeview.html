@@ -15,15 +15,15 @@
             autocomplete="off" name="starting_loc_id">
             <option value="0">-----</option>
             {% for loc in locations %}
-            <option {% if loc_id|int == loc.location_id|int %}selected{%endif%} value="{{loc.location_id}}">
-                {{loc.location_name}}</option>
+            <option {%if loc_id|int==loc.location_id|int%}selected{%endif%} value="{{loc.location_id}}">
+                {{loc.location_name|e}}</option>
             {% endfor %}
         </select>
         <br>
         <section class="row">
             <label>Current Location</label>
             <div class="col-sm-4 small-card">
-                <p>{{location.location_name}}</p>
+                <p>{{location.location_name|e}}</p>
                 {% if location != None%}
                 <input name="type" value="location" readonly class="hidden-in">
                 <input name="ent_id" value="{{location.location_id}}" readonly class="hidden-in">
@@ -39,7 +39,7 @@
                 {%endif%}
                 <br>
                 <label>Verfication Comments</label>
-                <input type="text" class="details" name="comment" value="{{location.reviewer_comments}}"
+                <input type="text" class="details" name="comment" value="{{location.reviewer_comments|e}}"
                     autocomplete="off" onchange="verify_changed(this)">
                 {% endif %}
             </div>
@@ -57,11 +57,11 @@
             <input name="ent_id" value="{{dec.decision_id}}" readonly class="hidden-in">
             <input name="loc_id" value="{{dec.loc_id}}" readonly class="hidden-in">
             {% if dec.transition_loc_id > 0%}
-            <a href="/verification/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">"{{dec.decision_name}}"
-                leads to "{{StoryLocation.get(story.story_id,dec.transition_loc_id).location_name}}"</a>
+            <a href="/verification/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">"{{dec.decision_name|e}}"
+                leads to "{{StoryLocation.get(story.story_id,dec.transition_loc_id).location_name|e}}"</a>
             <br>
             {%else%}
-            <p>"{{dec.decision_name}}" leads to NOWHERE</p>
+            <p>"{{dec.decision_name|e}}" leads to NOWHERE</p>
             {% endif%}
             <br><a
                 href="/story/location/decision/show?story_id={{story.story_id}}&location_id={{location.location_id}}">View
@@ -77,7 +77,7 @@
             {%endif%}
             <br>
             <label>Verfication Comments</label>
-            <input type="text" class="details" name="comment" value="{{dec.reviewer_comments}}" autocomplete="off"
+            <input type="text" class="details" name="comment" value="{{dec.reviewer_comments|e}}" autocomplete="off"
                 onchange="verify_changed(this)">
         </form>
         {% endfor %}
