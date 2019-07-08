@@ -4,12 +4,16 @@ from models.story import Story
 from models.storyevent import StoryEvent
 from models.storylocation import StoryLocation
 from models.storydecision import StoryDecision
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session
 
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
+
+from werkzeug.utils import secure_filename
 
 import pymysql
 import pymysql.cursors
+
+import os
 import sys
 
 import random
@@ -22,8 +26,12 @@ from datetime import datetime, timedelta
 
 import jwt
 
+UPLOAD_FOLDER = '/var/www/pictures/'
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
+
 app = Flask(__name__)
 app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -211,6 +219,37 @@ def logout():
         else:
             return redirect(url_for("session_new"))
 
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/upload/cover_photos', methods=['GET', 'POST'])
+def upload_cover():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            pass
+        file = request.files['file']
+        if file.filename == '':
+            flash("No selected file")
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for("uploaded_file", filename=filename))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 @app.route("/story/show")
 # @login_required
@@ -243,7 +282,7 @@ def story_update_post():
     story_price = details['story_price']
     genre = details.get('genre')
     if genre is None:
-        genre = "Action/Adventure"
+        genre = "Miscellaneous"
     story.length_of_story = details['length_of_story']
     story.inventory_size = details.get('inventory_size')
     story.starting_loc = details.get('starting_loc')
@@ -291,6 +330,10 @@ def app_store_expand():
     story_id = details.get("story_id")
     return Story.get_info(story_id)
 
+@app.route("/app/library/", methods=['GET'])
+def stories_show_owned_by_user():
+    user_id = request.args.get("user_id")
+    return Story.json_story_library(user_id)
 
 @app.route("/story/object/update", methods=['POST'])
 # @login_required

@@ -205,6 +205,22 @@ class Story:
         return story_list
 
     @classmethod
+    def json_story_library(cls, user_id):
+        library = cls.story_list_purchased_by_user(user_id)
+        result = []
+        for story in library:
+            stry_schema = {
+                "story_id" : story.story_id,
+                "story_title" : story.story_title,
+                "story_author" : story.story_author,
+                "story_synopsis" : story.story_synopsis,
+                "story_price" : story.story_price,
+                "genre" : story.genre
+            }
+            result.append(stry_schema)
+        return json.dumps(result)
+
+    @classmethod
     def story_list_ready_for_verification(cls):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
