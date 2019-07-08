@@ -17,13 +17,15 @@
             <div class="col-sm-8">
                 <label><b>Select Location or:</b><a href="#" onclick="add_btn_pressed_loc({{event.story_id}})"> Add New
                         Location</a></label>
-                <select class="form-control" autocomplete="off" name="event_loc" onchange="event_changed(this)" value="{{event.event_location_id}}">
+                <select class="form-control" autocomplete="off" name="event_loc" onchange="event_changed(this)"
+                    value="{{event.event_location_id}}">
                     <option value="0">None</option>
                     {% for loc in locations %}
-                   <option {% if loc.location_id==event.event_location_id %}selected{%endif%} value="{{loc.location_id}}">
+                    <option {% if loc.location_id==event.event_location_id %}selected{%endif%}
+                        value="{{loc.location_id}}">
                         {{ loc.location_name }}</option>
                     {%endfor%}
-                 </select>
+                </select>
             </div>
         </section>
 

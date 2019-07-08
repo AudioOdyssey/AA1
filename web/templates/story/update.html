@@ -67,7 +67,8 @@
                 <select autocomplete="none" class="form-control" onchange="story_changed(this)" name="starting_loc">
                     <option value="0" disabled>Starting Location</option>
                     {%for loc in locations%}
-                    <option {%if story.starting_loc|int == loc.location_id|int%}selected{%endif%} value="{{loc.location_id}}">
+                    <option {%if story.starting_loc|int == loc.location_id|int%}selected{%endif%}
+                        value="{{loc.location_id}}">
                         {{loc.location_name}}</option>
                     {%endfor%}
                 </select>
@@ -77,9 +78,9 @@
 
     <br><br>
     <!-- Object Row -->
- 
-        <h3>Objects</h3>
-   
+
+    <h3>Objects</h3>
+
 
 
     <button type="button" onclick="add_btn_obj('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
@@ -99,8 +100,8 @@
 
     <!-- Event Row -->
 
-        <h3>Events</h3>
-    
+    <h3>Events</h3>
+
     <button type="button" onclick="add_btn_evt('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
     <hr>
@@ -119,7 +120,7 @@
 <section id="1-right-col">
     <!-- Locations Row -->
 
-        <h3>Locations</h3>
+    <h3>Locations</h3>
 
 
     <button type="button" onclick="add_btn_loc('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i

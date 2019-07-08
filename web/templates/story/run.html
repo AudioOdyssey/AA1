@@ -3,25 +3,32 @@
 <!--NONE OF THIS NEEDS TO BE SAVABLE PER MIGUEL basically just a text version of the app but doesnt
 need to be nearly as clean/advanced. Do we want to make this like treeview where it replaces itself?-->
 {% block content %}
-<body> <!--note idk how to make location dynamic. Should this all just be a bunch of js functions??-->
-    <h1>Running {{story.story_title}}</h1>
-    <br><hr>
-  <h6>{{StoryLocation.get(story_id, story.starting_loc).original_description}}</h6> <!--I think printing 
+
+<body>
+  <!--note idk how to make location dynamic. Should this all just be a bunch of js functions??-->
+  <h1>Running {{story.story_title}}</h1>
+  <br>
+  <hr>
+  <h6>{{StoryLocation.get(story_id, story.starting_loc).original_description}}</h6>
+  <!--I think printing 
     all of these is acceptable maybe we could hide the not relevant ones if we can track the info?-->
   <p>(if already visited: {{StoryLocation.get(story_id, story.starting_loc).short_description}})</p>
   {% if location_event_id is not none%}
-  <p>(if {{StoryEvent.get(story_id, story.starting_loc).event_name}} has been triggered:{{StoryLocation.get(story_id, story.starting_loc).post_event_description}} )</p>
- {%endif%}
- <hr>
- <!--for objects at this location (brian idk how to keep track of that)-->
- <!--print their names and have a pick up option-->
+  <p>(if {{StoryEvent.get(story_id, story.starting_loc).event_name}} has been
+    triggered:{{StoryLocation.get(story_id, story.starting_loc).post_event_description}} )</p>
+  {%endif%}
+  <hr>
+  <!--for objects at this location (brian idk how to keep track of that)-->
+  <!--print their names and have a pick up option-->
   <p>Would you like to ...</p>
 
   {% for dec in StoryDecision.dec_list_for_story_loc(story_id, story.starting_loc)%}
- <!--that function is empty-->  <button onclick= "set_next_location({{dec.transition_loc_id}})"class = "btn btn-light">{{dec.decision_description}}</button> 
+  <!--that function is empty--> <button onclick="set_next_location({{dec.transition_loc_id}})"
+    class="btn btn-light">{{dec.decision_description}}</button>
   {%endfor%}
 </body>
-<br><hr>
+<br>
+<hr>
 <a href="/story/update?story_id={{story_id}}"><button class="btn btn-light">Back to Main Story Page</button></a>
 {% endblock %}
 <!--wow this is by far our most docuemented file and it doesnt even do anything!!! miss u already Brian xoxoxoxo ilysmbbrawrXD:3 nuzzles uwu-->
