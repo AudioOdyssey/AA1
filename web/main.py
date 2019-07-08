@@ -801,7 +801,13 @@ def story_run():
         return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    return render_template("story/run.html", StoryDecision=StoryDecision, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story_id=story_id, story=story)
+    loc_id = request.args.get("location_id")
+    location = None
+    if loc_id is None:
+        loc_id = story.starting_loc
+    location = StoryLocation.get(story_id, loc_id)
+    decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+    return render_template("story/run.html", decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
 @app.route("/save/saving")
