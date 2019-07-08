@@ -673,7 +673,6 @@ def review_update():
         obj.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
-        print(story_id)
         loc.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
@@ -687,7 +686,7 @@ def review_update():
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
-        dec.update_admin(is_verified, reviewer_comment)
+        dec.update_admin(reviewer_comment, is_verified)
     return '{"status":"ok"}'
 
 

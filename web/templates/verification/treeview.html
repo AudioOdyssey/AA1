@@ -46,47 +46,49 @@
         </section>
         <br>
     </form>
-    <form onclick="set_focus(this)" method="POST" action="/verification/treeview/update">
-        <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
-        <section class="row">
-            {% for dec in decisions %}
+
+    <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
+    <section class="row">
+        {% for dec in decisions %}
+        <form class="col-sm-4 small-card" onclick="set_focus(this)" method="POST"
+            action="/verification/treeview/update">
             <input name="type" value="decision" readonly class="hidden-in">
+            <input name="story_id" value="{{story.story_id}}" readonly class="hidden-in">
             <input name="ent_id" value="{{dec.decision_id}}" readonly class="hidden-in">
             <input name="loc_id" value="{{dec.loc_id}}" readonly class="hidden-in">
-            <div class="col-sm-4 small-card">
-                {% if dec.transition_loc_id > 0%}
-                <a href="/verification/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">"{{dec.decision_name}}"
-                    leads to "{{StoryLocation.get(story.story_id,dec.transition_loc_id).location_name}}"</a>
-                <br>
-                {%else%}
-                <p>"{{dec.decision_name}}" leads to NOWHERE</p>
-                {% endif%}
-                <br><a
-                    href="/story/location/decision/show?story_id={{story.story_id}}&location_id={{location.location_id}}">View
-                    Details/Edit</a>
-                <br>
-                <label>Verify Decision</label>
-                {%if dec.is_verified%}
-                <input type="checkbox" class="details" name="is_verified" autocomplete="off"
-                    onchange="verify_changed(this)">
-                {%else%}
-                <input type="checkbox" class="details" name="is_verified" autocomplete="off"
-                    onchange="verify_changed(this)" checked>
-                {%endif%}
-                <br>
-                <label>Verfication Comments</label>
-                <input type="text" class="details" name="comment" value="{{dec.reviewer_comments}}" autocomplete="off"
-                    onchange="verify_changed(this)">
-            </div>
-            {% endfor %}
-        </section>
+            {% if dec.transition_loc_id > 0%}
+            <a href="/verification/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}">"{{dec.decision_name}}"
+                leads to "{{StoryLocation.get(story.story_id,dec.transition_loc_id).location_name}}"</a>
+            <br>
+            {%else%}
+            <p>"{{dec.decision_name}}" leads to NOWHERE</p>
+            {% endif%}
+            <br><a
+                href="/story/location/decision/show?story_id={{story.story_id}}&location_id={{location.location_id}}">View
+                Details/Edit</a>
+            <br>
+            <label>Verify Decision</label>
+            {%if dec.is_verified%}
+            <input type="checkbox" class="details" name="is_verified" autocomplete="off" onchange="verify_changed(this)"
+                checked>
+            {%else%}
+            <input type="checkbox" class="details" name="is_verified" autocomplete="off"
+                onchange="verify_changed(this)">
+            {%endif%}
+            <br>
+            <label>Verfication Comments</label>
+            <input type="text" class="details" name="comment" value="{{dec.reviewer_comments}}" autocomplete="off"
+                onchange="verify_changed(this)">
+        </form>
+        {% endfor %}
+    </section>
 
-        <br>
-        <hr>
-        <a href="/verification/review?story_id={{story.story_id}}"><button class="btn btn-primary">Return to
-                Verification Form</button></a>
+    <br>
+    <hr>
+    <a href="/verification/review?story_id={{story.story_id}}"><button class="btn btn-primary">Return to
+            Verification Form</button></a>
 
-    </form>
+
 </body>
 
 
