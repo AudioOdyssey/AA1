@@ -689,133 +689,6 @@ def review_update():
     return '{"status":"ok"}'
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
-
-
-@app.route("/story/help")
-def help():
-    return render_template("story/help.html")
-
-
-@app.route("/verification/help")
-def vhelp():
-    return render_template("verification/help.html")
-
-
-@app.route("/story/treeview_help")
-def treeview_help():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("story/treeview_help.html", story=story)
-
-
-@login_manager.unauthorized_handler
-def unauthorized():
-    return redirect(url_for("session_new"))
-
-
-@app.route("/user/newcorp")
-def newcorp():
-    return render_template("user/newcorp.html")
-
-
-@app.route("/story/treeview")
-def treeview():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    locations = StoryLocation.loc_list(story_id)
-    loc_id = request.args.get('location_id')
-    decisions = []
-    if loc_id is not None:
-        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
-        location = StoryLocation.get(story_id, loc_id)
-    else:
-        location = StoryLocation.get(story_id, 0)
-    return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
-
-
-@app.route("/verification/treeview")
-def verify_treeview():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    locations = StoryLocation.loc_list(story_id)
-    loc_id = request.args.get('location_id')
-    decisions = []
-    if loc_id is not None:
-        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
-
-    location = StoryLocation.get(story_id, loc_id)
-    return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
-
-@app.route("/verification/treeview/update", methods = ['POST'])
-def verify_treeview_update():
-    details = request.form
-    story_id = details.get('story_id')
-    ent_type = details['type']
-    ent_id = details['ent_id']
-    reviewer_comment = details['comment']
-    is_verified = details.get("is_verified")
-    if is_verified is None:
-        is_verified = False
-    else:
-        is_verified = True
-    if ent_type.lower() == 'location':
-        loc = StoryLocation.get(story_id, ent_id)
-        loc.update_admin(is_verified, reviewer_comment)
-    else:
-        loc_id = details['loc_id']
-        dec = StoryDecision.get(story_id, loc_id, ent_id)
-        dec.update_admin(is_verified, reviewer_comment)
-    return '{"status":"ok"}'
-
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template('404.html'), 404
-
-
-@app.errorhandler(500)
-def page_not_found_500(e):
-    # note that we set the 404 status explicitly
-    return render_template('500.html'), 500
-
-
-@app.route("/save/saving")
-def saving():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("save/saving.html", story=story)
-
-
-@app.route("/save/savingstory")
-def savingstory():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("/save/savingstory.html", story=story)
-
-
-@app.route("/save/publishing")
-def publishing():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("/save/publishing.html", story=story)
-
-
-@app.route("/save/verifying")
-def verifying():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("/save/verifying.html", story=story)
-
-
 @app.route("/verification/object")
 # @login_required
 def verification_object():
@@ -862,6 +735,58 @@ def verfication_story():
     events = StoryEvent.event_list(story_id)
     return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
+@app.route("/story/treeview")
+def treeview():
+    # if "logged_in" not in session:
+    #     return redirect(url_for("session_new"))
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    loc_id = request.args.get('location_id')
+    decisions = []
+    if loc_id is not None:
+        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+        location = StoryLocation.get(story_id, loc_id)
+    else:
+        location = StoryLocation.get(story_id, 0)
+    return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
+
+@app.route("/verification/treeview")
+def verify_treeview():
+    # if "logged_in" not in session:
+    #     return redirect(url_for("session_new"))
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    loc_id = request.args.get('location_id')
+    decisions = []
+    if loc_id is not None:
+        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+
+    location = StoryLocation.get(story_id, loc_id)
+    return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
+
+@app.route("/verification/treeview/update", methods = ['POST'])
+def verify_treeview_update():
+    details = request.form
+    story_id = details.get('story_id')
+    ent_type = details['type']
+    ent_id = details['ent_id']
+    reviewer_comment = details['comment']
+    is_verified = details.get("is_verified")
+    if is_verified is None:
+        is_verified = False
+    else:
+        is_verified = True
+    if ent_type.lower() == 'location':
+        loc = StoryLocation.get(story_id, ent_id)
+        loc.update_admin(is_verified, reviewer_comment)
+    else:
+        loc_id = details['loc_id']
+        dec = StoryDecision.get(story_id, loc_id, ent_id)
+        dec.update_admin(is_verified, reviewer_comment)
+    return '{"status":"ok"}'
+
 @app.route("/story/run")
 # @login_required
 def story_run():
@@ -870,6 +795,70 @@ def story_run():
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     return render_template("story/run.html", StoryDecision=StoryDecision, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story_id=story_id, story=story)
+
+
+@app.route("/save/saving")
+def saving():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("save/saving.html", story=story)
+
+
+@app.route("/save/savingstory")
+def savingstory():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("/save/savingstory.html", story=story)
+
+
+@app.route("/save/publishing")
+def publishing():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("/save/publishing.html", story=story)
+
+
+@app.route("/save/verifying")
+def verifying():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("/save/verifying.html", story=story)
+
+@app.route("/story/help")
+def help():
+    return render_template("story/help.html")
+
+
+@app.route("/verification/help")
+def vhelp():
+    return render_template("verification/help.html")
+
+
+@app.route("/story/treeview_help")
+def treeview_help():
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    return render_template("story/treeview_help.html", story=story)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def page_not_found_500(e):
+    # note that we set the 404 status explicitly
+    return render_template('500.html'), 500
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for("session_new"))
 
 
 if __name__ == '__main__':
