@@ -5,7 +5,7 @@
 <!--TODO put all this info into server somehow-->
 
 <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
-    <input name="story_id" class = "details hidden-in" value="{{story_id}}" readonly> 
+    <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
     <h1 class="text" style="text-align: center;">Story Verification</h1>
     <br>
     <a href="/verification/treeview?story_id={{story_id}}">Switch to treeview</a>
@@ -17,11 +17,11 @@
     <br>
 </form>
 <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
-    <input name="story_id" class = "details hidden-in" value="{{story_id}}" readonly> 
+    <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
     {% for location in locations %}
     <section class="location-row">
-            <input name="type" value="location" readonly class="hidden-in"> 
-            <input name="ent_id" value="{{location.location_id}}" readonly class="hidden-in"> 
+        <input name="type" value="location" readonly class="hidden-in">
+        <input name="ent_id" value="{{location.location_id}}" readonly class="hidden-in">
         <p><strong>{{location.location_name}}</strong></p>
         <label>Location Verified</label>
         {% if location.is_verified == 1%}
@@ -68,9 +68,9 @@
 
     {%for decision in decisions%}
     <section class="decision-row">
-        <input name="type" value="decision" readonly class="hidden-in"> 
-        <input name="ent_id" value="{{decision.decision_id}}" readonly class="hidden-in"> 
-        <input name="loc_id" value="{{decision.loc_id}}" readonly class="hidden-in"> 
+        <input name="type" value="decision" readonly class="hidden-in">
+        <input name="ent_id" value="{{decision.decision_id}}" readonly class="hidden-in">
+        <input name="loc_id" value="{{decision.loc_id}}" readonly class="hidden-in">
         <p><strong>{{decision.decision_name}}</strong></p>
         <label>Decision Verified</label>
         {% if decision.is_verified == 1%}
@@ -110,8 +110,8 @@
     <br>
     {%for object in objects%}
     <section class="object-row">
-            <input name="type" value="object" readonly class="hidden-in"> 
-            <input name="ent_id" value="{{object.object_id}}" readonly class="hidden-in"> 
+        <input name="type" value="object" readonly class="hidden-in">
+        <input name="ent_id" value="{{object.object_id}}" readonly class="hidden-in">
         <p><strong>{{object.obj_name}}</strong></p>
         <label>Objects Verified</label>
         {% if object.is_verified==1%}
@@ -141,14 +141,14 @@
 
     {%endfor%}
 </form>
-    <hr><br>
-    <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+<hr><br>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <h2>Events:</h2>
     <br>
     {%for event in events%}
     <section class="event-row">
-        <input name="type" value="event" readonly class="hidden-in"> 
-        <input name="ent_id" value="{{event.event_id}}" readonly class="hidden-in"> 
+        <input name="type" value="event" readonly class="hidden-in">
+        <input name="ent_id" value="{{event.event_id}}" readonly class="hidden-in">
         <p><strong>{{event.event_name}}</strong></p>
         <label>Event Verified</label>
         {% if event.is_verified%}
@@ -174,9 +174,9 @@
     </section>
     {%endfor%}
 </form>
-    <br>
-    <hr><br>
-    <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+<br>
+<hr><br>
+<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
     <label>Suggested Rating:</label>
     <!--where do we want to store this info @sonny @brian-->
     <select class="form-control details" onchange="verify_changed(this)" name="parental_ratings">
@@ -188,12 +188,13 @@
 
     <br>
     <hr>
-   
+
     <section class="row">
-            <input name="type" value="story" readonly class="hidden-in"> 
-   <label>Additional Comments: </label>
-    <textarea class="details form-control" name="comment" onchange="verify_changed(this)">{{story.reviewer_comments}}</textarea>
-    
+        <input name="type" value="story" readonly class="hidden-in">
+        <label>Additional Comments: </label>
+        <textarea class="details form-control" name="comment"
+            onchange="verify_changed(this)">{{story.reviewer_comments}}</textarea>
+
     </section>
     <br>
     <hr>

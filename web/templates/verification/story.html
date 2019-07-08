@@ -5,43 +5,43 @@
 <!--TODO put all this info into server somehow-->
 
 
-    <h1 class="text" style="text-align: center;">Story Verification Status</h1>
-    <hr>
-    <h2 class="text">Locations:</h2>
+<h1 class="text" style="text-align: center;">Story Verification Status</h1>
+<hr>
+<h2 class="text">Locations:</h2>
+<br>
+
+{% for location in locations %}
+<section class="location-row">
+    <p><strong>{{location.location_name}}</strong></p>
+    {% if location.is_verified == 1%}
+    <h6 style="color: green">VERIFIED</h6>
     <br>
+    {% else%}
+    <h6 style="color: red">NOT VERIFIED</h6>
+    {%endif%}
+    <label>Verification Comments</label>
+    <textarea class="form-control" disabled>{{location.reviewer_comments}}</textarea>
+    <a href="/story/location/indiv?story_id={{story_id}}&location_id={{location.location_id}}">Edit Location</a>
+</section>
+{% endfor %}
 
-    {% for location in locations %}
-    <section class="location-row">
-        <p><strong>{{location.location_name}}</strong></p>
-        {% if location.is_verified == 1%}
-        <h6 style= "color: green">VERIFIED</h6>
-        <br>
-        {% else%}
-        <h6 style= "color: red">NOT VERIFIED</h6>
-        {%endif%}
-        <label>Verification Comments</label>
-        <textarea class = "form-control" disabled>{{location.reviewer_comments}}</textarea>
-        <a href = "/story/location/indiv?story_id={{story_id}}&location_id={{location.location_id}}">Edit Location</a>
-    </section>
-    {% endfor %}
+<hr>
+<h2 class="text">Decisions:</h2>
+<br>
 
-    <hr>
-    <h2 class="text">Decisions:</h2>
+{%for decision in decisions%}
+<section class="location-row">
+    <p><strong>{{decision.decision_name}}</strong></p>
+    {% if decision.is_verified == 1%}
+    <h6 style="color: green">VERIFIED</h6>
     <br>
-
-    {%for decision in decisions%}
-    <section class="location-row">
-            <p><strong>{{decision.decision_name}}</strong></p>
-            {% if decision.is_verified == 1%}
-            <h6 style= "color: green">VERIFIED</h6>
-            <br>
-            {% else%}
-            <h6 style= "color: red">NOT VERIFIED</h6>
-            {%endif%}
-            <label>Verification Comments</label>
-            <textarea class = "form-control" disabled  >{{decision.reviewer_comments}}</textarea>
-            <a href = "/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Edit Decision</a>
-     {%endfor%}
+    {% else%}
+    <h6 style="color: red">NOT VERIFIED</h6>
+    {%endif%}
+    <label>Verification Comments</label>
+    <textarea class="form-control" disabled>{{decision.reviewer_comments}}</textarea>
+    <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Edit Decision</a>
+    {%endfor%}
 
     <hr>
     <h2>Objects:</h2>
@@ -49,14 +49,14 @@
     {%for object  in objects%}
     <p><strong>{{object.obj_name}}</strong></p>
     {% if object.is_verified == 1%}
-    <h6 style= "color: green">VERIFIED</h6>
+    <h6 style="color: green">VERIFIED</h6>
     <br>
     {% else%}
-    <h6 style= "color:red">NOT VERIFIED</h6>
+    <h6 style="color:red">NOT VERIFIED</h6>
     {%endif%}
     <label>Verification Comments</label>
-    <textarea class = "form-control" disabled >{{object.reviewer_comments}}</textarea>
-    <a href = "/story/object/indiv?story_id={{story_id}}&object_id={{object.obj_id}}">Edit Object</a>
+    <textarea class="form-control" disabled>{{object.reviewer_comments}}</textarea>
+    <a href="/story/object/indiv?story_id={{story_id}}&object_id={{object.obj_id}}">Edit Object</a>
     {%endfor%}
 
     <hr><br>
@@ -66,22 +66,22 @@
     {%for event in events%}
     <p><strong>{{event.event_name}}</strong></p>
     {% if event.is_verified == 1%}
-    <h6 style= "color: green">VERIFIED</h6>
+    <h6 style="color: green">VERIFIED</h6>
     <br>
     {% else%}
-    <h6 style= "color: red">NOT VERIFIED</h6>
+    <h6 style="color: red">NOT VERIFIED</h6>
     {%endif%}
     <label>Verification Comments</label>
-    <textarea class = "form-control" disabled>{{event.reviewer_comments}}</textarea>
-    <a href = "/story/object/indiv?story_id={{story_id}}&event_id={{event.event_id}}">Edit Event</a>
+    <textarea class="form-control" disabled>{{event.reviewer_comments}}</textarea>
+    <a href="/story/object/indiv?story_id={{story_id}}&event_id={{event.event_id}}">Edit Event</a>
     {%endfor%}
 
     <br>
     <hr><br>
     <h6>Rating:</h6>
 
-  
 
 
 
-{% endblock %}
+
+    {% endblock %}
