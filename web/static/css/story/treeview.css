@@ -5,7 +5,7 @@
     border: 1px solid RGBA(0, 0, 0, .5);
     padding: 0.5em;
 }
-.is-hidden{
+.hidden-in {
     display: none;
 }
 
