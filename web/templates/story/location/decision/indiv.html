@@ -43,7 +43,8 @@
     <section class="details">
         <!-- TODO: add max value -->
         <label>Decision Sequence Number:</label>
-        <input class="form-control" name="sequence_number" min="1" type="number" onchange="decision_changed(this)">
+        <input class="form-control" name="sequence_number" min="1" type="number" onchange="decision_changed(this)"
+            value="{{decision.sequence_num|e}}">
 
 
         <label>Decision Description:</label>

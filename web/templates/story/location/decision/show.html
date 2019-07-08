@@ -50,7 +50,7 @@
     <div class="row col-sm-4">
         <p>
             {%if decision.transition%}
-            <b>Transition</b> to {{StoryLocation.get(story_id,decision.transition_loc_id).location_name}}
+            <b>Transition</b> to {{StoryLocation.get(story_id,decision.transition_loc_id).location_name|e}}
             {%else%}
             <b>Not a Transtion</b>
             {%endif%}
@@ -59,7 +59,7 @@
     <section class="col-sm-4 row">
         <!-- TODO: add max value -->
         <h6><b>Decision Sequence Number: </b></h6>
-        <p name="sequence_number" type="number">{{decision.sequence_num}}</p>
+        <p name="sequence_number" type="number">{{decision.sequence_num|e}}</p>
     </section>
 </section>
 
