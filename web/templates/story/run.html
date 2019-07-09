@@ -1,17 +1,23 @@
 {% extends "template.html" %}
+{% block content %}
 <script src="{{ url_for('static', filename='js/story/run.js') }}"></script>
 <!--NONE OF THIS NEEDS TO BE SAVABLE PER MIGUEL basically just a text version of the app but doesnt
 need to be nearly as clean/advanced. Do we want to make this like treeview where it replaces itself?-->
-{% block content %}
+
+<a href="/story/run?story_id={{story.story_id}}" class="btn btn-light">Back to Start</a>
+<a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
+<a class="btn btn-primary" style="float:right" href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
 
 <h1>Running {{story.story_title|e}}</h1>
 <br>
+<h2>At {{location.location_name|e}}</h2>
+
 <hr>
-<h6>{{location.original_description|e}}</h6>
+<h3>{{location.original_description|e}}</h3>
 <!--I think printing 
     all of these is acceptable maybe we could hide the not relevant ones if we can track the info?-->
 <p>(if already visited: {{location.short_description|e}})</p>
-{%if location.location_event_id != 0%}
+{% if location.location_event_id|int!=0 %}
 <p>(if {{location.event_name|e}} has been triggered:{{location.post_event_description|e}} )</p>
 {%endif%}
 <hr>
@@ -21,12 +27,15 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 
 {%for dec in decisions%}
 <!--that function is empty-->
-<a href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}"
+<a {%if dec.transition_loc_id|int!=0%}href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}"{%endif%}
   class="btn btn-light">{{dec.decision_description|e}}</a>
 {%endfor%}
 
 <br>
 <hr>
-<a href="/story/update?story_id={{story.story_id}}"><button class="btn btn-light">Back to Main Story Page</button></a>
+
+<a href="/story/run?story_id={{story.story_id}}" class="btn btn-light">Back to Start</a>
+<a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
+<a class="btn btn-primary" style="float:right" href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+
 {% endblock %}
-<!--wow this is by far our most docuemented file and it doesnt even do anything!!! miss u already Brian xoxoxoxo ilysmbbrawrXD:3 nuzzles uwu-->
