@@ -43,35 +43,34 @@ class User(UserMixin):
     db_name = "audio_adventures_dev"
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
-                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, date_of_birth_input=date.min, language=0):
-
+                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, date_of_birth_input=date.min, language=0, user_type=0):
         self.username = username_input
-
         if password_salt_input == "":
             self.password_salt = self.generate_password_salt()
         else:
             self.password_salt = password_salt_input
         self.password = password_input
-
         self.email = email_input
-
         self.gender = gender_input
-
         self.country_of_origin = country_of_origin_input
-
         self.first_name = first_name_input
         self.last_name = last_name_input
-
         self.gender = gender_input
-
         self.country_of_origin = country_of_origin_input
         self.profession = profession_input
-
         self.disabilities = disabilities_input
-
         self.date_of_birth = date_of_birth_input
-
         self.language_id = language
+        self.user_type = user_type
+        self.is_admin = False
+        self.is_content_editor = False
+        self.is_copy_editor = False
+        if user_type & 0x04 == 0x04:
+            self.is_admin = True
+        if user_type & 0x02 == 0x02:
+            self.is_content_editor = True
+        if user_type & 0x01 == 0x01:
+            self.is_copy_editor = True
 
     # Generates a salt for storing passwords
     @staticmethod
@@ -102,9 +101,16 @@ class User(UserMixin):
             if results:
                 conn.close()
                 return False
-            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            self.user_type = 0
+            if self.is_admin:
+                self.user_type += 4
+            if self.is_content_editor:
+                self.user_type += 2
+            if self.is_copy_editor:
+                self.user_type += 1
+            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth, user_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         (self.username, self.password, self.password_salt, self.email,
-                         self.profession, self.gender, self.country_of_origin, self.disabilities, self.language_id, self.first_name, self.last_name, self.date_of_birth))
+                         self.profession, self.gender, self.country_of_origin, self.disabilities, self.language_id, self.first_name, self.last_name, self.date_of_birth, self.user_type))
             conn.commit()
             cur.execute(
                 "SELECT `user_id` FROM users WHERE `username` = %s", (self.username))
@@ -129,16 +135,12 @@ class User(UserMixin):
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(
-            ("SELECT `user_id` FROM users WHERE `user_id` = %s"), (int_user_id))
+            ("SELECT `username`, `password`, `password_salt`, `user_type` FROM users WHERE `user_id` = %s"), (int_user_id))
         result = cur.fetchone()
-        int_user_id = result['user_id']
-        if(int_user_id is None):
+        if result['username'] is None:
             return None
-        cur.execute(
-            ("SELECT `username`, `password`, `password_salt` FROM users WHERE `user_id` = %s"), (int_user_id))
-        result = cur.fetchone()
-        result = User(result['username'],
-                      result['password'], result['password_salt'])
+        result = User(result['username'], result['password'],
+                      result['password_salt'], user_type=result['user_type'])
         conn.close()
         return result
 
