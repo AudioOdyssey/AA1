@@ -239,7 +239,8 @@ def story_update():
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
-    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
+    cover_photo = story.get_image_base64()
+    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, cover = cover_photo)
 
 
 @app.route("/story/update", methods=["POST"])
