@@ -43,7 +43,7 @@ class User(UserMixin):
     db_name = "audio_adventures_dev"
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
-                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, date_of_birth_input=date.min, language=0, user_type=0, user_id = 0):
+                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, date_of_birth_input=date.min, language=0, user_type=0, user_id=0):
         self.username = username_input
         if password_salt_input == "":
             self.password_salt = self.generate_password_salt()
@@ -176,11 +176,22 @@ class User(UserMixin):
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                        db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `users`"))
+            cur.execute(
+                ("SELECT `username`, `user_type`, `user_id` FROM `users`"))
             query_data = cur.fetchall()
             for row in query_data:
-                result.append(cls(row['usename'], email_input = row['email_address'], user_type = row['user_type'], user_id = row['user_id']))
+                result.append(
+                    cls(row['username'], user_type=row['user_type'], user_id=row['user_id']))
         return result
+
+    def update_admin(self):
+        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
+                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE `users` SET username = %s, user_type = %s WHERE user_id = %s"),
+                        (self.username, self.user_type, self.user_id))
+            conn.commit()
+        conn.close()
