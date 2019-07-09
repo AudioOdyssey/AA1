@@ -145,7 +145,10 @@ lable {
 	color: #734f96;
 	font-family: "Helvetica"sans-serif;
 	text-align: center;
-
+	height: 100%;
+    text-align: left;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
 }
 
 .title {

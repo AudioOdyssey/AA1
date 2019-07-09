@@ -897,6 +897,13 @@ def treeview_help():
     return render_template("story/treeview_help.html", story=story)
 
 
+@app.route("/admin")
+def admin_index():
+    stories = Story.get_story_count()
+    users = User.get_user_count()
+    return render_template("admin/index.html", stories=stories, users=users)
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly

@@ -298,6 +298,23 @@ class Story:
             last_id = result[0]
         conn.close()
         return last_id
+    
+    @classmethod
+    def get_story_count(cls):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        last_id = 0
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT COUNT(story_id) FROM master_stories"))
+            result = cur.fetchone()
+            last_id = result[0]
+        conn.close()
+        return last_id
 
     @classmethod
     def get_info(cls, story_id):
