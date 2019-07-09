@@ -188,6 +188,13 @@ class User(UserMixin):
         return result
 
     def update_admin(self):
+        self.user_type = 0
+        if self.is_admin:
+            self.user_type += 4
+        if self.is_content_editor:
+            self.user_type += 2
+        if self.is_copy_editor:
+            self.user_type += 1
         conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
                                db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
