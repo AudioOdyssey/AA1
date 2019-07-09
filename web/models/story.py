@@ -17,6 +17,7 @@ from datetime import datetime, date
 
 import base64
 
+
 class Story:
     story_id = 0
     story_title = ''
@@ -40,7 +41,6 @@ class Story:
     inventory_size = 0
     parental_ratings = 0.0
     updated_at = None
-    
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
@@ -80,8 +80,8 @@ class Story:
             cur.execute(("INSERT INTO master_stories(story_title, story_author, story_price, user_creator_id) VALUES(%s, %s, %s, %s)"),
                         (self.story_title, self.story_author, self.story_price, self.user_creator_id))
             conn.commit()
-            #unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
-            cur.execute(("SELECT MAX(story_id) FROM master_stories")) 
+            # unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
+            cur.execute(("SELECT MAX(story_id) FROM master_stories"))
             query_data = cur.fetchone()
             self.story_id = query_data[0]
             conn.commit()
@@ -106,12 +106,16 @@ class Story:
             if results is None:
                 return None
             else:
-                return cls(story_id = story_id, story_title = results["story_title"], story_author = results["story_author"], story_synopsis = results["story_synopsis"],
-                           story_price = results["story_price"], author_paid = results["author_paid"], genre = results['genre'], length_of_story = results["length_of_story"],
-                           number_of_locations = results["number_of_location"], number_of_decisions=results["number_of_decisions"], story_in_store = results["story_in_store"],
-                           story_verification_date = results["story_verification_date"], name_of_verifier = results["name_of_verifier"], verification_status = results['verification_status'], story_ratings = results["story_ratings"],
-                           story_language_id = results["story_language_id"], storage_size = results["storage_size"], user_creator_id = results["user_creator_id"], 
-                           reviewer_comments = results['reviewer_comments'], starting_loc = results['starting_loc'], inventory_size = results['inventory_size'], parental_ratings = results['parental_ratings'])
+                return cls(story_id=story_id, story_title=results["story_title"], story_author=results["story_author"], story_synopsis=results["story_synopsis"],
+                           story_price=results["story_price"], author_paid=results[
+                               "author_paid"], genre=results['genre'], length_of_story=results["length_of_story"],
+                           number_of_locations=results["number_of_location"], number_of_decisions=results[
+                               "number_of_decisions"], story_in_store=results["story_in_store"],
+                           story_verification_date=results["story_verification_date"], name_of_verifier=results[
+                               "name_of_verifier"], verification_status=results['verification_status'], story_ratings=results["story_ratings"],
+                           story_language_id=results["story_language_id"], storage_size=results[
+                               "storage_size"], user_creator_id=results["user_creator_id"],
+                           reviewer_comments=results['reviewer_comments'], starting_loc=results['starting_loc'], inventory_size=results['inventory_size'], parental_ratings=results['parental_ratings'])
 
     def update(self, story_title, story_author, story_price, story_language_id, genre, story_synopsis):
         self.story_title = story_title
@@ -147,12 +151,13 @@ class Story:
             cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s, updated_at = NOW(), story_verification_date = CURDATE(), name_of_verifier = %s WHERE story_id = %s"),
                         (self.story_ratings, self.story_verification_date, self.storage_size, self.reviewer_comments, self.name_of_verifier, self.story_id))
             conn.commit()
-            cur.execute(("SELECT updated_at, story_verification_date WHERE story_id = %s"), (self.story_id))
+            cur.execute(
+                ("SELECT updated_at, story_verification_date WHERE story_id = %s"), (self.story_id))
             query_data = cur.fetchall()
             self.updated_at = query_data['updated_at']
             self.story_verification_date = query_data['story_verification_date']
         conn.close()
-    
+
     def get_image_base64(self):
         upload_folder = '/var/www/pictures/'
         cover_file = str(self.story_id) + ".jpg"
@@ -162,8 +167,8 @@ class Story:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
             return ''
-        return result  
-        
+        return result
+
     @classmethod
     def story_list_by_creator(cls, user_creator_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -227,12 +232,12 @@ class Story:
         result = []
         for story in library:
             stry_schema = {
-                "story_id" : story.story_id,
-                "story_title" : story.story_title,
-                "story_author" : story.story_author,
-                "story_synopsis" : story.story_synopsis,
-                "story_price" : story.story_price,
-                "genre" : story.genre
+                "story_id": story.story_id,
+                "story_title": story.story_title,
+                "story_author": story.story_author,
+                "story_synopsis": story.story_synopsis,
+                "story_price": story.story_price,
+                "genre": story.genre
             }
             result.append(stry_schema)
         return json.dumps(result)
@@ -308,14 +313,14 @@ class Story:
         conn = pymysql.connect(
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            #unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
+            # unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
             cur.execute(
                 ("SELECT MAX(story_id) FROM master_stories"))
             result = cur.fetchone()
             last_id = result[0]
         conn.close()
         return last_id
-    
+
     @classmethod
     def get_story_count(cls):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -375,7 +380,7 @@ class Story:
                 stry_info = {'story_id': row[0], 'story_title': row[1],
                              'story_author': row[2], 'story_synopsis': row[3],
                              'story_price': row[4], 'genre': row[5],
-                             'cover' : stry.get_image_base64()}
+                             'cover': stry.get_image_base64()}
                 result.append(stry_info)
         storefront = {"stories": result}
         return json.dumps(storefront)
