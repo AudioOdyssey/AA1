@@ -219,9 +219,11 @@ def logout():
         else:
             return redirect(url_for("session_new"))
 
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/upload/cover_photos', methods=['GET', 'POST'])
 def upload_cover():
@@ -245,6 +247,7 @@ def upload_cover():
       <input type=submit value=Upload>
     </form>
     '''
+
 
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
@@ -330,10 +333,12 @@ def app_store_expand():
     story_id = details.get("story_id")
     return Story.get_info(story_id)
 
+
 @app.route("/app/library/", methods=['GET'])
 def stories_show_owned_by_user():
     user_id = request.args.get("user_id")
     return Story.json_story_library(user_id)
+
 
 @app.route("/story/object/update", methods=['POST'])
 # @login_required
