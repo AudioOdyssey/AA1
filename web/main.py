@@ -32,6 +32,7 @@ ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
 app = Flask(__name__)
 app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -218,8 +219,6 @@ def logout():
             return redirect(url_for("home"))
         else:
             return redirect(url_for("session_new"))
-
-
 
 @app.route("/story/show")
 # @login_required
