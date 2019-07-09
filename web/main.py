@@ -220,8 +220,6 @@ def logout():
         else:
             return redirect(url_for("session_new"))
 
-
-
 @app.route("/story/show")
 # @login_required
 def story_show():
