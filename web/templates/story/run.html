@@ -21,7 +21,7 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 
 {%for dec in decisions%}
 <!--that function is empty-->
-<a href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}')"
+<a href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}"
   class="btn btn-light">{{dec.decision_description|e}}</a>
 {%endfor%}
 
