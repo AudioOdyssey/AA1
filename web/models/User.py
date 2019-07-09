@@ -12,6 +12,7 @@ from flask_login import UserMixin
 
 import json
 
+
 class User(UserMixin):
     username = ""
     password = ""
@@ -40,23 +41,23 @@ class User(UserMixin):
     name = "AA_admin"
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
-    
-    def __init__(self, username_input = "", password_input = "", password_salt_input = "", email_input = "", first_name_input = "", last_name_input = "", 
-                gender_input = 0, country_of_origin_input = 1, profession_input = "", disabilities_input = 0, date_of_birth_input = date.min, language = 0):
-        
+
+    def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
+                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, date_of_birth_input=date.min, language=0):
+
         self.username = username_input
 
         if password_salt_input == "":
             self.password_salt = self.generate_password_salt()
         else:
-            self.password_salt = password_salt_input 
+            self.password_salt = password_salt_input
         self.password = password_input
 
         self.email = email_input
 
         self.gender = gender_input
 
-        self.country_of_origin = country_of_origin_input 
+        self.country_of_origin = country_of_origin_input
 
         self.first_name = first_name_input
         self.last_name = last_name_input
@@ -72,37 +73,41 @@ class User(UserMixin):
 
         self.language_id = language
 
-    #Generates a salt for storing passwords
+    # Generates a salt for storing passwords
     @staticmethod
     def generate_password_salt():
-        salt_source = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz123456789' 
+        salt_source = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz123456789'
         salt = random.choice(salt_source)
         for i in range(15):
             salt += random.choice(salt_source)
         return salt
-    
+
     @staticmethod
     def encrypt_password(raw_password, password_salt):
-        password = raw_password + password_salt 
+        password = raw_password + password_salt
         encrypted_password = hashlib.sha256(password.encode()).digest()
         password_hex_string = binascii.b2a_hex(encrypted_password)
         return password_hex_string.decode('utf-8')
 
     def add_to_server(self):
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd = self.rds_password, db= self.db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
+        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
+                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             password_input = self.password
-            self.password = self.encrypt_password(password_input, self.password_salt)
-            cur.execute(("SELECT * FROM users WHERE username = %s"), (self.username))
+            self.password = self.encrypt_password(
+                password_input, self.password_salt)
+            cur.execute(("SELECT * FROM users WHERE username = %s"),
+                        (self.username))
             results = cur.fetchone()
             if results:
                 conn.close()
                 return False
             cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            (self.username, self.password, self.password_salt, self.email, 
-            self.profession, self.gender, self.country_of_origin, self.disabilities, self.language_id, self.first_name, self.last_name, self.date_of_birth))
+                        (self.username, self.password, self.password_salt, self.email,
+                         self.profession, self.gender, self.country_of_origin, self.disabilities, self.language_id, self.first_name, self.last_name, self.date_of_birth))
             conn.commit()
-            cur.execute("SELECT `user_id` FROM users WHERE `username` = %s", (self.username))
+            cur.execute(
+                "SELECT `user_id` FROM users WHERE `username` = %s", (self.username))
             result = cur.fetchone()
             self.user_id = result['user_id']
         conn.close()
@@ -120,18 +125,39 @@ class User(UserMixin):
         if user_id == 0 or user_id == '':
             return None
         int_user_id = int(user_id)
-        conn = pymysql.connect(rds_host, user=name, passwd = rds_password, db= db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
+                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
-        cur.execute(("SELECT `user_id` FROM users WHERE `user_id` = %s"), (int_user_id))
+        cur.execute(
+            ("SELECT `user_id` FROM users WHERE `user_id` = %s"), (int_user_id))
         result = cur.fetchone()
         int_user_id = result['user_id']
         if(int_user_id is None):
             return None
-        cur.execute(("SELECT `username`, `password`, `password_salt` FROM users WHERE `user_id` = %s"), (int_user_id))
+        cur.execute(
+            ("SELECT `username`, `password`, `password_salt` FROM users WHERE `user_id` = %s"), (int_user_id))
         result = cur.fetchone()
-        result = User(result['username'], result['password'], result['password_salt'])
+        result = User(result['username'],
+                      result['password'], result['password_salt'])
         conn.close()
         return result
+
+    @classmethod
+    def get_user_count(cls):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        last_id = 0
+        conn = pymysql.connect(
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT COUNT(user_id) FROM users"))
+            result = cur.fetchone()
+            last_id = result[0]
+        conn.close()
+        return last_id
 
     def authenticate(self, password_input):
         if self.password == self.encrypt_password(password_input, self.password_salt):

@@ -273,32 +273,32 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/upload/cover_photos', methods=['GET', 'POST'])
-def upload_cover():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            pass
-        file = request.files['file']
-        if file.filename == '':
-            flash("No selected file")
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for("uploaded_file", filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+# @app.route('/upload/cover_photos', methods=['GET', 'POST'])
+# def upload_cover():
+#     if request.method == 'POST':
+#         if 'file' not in request.files:
+#             pass
+#         file = request.files['file']
+#         if file.filename == '':
+#             flash("No selected file")
+#             return redirect(request.url)
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             return redirect(url_for("uploaded_file", filename=filename))
+#     return '''
+#     <!doctype html>
+#     <title>Upload new File</title>
+#     <h1>Upload new File</h1>
+#     <form method=post enctype=multipart/form-data>
+#       <input type=file name=file>
+#       <input type=submit value=Upload>
+#     </form>
+#     '''
 
-@app.route("/uploads/<filename>")
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+# @app.route("/uploads/<filename>")
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 @app.route("/story/new", methods=["POST"])
@@ -338,10 +338,12 @@ def app_store_expand():
     story_id = details.get("story_id")
     return Story.get_info(story_id)
 
+
 @app.route("/app/library/", methods=['GET'])
 def stories_show_owned_by_user():
     user_id = request.args.get("user_id")
     return Story.json_story_library(user_id)
+
 
 @app.route("/story/object/update", methods=['POST'])
 # @login_required
@@ -903,6 +905,13 @@ def treeview_help():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("story/treeview_help.html", story=story)
+
+
+@app.route("/admin")
+def admin_index():
+    stories = Story.get_story_count()
+    users = User.get_user_count()
+    return render_template("admin/index.html", stories=stories, users=users)
 
 
 @app.errorhandler(404)
