@@ -1,6 +1,8 @@
 import pymysql
 import pymysql.cursors
+
 import sys
+import os
 
 import simplejson as json
 
@@ -12,6 +14,9 @@ from .storydecision import StoryDecision
 from decimal import Decimal
 
 from datetime import datetime, date
+
+import base64
+
 class Story:
     story_id = 0
     story_title = ''
@@ -35,6 +40,7 @@ class Story:
     inventory_size = 0
     parental_ratings = 0.0
     updated_at = None
+    
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
@@ -122,7 +128,7 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s, inventory_size = %s, starting_loc = %s, length_of_story = %s WHERE story_id = %s"),
+            cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s, inventory_size = %s, starting_loc = %s, length_of_story = %s, cover_file = %s WHERE story_id = %s"),
                         (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_synopsis, self.inventory_size, self.starting_loc, self.length_of_story, self.story_id))
             conn.commit()
         conn.close()
@@ -146,7 +152,18 @@ class Story:
             self.updated_at = query_data['updated_at']
             self.story_verification_date = query_data['story_verification_date']
         conn.close()
-
+    
+    def get_image_base64(self):
+        upload_folder = '/var/www/pictures/'
+        cover_file = str(self.story_id) + ".jpg"
+        result = ''
+        try:
+            with open(os.path.join(upload_folder, cover_file), 'rb') as image_file:
+                result = base64.b64encode(image_file.read())
+        except FileNotFoundError:
+            return ''
+        return result  
+        
     @classmethod
     def story_list_by_creator(cls, user_creator_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -354,9 +371,11 @@ class Story:
                 ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
             query_data = cur.fetchall()
             for row in query_data:
+                stry = cls.get(row[0])
                 stry_info = {'story_id': row[0], 'story_title': row[1],
                              'story_author': row[2], 'story_synopsis': row[3],
-                             'story_price': row[4], 'genre': row[5]}
+                             'story_price': row[4], 'genre': row[5],
+                             'cover' : stry.get_image_base64()}
                 result.append(stry_info)
         storefront = {"stories": result}
         return json.dumps(storefront)

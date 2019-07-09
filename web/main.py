@@ -220,39 +220,6 @@ def logout():
             return redirect(url_for("session_new"))
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-@app.route('/upload/cover_photos', methods=['GET', 'POST'])
-def upload_cover():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            pass
-        file = request.files['file']
-        if file.filename == '':
-            flash("No selected file")
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for("uploaded_file", filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
-
-
-@app.route("/uploads/<filename>")
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
 
 @app.route("/story/show")
 # @login_required
@@ -290,10 +257,48 @@ def story_update_post():
     story.inventory_size = details.get('inventory_size')
     story.starting_loc = details.get('starting_loc')
     story.story_id = story_id
+    filename = ''
+    file = request.files['cover']
+    if file.filename == '':
+        pass
+    if file and allowed_file(file.filename):
+        filename = str(story_id) + ".jpg"
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
 
     #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
     return '{"status":"ok"}'
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# @app.route('/upload/cover_photos', methods=['GET', 'POST'])
+# def upload_cover():
+#     if request.method == 'POST':
+#         if 'file' not in request.files:
+#             pass
+#         file = request.files['file']
+#         if file.filename == '':
+#             flash("No selected file")
+#             return redirect(request.url)
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             return redirect(url_for("uploaded_file", filename=filename))
+#     return '''
+#     <!doctype html>
+#     <title>Upload new File</title>
+#     <h1>Upload new File</h1>
+#     <form method=post enctype=multipart/form-data>
+#       <input type=file name=file>
+#       <input type=submit value=Upload>
+#     </form>
+#     '''
+
+# @app.route("/uploads/<filename>")
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 @app.route("/story/new", methods=["POST"])
