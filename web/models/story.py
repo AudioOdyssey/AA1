@@ -157,11 +157,11 @@ class Story:
         upload_folder = '/var/www/pictures/'
         cover_file = str(self.story_id) + ".jpg"
         result = ''
-        with open(os.path.join(upload_folder, cover_file), 'rb') as image_file:
-            try:
+        try:
+            with open(os.path.join(upload_folder, cover_file), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
-            except FileNotFoundError:
-                return ''
+        except FileExistsError:
+            return ''
         return result  
         
     @classmethod
