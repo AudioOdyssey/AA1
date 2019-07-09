@@ -160,7 +160,7 @@ class Story:
         try:
             with open(os.path.join(upload_folder, cover_file), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
-        except FileExistsError:
+        except FileNotFoundError:
             return ''
         return result  
         
