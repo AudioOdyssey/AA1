@@ -1,0 +1,36 @@
+{%extends "template.html" %}
+{% block content%}
+
+<script>
+    function onchangefield(elem) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            } else if (this.readyState == 4) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("POST", "/admin/user/update", true);
+        xhttp.send(new FormData(elem.form));
+    }
+</script>
+
+<section>
+    {%for user in users%}
+    <form class="user">
+        <label>User-Id:</label>
+        <input type="number" name="user_id" value="{{user.user_id}}" disabled onchange="onchangefield(this)">
+        <label>Username</label>
+        <input type="text" name="username" value="{{user.username|e}}" onchange="onchangefield(this)">
+        <label>Admin:</label>
+        <input type="checkbox" name="is_admin" {%if user.is_admin%}selected{%endif%} onchange="onchangefield(this)">
+        <label>Content Editor:</label>
+        <input type="checkbox" name="is_content_editor" {%if user.is_content_editor%}selected{%endif%} onchange="onchangefield(this)">
+        <label>Copy Editor:</label>
+        <input type="checkbox" name="is_copy_editor" {%if user.is_copy_editor%}selected{%endif%} onchange="onchangefield(this)">
+    </form>
+    {%endfor%}
+</section>
+
+{% endblock %}

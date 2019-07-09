@@ -915,6 +915,12 @@ def admin_index():
     return render_template("admin/index.html", stories=stories, users=users)
 
 
+@app.route("/admin/users")
+def admin_users():
+    users = User.get_user_count()
+    return render_template("admin/users.html", users=users)
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
