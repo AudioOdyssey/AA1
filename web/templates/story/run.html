@@ -6,7 +6,8 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 
 <a href="/story/run?story_id={{story.story_id}}" class="btn btn-light">Back to Start</a>
 <a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
-<a class="btn btn-primary" style="float:right" href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+<a class="btn btn-primary" style="float:right"
+  href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
 
 <h1>Running {{story.story_title|e}}</h1>
 <br>
@@ -23,12 +24,15 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <hr>
 <!--for objects at this location (brian idk how to keep track of that)-->
 <!--print their names and have a pick up option-->
+{%for obj in objects%}
+<a class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up <i>{{obj.obj_name}}</i></a>
+{%endfor%}
 <p>Would you like to ...</p>
 
 {%for dec in decisions%}
 <!--that function is empty-->
-<a {%if dec.transition_loc_id|int!=0%}href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}"{%endif%}
-  class="btn btn-light">{{dec.decision_description|e}}</a>
+<a {%if dec.transition_loc_id|int!=0%}href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}"
+  {%endif%} class="btn btn-light">{{dec.decision_description|e}}</a>
 {%endfor%}
 
 <br>
@@ -36,6 +40,7 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 
 <a href="/story/run?story_id={{story.story_id}}" class="btn btn-light">Back to Start</a>
 <a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
-<a class="btn btn-primary" style="float:right" href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+<a class="btn btn-primary" style="float:right"
+  href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
 
 {% endblock %}

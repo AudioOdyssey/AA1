@@ -861,7 +861,8 @@ def story_run():
         loc_id = story.starting_loc
     location = StoryLocation.get(story_id, loc_id)
     decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
-    return render_template("story/run.html", decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
+    objects = StoryObject.obj_list_loc(story_id, loc_id)
+    return render_template("story/run.html", objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
 @app.route("/save/saving")
