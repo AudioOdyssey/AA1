@@ -5,7 +5,7 @@ from models.storyevent import StoryEvent
 from models.storylocation import StoryLocation
 from models.storydecision import StoryDecision
 
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 
 from werkzeug.utils import secure_filename
@@ -220,6 +220,7 @@ def logout():
         else:
             return redirect(url_for("session_new"))
 
+
 @app.route("/story/show")
 # @login_required
 def story_show():
@@ -239,7 +240,7 @@ def story_update():
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
     cover_photo = story.get_image_base64()
-    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, cover = cover_photo)
+    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, cover=cover_photo)
 
 
 @app.route("/story/update", methods=["POST"])
@@ -268,6 +269,7 @@ def story_update_post():
 
     #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
     return '{"status":"ok"}'
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -859,7 +861,8 @@ def story_run():
         loc_id = story.starting_loc
     location = StoryLocation.get(story_id, loc_id)
     decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
-    return render_template("story/run.html", decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
+    objects = StoryObject.obj_list_loc(story_id, loc_id)
+    return render_template("story/run.html", objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
 @app.route("/save/saving")
@@ -909,15 +912,42 @@ def treeview_help():
 
 @app.route("/admin")
 def admin_index():
+    uid = session['user_id']
+    acct = User.get(uid)
+    if not acct.is_admin:
+        abort(403)
     stories = Story.get_story_count()
     users = User.get_user_count()
     return render_template("admin/index.html", stories=stories, users=users)
 
 
-@app.route("/admin/users")
+@app.route("/admin/users", methods=["GET", "POST"])
 def admin_users():
-    users = User.get_user_count()
-    return render_template("admin/users.html", users=users)
+    uid = session['user_id']
+    acct = User.get(uid)
+    if not acct.is_admin:
+        abort(403)
+    if request.method == "GET":
+        users = User.list_of_all_users()
+        return render_template("admin/users.html", users=users)
+    else:
+        user = User()
+        user.user_id = request.form.get("user_id")
+        user.username = request.form.get("username")
+        user.is_admin = True
+        user.is_content_editor = True
+        user.is_copy_editor = True
+        print(request.form.get("is_admin"))
+        if request.form.get("is_admin") is None:
+            user.is_admin = False
+        if request.form.get("is_content_editor") is None:
+            user.is_content_editor = False
+        if request.form.get("is_copy_editor") is None:
+            user.is_copy_editor = False
+        print(user.username)
+        print(user.user_id)
+        user.update_admin()
+        return '{"status":"ok"}'
 
 
 @app.errorhandler(404)
