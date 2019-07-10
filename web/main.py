@@ -850,34 +850,6 @@ def story_run():
     return render_template("story/run.html", objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
-@app.route("/save/saving")
-def saving():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("save/saving.html", story=story)
-
-
-@app.route("/save/savingstory")
-def savingstory():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("/save/savingstory.html", story=story)
-
-
-@app.route("/save/publishing")
-def publishing():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("/save/publishing.html", story=story)
-
-
-@app.route("/save/verifying")
-def verifying():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("/save/verifying.html", story=story)
-
-
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
