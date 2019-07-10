@@ -847,7 +847,25 @@ def story_run():
     location = StoryLocation.get(story_id, loc_id)
     decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
     objects = StoryObject.obj_list_loc(story_id, loc_id)
-    return render_template("story/run.html", objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
+
+    cookies = request.cookies
+    rundata = cookies.get("rundata")
+    inv = []
+    evts = []
+    triggered = []
+    backs = []
+    if not rundata is None:
+        obj = json.loads(rundata)
+        for itm in obj['items']:
+            inv.append(StoryObject.get(story_id, itm))
+        for ent in obj['events']:
+            evts.append(StoryEvent.get(story_id, ent))
+        for decision in obj['decs']:
+            triggered.append(StoryDecision.get(story_id, 0, decision))
+        for back in obj['back']:
+            backs.append(StoryLocation.get(story_id, back))
+
+    return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
 @app.route("/story/help")
