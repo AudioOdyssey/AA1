@@ -166,7 +166,11 @@
             href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">
             <h4>{{ location.location_name|e }}</h4>
             <hr>
+            {%if location.short_description != ""%}
             <p>{{ location.short_description|e }}</p>
+            {%else%}
+            <p>{{ location.original_description|e }}</p>
+            {%endif%}
         </a>
         {% endfor %}
     </section>
