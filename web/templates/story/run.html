@@ -11,6 +11,13 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 
 <h1>Running {{story.story_title|e}}</h1>
 <br>
+<h3>Inventory:</h3>
+{%for itm in inv%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{itm.obj_name|e}}</div>
+{%else%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</div>
+{%endfor%}
+
 <h2>At {{location.location_name|e}}</h2>
 
 <hr>
@@ -25,7 +32,7 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <!--for objects at this location (brian idk how to keep track of that)-->
 <!--print their names and have a pick up option-->
 {%for obj in objects%}
-<a class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up <i>{{obj.obj_name}}</i></a>
+<a onclick="addItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up <i>{{obj.obj_name}}</i></a>
 {%endfor%}
 <p>Would you like to ...</p>
 

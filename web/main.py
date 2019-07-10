@@ -136,6 +136,7 @@ def session_new():
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
+
 def authenticate(details):
     conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
                            cursorclass=pymysql.cursors.DictCursor)
@@ -176,7 +177,7 @@ def app_session_new():
             'message': message
         }
     return jsonify(result)
-    
+
 
 def encode_auth_token(user_id):
     payload = {
@@ -821,7 +822,19 @@ def story_run():
     location = StoryLocation.get(story_id, loc_id)
     decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
     objects = StoryObject.obj_list_loc(story_id, loc_id)
-    return render_template("story/run.html", objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
+
+    cookies = request.cookies
+    rundata = cookies.get("rundata")
+    inv = []
+    evts = []
+    if not rundata is None:
+        obj = json.loads(rundata)
+        for itm in obj['items']:
+            inv.append(StoryObject.get(story_id, itm))
+        for ent in obj['events']:
+            evts.append(StoryEvent.get(story_id, ent))
+
+    return render_template("story/run.html", inv=inv, evts=evts, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
 @app.route("/save/saving")
