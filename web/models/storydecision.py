@@ -79,7 +79,7 @@ class StoryDecision:
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND decision_id = %s AND loc_id = %s"), (story_id, decision_id, location_id))
+            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND decision_id = %s"), (story_id, decision_id))
             results = cur.fetchone()
             if results is None:
                 return None
