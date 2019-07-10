@@ -38,55 +38,84 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <!--for objects at this location (brian idk how to keep track of that)-->
 <!--print their names and have a pick up option-->
 {%for obj in objects%}
-<a onclick="addItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up <i>{{obj.obj_name}}</i></a>
+<a onclick="addItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up
+    <i>{{obj.obj_name}}</i></a>
 {%endfor%}
 <p>Would you like to ...</p>
 
 <section class="row">
     {%for dec in decisions%}
-    <a {%if dec.transition%}href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}"
-        {%endif%} class="col-sm-4 storycard">
+    <a onclick="dec_clicked({{story.story_id}},{{dec.decision_id}},{{dec.transition}},{{dec.transition_loc_id}},{{dec.can_occur_once}},{{dec.cause_event}},{{dec.effect_event_id}})"
+        class="col-sm-4 storycard">
         <h3>{{dec.decision_name|e}}</h3>
         <hr>
         <h5>Transitions to
             <i>{%if dec.transition%}{{StoryLocation.get(story.story_id, dec.transition_loc_id).location_name}}{%else%}Nowhere{%endif%}</i>
         </h5>
+        {%if dec.hidden%}
+        {%if dec.show_event_id!=0%}
+        <h6>Hidden by Event {{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</h6>
+        {%elif dec.show_object_id!=0%}
+        <h6>Hidden by Object {{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</h6>
+        {%endif%}
+        {%endif%}
+
+        {%if dec.locked%}
+        {%if dec.unlock_event_id!=0%}
+        <h6>Locked by Event {{StoryEvent.get(story.story_id, dec.unlock_event_id).event_name|e}}</h6>
+        {%elif dec.unlock_object_id!=0%}
+        <h6>Locked by Object {{StoryObject.get(story.story_id, dec.unlock_object_id).obj_name|e}}</h6>
+        {%endif%}
+        {%endif%}
+
+        {%if dec.cause_event%}
+        <h6>Causes Event {{StoryEvent.get(story.story_id, dec.effect_event_id).event_name|e}}</h6>
+        {%endif%}
+
+        {%if dec.is_locked_by_event_id!=0%}
+        <h6>Gets locked by Event {{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</h6>
+        {%endif%}
+
+        {%if can_occur_once%}
+        <h6>Decision can only be triggered once</h6>
+        {%endif%}
+
         <p>{{dec.decision_description|e}}</p>
     </a>
     {%endfor%}
 </section>
 
 <!--
-if transition
-    Transitions to transitionid
-    click: push back to cookie
-    click: transition to transitionid
-if hidden
-    if hideobj != 0
-        if hideobj not in inv
-            Hidden by object hideobj
-    if hideevt != 0
-        if hideevt not in evts
-            Hidden by event hideevt
-if locked
-    if lockobj != 0
-        if lockobj not in inv
-            Locked by object lockobj
-    if lockevt != 0
-        if lockevt not in evts
-            Locked by event lockevt
-if triggers
-    Triggers Event triggerevt
-    click: triggerevt
-if locker != 0
-    if locker in cookie
-        Locked by Event locker
-if once
-    if dec not in cookie
-        Can be triggered once
-        click: add to cookie
-    else
-        Has been triggered, can't be again
+    if transition
+        Transitions to transitionid
+        click: push back to cookie
+        click: transition to transitionid
+    if hidden
+        if hideobj != 0
+            if hideobj not in inv
+                Hidden by object hideobj
+        if hideevt != 0
+            if hideevt not in evts
+                Hidden by event hideevt
+    if locked
+        if lockobj != 0
+            if lockobj not in inv
+                Locked by object lockobj
+        if lockevt != 0
+            if lockevt not in evts
+                Locked by event lockevt
+    if triggers
+        Triggers Event triggerevt
+        click: triggerevt
+    if locker != 0
+        if locker in cookie
+            Locked by Event locker
+    if once
+        if dec not in cookie
+            Can be triggered once
+            click: add to cookie
+        else
+            Has been triggered, can't be again
 -->
 
 <br>
