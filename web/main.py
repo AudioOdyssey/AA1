@@ -128,13 +128,38 @@ def session_new():
     if request.method == 'POST':
         details = request.form
         if authenticate(details):
-            resp = make_response(url_for('story_show'))
+            resp = make_response(redirect(url_for('story_show')))
             if 'remember' in details:
-                resp.set_cookie('success', True)
-            return redirect(url_for('story_show'))
+                selector = os.urandom(16).decode('latin-1')
+                validator = os.urandom(16).decode('latin-1')
+                expired_date = datetime.utcnow() + timedelta(days = 30)
+                resp.set_cookie("remember_", (selector + ":" + validator), expires = expired_date)
+                rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+                name = "AA_admin"
+                rds_password = "z9QC3pvQ"
+                db_name = "audio_adventures_dev"
+                conn = pymysql.connect(
+                    rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+                with conn.cursor() as cur:
+                    hashedValidator = hashlib.sha256(validator.encode()).digest()
+                    hashed_validator_hexstring = binascii.b2a_hex(hashedValidator)
+                    cur.execute(("SELECT userid from `auth_tokens`"))
+                    query_data = cur.fetchall()
+                    if query_data[0] != session['user_id']:
+                        cur.execute(("INSERT INTO `auth_tokens`(selector, hashedValidator, userid, expires) VALUES (%s, %s, %s, %s)"),
+                                    (selector, hashed_validator_hexstring, session['user_id'], expired_date))
+                        cur.commit()
+                conn.close()
+            return resp
         else:
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
+
+def authentication_required():
+    def func_wrapper():
+        if 'user_id' not in session:
+            remember_me = request.cookies.get('remember_')
+        
 
 def authenticate(details):
     conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
@@ -223,7 +248,7 @@ def logout():
 
 @app.route("/story/show")
 def story_show():
-    print(request.cookies.get('selector'))
+    print(request.cookies.get('sucess'))
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
     stories = Story.story_list_by_creator(session['user_id'])
