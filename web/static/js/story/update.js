@@ -86,7 +86,16 @@ function add_btn_loc(story_id) {
     xhttp.send();
 }
 
-function publish_story(story_id) //TODO ??
-{
+function handleFileSelect(evt) {
+    var files = evt.target.files;
+    var f = files[0];
+    var reader = new FileReader();
 
+    reader.onload = (function (theFile) {
+        return function (e) {
+            document.getElementById('cover-photo').style.backgroundImage = "url('" + e.target.result + "')";
+        };
+    })(f);
+
+    reader.readAsDataURL(f);
 }

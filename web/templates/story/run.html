@@ -4,13 +4,26 @@
 <!--NONE OF THIS NEEDS TO BE SAVABLE PER MIGUEL basically just a text version of the app but doesnt
 need to be nearly as clean/advanced. Do we want to make this like treeview where it replaces itself?-->
 
-<a href="/story/run?story_id={{story.story_id}}" class="btn btn-light">Back to Start</a>
+<button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Back to Start</button>
 <a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
 <a class="btn btn-primary" style="float:right"
-  href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+    href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
 
 <h1>Running {{story.story_title|e}}</h1>
 <br>
+<h3>Inventory:</h3>
+{%for itm in inv%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{itm.obj_name|e}}</div>
+{%else%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</div>
+{%endfor%}
+<h3>Triggered Events:</h3>
+{%for event in evts%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{event.event_name|e}}</div>
+{%else%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</div>
+{%endfor%}
+
 <h2>At {{location.location_name|e}}</h2>
 
 <hr>
@@ -25,22 +38,88 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <!--for objects at this location (brian idk how to keep track of that)-->
 <!--print their names and have a pick up option-->
 {%for obj in objects%}
-<a class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up <i>{{obj.obj_name}}</i></a>
+<a onclick="addItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up
+    <i>{{obj.obj_name}}</i></a>
 {%endfor%}
 <p>Would you like to ...</p>
 
-{%for dec in decisions%}
-<!--that function is empty-->
-<a {%if dec.transition_loc_id|int!=0%}href="/story/run?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}"
-  {%endif%} class="btn btn-light">{{dec.decision_description|e}}</a>
-{%endfor%}
+<section class="row">
+    {%for dec in decisions%}
+    <a href="#"
+        onclick="dec_clicked({{story.story_id}},{{dec.decision_id}},{{dec.transition}},{{dec.transition_loc_id}},{{dec.can_occur_once}},{{dec.cause_event}},{{dec.effect_event_id}})"
+        class="col-sm-4 storycard">
+        <h3>{{dec.decision_name|e}}</h3>
+        <hr>
+        <h4>Transitions to
+            <i>{%if dec.transition%}{{StoryLocation.get(story.story_id, dec.transition_loc_id).location_name}}{%else%}Nowhere{%endif%}</i>
+        </h4>
+        {%if dec.hidden%}
+        {%if dec.show_event_id!=0%}
+        {%if dec.show_event_id in evts%}
+        <h5>Was hidden by Event <i>{{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</i>, now revealed
+        </h5>
+        {%else%}
+        <h5>Hidden by Event <i>{{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</i></h5>
+        {%endif%}
+        {%elif dec.show_object_id!=0%}
+        {%if dec.show_object_id in inv%}
+        <h5>Was hidden by Object <i>{{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</i>, now revealed
+        </h5>
+        {%else%}
+        <h5>Hidden by Object <i>{{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</i></h5>
+        {%endif%}
+        {%endif%}
+        {%endif%}
+
+        {%if dec.locked%}
+        {%if dec.unlock_event_id!=0%}
+        {%if dec.unlock_event_id in inv%}
+        <h5>Was locked by Event <i>{{StoryEvent.get(story.story_id, dec.unlock_event_id).event_name|e}}</i>, now
+            revealed</h5>
+        {%else%}
+        <h5>Locked by Event <i>{{StoryEvent.get(story.story_id, dec.unlock_event_id).event_name|e}}</i></h5>
+        {%endif%}
+        {%elif dec.unlock_object_id!=0%}
+        {%if dec.unlock_object_id in evts%}
+        <h5>Was locked by Object <i>{{StoryObject.get(story.story_id, dec.unlock_object_id).obj_name|e}}</i>, now
+            unlocked</h5>
+        {%else%}
+        <h5>Locked by Object <i>{{StoryObject.get(story.story_id, dec.unlock_object_id).obj_name|e}}</i></h5>
+        {%endif%}
+        {%endif%}
+        {%endif%}
+
+        {%if dec.cause_event%}
+        <h5>Causes Event <i>{{StoryEvent.get(story.story_id, dec.effect_event_id).event_name|e}}</i></h5>
+        {%endif%}
+
+        {%if dec.is_locked_by_event_id!=0%}
+        {%if dec.is_locked_by_event_id in evts%}
+        <h5>Now locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i></h5>
+        {%else%}
+        <h5>Gets locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i></h5>
+        {%endif%}
+        {%endif%}
+
+        {%if dec.can_occur_once%}
+        {%if dec.decision_id in triggered%}
+        <h5 style="color: red">Decision can only be triggered once, and has already been triggered!</h5>
+        {%else%}
+        <h5>Decision can only be triggered once</h5>
+        {%endif%}
+        {%endif%}
+
+        <p>{{dec.decision_description|e}}</p>
+    </a>
+    {%endfor%}
+</section>
 
 <br>
 <hr>
 
-<a href="/story/run?story_id={{story.story_id}}" class="btn btn-light">Back to Start</a>
+<button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Back to Start</button>
 <a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
 <a class="btn btn-primary" style="float:right"
-  href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+    href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
 
 {% endblock %}

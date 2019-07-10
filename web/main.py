@@ -159,6 +159,7 @@ def authentication_required():
     def func_wrapper():
         if 'user_id' not in session:
             remember_me = request.cookies.get('remember_')
+            
         
 
 def authenticate(details):
