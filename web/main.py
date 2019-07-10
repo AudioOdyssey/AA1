@@ -27,12 +27,12 @@ from datetime import datetime, timedelta
 import jwt
 
 UPLOAD_FOLDER = '/var/www/pictures/'
-ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
 app = Flask(__name__)
 app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -128,12 +128,13 @@ def session_new():
     if request.method == 'POST':
         details = request.form
         if authenticate(details):
-            session['platform'] = 'web'
-            return redirect(url_for("story_show"))
+            resp = make_response(url_for('story_show'))
+            if 'remember' in details:
+                resp.set_cookie('success', True)
+            return redirect(url_for('story_show'))
         else:
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
-
 
 def authenticate(details):
     conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
@@ -175,7 +176,7 @@ def app_session_new():
             'message': message
         }
     return jsonify(result)
-
+    
 
 def encode_auth_token(user_id):
     payload = {
@@ -222,6 +223,7 @@ def logout():
 
 @app.route("/story/show")
 def story_show():
+    print(request.cookies.get('selector'))
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
     stories = Story.story_list_by_creator(session['user_id'])
@@ -299,7 +301,7 @@ def object_show():
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
-@app.route("/app/story/info", methods=['GET'])
+@app.route("/appmys/story/info", methods=['GET'])
 def app_story_logistics():
     return Story.get_entities(int(request.args.get('story_id')))
 
