@@ -691,8 +691,8 @@ def contact():
 
 @app.route("/verification/view")
 def verification_view():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
+    if "logged_in" not in session:
+        return redirect(url_for("session_new"))
     stories = Story.story_list_ready_for_verification()
     return render_template("verification/view.html", stories=stories)
 
