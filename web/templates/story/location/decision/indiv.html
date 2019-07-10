@@ -3,6 +3,12 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/decision/show.css') }}"
     type="text/css" />
 <script src="{{ url_for('static', filename='js/story/location/decision/show.js') }}"></script>
+
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Location</a>
+<a class="btn btn-light" href="/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Decision List</a>
+<a class="btn btn-primary" style="float:right" href="/save/saving?story_id={{ story_id }}">Save</a>
+
 <form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
     <input name="location_id" value="{{ decision.loc_id}}" readonly class="hidden-in">
@@ -231,9 +237,11 @@
     </section>
 </form>
 
-
 <br>
-<a href="/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Decision List</a>
+
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
+<a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Location</a>
+<a class="btn btn-light" href="/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Decision List</a>
+<a class="btn btn-primary" style="float:right" href="/save/saving?story_id={{ story_id }}">Save</a>
+
 {% endblock %}

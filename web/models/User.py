@@ -43,7 +43,7 @@ class User(UserMixin):
     db_name = "audio_adventures_dev"
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
-                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, date_of_birth_input=date.min, language=0, user_type=0):
+                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, date_of_birth_input=date.min, language=0, user_type=0, user_id=0):
         self.username = username_input
         if password_salt_input == "":
             self.password_salt = self.generate_password_salt()
@@ -71,7 +71,8 @@ class User(UserMixin):
             self.is_content_editor = True
         if user_type & 0x01 == 0x01:
             self.is_copy_editor = True
-
+        if user_id != 0:
+            self.user_id = user_id
     # Generates a salt for storing passwords
     @staticmethod
     def generate_password_salt():
@@ -167,3 +168,37 @@ class User(UserMixin):
         else:
             self.is_authenticated = False
         return self.is_authenticated
+
+    @classmethod
+    def list_of_all_users(cls):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
+                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        result = []
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT `username`, `user_type`, `user_id` FROM `users`"))
+            query_data = cur.fetchall()
+            for row in query_data:
+                result.append(
+                    cls(row['username'], user_type=row['user_type'], user_id=row['user_id']))
+        return result
+
+    def update_admin(self):
+        self.user_type = 0
+        if self.is_admin:
+            self.user_type += 4
+        if self.is_content_editor:
+            self.user_type += 2
+        if self.is_copy_editor:
+            self.user_type += 1
+        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
+                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE `users` SET username = %s, user_type = %s WHERE user_id = %s"),
+                        (self.username, self.user_type, self.user_id))
+            conn.commit()
+        conn.close()

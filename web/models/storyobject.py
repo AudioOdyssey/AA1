@@ -130,6 +130,22 @@ class StoryObject:
                 objs_list.append(cls(row['story_id'], row['obj_id'], row['obj_name'], row['obj_description'], row['can_pickup_obj'], row['obj_starting_loc'], row['is_hidden'], row['unhide_event_id'], row['reviewer_comments'], row['is_verified']))
         conn.close()
         return objs_list
+    
+    @classmethod
+    def obj_list_loc(cls, story_id, location_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass=pymysql.cursors.DictCursor)
+        objs_list = []
+        with conn.cursor() as cur:
+            cur.execute(("SELECT * FROM `objects` WHERE obj_starting_loc = %s"), (location_id))
+            results = cur.fetchall()
+            for row in results:
+                objs_list.append(cls(row['story_id'], row['obj_id'], row['obj_name'], row['obj_description'], row['can_pickup_obj'], row['obj_starting_loc'], row['is_hidden'], row['unhide_event_id'], row['reviewer_comments'], row['is_verified']))
+        conn.close()
+        return objs_list
 
     @classmethod
     def obj_list_json(cls, story_id):

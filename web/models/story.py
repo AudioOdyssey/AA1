@@ -237,7 +237,8 @@ class Story:
                 "story_author": story.story_author,
                 "story_synopsis": story.story_synopsis,
                 "story_price": story.story_price,
-                "genre": story.genre
+                "genre": story.genre,
+                "cover": story.get_image_base64()
             }
             result.append(stry_schema)
         return json.dumps(result)
