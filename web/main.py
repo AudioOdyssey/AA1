@@ -202,7 +202,7 @@ def app_session_new():
             'message': message
         }
     return jsonify(result)
-
+    
 
 def encode_auth_token(user_id):
     payload = {
