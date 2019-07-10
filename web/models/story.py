@@ -241,7 +241,8 @@ class Story:
                 "cover": story.get_image_base64()
             }
             result.append(stry_schema)
-        return json.dumps(result)
+        library_dict = {'stories' : result}
+        return json.dumps(library_dict)
 
     @classmethod
     def story_list_ready_for_verification(cls):

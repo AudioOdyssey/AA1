@@ -209,7 +209,6 @@ def app_logout():
 
 
 @app.route("/session/logout", methods=['POST', 'GET'])
-# @login_required
 def logout():
     if request.method == 'POST':
         if "logged_in" in session:
@@ -222,7 +221,6 @@ def logout():
 
 
 @app.route("/story/show")
-# @login_required
 def story_show():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -231,7 +229,6 @@ def story_show():
 
 
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
-# @login_required
 def story_update():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -275,34 +272,6 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# @app.route('/upload/cover_photos', methods=['GET', 'POST'])
-# def upload_cover():
-#     if request.method == 'POST':
-#         if 'file' not in request.files:
-#             pass
-#         file = request.files['file']
-#         if file.filename == '':
-#             flash("No selected file")
-#             return redirect(request.url)
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#             return redirect(url_for("uploaded_file", filename=filename))
-#     return '''
-#     <!doctype html>
-#     <title>Upload new File</title>
-#     <h1>Upload new File</h1>
-#     <form method=post enctype=multipart/form-data>
-#       <input type=file name=file>
-#       <input type=submit value=Upload>
-#     </form>
-#     '''
-
-# @app.route("/uploads/<filename>")
-# def uploaded_file(filename):
-#     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
-
 @app.route("/story/new", methods=["POST"])
 def story_new():
     story = Story(user_creator_id=session['user_id'])
@@ -313,7 +282,6 @@ def story_new():
 
 #### THIS WORKS #####
 @app.route("/story/object/show")
-# @login_required
 def object_show():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -348,7 +316,6 @@ def stories_show_owned_by_user():
 
 
 @app.route("/story/object/update", methods=['POST'])
-# @login_required
 def object_update():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -385,7 +352,6 @@ def object_update():
 
 
 @app.route("/story/object/new", methods=['POST'])
-# @login_required
 def object_new():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -403,7 +369,6 @@ def object_destroy():
 
 #### STILL NEEDS WORK ####
 @app.route("/story/event/show", methods=['GET'])
-# @login_required
 def event_show():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -414,7 +379,6 @@ def event_show():
 
 
 @app.route('/story/event/update', methods=['POST'])
-# @login_required
 def event_update():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -440,7 +404,6 @@ def event_update():
 
 
 @app.route('/story/event/new', methods=['POST'])
-# @login_required
 def event_new():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -458,7 +421,6 @@ def event_destroy():
 
 
 @app.route("/story/location/show")
-# @login_required
 def location_show():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -469,7 +431,6 @@ def location_show():
 
 
 @app.route("/story/location/indiv")
-# @login_required
 def location_indiv():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -482,7 +443,6 @@ def location_indiv():
 
 
 @app.route("/story/object/indiv")
-# @login_required
 def object_indiv():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -495,7 +455,6 @@ def object_indiv():
 
 
 @app.route("/story/location/decision/indiv")
-# @login_required
 def decision_indiv():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -510,7 +469,6 @@ def decision_indiv():
 
 
 @app.route("/story/event/indiv")
-# @login_required
 def event_indiv():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -522,7 +480,6 @@ def event_indiv():
 
 
 @app.route('/story/location/update', methods=['POST'])
-# @login_required
 def location_update():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -553,7 +510,6 @@ def location_update():
 
 
 @app.route('/story/location/new', methods=['POST'])
-# @login_required
 def location_new():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -711,7 +667,6 @@ def verification_review():
 
 
 @app.route("/verification/review/update", methods=['POST'])
-# @login_required
 def review_update():
     details = request.form
     story_id = details['story_id']
@@ -746,7 +701,6 @@ def review_update():
 
 
 @app.route("/verification/object")
-# @login_required
 def verification_object():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -757,7 +711,6 @@ def verification_object():
 
 
 @app.route("/verification/location")
-# @login_required
 def verification_location():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -769,7 +722,6 @@ def verification_location():
 
 
 @app.route("/verification/event")
-# @login_required
 def verfication_event():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -780,7 +732,6 @@ def verfication_event():
 
 
 @app.route("/verification/story")
-# @login_required
 def verfication_story():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
@@ -849,7 +800,6 @@ def verify_treeview():
 
 
 @app.route("/story/run")
-# @login_required
 def story_run():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
