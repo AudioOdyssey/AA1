@@ -35,7 +35,7 @@ function addEvent(event) {
     if (events == "")
         events = '{"items":[], "events":[], "decs":[], "back":[]}'
     var obj = JSON.parse(events);
-    if (obj.events.indexOf(item) === -1) obj.events.push(item);
+    if (obj.events.indexOf(event) === -1) obj.events.push(event);
     var cookie = JSON.stringify(obj);
     setCookie("rundata", cookie, 1);
 }
@@ -75,5 +75,10 @@ function dec_clicked(story_id, dec_id, transition, transition_loc_id, can_occur_
         addDec(dec_id);
     if (transition)
         addBack(transition_loc_id);
-        window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id
+        window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id;
+}
+
+function start_over(story_id) {
+    setCookie("rundata", "", -1); // Delete Cookie
+    window.location.href = "/story/run?story_id=" + story_id;
 }
