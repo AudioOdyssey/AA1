@@ -45,25 +45,28 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 
 <section class="row">
     {%for dec in decisions%}
-    <a href="#" onclick="dec_clicked({{story.story_id}},{{dec.decision_id}},{{dec.transition}},{{dec.transition_loc_id}},{{dec.can_occur_once}},{{dec.cause_event}},{{dec.effect_event_id}})"
+    <a href="#"
+        onclick="dec_clicked({{story.story_id}},{{dec.decision_id}},{{dec.transition}},{{dec.transition_loc_id}},{{dec.can_occur_once}},{{dec.cause_event}},{{dec.effect_event_id}})"
         class="col-sm-4 storycard">
         <h3>{{dec.decision_name|e}}</h3>
         <hr>
-        <h5>Transitions to
+        <h4>Transitions to
             <i>{%if dec.transition%}{{StoryLocation.get(story.story_id, dec.transition_loc_id).location_name}}{%else%}Nowhere{%endif%}</i>
-        </h5>
+        </h4>
         {%if dec.hidden%}
         {%if dec.show_event_id!=0%}
         {%if dec.show_event_id in evts%}
-        <h6>Was hidden by Event {{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}, now revealed</h6>
+        <h5>Was hidden by Event <i>{{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</i>, now revealed
+        </h5>
         {%else%}
-        <h6>Hidden by Event {{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</h6>
+        <h5>Hidden by Event <i>{{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</i></h5>
         {%endif%}
         {%elif dec.show_object_id!=0%}
         {%if dec.show_object_id in inv%}
-        <h6>Was hidden by Object {{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}, now revealed</h6>
+        <h5>Was hidden by Object <i>{{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</i>, now revealed
+        </h5>
         {%else%}
-        <h6>Hidden by Object {{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</h6>
+        <h5>Hidden by Object <i>{{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</i></h5>
         {%endif%}
         {%endif%}
         {%endif%}
@@ -71,36 +74,38 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
         {%if dec.locked%}
         {%if dec.unlock_event_id!=0%}
         {%if dec.unlock_event_id in inv%}
-        <h6>Was locked by Event {{StoryEvent.get(story.story_id, dec.unlock_event_id).event_name|e}}, now revealed</h6>
+        <h5>Was locked by Event <i>{{StoryEvent.get(story.story_id, dec.unlock_event_id).event_name|e}}</i>, now
+            revealed</h5>
         {%else%}
-        <h6>Locked by Event {{StoryEvent.get(story.story_id, dec.unlock_event_id).event_name|e}}</h6>
+        <h5>Locked by Event <i>{{StoryEvent.get(story.story_id, dec.unlock_event_id).event_name|e}}</i></h5>
         {%endif%}
         {%elif dec.unlock_object_id!=0%}
         {%if dec.unlock_object_id in evts%}
-        <h6>Was locked by Object {{StoryObject.get(story.story_id, dec.unlock_object_id).obj_name|e}}, now unlocked</h6>
+        <h5>Was locked by Object <i>{{StoryObject.get(story.story_id, dec.unlock_object_id).obj_name|e}}</i>, now
+            unlocked</h5>
         {%else%}
-        <h6>Locked by Object {{StoryObject.get(story.story_id, dec.unlock_object_id).obj_name|e}}</h6>
+        <h5>Locked by Object <i>{{StoryObject.get(story.story_id, dec.unlock_object_id).obj_name|e}}</i></h5>
         {%endif%}
         {%endif%}
         {%endif%}
 
         {%if dec.cause_event%}
-        <h6>Causes Event {{StoryEvent.get(story.story_id, dec.effect_event_id).event_name|e}}</h6>
+        <h5>Causes Event <i>{{StoryEvent.get(story.story_id, dec.effect_event_id).event_name|e}}</i></h5>
         {%endif%}
 
         {%if dec.is_locked_by_event_id!=0%}
         {%if dec.is_locked_by_event_id in evts%}
-        <h6>Now locked by Event {{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</h6>
+        <h5>Now locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i></h5>
         {%else%}
-        <h6>Gets locked by Event {{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</h6>
+        <h5>Gets locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i></h5>
         {%endif%}
         {%endif%}
 
         {%if dec.can_occur_once%}
         {%if dec.decision_id in triggered%}
-        <h6 style="color: red">Decision can only be triggered once, and has already been triggered!</h6>
+        <h5 style="color: red">Decision can only be triggered once, and has already been triggered!</h5>
         {%else%}
-        <h6>Decision can only be triggered once</h6>
+        <h5>Decision can only be triggered once</h5>
         {%endif%}
         {%endif%}
 
@@ -108,39 +113,6 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
     </a>
     {%endfor%}
 </section>
-
-<!--
-if transition
-    Transitions to transitionid
-    click: push back to cookie
-    click: transition to transitionid
-if hidden
-    if hideobj != 0
-        if hideobj not in inv
-            Hidden by object hideobj
-    if hideevt != 0
-        if hideevt not in evts
-            Hidden by event hideevt
-if locked
-    if lockobj != 0
-        if lockobj not in inv
-            Locked by object lockobj
-    if lockevt != 0
-        if lockevt not in evts
-            Locked by event lockevt
-if triggers
-    Triggers Event triggerevt
-    click: triggerevt
-if locker != 0
-    if locker in events
-        Locked by Event locker
-if once
-    if dec not in cookie
-        Can be triggered once
-        click: add to cookie
-    else
-        Has been triggered, can't be again
--->
 
 <br>
 <hr>
