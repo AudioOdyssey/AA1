@@ -224,7 +224,7 @@ def logout():
 def story_show():
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
-    stories = Story.story_list_by_creator(session['user_id'])  # TODO: Real UID
+    stories = Story.story_list_by_creator(session['user_id'])
     return render_template("story/show.html", stories=stories)
 
 
