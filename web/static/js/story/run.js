@@ -68,6 +68,14 @@ function decDone(dec) {
     return obj.events.indexOf(item) === -1
 }
 
+function poploc() {
+    var events = getCookie("rundata");
+    if (events == "")
+        return "";
+    var obj = JSON.parse(events);
+    return obj.back.pop();
+}
+
 function dec_clicked(story_id, dec_id, transition, transition_loc_id, can_occur_once, cause_event, effect_event_id) {
     if (cause_event)
         addEvent(effect_event_id);
@@ -75,10 +83,15 @@ function dec_clicked(story_id, dec_id, transition, transition_loc_id, can_occur_
         addDec(dec_id);
     if (transition)
         addBack(transition_loc_id);
-        window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id;
+    window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id;
 }
 
 function start_over(story_id) {
     setCookie("rundata", "", -1); // Delete Cookie
     window.location.href = "/story/run?story_id=" + story_id;
+}
+
+function backone(story_id) {
+    var id = poploc();
+    window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + id;
 }

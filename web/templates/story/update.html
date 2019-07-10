@@ -23,7 +23,10 @@
         <div id="dummy-thicc" style="display: none;" class="alert alert-danger">
             <strong>Danger!</strong> The uploaded image was too big! It must be less than 2MB.
         </div>
-        <h3>Story Summary</h3>
+        <section class="row">
+            <h3 style="width:max-content">Story Summary</h3>
+            <button onclick="save()" style="margin-left: auto" class="btn btn-primary">Save</button>
+        </section>
         <hr>
 
         <form id="edit-story-details" method="POST" action="/story/update">
@@ -188,5 +191,9 @@
 <script>
     document.getElementById('cover-upload').addEventListener('change', handleFileSelect, false);
 </script>
+
+<div id="save-bubble">
+    <div id="save-bubble-inner">Story Saved</div>
+</div>
 
 {% endblock %}
