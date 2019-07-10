@@ -17,6 +17,12 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 {%else%}
 <div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</div>
 {%endfor%}
+<h3>Triggered Events:</h3>
+{%for event in evts%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{event.event_name|e}}</div>
+{%else%}
+<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</div>
+{%endfor%}
 
 <h2>At {{location.location_name|e}}</h2>
 
