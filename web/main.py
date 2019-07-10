@@ -226,7 +226,7 @@ def story_show():
     print(request.cookies.get('selector'))
     if "logged_in" not in session:
         return redirect(url_for("session_new"))
-    stories = Story.story_list_by_creator(session['user_id'])  # TODO: Real UID
+    stories = Story.story_list_by_creator(session['user_id'])
     return render_template("story/show.html", stories=stories)
 
 
@@ -238,8 +238,14 @@ def story_update():
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
-    cover_photo = story.get_image_base64()
-    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, cover=cover_photo)
+    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
+
+
+@app.route("/story/image")
+def story_image():
+    story = Story.get(int(request.args['story_id']))
+    # print(story.get_image_base64())
+    return story.get_image_base64()
 
 
 @app.route("/story/update", methods=["POST"])
@@ -273,6 +279,7 @@ def story_update_post():
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route("/story/new", methods=["POST"])
 def story_new():

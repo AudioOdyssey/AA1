@@ -8,16 +8,15 @@
 <br>
 
 
-{% for story in stories %}
+<section class="row">
+    {% for story in stories %}
+    <!-- CHANGED FOR TESTING -->
+    <div class="col-sm-4 storycard">
+        <a href="/verification/review?story_id={{story.story_id}}"><button id="tbvs"
+                class="btn btn-light">{{ story.story_title|e }}</button> </a>
 
-<!-- CHANGED FOR TESTING -->
+    </div> <br>
+    {% endfor %}
+</section>
 
-<div class="col-sm-4 storycard">
-    <a href="/verification/review?story_id={{story.story_id}}"><button id="tbvs"
-            class="btn btn-light">{{ story.story_title|e }}</button> </a>
-
-</div> <br>
-
-
-{% endfor %}
 {% endblock %}

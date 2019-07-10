@@ -1,9 +1,15 @@
+function transferFailed(e) {
+    console.log("Error");
+}
+
 function story_changed(elem) {
     var xhttp = new XMLHttpRequest();
+    xhttp.addEventListener("abort", transferFailed);
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+            console.log("200");
         } else if (this.readyState == 4) {
+            console.log(this.status);
             console.log(this.responseText);
         }
     };
