@@ -50,6 +50,39 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
     {%endfor%}
 </section>
 
+<!--
+if transition
+    Transitions to transitionid
+    click: push back to cookie
+    click: transition to transitionid
+if hidden
+    if hideobj != 0
+        if hideobj not in inv
+            Hidden by object hideobj
+    if hideevt != 0
+        if hideevt not in evts
+            Hidden by event hideevt
+if locked
+    if lockobj != 0
+        if lockobj not in inv
+            Locked by object lockobj
+    if lockevt != 0
+        if lockevt not in evts
+            Locked by event lockevt
+if triggers
+    Triggers Event triggerevt
+    click: triggerevt
+if locker != 0
+    if locker in cookie
+        Locked by Event locker
+if once
+    if dec not in cookie
+        Can be triggered once
+        click: add to cookie
+    else
+        Has been triggered, can't be again
+-->
+
 <br>
 <hr>
 
