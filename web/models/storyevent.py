@@ -13,13 +13,13 @@ class StoryEvent:
     event_location_id = 0
     event_is_global = False  
     reviewer_comments = ''
-    is_verified = False
+    verification_status = False
     rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
     name = "AA_admin"
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
 
-    def __init__(self, story_id= 0, event_id = 0, event_name = 0, event_description = '', event_location_id = 0, event_is_global = False, reviewer_comments = '', is_verified = False):
+    def __init__(self, story_id= 0, event_id = 0, event_name = 0, event_description = '', event_location_id = 0, event_is_global = False, reviewer_comments = '', verification_status = False):
         self.story_id = story_id
         self.event_id = event_id
         self.event_name = event_name
@@ -27,7 +27,7 @@ class StoryEvent:
         self.event_location_id = event_location_id
         self.event_is_global = event_is_global
         self.reviewer_comments = reviewer_comments
-        self.is_verified = is_verified
+        self.verification_status = verification_status
 
     def add_to_server(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
@@ -54,7 +54,7 @@ class StoryEvent:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["event_id"], results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"], results['reviewer_comments'], results['is_verified'])
+                return cls(story_id, results["event_id"], results["event_name"], results["event_description"], results["event_location_id"], results["event_is_global"], results['reviewer_comments'], results['verification_status'])
        
     def update(self, story_id, event_id, name, location_id, description, is_global):
         self.event_name = name
@@ -68,12 +68,12 @@ class StoryEvent:
             conn.commit()
         conn.close()
 
-    def update_admin(self, reviewer_comments, is_verified):
+    def update_admin(self, reviewer_comments, verification_status):
         self.reviewer_comments = reviewer_comments
-        self.is_verified = is_verified
+        self.verification_status = verification_status
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `events` SET reviewer_comments = %s, is_verified = %s WHERE story_id = %s AND event_id = %s"), (self.reviewer_comments, self.is_verified, self.story_id, self.event_id))
+            cur.execute(("UPDATE `events` SET reviewer_comments = %s, verification_status = %s WHERE story_id = %s AND event_id = %s"), (self.reviewer_comments, self.verification_status, self.story_id, self.event_id))
             conn.commit()
         conn.close()    
     
@@ -113,7 +113,7 @@ class StoryEvent:
             cur.execute(("SELECT * FROM `events` WHERE story_id = %s"), (story_id))
             results = cur.fetchall()
             for row in results:
-                events_list.append(cls(row['story_id'], row['event_id'], row['event_name'], row['event_description'], row['event_location_id'], row['event_is_global'], row['reviewer_comments'], row['is_verified']))
+                events_list.append(cls(row['story_id'], row['event_id'], row['event_name'], row['event_description'], row['event_location_id'], row['event_is_global'], row['reviewer_comments'], row['verification_status']))
         conn.close()
         return events_list
 
