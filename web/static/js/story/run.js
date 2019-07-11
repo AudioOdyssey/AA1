@@ -73,16 +73,19 @@ function poploc() {
     if (events == "")
         return "";
     var obj = JSON.parse(events);
-    return obj.back.pop();
+    var ret = obj.back.pop();
+    var cookie = JSON.stringify(obj);
+    setCookie("rundata", cookie, 1);
+    return ret;
 }
 
-function dec_clicked(story_id, dec_id, transition, transition_loc_id, can_occur_once, cause_event, effect_event_id) {
+function dec_clicked(story_id, dec_id, loc_id, transition, transition_loc_id, can_occur_once, cause_event, effect_event_id) {
     if (cause_event)
         addEvent(effect_event_id);
     if (can_occur_once && !decDone())
         addDec(dec_id);
     if (transition)
-        addBack(transition_loc_id);
+        addBack(loc_id);
     window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id;
 }
 
