@@ -1,0 +1,156 @@
+{%extends "template.html" %}
+{% block content%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verification/review.css') }}" type="text/css" />
+<script src="{{ url_for('static', filename='js/verification/review.js') }}"></script>
+
+<style>
+    .card-outer {
+        padding: 1em;
+    }
+
+    .card-inner {
+        border: solid 1px grey;
+        border-radius: 20px;
+        padding: 0.5em 1em;
+        background: white;
+    }
+
+    .form-control {
+        background: white;
+    }
+
+    .btn-passfail {
+        margin-top: 0.5rem;
+        width: inherit;
+    }
+
+    .disp-none {
+        display: none;
+    }
+</style>
+
+<script>
+    function passfail(pass, elem) {
+        elem.form.getElementsByClassName("verified")[0].value = pass ? "3" : "2";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                elem.form.parentElement.parentNode.removeChild(elem.form.parentElement);
+            } else if (this.readyState == 4) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("POST", "/verification/review/update", true);
+        xhttp.send(new FormData(elem.form));
+    }
+</script>
+
+<h1>{{story.story_title|e}}</h1>
+<p>{{story.story_synopsis|e}}</p>
+<hr>
+<h2>Objects</h2>
+<section class="row">
+    {%for object in objects%}
+    <section class="card-outer col-sm-6">
+        <form class="card-inner">
+            <input class="disp-none" name="story_id" value="{{story.story_id}}" readonly>
+            <input class="disp-none" name="type" value="object" readonly>
+            <input class="disp-none" name="ent_id" value="{{object.obj_id}}" readonly>
+            <input class="disp-none verified" name="is_verified">
+            <h2>{{object.obj_name|e}}</h2>
+            <h3>{{StoryLocation.get(story.story_id, object.obj_starting_loc).location_name|e}}</h3>
+            <hr>
+            <p>{{object.obj_description|e}}</p>
+            {%if object.can_pickup_obj%}
+            <p>Object <i>can</i> be picked up</p>
+            {%endif%}
+            {%if object.is_hidden%}
+            <p>Object <i>is</i> hidden and will be revealed by
+                {%if object.unhide_event_id != 0%}
+                {{StoryEvent.get(story.story_id, object.unhide_event_id).event_name|e}}
+                {%endif%}
+            </p>
+            {%endif%}
+            <input class="form-control" type="text" name="comment" placeholder="Comments...">
+            <section class="row">
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify Object</button>
+                </div>
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail Object</button>
+                </div>
+            </section>
+        </form>
+    </section>
+    {%endfor%}
+</section>
+
+<h2>Events</h2>
+<section class="row">
+    {%for event in events%}
+    <section class="card-outer col-sm-6">
+        <form class="card-inner">
+            <input class="disp-none" name="story_id" value="{{story.story_id}}" readonly>
+            <input class="disp-none" name="type" value="event" readonly>
+            <input class="disp-none" name="ent_id" value="{{event.event_id}}" readonly>
+            <input class="disp-none verified" name="is_verified">
+            <h2>{{event.event_name|e}}</h2>
+            <h3>{{StoryLocation.get(story.story_id, event.event_location_id).location_name|e}}</h3>
+            <hr>
+            <p>{{event.event_description|e}}</p>
+            {%if event.is_global%}
+            <p>Object <i>can</i> be picked up</p>
+            {%endif%}
+            <input class="form-control" type="text" name="comment" placeholder="Comments...">
+            <section class="row">
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify Event</button>
+                </div>
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail Event</button>
+                </div>
+            </section>
+        </form>
+    </section>
+    {%endfor%}
+</section>
+
+<h2>Locations</h2>
+<section class="row">
+    {%for location in locations%}
+    <section class="card-outer col-sm-6">
+        <form class="card-inner">
+            <input class="disp-none" name="story_id" value="{{story.story_id}}" readonly>
+            <input class="disp-none" name="type" value="location" readonly>
+            <input class="disp-none" name="ent_id" value="{{location.location_id}}" readonly>
+            <input class="disp-none verified" name="is_verified">
+            <h2>{{location.location_name|e}}</h2>
+            <hr>
+            <p>Original Description: {{location.original_description|e}}</p>
+            <hr>
+            <p>Short Description: {{location.short_description|e}}</p>
+            {%if location.location_event_id|int != 0%}
+            <hr>
+            <p>Location Changed by Event {{StoryEvent.get(story.story_id, location.location_event_id).event_name|e}}</p>
+            <p>Post Event Description: {{location.post_event|e}}</p>
+            {%endif%}
+            {%if location.auto_goto%}
+            <p>Visiting Will Automatically Redirect to
+                <i>{{StoryLocation.get(story.story_id, location.next_loc_id).location_name|e}}</i></p>
+            {%endif%}
+
+            <input class="form-control" type="text" name="comment" placeholder="Comments...">
+            <section class="row">
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify Event</button>
+                </div>
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail Event</button>
+                </div>
+            </section>
+        </form>
+    </section>
+    {%endfor%}
+</section>
+
+{% endblock %}

@@ -699,6 +699,17 @@ def verification_review():
 
 
 @authentication_required
+@app.route("/verification/review_new")
+def verification_review_new():
+    story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    objects = StoryObject.obj_list(story_id)
+    locations = StoryLocation.loc_list(story_id)
+    events = StoryEvent.event_list(story_id)
+    decisions = StoryDecision.dec_list_story(story_id)
+    return render_template("verification/review_new.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+
+@authentication_required
 @app.route("/verification/review/update", methods=['POST'])
 def review_update():
     details = request.form
@@ -706,10 +717,6 @@ def review_update():
     entity_type = details['type']
     ent_id = details['ent_id']
     is_verified = details.get('is_verified')
-    if is_verified is None:
-        is_verified = False
-    else:
-        is_verified = True
     reviewer_comment = details['comment']
     if entity_type.lower() == 'object':
         obj = StoryObject.get(story_id, ent_id)
