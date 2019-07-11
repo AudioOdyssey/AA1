@@ -4,7 +4,7 @@
 <!--NONE OF THIS NEEDS TO BE SAVABLE PER MIGUEL basically just a text version of the app but doesnt
 need to be nearly as clean/advanced. Do we want to make this like treeview where it replaces itself?-->
 
-{%if len[back] > 0%}
+{%if backs|length > 0%}
 <button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</a>
 {%endif%}
 <button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Restart</button>
@@ -49,7 +49,7 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <section class="row">
     {%for dec in decisions%}
     <a href="#"
-        onclick="dec_clicked({{story.story_id}},{{dec.decision_id}},{{dec.transition}},{{dec.transition_loc_id}},{{dec.can_occur_once}},{{dec.cause_event}},{{dec.effect_event_id}})"
+        onclick="dec_clicked({{story.story_id}},{{dec.decision_id}},{{location.location_id}},{{dec.transition}},{{dec.transition_loc_id}},{{dec.can_occur_once}},{{dec.cause_event}},{{dec.effect_event_id}})"
         class="col-sm-4 storycard">
         <h3>{{dec.decision_name|e}}</h3>
         <hr>
