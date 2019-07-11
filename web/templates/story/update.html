@@ -179,14 +179,14 @@
     </section>
 </section>
 <hr>
-<a href="/save/savingstory?story_id={{story.story_id}}"><button class="btn btn-light"
-        onclick="save('{{story.story_id}}')">Save For Later</button></a>
 <a href="/save/publishing?story_id={{story.story_id}}"> <button class="btn btn-light"
         onclick="publishStory('{{story.story_id}}')">Submit for Verification</button></a>
 <a href="/verification/story?story_id={{story.story_id}}"> <button class="btn btn-light">View Verification
         Status</button></a>
 <a href="/story/run?story_id={{story.story_id}}"> <button class="btn btn-light">Run Story</button></a>
 <button class="btn btn-danger" onclick="story_delete('{{story.story_id}}')">Delete Story</button>
+
+<button onclick="save()" style="float: right" class="btn btn-primary">Save</button>
 
 <script>
     document.getElementById('cover-upload').addEventListener('change', handleFileSelect, false);
