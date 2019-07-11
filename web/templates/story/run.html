@@ -132,6 +132,10 @@
 <br>
 <hr>
 
+{%if backs|length > 0%}
+<button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</button>
+{%endif%}
+
 <button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Restart</button>
 <a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
 <a class="btn btn-primary" style="float:right"

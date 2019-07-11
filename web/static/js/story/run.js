@@ -81,7 +81,7 @@ function poploc() {
 }
 
 function dec_clicked(story_id, dec_id, loc_id, transition, transition_loc_id, can_occur_once, cause_event, effect_event_id) {
-    if (cause_event)
+    if (cause_event && effect_event_id != 0)
         addEvent(effect_event_id);
     if (can_occur_once && !decDone())
         addDec(dec_id);
