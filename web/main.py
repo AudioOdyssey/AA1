@@ -185,14 +185,14 @@ def app_session_new():
         details = request.json
         user_id = authenticate(details)
         current_time = datetime.utcnow()
-        expired_date = datetime.utcnow() + timedelta(days = 30)
+        expired_date = datetime.utcnow() + timedelta(days=30)
         if user_id:
             result = {
-                'auth_token' : encode_auth_token(user_id, current_time, expired_date)
+                'auth_token': encode_auth_token(user_id, current_time, expired_date)
             }
         else:
             result = {
-                'message' : 'Username/password is incorrect'
+                'message': 'Username/password is incorrect'
             }
     return jsonify(result)
 
@@ -253,6 +253,7 @@ def story_show():
     stories = Story.story_list_by_creator(user_id)
     return render_template("story/show.html", stories=stories)
 
+
 @authentication_required
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 def story_update():
@@ -262,12 +263,14 @@ def story_update():
     locations = StoryLocation.loc_list(request.args['story_id'])
     return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
 
+
 @authentication_required
 @app.route("/story/image")
 def story_image():
     story = Story.get(int(request.args['story_id']))
     # print(story.get_image_base64())
     return story.get_image_base64()
+
 
 @authentication_required
 @app.route("/story/update", methods=["POST"])
@@ -302,6 +305,7 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @authentication_required
 @app.route("/story/new", methods=["POST"])
 def story_new():
@@ -332,6 +336,7 @@ def app_story_logistics():
 def app_store_info():
     return Story.display_for_store()
 
+
 @authentication_required
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
@@ -344,6 +349,7 @@ def app_store_expand():
 def stories_show_owned_by_user():
     user_id = request.args.get("user_id")
     return Story.json_story_library(user_id)
+
 
 @authentication_required
 @app.route("/story/object/update", methods=['POST'])
@@ -381,6 +387,7 @@ def object_update():
     # return redirect(url_for("object_show"))
     return "ok"
 
+
 @authentication_required
 @app.route("/story/object/new", methods=['POST'])
 def object_new():
@@ -390,6 +397,7 @@ def object_new():
     obj = StoryObject(story_id)
     obj.add_to_server()
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
+
 
 @authentication_required
 @app.route("/story/object/destroy", methods=['POST'])
@@ -407,6 +415,7 @@ def event_show():
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/show.html", locations=locations, events=events, story_id=story_id)
+
 
 @authentication_required
 @app.route('/story/event/update', methods=['POST'])
@@ -433,6 +442,7 @@ def event_update():
         evnt.update(story_id, event_id, name, location, desc, is_global)
     return '{"status":"ok"}'
 
+
 @authentication_required
 @app.route('/story/event/new', methods=['POST'])
 def event_new():
@@ -444,11 +454,13 @@ def event_new():
     evnt.add_to_server()
     return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
 
+
 @authentication_required
 @app.route("/story/event/destroy", methods=['POST'])
 def event_destroy():
     StoryEvent.event_del(request.form['event_id'])
     return '{"status":"ok"}'
+
 
 @authentication_required
 @app.route("/story/location/show")
@@ -459,6 +471,7 @@ def location_show():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
+
 
 @authentication_required
 @app.route("/story/location/indiv")
@@ -472,6 +485,7 @@ def location_indiv():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
 
+
 @authentication_required
 @app.route("/story/object/indiv")
 def object_indiv():
@@ -483,6 +497,7 @@ def object_indiv():
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
+
 
 @authentication_required
 @app.route("/story/location/decision/indiv")
@@ -498,6 +513,7 @@ def decision_indiv():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/location/decision/indiv.html", locations=locations, decision=decision, story_id=story_id, decision_id=decision_id, events=events, objects=objects)
 
+
 @authentication_required
 @app.route("/story/event/indiv")
 def event_indiv():
@@ -508,6 +524,7 @@ def event_indiv():
     event = StoryEvent.get(story_id, event_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)
+
 
 @authentication_required
 @app.route('/story/location/update', methods=['POST'])
@@ -539,6 +556,7 @@ def location_update():
                post_event_description, event_id, auto_goto, next_location_id)
     return '{"status":"ok"}'
 
+
 @authentication_required
 @app.route('/story/location/new', methods=['POST'])
 def location_new():
@@ -548,6 +566,7 @@ def location_new():
     loc = StoryLocation(story_id)
     loc.add_to_server()
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
+
 
 @authentication_required
 @app.route("/story/location/destroy", methods=['POST'])
@@ -574,6 +593,7 @@ def decision_show():
     events = StoryEvent.event_list(
         request.args['story_id'])
     return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
+
 
 @authentication_required
 @app.route("/story/location/decision/update", methods=['POST'])
@@ -649,6 +669,7 @@ def decision_update():
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
     return '{"status":"ok"}'
 
+
 @authentication_required
 @app.route("/story/location/decision/new", methods=['POST'])
 def decision_new():
@@ -660,6 +681,7 @@ def decision_new():
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
+
 
 @authentication_required
 @app.route("/story/location/decision/destroy", methods=['POST'])
@@ -676,6 +698,7 @@ def about():
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
 
 @authentication_required
 @app.route("/verification/view")
@@ -708,6 +731,7 @@ def verification_review_new():
     events = StoryEvent.event_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
     return render_template("verification/review_new.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+
 
 @authentication_required
 @app.route("/verification/review/update", methods=['POST'])
