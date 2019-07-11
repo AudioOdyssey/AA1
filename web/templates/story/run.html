@@ -4,6 +4,11 @@
 <!--NONE OF THIS NEEDS TO BE SAVABLE PER MIGUEL basically just a text version of the app but doesnt
 need to be nearly as clean/advanced. Do we want to make this like treeview where it replaces itself?-->
 
+{%if location is none%}
+<h1>Can't Load Run-View, No starting location!</h1>
+<a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
+{%else%}
+
 {%if backs|length > 0%}
 <button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</button>
 {%endif%}
@@ -129,4 +134,5 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <a class="btn btn-primary" style="float:right"
     href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
 
+{%endif%}
 {% endblock %}
