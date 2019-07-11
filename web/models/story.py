@@ -148,8 +148,8 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s, updated_at = NOW(), story_verification_date = CURDATE(), name_of_verifier = %s WHERE story_id = %s"),
-                        (self.story_ratings, self.story_verification_date, self.storage_size, self.reviewer_comments, self.name_of_verifier, self.story_id))
+            cur.execute(("UPDATE master_stories SET story_ratings = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s, story_verification_date = CURDATE(), name_of_verifier = %s WHERE story_id = %s"),
+                        (self.story_ratings, self.story_verification_status, self.storage_size, self.reviewer_comments, self.name_of_verifier, self.story_id))
             conn.commit()
             cur.execute(
                 ("SELECT updated_at, story_verification_date WHERE story_id = %s"), (self.story_id))

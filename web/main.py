@@ -713,6 +713,10 @@ def review_update():
     else:
         is_verified = True
     reviewer_comment = details['comment']
+    print(is_verified)
+    print(reviewer_comment)
+    print(story_id)
+    print(ent_id)
     if entity_type.lower() == 'object':
         obj = StoryObject.get(story_id, ent_id)
         obj.update_admin(is_verified, reviewer_comment)
