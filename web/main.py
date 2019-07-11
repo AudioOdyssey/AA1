@@ -53,7 +53,11 @@ random.seed()
 @app.route("/home")
 @app.route("/index")
 def home():
-    return render_template("index.html")
+    token = request.cookies.get('remember_')
+    if token is None:
+        return render_template("index.html")
+    else:
+        return redirect(url_for('story_show'))
 
 
 @app.route("/user/new", methods=['GET', 'POST'])
@@ -124,43 +128,37 @@ def sign_up(details_dict):
 
 @app.route("/session/new", methods=['GET', 'POST'])
 def session_new():
+    if 'user_id' in session:
+        return redirect(url_for('home'))
     error = None
     if request.method == 'POST':
         details = request.form
-        if authenticate(details):
+        user_id = authenticate(details)
+        if user_id:
+            current_time = datetime.utcnow()
+            expired_date = datetime.utcnow() + timedelta(days=30)
+            token = encode_auth_token(user_id, current_time, expired_date)
             resp = make_response(redirect(url_for('story_show')))
             if 'remember' in details:
-                selector = os.urandom(16).decode('latin-1')
-                validator = os.urandom(16).decode('latin-1')
-                expired_date = datetime.utcnow() + timedelta(days = 30)
-                resp.set_cookie("remember_", (selector + ":" + validator), expires = expired_date)
-                rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-                name = "AA_admin"
-                rds_password = "z9QC3pvQ"
-                db_name = "audio_adventures_dev"
-                conn = pymysql.connect(
-                    rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
-                with conn.cursor() as cur:
-                    hashedValidator = hashlib.sha256(validator.encode()).digest()
-                    hashed_validator_hexstring = binascii.b2a_hex(hashedValidator)
-                    cur.execute(("SELECT userid from `auth_tokens`"))
-                    query_data = cur.fetchall()
-                    if query_data[0] != session['user_id']:
-                        cur.execute(("INSERT INTO `auth_tokens`(selector, hashedValidator, userid, expires) VALUES (%s, %s, %s, %s)"),
-                                    (selector, hashed_validator_hexstring, session['user_id'], expired_date))
-                        cur.commit()
-                conn.close()
+                resp.set_cookie("remember_", token, expires=expired_date)
+            else:
+                session['token'] = token
             return resp
         else:
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
-def authentication_required():
+
+def authentication_required(func):
     def func_wrapper():
-        if 'user_id' not in session:
-            remember_me = request.cookies.get('remember_')
-            
-        
+        if 'token' not in session:
+            jwt = request.cookies.get('remember_')
+            if jwt is None:
+                return redirect(url_for('session_new'))
+        else:
+            func()
+    return func_wrapper
+
 
 def authenticate(details):
     conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
@@ -170,44 +168,39 @@ def authenticate(details):
         cur.execute(("SELECT * FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
-            return False
+            return 0
         else:
             usr = load_user(result['user_id'])
             if(usr.authenticate(details['password'])):
-                session['logged_in'] = True
-                session['user_id'] = result['user_id']
-                return True
+                return result['user_id']
             else:
-                return False
-    return True
+                return 0
+    return 0
 
 
 @app.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
-    message = None
     result = None
     if request.method == 'POST':
         details = request.json
-        if authenticate(details):
-            session['platform'] = 'app'
+        user_id = authenticate(details)
+        current_time = datetime.utcnow()
+        expired_date = datetime.utcnow() + timedelta(days = 30)
+        if user_id:
+            result = {
+                'auth_token' : encode_auth_token(user_id, current_time, expired_date)
+            }
         else:
-            message = "Username and/or password is not valid"
-    if message is None:
-        result = {
-            'user_id': str(session['user_id']),
-            'auth_token': encode_auth_token(str(session['user_id']))
-        }
-    else:
-        result = {
-            'message': message
-        }
+            result = {
+                'message' : 'Username/password is incorrect'
+            }
     return jsonify(result)
-    
 
-def encode_auth_token(user_id):
+
+def encode_auth_token(user_id, current_time, expired_date):
     payload = {
-        'exp': datetime.utcnow() + timedelta(days=7, seconds=5),
-        'iat': datetime.utcnow(),
+        'exp': expired_date,
+        'iat': current_time,
         'sub': user_id
     }
     return jwt.encode(
@@ -237,43 +230,46 @@ def app_logout():
 
 @app.route("/session/logout", methods=['POST', 'GET'])
 def logout():
+    resp = make_response(redirect(url_for('home')))
     if request.method == 'POST':
-        if "logged_in" in session:
-            session.pop("logged_in", None)
-            usr = User.get(session.get('user_id'))
-            usr.is_authenticated = False
-            return redirect(url_for("home"))
+        if "token" in session:
+            session.pop('token', None)
         else:
-            return redirect(url_for("session_new"))
+            resp.set_cookie('remember_', '', expires=0)
+        return resp
+    else:
+        return redirect(url_for("session_new"))
 
 
+@authentication_required
 @app.route("/story/show")
 def story_show():
-    print(request.cookies.get('sucess'))
-    if "logged_in" not in session:
-        return redirect(url_for("session_new"))
-    stories = Story.story_list_by_creator(session['user_id'])
+    token = None
+    if 'token' in session:
+        token = session['token']
+    else:
+        token = request.cookies.get('remember_')
+    user_id = decode_auth_token(token)
+    stories = Story.story_list_by_creator(user_id)
     return render_template("story/show.html", stories=stories)
 
-
+@authentication_required
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 def story_update():
-    if "logged_in" not in session:
-        return redirect(url_for("session_new"))
     story = Story.get(int(request.args['story_id']))
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
     return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
 
-
+@authentication_required
 @app.route("/story/image")
 def story_image():
     story = Story.get(int(request.args['story_id']))
     # print(story.get_image_base64())
     return story.get_image_base64()
 
-
+@authentication_required
 @app.route("/story/update", methods=["POST"])
 def story_update_post():
     details = request.form
@@ -306,7 +302,7 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
+@authentication_required
 @app.route("/story/new", methods=["POST"])
 def story_new():
     story = Story(user_creator_id=session['user_id'])
@@ -315,7 +311,7 @@ def story_new():
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
 
-#### THIS WORKS #####
+@authentication_required
 @app.route("/story/object/show")
 def object_show():
     if "logged_in" not in session:
@@ -327,7 +323,7 @@ def object_show():
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
-@app.route("/appmys/story/info", methods=['GET'])
+@app.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
     return Story.get_entities(int(request.args.get('story_id')))
 
@@ -336,7 +332,7 @@ def app_story_logistics():
 def app_store_info():
     return Story.display_for_store()
 
-
+@authentication_required
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
     details = request.json
@@ -349,7 +345,7 @@ def stories_show_owned_by_user():
     user_id = request.args.get("user_id")
     return Story.json_story_library(user_id)
 
-
+@authentication_required
 @app.route("/story/object/update", methods=['POST'])
 def object_update():
     if "logged_in" not in session:
@@ -385,7 +381,7 @@ def object_update():
     # return redirect(url_for("object_show"))
     return "ok"
 
-
+@authentication_required
 @app.route("/story/object/new", methods=['POST'])
 def object_new():
     if "logged_in" not in session:
@@ -395,14 +391,14 @@ def object_new():
     obj.add_to_server()
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
-
+@authentication_required
 @app.route("/story/object/destroy", methods=['POST'])
 def object_destroy():
     StoryObject.obj_del(request.form['obj_id'])
     return '{"status":"ok"}'
 
 
-#### STILL NEEDS WORK ####
+@authentication_required
 @app.route("/story/event/show", methods=['GET'])
 def event_show():
     if "logged_in" not in session:
@@ -412,7 +408,7 @@ def event_show():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/show.html", locations=locations, events=events, story_id=story_id)
 
-
+@authentication_required
 @app.route('/story/event/update', methods=['POST'])
 def event_update():
     if "logged_in" not in session:
@@ -437,7 +433,7 @@ def event_update():
         evnt.update(story_id, event_id, name, location, desc, is_global)
     return '{"status":"ok"}'
 
-
+@authentication_required
 @app.route('/story/event/new', methods=['POST'])
 def event_new():
     if "logged_in" not in session:
@@ -448,13 +444,13 @@ def event_new():
     evnt.add_to_server()
     return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
 
-
+@authentication_required
 @app.route("/story/event/destroy", methods=['POST'])
 def event_destroy():
     StoryEvent.event_del(request.form['event_id'])
     return '{"status":"ok"}'
 
-
+@authentication_required
 @app.route("/story/location/show")
 def location_show():
     if "logged_in" not in session:
@@ -464,7 +460,7 @@ def location_show():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
-
+@authentication_required
 @app.route("/story/location/indiv")
 def location_indiv():
     if "logged_in" not in session:
@@ -476,7 +472,7 @@ def location_indiv():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
 
-
+@authentication_required
 @app.route("/story/object/indiv")
 def object_indiv():
     if "logged_in" not in session:
@@ -488,7 +484,7 @@ def object_indiv():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
 
-
+@authentication_required
 @app.route("/story/location/decision/indiv")
 def decision_indiv():
     if "logged_in" not in session:
@@ -502,7 +498,7 @@ def decision_indiv():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/location/decision/indiv.html", locations=locations, decision=decision, story_id=story_id, decision_id=decision_id, events=events, objects=objects)
 
-
+@authentication_required
 @app.route("/story/event/indiv")
 def event_indiv():
     if "logged_in" not in session:
@@ -513,7 +509,7 @@ def event_indiv():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)
 
-
+@authentication_required
 @app.route('/story/location/update', methods=['POST'])
 def location_update():
     if "logged_in" not in session:
@@ -543,7 +539,7 @@ def location_update():
                post_event_description, event_id, auto_goto, next_location_id)
     return '{"status":"ok"}'
 
-
+@authentication_required
 @app.route('/story/location/new', methods=['POST'])
 def location_new():
     if "logged_in" not in session:
@@ -553,14 +549,14 @@ def location_new():
     loc.add_to_server()
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
-
+@authentication_required
 @app.route("/story/location/destroy", methods=['POST'])
 def location_destroy():
     StoryLocation.loc_del(request.form['loc_id'])
     return '{"status":"ok"}'
 
 
-#### DECISIONS WORK ####
+@authentication_required
 @app.route("/story/location/decision/show")
 def decision_show():
     if "logged_in" not in session:
@@ -579,7 +575,7 @@ def decision_show():
         request.args['story_id'])
     return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
-
+@authentication_required
 @app.route("/story/location/decision/update", methods=['POST'])
 def decision_update():
     if "logged_in" not in session:
@@ -653,7 +649,7 @@ def decision_update():
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
     return '{"status":"ok"}'
 
-
+@authentication_required
 @app.route("/story/location/decision/new", methods=['POST'])
 def decision_new():
     if "logged_in" not in session:
@@ -665,7 +661,7 @@ def decision_new():
     dec.add_to_server()
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
-
+@authentication_required
 @app.route("/story/location/decision/destroy", methods=['POST'])
 def decision_destroy():
     StoryDecision.dec_del(request.form['decision_id'])
@@ -681,7 +677,7 @@ def about():
 def contact():
     return render_template("contact.html")
 
-
+@authentication_required
 @app.route("/verification/view")
 def verification_view():
     if "logged_in" not in session:
@@ -690,6 +686,7 @@ def verification_view():
     return render_template("verification/view.html", stories=stories)
 
 
+@authentication_required
 @app.route("/verification/review")
 def verification_review():
     story_id = request.args["story_id"]
@@ -701,6 +698,7 @@ def verification_review():
     return render_template("verification/review.html", story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
+@authentication_required
 @app.route("/verification/review/update", methods=['POST'])
 def review_update():
     details = request.form
@@ -713,10 +711,6 @@ def review_update():
     else:
         is_verified = True
     reviewer_comment = details['comment']
-    print(is_verified)
-    print(reviewer_comment)
-    print(story_id)
-    print(ent_id)
     if entity_type.lower() == 'object':
         obj = StoryObject.get(story_id, ent_id)
         obj.update_admin(is_verified, reviewer_comment)
@@ -739,6 +733,7 @@ def review_update():
     return '{"status":"ok"}'
 
 
+@authentication_required
 @app.route("/verification/object")
 def verification_object():
     if "logged_in" not in session:
@@ -749,6 +744,7 @@ def verification_object():
     return render_template("verification/object.html", obj=obj, story_id=story_id, object_id=object_id)
 
 
+@authentication_required
 @app.route("/verification/location")
 def verification_location():
     if "logged_in" not in session:
@@ -760,6 +756,7 @@ def verification_location():
     return render_template("verification/location.html", location=location, story_id=story_id, location_id=location_id, decisions=decisions)
 
 
+@authentication_required
 @app.route("/verification/event")
 def verfication_event():
     if "logged_in" not in session:
@@ -770,6 +767,7 @@ def verfication_event():
     return render_template("verification/event.html", event=event, story_id=story_id, event_id=event_id)
 
 
+@authentication_required
 @app.route("/verification/story")
 def verfication_story():
     if "logged_in" not in session:
@@ -782,6 +780,7 @@ def verfication_story():
     return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
 
+@authentication_required
 @app.route("/story/treeview")
 def treeview():
     # if "logged_in" not in session:
@@ -800,6 +799,7 @@ def treeview():
     return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
 
 
+@authentication_required
 @app.route("/verification/treeview")
 def verify_treeview():
     # if "logged_in" not in session:
@@ -838,6 +838,7 @@ def verify_treeview():
 #     return '{"status":"ok"}'
 
 
+@authentication_required
 @app.route("/story/run")
 def story_run():
     if "logged_in" not in session:
@@ -872,16 +873,19 @@ def story_run():
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
+@authentication_required
 @app.route("/story/help")
 def help():
     return render_template("story/help.html")
 
 
+@authentication_required
 @app.route("/verification/help")
 def vhelp():
     return render_template("verification/help.html")
 
 
+@authentication_required
 @app.route("/story/treeview_help")
 def treeview_help():
     story_id = request.args['story_id']
@@ -889,6 +893,7 @@ def treeview_help():
     return render_template("story/treeview_help.html", story=story)
 
 
+@authentication_required
 @app.route("/admin")
 def admin_index():
     uid = session['user_id']
@@ -900,6 +905,7 @@ def admin_index():
     return render_template("admin/index.html", stories=stories, users=users)
 
 
+@authentication_required
 @app.route("/admin/users", methods=["GET", "POST"])
 def admin_users():
     uid = session['user_id']
@@ -946,9 +952,9 @@ def load_user(user_id):
     return User.get(user_id)
 
 
-@login_manager.unauthorized_handler
-def unauthorized():
-    return redirect(url_for("session_new"))
+# @login_manager.unauthorized_handler
+# def unauthorized():
+#     return redirect(url_for("session_new"))
 
 
 if __name__ == '__main__':
