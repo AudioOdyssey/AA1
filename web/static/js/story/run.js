@@ -28,6 +28,7 @@ function addItem(item) {
     if (obj.items.indexOf(item) === -1) obj.items.push(item);
     var cookie = JSON.stringify(obj);
     setCookie("rundata", cookie, 1);
+    location.reload(); 
 }
 
 function addEvent(event) {
@@ -65,7 +66,7 @@ function decDone(dec) {
     if (events == "")
         events = '{"items":[], "events":[], "decs":[], "back":[]}'
     var obj = JSON.parse(events);
-    return obj.events.indexOf(item) === -1
+    return obj.events.indexOf(dec) === -1
 }
 
 function poploc() {
@@ -84,9 +85,10 @@ function dec_clicked(story_id, dec_id, loc_id, transition, transition_loc_id, ca
         addEvent(effect_event_id);
     if (can_occur_once && !decDone())
         addDec(dec_id);
-    if (transition)
+    if (transition) {
         addBack(loc_id);
-    window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id;
+        window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id;
+    }
 }
 
 function start_over(story_id) {

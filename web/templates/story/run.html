@@ -1,8 +1,6 @@
 {% extends "template.html" %}
 {% block content %}
 <script src="{{ url_for('static', filename='js/story/run.js') }}"></script>
-<!--NONE OF THIS NEEDS TO BE SAVABLE PER MIGUEL basically just a text version of the app but doesnt
-need to be nearly as clean/advanced. Do we want to make this like treeview where it replaces itself?-->
 
 {%if location is none%}
 <h1>Can't Load Run-View, No starting location!</h1>
@@ -12,6 +10,7 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 {%if backs|length > 0%}
 <button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</button>
 {%endif%}
+
 <button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Restart</button>
 <a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
 <a class="btn btn-primary" style="float:right"
@@ -20,17 +19,21 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <h1>Running {{story.story_title|e}}</h1>
 <br>
 <h3>Inventory:</h3>
+<div class="clearfix"></div>
 {%for itm in inv%}
-<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{itm.obj_name|e}}</div>
+<p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{itm.obj_name|e}}</p>
 {%else%}
-<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</div>
+<p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</p>
 {%endfor%}
+<div class="clearfix"></div>
 <h3>Triggered Events:</h3>
+<div class="clearfix"></div>
 {%for event in evts%}
-<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{event.event_name|e}}</div>
+<p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{event.event_name|e}}</p>
 {%else%}
-<div style="margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</div>
+<p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</p>
 {%endfor%}
+<div class="clearfix"></div>
 
 <h2>At {{location.location_name|e}}</h2>
 
