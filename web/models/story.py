@@ -109,7 +109,7 @@ class Story:
                 return cls(story_id=story_id, story_title=results["story_title"], story_author=results["story_author"], story_synopsis=results["story_synopsis"],
                            story_price=results["story_price"], author_paid=results[
                                "author_paid"], genre=results['genre'], length_of_story=results["length_of_story"],
-                           number_of_locations=results["number_of_location"], number_of_decisions=results[
+                           number_of_locations=results["number_of_locations"], number_of_decisions=results[
                                "number_of_decisions"], story_in_store=results["story_in_store"],
                            story_verification_date=results["story_verification_date"], name_of_verifier=results[
                                "name_of_verifier"], verification_status=results['verification_status'], story_ratings=results["story_ratings"],
