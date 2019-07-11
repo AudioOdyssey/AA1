@@ -74,10 +74,12 @@
             <input class="form-control" type="text" name="comment" placeholder="Comments...">
             <section class="row">
                 <div class="input-group col-sm-6">
-                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify Object</button>
+                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify
+                        Object</button>
                 </div>
                 <div class="input-group col-sm-6">
-                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail Object</button>
+                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail
+                        Object</button>
                 </div>
             </section>
         </form>
@@ -104,10 +106,12 @@
             <input class="form-control" type="text" name="comment" placeholder="Comments...">
             <section class="row">
                 <div class="input-group col-sm-6">
-                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify Event</button>
+                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify
+                        Event</button>
                 </div>
                 <div class="input-group col-sm-6">
-                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail Event</button>
+                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail
+                        Event</button>
                 </div>
             </section>
         </form>
@@ -142,10 +146,81 @@
             <input class="form-control" type="text" name="comment" placeholder="Comments...">
             <section class="row">
                 <div class="input-group col-sm-6">
-                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify Event</button>
+                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify
+                        Event</button>
                 </div>
                 <div class="input-group col-sm-6">
-                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail Event</button>
+                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail
+                        Event</button>
+                </div>
+            </section>
+        </form>
+    </section>
+    {%endfor%}
+</section>
+
+<h2>Decisions</h2>
+<section class="row">
+    {%for decision in decisions%}
+    <section class="card-outer col-sm-6">
+        <form class="card-inner">
+            <input class="disp-none" name="story_id" value="{{story.story_id}}" readonly>
+            <input class="disp-none" name="type" value="decision" readonly>
+            <input class="disp-none" name="ent_id" value="{{decision.decision_id}}" readonly>
+            <input class="disp-none verified" name="is_verified">
+            <h2>{{decision.decision_name|e}}</h2>
+            <hr>
+            <p>Original Description: {{decision.decision_description|e}}</p>
+
+            {%if decision.aftermath_description|e != ""%}
+            <hr>
+            <p>Aftermath Description: {{decision.aftermath_description|e}}</p>
+            {%endif%}
+
+            {%if decision.transition%}
+            <p>Transitions to <i>{{StoryLocation.get(story.story_id, decision.transition_loc_id).location_name|e}}</i>
+            </p>
+            {%endif%}
+
+            {%if decision.hidden%}
+            {%if decision.show_event_id!=0%}
+            <h5>Hidden by Event <i>{{StoryEvent.get(story.story_id, decision.show_event_id).event_name|e}}</i></h5>
+            {%elif decision.show_object_id!=0%}
+            <h5>Hidden by Object <i>{{StoryObject.get(story.story_id, decision.show_object_id).obj_name|e}}</i></h5>
+            {%endif%}
+            {%endif%}
+
+            {%if decision.locked%}
+            {%if decision.unlock_event_id!=0%}
+            <h5>Locked by Event <i>{{StoryEvent.get(story.story_id, decision.unlock_event_id).event_name|e}}</i></h5>
+            {%elif decision.unlock_object_id!=0%}
+            <h5>Locked by Object <i>{{StoryObject.get(story.story_id, decision.unlock_object_id).obj_name|e}}</i></h5>
+            {%endif%}
+            {%endif%}
+
+            {%if decision.cause_event%}
+            <h5>Causes Event <i>{{StoryEvent.get(story.story_id, decision.effect_event_id).event_name|e}}</i></h5>
+            {%endif%}
+
+            {%if decision.is_locked_by_event_id!=0%}
+            <h5>Gets locked by Event
+                <i>{{StoryEvent.get(story.story_id, decision.is_locked_by_event_id).event_name|e}}</i></h5>
+            <p>Locked Description: {{decision.locked_by_event_description|e}}</p>
+            {%endif%}
+
+            {%if decision.can_occur_once%}
+            <h5>Decision can only be triggered once</h5>
+            {%endif%}
+
+            <input class="form-control" type="text" name="comment" placeholder="Comments...">
+            <section class="row">
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify
+                        Decision</button>
+                </div>
+                <div class="input-group col-sm-6">
+                    <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail
+                        Decision</button>
                 </div>
             </section>
         </form>
