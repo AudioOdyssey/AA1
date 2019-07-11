@@ -20,9 +20,6 @@
 <section id="3-left-rows">
     <section class="1-3-left-row">
         <!-- Summary Row -->
-        <div id="dummy-thicc" style="display: none;" class="alert alert-danger">
-            <strong>Danger!</strong> The uploaded image was too big! It must be less than 2MB.
-        </div>
         <section class="row">
             <h3 style="width:max-content">Story Summary</h3>
             <button onclick="save()" style="margin-left: auto" class="btn btn-primary">Save</button>
@@ -95,8 +92,11 @@
                 </select>
             </div>
             <label>Cover Image:</label>
+            <div id="dummy-thicc" style="display: none;" class="alert alert-danger">
+                <strong>Danger!</strong> The uploaded image was too big! It must be less than <u>7.5MB.</u>
+            </div>
             <div id="cover-photo"
-                style="margin: auto; max-width: 100%;height:28em; width:20em; background-repeat: no-repeat; background-position: center; background-color: #cccccc; background-size: cover;">
+                style="margin: 1rem auto; max-width: 100%;height:28em; width:20em; background-repeat: no-repeat; background-position: center; background-color: #cccccc; background-size: cover;">
             </div>
             <div class="input-group">
                 <div class="input-group-prepend">

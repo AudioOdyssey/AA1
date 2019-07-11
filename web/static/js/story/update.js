@@ -7,10 +7,8 @@ function story_changed(elem) {
     xhttp.addEventListener("abort", transferFailed);
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log("200");
             save();
         } else if (this.readyState == 4) {
-            console.log(this.status);
             console.log(this.responseText);
         }
     };
@@ -90,6 +88,12 @@ function add_btn_loc(story_id) {
 function handleFileSelect(evt) {
     var files = evt.target.files;
     var f = files[0];
+    var filesize = ((f.size / 1024) / 1024).toFixed(4);
+    if (filesize > 7.5) {
+        // The image id DUMMY THICC and the clap alerted the server!
+        document.getElementById("dummy-thicc").style.display = "block";
+        return;
+    }
     var reader = new FileReader();
 
     reader.onload = (function (theFile) {
