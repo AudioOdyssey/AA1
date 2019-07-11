@@ -8,6 +8,7 @@ function story_changed(elem) {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             console.log("200");
+            save();
         } else if (this.readyState == 4) {
             console.log(this.status);
             console.log(this.responseText);
