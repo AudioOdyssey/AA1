@@ -27,14 +27,14 @@ class StoryDecision:
     is_locked_by_event_id = 0
     locked_by_event_description = 0
     reviewer_comments = ''
-    is_verified = False
+    verification_status = False
 
     rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
     name = "AA_admin"
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
 
-    def __init__(self, story_id =0, loc_id = 0, sequence_num = 0, decision_id = 0, decision_name = "", transition = False, transition_loc_id = 0, hidden = False, locked = False, decision_description = "", show_event_id = 0, show_object_id = 0, unlock_event_id = 0, unlock_object_id = 0, locked_descr = "", aftermath_descr = "", cause_event = False, effect_event_id = 0, can_occur_once = False, is_locked_by_event_id = 0, locked_by_event_description = "", reviewer_comments = '', is_verified = False):
+    def __init__(self, story_id =0, loc_id = 0, sequence_num = 0, decision_id = 0, decision_name = "", transition = False, transition_loc_id = 0, hidden = False, locked = False, decision_description = "", show_event_id = 0, show_object_id = 0, unlock_event_id = 0, unlock_object_id = 0, locked_descr = "", aftermath_descr = "", cause_event = False, effect_event_id = 0, can_occur_once = False, is_locked_by_event_id = 0, locked_by_event_description = "", reviewer_comments = '', verification_status = False):
         self.story_id = story_id
         self.loc_id = loc_id
         self.sequence_num =  sequence_num
@@ -57,7 +57,7 @@ class StoryDecision:
         self.is_locked_by_event_id = is_locked_by_event_id
         self.locked_by_event_description = locked_by_event_description
         self.reviewer_comments = reviewer_comments
-        self.is_verified = is_verified
+        self.verification_status = verification_status
 
     def add_to_server(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
@@ -84,7 +84,7 @@ class StoryDecision:
             if results is None:
                 return None
             else:
-                return cls(story_id, results["loc_id"], results["sequence_num"], results["decision_id"], results['decision_name'], results["transition"], results["transition_loc_id"], results["hidden"], results["locked"], results["decision_description"], results["show_event_id"], results["show_object_id"], results["unlock_event_id"], results["unlock_object_id"], results["locked_descr"], results["aftermath_descr"], results["cause_event"], results["effect_event_id"], results["can_occur_once"], results["is_locked_by_event_id"], results["locked_by_event_description"], results['reviewer_comments'], results['is_verified'])
+                return cls(story_id, results["loc_id"], results["sequence_num"], results["decision_id"], results['decision_name'], results["transition"], results["transition_loc_id"], results["hidden"], results["locked"], results["decision_description"], results["show_event_id"], results["show_object_id"], results["unlock_event_id"], results["unlock_object_id"], results["locked_descr"], results["aftermath_descr"], results["cause_event"], results["effect_event_id"], results["can_occur_once"], results["is_locked_by_event_id"], results["locked_by_event_description"], results['reviewer_comments'], results['verification_status'])
     
     def update(self, story_id, decision_id, loc_id, sequence_num, decision_name, transition, transition_loc_id, hidden, locked, decision_description, show_event_id, show_object_id, unlock_event_id, unlock_object_id, locked_descr, aftermath_descr, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_description):
         self.sequence_num =  sequence_num
@@ -112,12 +112,12 @@ class StoryDecision:
             conn.commit()
         conn.close()
 
-    def update_admin(self, reviewer_comments, is_verified):
+    def update_admin(self, reviewer_comments, verification_status):
         self.reviewer_comments = reviewer_comments
-        self.is_verified = is_verified
+        self.verification_status = verification_status
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `decisions` SET reviewer_comments = %s, is_verified = %s WHERE story_id = %s AND loc_id = %s AND decision_id = %s"), (self.reviewer_comments, self.is_verified, self.story_id, self.loc_id, self.decision_id))
+            cur.execute(("UPDATE `decisions` SET reviewer_comments = %s, verification_status = %s WHERE story_id = %s AND loc_id = %s AND decision_id = %s"), (self.reviewer_comments, self.verification_status, self.story_id, self.loc_id, self.decision_id))
             conn.commit()
         conn.close()
         
@@ -181,7 +181,7 @@ class StoryDecision:
                     row['unlock_event_id'], row['unlock_object_id'], row['locked_descr'], row['aftermath_descr'],
                     row['cause_event'], row['effect_event_id'], row['can_occur_once'], 
                     row['is_locked_by_event_id'], row['locked_by_event_description'], 
-                    row['reviewer_comments'], row['is_verified']))
+                    row['reviewer_comments'], row['verification_status']))
             conn.close()
         return decs_list
 

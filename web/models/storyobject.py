@@ -13,7 +13,7 @@ class StoryObject:
     is_hidden = 0
     unhide_event_id = 0
     reviewer_comments = ''
-    is_verified = False
+    verification_status = False
 
     REGION = 'us-east-2b'
 
@@ -23,7 +23,7 @@ class StoryObject:
     db_name = "audio_adventures_dev"
     
 
-    def __init__(self, story_id = 0, obj_id = 0, obj_name = "", obj_description = "", can_pickup_obj = 0, obj_starting_loc = 0, is_hidden = 0, unhide_event_id = 0, reviewer_comments = '', is_verified = False):
+    def __init__(self, story_id = 0, obj_id = 0, obj_name = "", obj_description = "", can_pickup_obj = 0, obj_starting_loc = 0, is_hidden = 0, unhide_event_id = 0, reviewer_comments = '', verification_status = False):
         self.story_id = story_id
 
         self.obj_id = obj_id
@@ -42,7 +42,7 @@ class StoryObject:
 
         self.reviewer_comments = reviewer_comments
 
-        self.is_verified = is_verified
+        self.verification_status = verification_status
 
     def add_to_server(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
@@ -69,7 +69,7 @@ class StoryObject:
             if results is None:
                 return None
             else:
-                return cls(story_id, results['obj_id'], results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"], results['reviewer_comments'], results['is_verified'])
+                return cls(story_id, results['obj_id'], results["obj_name"], results["obj_description"], results["can_pickup_obj"], results["obj_starting_loc"], results["is_hidden"], results["unhide_event_id"], results['reviewer_comments'], results['verification_status'])
     
     def update(self, story_id, object_id, name, starting_loc, desc, can_pickup_obj, is_hidden):
         self.obj_name = name
@@ -84,12 +84,12 @@ class StoryObject:
             conn.commit()
         conn.close()
         
-    def update_admin(self, is_verified, reviewer_comments):
-        self.is_verified = is_verified
+    def update_admin(self, verification_status, reviewer_comments):
+        self.verification_status = verification_status
         self.reviewer_comments = reviewer_comments
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `objects` SET is_verified = %s, reviewer_comments = %s WHERE story_id = %s AND obj_id = %s"), (self.is_verified, self.reviewer_comments, self.story_id, self.obj_id))
+            cur.execute(("UPDATE `objects` SET verification_status = %s, reviewer_comments = %s WHERE story_id = %s AND obj_id = %s"), (self.verification_status, self.reviewer_comments, self.story_id, self.obj_id))
             conn.commit()
         conn.close()
 
@@ -127,7 +127,7 @@ class StoryObject:
             cur.execute(("SELECT * FROM `objects` WHERE story_id = %s"), (story_id))
             results = cur.fetchall()
             for row in results:
-                objs_list.append(cls(row['story_id'], row['obj_id'], row['obj_name'], row['obj_description'], row['can_pickup_obj'], row['obj_starting_loc'], row['is_hidden'], row['unhide_event_id'], row['reviewer_comments'], row['is_verified']))
+                objs_list.append(cls(row['story_id'], row['obj_id'], row['obj_name'], row['obj_description'], row['can_pickup_obj'], row['obj_starting_loc'], row['is_hidden'], row['unhide_event_id'], row['reviewer_comments'], row['verification_status']))
         conn.close()
         return objs_list
     
@@ -143,7 +143,7 @@ class StoryObject:
             cur.execute(("SELECT * FROM `objects` WHERE obj_starting_loc = %s"), (location_id))
             results = cur.fetchall()
             for row in results:
-                objs_list.append(cls(row['story_id'], row['obj_id'], row['obj_name'], row['obj_description'], row['can_pickup_obj'], row['obj_starting_loc'], row['is_hidden'], row['unhide_event_id'], row['reviewer_comments'], row['is_verified']))
+                objs_list.append(cls(row['story_id'], row['obj_id'], row['obj_name'], row['obj_description'], row['can_pickup_obj'], row['obj_starting_loc'], row['is_hidden'], row['unhide_event_id'], row['reviewer_comments'], row['verification_status']))
         conn.close()
         return objs_list
 
