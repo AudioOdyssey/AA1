@@ -5,7 +5,7 @@
 need to be nearly as clean/advanced. Do we want to make this like treeview where it replaces itself?-->
 
 {%if backs|length > 0%}
-<button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</a>
+<button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</button>
 {%endif%}
 <button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Restart</button>
 <a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
@@ -49,7 +49,7 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 <section class="row">
     {%for dec in decisions%}
     <a href="#"
-        onclick="dec_clicked({{story.story_id}},{{dec.decision_id}},{{location.location_id}},{{dec.transition}},{{dec.transition_loc_id}},{{dec.can_occur_once}},{{dec.cause_event}},{{dec.effect_event_id}})"
+        onclick="dec_clicked('{{story.story_id}}','{{dec.decision_id}}','{{location.location_id}}','{{dec.transition}}','{{dec.transition_loc_id}}','{{dec.can_occur_once}}','{{dec.cause_event}}','{{dec.effect_event_id}}')"
         class="col-sm-4 storycard">
         <h3>{{dec.decision_name|e}}</h3>
         <hr>
@@ -59,14 +59,16 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
         {%if dec.hidden%}
         {%if dec.show_event_id!=0%}
         {%if dec.show_event_id in evts%}
-        <h5>Was hidden by Event <i>{{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</i>, now revealed
+        <h5>Was hidden by Event <i>{{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</i>, now
+            revealed
         </h5>
         {%else%}
         <h5>Hidden by Event <i>{{StoryEvent.get(story.story_id, dec.show_event_id).event_name|e}}</i></h5>
         {%endif%}
         {%elif dec.show_object_id!=0%}
         {%if dec.show_object_id in inv%}
-        <h5>Was hidden by Object <i>{{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</i>, now revealed
+        <h5>Was hidden by Object <i>{{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</i>, now
+            revealed
         </h5>
         {%else%}
         <h5>Hidden by Object <i>{{StoryObject.get(story.story_id, dec.show_object_id).obj_name|e}}</i></h5>
@@ -98,9 +100,11 @@ need to be nearly as clean/advanced. Do we want to make this like treeview where
 
         {%if dec.is_locked_by_event_id!=0%}
         {%if dec.is_locked_by_event_id in evts%}
-        <h5>Now locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i></h5>
+        <h5>Now locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i>
+        </h5>
         {%else%}
-        <h5>Gets locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i></h5>
+        <h5>Gets locked by Event <i>{{StoryEvent.get(story.story_id, dec.is_locked_by_event_id).event_name|e}}</i>
+        </h5>
         {%endif%}
         {%endif%}
 
