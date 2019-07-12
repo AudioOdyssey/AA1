@@ -46,6 +46,11 @@
 </script>
 
 <h1>{{story.story_title|e}}</h1>
+<h4>Sold for ${{story.story_price|e}}</h4>
+<h4><b>Genre:</b> {{story.genre|e}}</h4>
+<h4><b>Length:</b> {{story.length_of_story|e}}</h4>
+<h4><b>Inventory Size:</b> {{story.inventory_size|e}}</h4>
+<h4><b>Starting Location:</b> {{StoryLocation.get(story.story_id, story.starting_loc).location_name|e}}</h4>
 <p>{{story.story_synopsis|e}}</p>
 <hr>
 <h2>Objects</h2>
@@ -167,6 +172,7 @@
             <input class="disp-none" name="story_id" value="{{story.story_id}}" readonly>
             <input class="disp-none" name="type" value="decision" readonly>
             <input class="disp-none" name="ent_id" value="{{decision.decision_id}}" readonly>
+            <input class="disp-none" name="loc_id" value="{{decision.loc_id}}" readonly>
             <input class="disp-none verified" name="is_verified">
             <h2>{{decision.decision_name|e}}</h2>
             <hr>
@@ -227,5 +233,30 @@
     </section>
     {%endfor%}
 </section>
+
+<form>
+    <h2>Story</h2>
+    <input class="disp-none" name="story_id" value="{{story.story_id}}" readonly>
+    <input class="disp-none" name="type" value="story" readonly>
+    <input class="disp-none" name="ent_id" value="{{story.story_id}}" readonly>
+    <input class="disp-none verified" name="is_verified">
+    <input class="form-control" type="text" name="comment" placeholder="Comments...">
+    <select class="form-control details" name="parental_ratings">
+        <option {% if story.parental_ratings == "G" %}selected{%endif%}>G</option>
+        <option {% if story.parental_ratings == "PG" %}selected{%endif%}>PG</option>
+        <option {% if story.parental_ratings == "PG-13" %}selected{%endif%}>PG-13</option>
+        <option {% if story.parental_ratings == "R" %}selected{%endif%}>R</option>
+    </select>
+    <section class="row">
+        <div class="input-group col-sm-6">
+            <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify
+                Story</button>
+        </div>
+        <div class="input-group col-sm-6">
+            <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail
+                Story</button>
+        </div>
+    </section>
+</form>
 
 {% endblock %}

@@ -278,25 +278,26 @@ def story_show():
     return render_template("story/show.html", stories=stories)
 
 
-
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 @authentication_required
 def story_update():
     story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
     return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
 
 
-
 @app.route("/story/image")
 @authentication_required
 def story_image():
     story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     # print(story.get_image_base64())
     return story.get_image_base64()
-
 
 
 @app.route("/story/update", methods=["POST"])
@@ -305,6 +306,8 @@ def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
@@ -333,7 +336,6 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
 @app.route("/story/new", methods=["POST"])
 @authentication_required
 def story_new():
@@ -350,6 +352,9 @@ def object_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
@@ -379,7 +384,6 @@ def stories_show_owned_by_user():
     return Story.json_story_library(user_id)
 
 
-
 @app.route("/story/object/update", methods=['POST'])
 @authentication_required
 def object_update():
@@ -387,6 +391,9 @@ def object_update():
     #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     object_id = details['obj_id']
     if object_id == '':
         object_id = StoryObject.get_last_id(story_id)
@@ -417,22 +424,26 @@ def object_update():
     return "ok"
 
 
-
 @app.route("/story/object/new", methods=['POST'])
 @authentication_required
 def object_new():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     obj = StoryObject(story_id)
     obj.add_to_server()
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
-
 @app.route("/story/object/destroy", methods=['POST'])
 @authentication_required
 def object_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     StoryObject.obj_del(request.form['obj_id'])
     return '{"status":"ok"}'
 
@@ -443,10 +454,12 @@ def event_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/show.html", locations=locations, events=events, story_id=story_id)
-
 
 
 @app.route('/story/event/update', methods=['POST'])
@@ -457,6 +470,9 @@ def event_update():
     if request.method == 'POST':
         details = request.form
         story_id = details['story_id']
+        story = Story.get(story_id)
+        if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+            abort(403)
         event_id = details['event_id']
         if event_id == '':
             event_id = StoryEvent.get_last_id(story_id)
@@ -482,6 +498,9 @@ def event_new():
     #     return redirect(url_for("session_new"))
     details = request.args
     story_id = details['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     evnt = StoryEvent(story_id)
     evnt.add_to_server()
     return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
@@ -490,9 +509,11 @@ def event_new():
 @app.route("/story/event/destroy", methods=['POST'])
 @authentication_required
 def event_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     StoryEvent.event_del(request.form['event_id'])
     return '{"status":"ok"}'
-
 
 
 @app.route("/story/location/show")
@@ -501,10 +522,12 @@ def location_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
-
 
 
 @app.route("/story/location/indiv")
@@ -513,12 +536,14 @@ def location_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
-
 
 
 @app.route("/story/object/indiv")
@@ -527,6 +552,9 @@ def object_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
     events = StoryEvent.event_list(story_id)
@@ -540,6 +568,9 @@ def decision_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
     decision = StoryDecision.get(story_id, location_id, decision_id)
@@ -555,6 +586,9 @@ def event_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
     locations = StoryLocation.loc_list(story_id)
@@ -568,6 +602,9 @@ def location_update():
     #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     loc_id = details['loc_id']
     if loc_id is None:
         loc_id = StoryLocation.get_last_id(story_id)
@@ -598,6 +635,9 @@ def location_new():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     loc = StoryLocation(story_id)
     loc.add_to_server()
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
@@ -606,6 +646,9 @@ def location_new():
 @app.route("/story/location/destroy", methods=['POST'])
 @authentication_required
 def location_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     StoryLocation.loc_del(request.form['loc_id'])
     return '{"status":"ok"}'
 
@@ -615,6 +658,9 @@ def location_destroy():
 def decision_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    story = Story.get(request.args['story_id'])
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     decisions = StoryDecision.dec_list_for_story_loc(
         request.args['story_id'], request.args['location_id'])
     locations = StoryLocation.loc_list(
@@ -637,6 +683,9 @@ def decision_update():
     #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     location_id = details["location_id"]
     decision_id = details['decision_id']
     if decision_id == '':
@@ -712,6 +761,9 @@ def decision_new():
         # return redirect(url_for("session_new"))
     details = request.args
     story_id = details["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     location_id = details["location_id"]
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
@@ -721,6 +773,9 @@ def decision_new():
 @app.route("/story/location/decision/destroy", methods=['POST'])
 @authentication_required
 def decision_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     StoryDecision.dec_del(request.form['decision_id'])
     return '{"status":"ok"}'
 
@@ -774,7 +829,7 @@ def review_update():
     details = request.form
     story_id = details['story_id']
     entity_type = details['type']
-    ent_id = details['ent_id']
+    ent_id = details.get('ent_id')
     is_verified = details.get('is_verified')
     reviewer_comment = details['comment']
     if entity_type.lower() == 'object':
@@ -785,13 +840,18 @@ def review_update():
         loc.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
-        evnt.update_admin(is_verified, reviewer_comment)
+        evnt.update_admin(reviewer_comment, is_verified)
     elif entity_type.lower() == 'story':
-        parental_rating = details['parental_ratings']
-        usr = User.get(session['user_id'])
-        verifier_name = usr.username
-        stry = Story.get(story_id)
-        stry.update_admin(reviewer_comment, parental_rating, verifier_name)
+        story = Story.get(story_id)
+        print(story.verification_status)
+        story.parental_rating = details['parental_ratings']
+        story.verifier_id = getUid()
+        story.reviewer_comments = reviewer_comment
+        if StoryDecision.check_verify(story_id) and StoryLocation.check_verify(story_id) and StoryObject.check_verify(story_id) and StoryEvent.check_verify(story_id):
+            story.verification_status = is_verified
+        if int(is_verified) == 2:
+            story.verification_status = is_verified
+        story.update_verify()
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
@@ -911,6 +971,8 @@ def story_run():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     loc_id = request.args.get("location_id")
     location = None
     if loc_id is None:
@@ -962,7 +1024,9 @@ def treeview_help():
 @app.route("/admin")
 @authentication_required
 def admin_index():
-    uid = session['user_id']
+    uid = getUid()
+    if not checkAdmin(uid):
+        abort(404)
     acct = User.get(uid)
     if not acct.is_admin:
         abort(403)
@@ -974,7 +1038,9 @@ def admin_index():
 @app.route("/admin/users", methods=["GET", "POST"])
 @authentication_required
 def admin_users():
-    uid = session['user_id']
+    uid = getUid()
+    if not checkAdmin(uid):
+        abort(404)
     acct = User.get(uid)
     if not acct.is_admin:
         abort(403)
@@ -1001,6 +1067,12 @@ def admin_users():
         return '{"status":"ok"}'
 
 
+@app.errorhandler(403)
+def page_not_found(e):
+    # Pretend all 403s are 404s for security
+    return render_template('404.html'), 404
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
@@ -1022,6 +1094,19 @@ def load_user(user_id):
 # def unauthorized():
 #     return redirect(url_for("session_new"))
 
+def getUid():
+    token = session.get('token')
+    if token is None:
+        token = request.cookies.get('remember_')
+    return decode_auth_token(token)
+
+def checkEditorAdmin(uid):
+    user = User.get(uid)
+    return user.is_admin or user.is_copy_editor or user.is_content_editor
+
+def checkAdmin(uid):
+    user = User.get(uid)
+    return user.is_admin
 
 if __name__ == '__main__':
     app.run()

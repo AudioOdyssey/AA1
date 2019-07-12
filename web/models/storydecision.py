@@ -131,6 +131,20 @@ class StoryDecision:
                 return None
             else:
                 return json.dumps(results)
+    
+    @classmethod
+    def check_verify(cls, story_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT COUNT(decision_id) FROM decisions WHERE story_id = %s AND verification_status != 3"), (story_id))
+            results = cur.fetchone()
+            if results is None:
+                return None
+            return results['COUNT(decision_id)'] == 0
 
     @classmethod
     def dec_del(cls, dec_id):
