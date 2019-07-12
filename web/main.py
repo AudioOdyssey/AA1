@@ -733,13 +733,20 @@ def verification_review_new():
     return render_template("verification/review_new.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
+def getUid():
+    token = session.get('token')
+    if token is None:
+        token = request.cookies.get('remember_')
+    return decode_auth_token(token)
+
+
 @authentication_required
 @app.route("/verification/review/update", methods=['POST'])
 def review_update():
     details = request.form
     story_id = details['story_id']
     entity_type = details['type']
-    ent_id = details['ent_id']
+    ent_id = details.get('ent_id')
     is_verified = details.get('is_verified')
     reviewer_comment = details['comment']
     if entity_type.lower() == 'object':
@@ -750,13 +757,18 @@ def review_update():
         loc.update_admin(is_verified, reviewer_comment)
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
-        evnt.update_admin(is_verified, reviewer_comment)
+        evnt.update_admin(reviewer_comment, is_verified)
     elif entity_type.lower() == 'story':
-        parental_rating = details['parental_ratings']
-        usr = User.get(session['user_id'])
-        verifier_name = usr.username
-        stry = Story.get(story_id)
-        stry.update_admin(reviewer_comment, parental_rating, verifier_name)
+        story = Story.get(story_id)
+        print(story.verification_status)
+        story.parental_rating = details['parental_ratings']
+        story.verifier_id = getUid()
+        story.reviewer_comments = reviewer_comment
+        if StoryDecision.check_verify(story_id) and StoryLocation.check_verify(story_id) and StoryObject.check_verify(story_id) and StoryEvent.check_verify(story_id):
+            story.verification_status = is_verified
+        if int(is_verified) == 2:
+            story.verification_status = is_verified
+        story.update_verify()
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)

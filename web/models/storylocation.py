@@ -196,3 +196,17 @@ class StoryLocation:
             last_id = query_data[0]
         conn.close()
         return last_id
+
+    @classmethod
+    def check_verify(cls, story_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT COUNT(location_id) FROM locations WHERE story_id = %s AND verification_status != 3"), (story_id))
+            results = cur.fetchone()
+            if results is None:
+                return None
+            return results['COUNT(location_id)'] == 0
