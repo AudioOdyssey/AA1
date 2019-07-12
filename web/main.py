@@ -5,7 +5,7 @@ from models.storyevent import StoryEvent
 from models.storylocation import StoryLocation
 from models.storydecision import StoryDecision
 
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 
 from werkzeug.utils import secure_filename
@@ -51,11 +51,22 @@ db_name = "audio_adventures_dev"
 random.seed()
 
 
+def check_header(func):
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
+        g.uid = getUid()
+        if g.uid == 'Invalid token. please log in again':
+            g.uid = 0
+        return func(*args, **kwargs)
+    return func_wrapper
+
+
 @app.route("/")
 @app.route("/home")
 @app.route("/index")
+@check_header
 def home():
-    
+
     auth_token = request.cookies.get('remember_')
     if auth_token is None:
         token = session.get('token')
@@ -73,6 +84,7 @@ def home():
 
 
 @app.route("/user/new", methods=['GET', 'POST'])
+@check_header
 def user_new():  # fix later
     if request.method == "POST":
         details = request.form
@@ -139,6 +151,7 @@ def sign_up(details_dict):
 
 
 @app.route("/session/new", methods=['GET', 'POST'])
+@check_header
 def session_new():
     error = None
     if request.method == 'POST':
@@ -265,9 +278,9 @@ def logout():
         return resp
 
 
-
 @app.route("/story/show")
 @authentication_required
+@check_header
 def story_show():
     print(session)
     token = None
@@ -282,6 +295,7 @@ def story_show():
 
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 @authentication_required
+@check_header
 def story_update():
     story = Story.get(int(request.args['story_id']))
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -294,6 +308,7 @@ def story_update():
 
 @app.route("/story/image")
 @authentication_required
+@check_header
 def story_image():
     story = Story.get(int(request.args['story_id']))
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -347,9 +362,9 @@ def story_new():
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
 
-
 @app.route("/story/object/show")
 @authentication_required
+@check_header
 def object_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -452,6 +467,7 @@ def object_destroy():
 
 @app.route("/story/event/show", methods=['GET'])
 @authentication_required
+@check_header
 def event_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -520,6 +536,7 @@ def event_destroy():
 
 @app.route("/story/location/show")
 @authentication_required
+@check_header
 def location_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -534,6 +551,7 @@ def location_show():
 
 @app.route("/story/location/indiv")
 @authentication_required
+@check_header
 def location_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -550,6 +568,7 @@ def location_indiv():
 
 @app.route("/story/object/indiv")
 @authentication_required
+@check_header
 def object_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -566,6 +585,7 @@ def object_indiv():
 
 @app.route("/story/location/decision/indiv")
 @authentication_required
+@check_header
 def decision_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -584,6 +604,7 @@ def decision_indiv():
 
 @app.route("/story/event/indiv")
 @authentication_required
+@check_header
 def event_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -657,6 +678,7 @@ def location_destroy():
 
 @app.route("/story/location/decision/show")
 @authentication_required
+@check_header
 def decision_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -783,22 +805,24 @@ def decision_destroy():
 
 
 @app.route("/about")
+@check_header
 def about():
     return render_template("about.html")
 
 
 @app.route("/contact")
+@check_header
 def contact():
     return render_template("contact.html")
 
 
 @app.route("/verification/view")
 @authentication_required
+@check_header
 def verification_view():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
-    story = Story.get(story_id)
-    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+    if not checkEditorAdmin(getUid()):
         abort(403)
     stories = Story.story_list_ready_for_verification()
     return render_template("verification/view.html", stories=stories)
@@ -806,6 +830,7 @@ def verification_view():
 
 @app.route("/verification/review")
 @authentication_required
+@check_header
 def verification_review():
     uid = getUid()
     if not checkEditorAdmin(uid):
@@ -821,6 +846,7 @@ def verification_review():
 
 @app.route("/verification/review_new")
 @authentication_required
+@check_header
 def verification_review_new():
     uid = getUid()
     if not checkEditorAdmin(uid):
@@ -875,6 +901,7 @@ def review_update():
 
 @app.route("/verification/object")
 @authentication_required
+@check_header
 def verification_object():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -889,6 +916,7 @@ def verification_object():
 
 @app.route("/verification/location")
 @authentication_required
+@check_header
 def verification_location():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -904,6 +932,7 @@ def verification_location():
 
 @app.route("/verification/event")
 @authentication_required
+@check_header
 def verfication_event():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -918,6 +947,7 @@ def verfication_event():
 
 @app.route("/verification/story")
 @authentication_required
+@check_header
 def verfication_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -934,6 +964,7 @@ def verfication_story():
 
 @app.route("/story/treeview")
 @authentication_required
+@check_header
 def treeview():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -955,6 +986,7 @@ def treeview():
 
 @app.route("/verification/treeview")
 @authentication_required
+@check_header
 def verify_treeview():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -997,6 +1029,7 @@ def verify_treeview():
 
 @app.route("/story/run")
 @authentication_required
+@check_header
 def story_run():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -1034,18 +1067,21 @@ def story_run():
 
 @app.route("/story/help")
 @authentication_required
+@check_header
 def help():
     return render_template("story/help.html")
 
 
 @app.route("/verification/help")
 @authentication_required
+@check_header
 def vhelp():
     return render_template("verification/help.html")
 
 
 @app.route("/story/treeview_help")
 @authentication_required
+@check_header
 def treeview_help():
     story_id = request.args['story_id']
     story = Story.get(story_id)
@@ -1054,6 +1090,7 @@ def treeview_help():
 
 @app.route("/admin")
 @authentication_required
+@check_header
 def admin_index():
     uid = getUid()
     if not checkAdmin(uid):
@@ -1068,6 +1105,7 @@ def admin_index():
 
 @app.route("/admin/users", methods=["GET", "POST"])
 @authentication_required
+@check_header
 def admin_users():
     uid = getUid()
     if not checkAdmin(uid):
@@ -1099,18 +1137,21 @@ def admin_users():
 
 
 @app.errorhandler(403)
+@check_header
 def page_not_found(e):
     # Pretend all 403s are 404s for security
     return render_template('404.html'), 404
 
 
 @app.errorhandler(404)
+@check_header
 def page_not_found_404(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
 
 @app.errorhandler(500)
+@check_header
 def page_not_found_500(e):
     # note that we set the 404 status explicitly
     return render_template('500.html'), 500
@@ -1131,13 +1172,16 @@ def getUid():
         token = request.cookies.get('remember_')
     return decode_auth_token(token)
 
+
 def checkEditorAdmin(uid):
     user = User.get(uid)
     return user.is_admin or user.is_copy_editor or user.is_content_editor
 
+
 def checkAdmin(uid):
     user = User.get(uid)
     return user.is_admin
+
 
 if __name__ == '__main__':
     app.run()
