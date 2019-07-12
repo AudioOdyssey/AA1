@@ -26,6 +26,8 @@ from datetime import datetime, timedelta
 
 import jwt
 
+from functools import wraps
+
 UPLOAD_FOLDER = '/var/www/pictures/'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
@@ -53,6 +55,7 @@ random.seed()
 @app.route("/home")
 @app.route("/index")
 def home():
+    
     auth_token = request.cookies.get('remember_')
     if auth_token is None:
         token = session.get('token')
@@ -157,26 +160,21 @@ def session_new():
 
 
 def authentication_required(func):
-    def func_wrapper():
-        token = session.get('token')
-        if token is None:
-            print('1')
-            remember_token = request.cookies.get('remember_')
-            if remember_token is None:
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
+        remember = request.cookies.get('remember_')
+        if remember is None:
+            print(1)
+            token = session.get('token')
+            if token is None or decode_auth_token(token) == 0:
+                print(3)
                 return redirect(url_for('session_new'))
             else:
-                user_id = decode_auth_token(remember_token)
-                if user_id:
-                    return func()
-                else:
-                    return redirect(url_for('session_new'))
+                print(4)
+                return func(*args, **kwargs)
         else:
-            print('2')
-            user_id = decode_auth_token(token)
-            if user_id:
-                func()
-            else:
-                return redirect(url_for('session_new'))
+            print(2)
+            return func(*args, **kwargs)
     return func_wrapper
 
 
@@ -188,14 +186,14 @@ def authenticate(details):
         cur.execute(("SELECT * FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
-            return 0
+            return None
         else:
             usr = load_user(result['user_id'])
             if(usr.authenticate(details['password'])):
                 return result['user_id']
             else:
-                return 0
-    return 0
+                return None
+    return None
 
 
 @app.route("/app/session/new", methods=['POST', 'GET'])
@@ -248,22 +246,28 @@ def app_logout():
     return redirect(url_for("home"))
 
 
-@app.route("/session/logout", methods=['POST', 'GET'])
+@app.route("/session/logout", methods=['POST'])
 def logout():
     resp = make_response(redirect(url_for('home')))
-    if request.method == 'POST':
-        if "token" in session:
-            session.pop('token', None)
-        else:
-            resp.set_cookie('remember_', '', expires=0)
-        return resp
+    if request.cookies.get('remember_') is None:
+        print(session)
+        token = session.get('token')
+        if token:
+            session.clear()
+            return resp
+        elif decode_auth_token(token) == 0 or token is None:
+            session.clear()
+            return redirect(url_for("session_new"))
     else:
-        return redirect(url_for("session_new"))
+        resp.set_cookie('remember_', '', 0)
+        return resp
 
 
-@authentication_required
+
 @app.route("/story/show")
+@authentication_required
 def story_show():
+    print(session)
     token = None
     if 'token' in session:
         token = session['token']
@@ -274,8 +278,8 @@ def story_show():
     return render_template("story/show.html", stories=stories)
 
 
-@authentication_required
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
+@authentication_required
 def story_update():
     story = Story.get(int(request.args['story_id']))
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -286,8 +290,8 @@ def story_update():
     return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
 
 
-@authentication_required
 @app.route("/story/image")
+@authentication_required
 def story_image():
     story = Story.get(int(request.args['story_id']))
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -296,8 +300,8 @@ def story_image():
     return story.get_image_base64()
 
 
-@authentication_required
 @app.route("/story/update", methods=["POST"])
+@authentication_required
 def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
@@ -332,8 +336,8 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@authentication_required
 @app.route("/story/new", methods=["POST"])
+@authentication_required
 def story_new():
     story = Story(user_creator_id=session['user_id'])
     story.story_synopsis = ""
@@ -341,8 +345,9 @@ def story_new():
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
 
-@authentication_required
+
 @app.route("/story/object/show")
+@authentication_required
 def object_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -366,7 +371,6 @@ def app_store_info():
     return Story.display_for_store()
 
 
-@authentication_required
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
     details = request.json
@@ -380,8 +384,8 @@ def stories_show_owned_by_user():
     return Story.json_story_library(user_id)
 
 
-@authentication_required
 @app.route("/story/object/update", methods=['POST'])
+@authentication_required
 def object_update():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -420,8 +424,8 @@ def object_update():
     return "ok"
 
 
-@authentication_required
 @app.route("/story/object/new", methods=['POST'])
+@authentication_required
 def object_new():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -434,8 +438,8 @@ def object_new():
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
-@authentication_required
 @app.route("/story/object/destroy", methods=['POST'])
+@authentication_required
 def object_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -444,8 +448,8 @@ def object_destroy():
     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route("/story/event/show", methods=['GET'])
+@authentication_required
 def event_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -458,8 +462,8 @@ def event_show():
     return render_template("story/event/show.html", locations=locations, events=events, story_id=story_id)
 
 
-@authentication_required
 @app.route('/story/event/update', methods=['POST'])
+@authentication_required
 def event_update():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -487,8 +491,8 @@ def event_update():
     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route('/story/event/new', methods=['POST'])
+@authentication_required
 def event_new():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -502,8 +506,8 @@ def event_new():
     return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
 
 
-@authentication_required
 @app.route("/story/event/destroy", methods=['POST'])
+@authentication_required
 def event_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -512,8 +516,8 @@ def event_destroy():
     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route("/story/location/show")
+@authentication_required
 def location_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -526,8 +530,8 @@ def location_show():
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
 
-@authentication_required
 @app.route("/story/location/indiv")
+@authentication_required
 def location_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -542,8 +546,8 @@ def location_indiv():
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
 
 
-@authentication_required
 @app.route("/story/object/indiv")
+@authentication_required
 def object_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -558,8 +562,8 @@ def object_indiv():
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
 
 
-@authentication_required
 @app.route("/story/location/decision/indiv")
+@authentication_required
 def decision_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -576,8 +580,8 @@ def decision_indiv():
     return render_template("story/location/decision/indiv.html", locations=locations, decision=decision, story_id=story_id, decision_id=decision_id, events=events, objects=objects)
 
 
-@authentication_required
 @app.route("/story/event/indiv")
+@authentication_required
 def event_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -591,8 +595,8 @@ def event_indiv():
     return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)
 
 
-@authentication_required
 @app.route('/story/location/update', methods=['POST'])
+@authentication_required
 def location_update():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -625,8 +629,8 @@ def location_update():
     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route('/story/location/new', methods=['POST'])
+@authentication_required
 def location_new():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -639,8 +643,8 @@ def location_new():
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
 
-@authentication_required
 @app.route("/story/location/destroy", methods=['POST'])
+@authentication_required
 def location_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -649,8 +653,8 @@ def location_destroy():
     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route("/story/location/decision/show")
+@authentication_required
 def decision_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -672,8 +676,8 @@ def decision_show():
     return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
 
-@authentication_required
 @app.route("/story/location/decision/update", methods=['POST'])
+@authentication_required
 def decision_update():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -750,8 +754,8 @@ def decision_update():
     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route("/story/location/decision/new", methods=['POST'])
+@authentication_required
 def decision_new():
     # if "logged_in" not in session:
         # return redirect(url_for("session_new"))
@@ -766,8 +770,8 @@ def decision_new():
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
 
-@authentication_required
 @app.route("/story/location/decision/destroy", methods=['POST'])
+@authentication_required
 def decision_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -786,8 +790,8 @@ def contact():
     return render_template("contact.html")
 
 
-@authentication_required
 @app.route("/verification/view")
+@authentication_required
 def verification_view():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -798,8 +802,8 @@ def verification_view():
     return render_template("verification/view.html", stories=stories)
 
 
-@authentication_required
 @app.route("/verification/review")
+@authentication_required
 def verification_review():
     uid = getUid()
     if not checkEditorAdmin(uid):
@@ -813,8 +817,8 @@ def verification_review():
     return render_template("verification/review.html", story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
-@authentication_required
 @app.route("/verification/review_new")
+@authentication_required
 def verification_review_new():
     uid = getUid()
     if not checkEditorAdmin(uid):
@@ -828,8 +832,8 @@ def verification_review_new():
     return render_template("verification/review_new.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
-@authentication_required
 @app.route("/verification/review/update", methods=['POST'])
+@authentication_required
 def review_update():
     uid = getUid()
     if not checkEditorAdmin(uid):
@@ -867,8 +871,8 @@ def review_update():
     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route("/verification/object")
+@authentication_required
 def verification_object():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -881,8 +885,8 @@ def verification_object():
     return render_template("verification/object.html", obj=obj, story_id=story_id, object_id=object_id)
 
 
-@authentication_required
 @app.route("/verification/location")
+@authentication_required
 def verification_location():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -896,8 +900,8 @@ def verification_location():
     return render_template("verification/location.html", location=location, story_id=story_id, location_id=location_id, decisions=decisions)
 
 
-@authentication_required
 @app.route("/verification/event")
+@authentication_required
 def verfication_event():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -910,8 +914,8 @@ def verfication_event():
     return render_template("verification/event.html", event=event, story_id=story_id, event_id=event_id)
 
 
-@authentication_required
 @app.route("/verification/story")
+@authentication_required
 def verfication_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -926,8 +930,8 @@ def verfication_story():
     return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
 
-@authentication_required
 @app.route("/story/treeview")
+@authentication_required
 def treeview():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -947,8 +951,8 @@ def treeview():
     return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
 
 
-@authentication_required
 @app.route("/verification/treeview")
+@authentication_required
 def verify_treeview():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -989,8 +993,8 @@ def verify_treeview():
 #     return '{"status":"ok"}'
 
 
-@authentication_required
 @app.route("/story/run")
+@authentication_required
 def story_run():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
@@ -1026,28 +1030,28 @@ def story_run():
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
-@authentication_required
 @app.route("/story/help")
+@authentication_required
 def help():
     return render_template("story/help.html")
 
 
-@authentication_required
 @app.route("/verification/help")
+@authentication_required
 def vhelp():
     return render_template("verification/help.html")
 
 
-@authentication_required
 @app.route("/story/treeview_help")
+@authentication_required
 def treeview_help():
     story_id = request.args['story_id']
     story = Story.get(story_id)
     return render_template("story/treeview_help.html", story=story)
 
 
-@authentication_required
 @app.route("/admin")
+@authentication_required
 def admin_index():
     uid = getUid()
     if not checkAdmin(uid):
@@ -1060,8 +1064,8 @@ def admin_index():
     return render_template("admin/index.html", stories=stories, users=users)
 
 
-@authentication_required
 @app.route("/admin/users", methods=["GET", "POST"])
+@authentication_required
 def admin_users():
     uid = getUid()
     if not checkAdmin(uid):
