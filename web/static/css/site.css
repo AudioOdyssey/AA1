@@ -132,12 +132,21 @@ lable {
 }
 
 .storycard {
-	border: 5px solid;
+	border: 5px solid !important;
 	border-color: #073884;
 	background-color: white;
 	color: #073884;
 	font-family: "Helvetica"sans-serif;
 	text-align: center;
+	padding: 10px !important;
+	transition: border 0.1s, padding 0.1s;
+}
+
+.storycard:hover {
+	border: 1px solid !important;
+	border-color: #073884;
+	padding: 14px !important;
+	transition: border 0.1s, padding 0.1s;
 }
 
 .title {

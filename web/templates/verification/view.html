@@ -7,15 +7,24 @@
 <h2 class="text">Stories Ready for Verification:</h2>
 <br>
 
+<style>
+    .card-outer {
+        padding: .5rem;
+    }
+
+    .storycard {
+        border-radius: .25rem;
+        width: 100%;
+    }
+</style>
 
 <section class="row">
     {% for story in stories %}
-    <!-- CHANGED FOR TESTING -->
-    <div class="col-sm-4 storycard">
-        <a href="/verification/review?story_id={{story.story_id}}"><button id="tbvs"
-                class="btn btn-light">{{ story.story_title|e }}</button> </a>
-
-    </div> <br>
+    <div class="col-sm-4 card-outer">
+        <div class="storycard">
+            <a href="/verification/review?story_id={{story.story_id}}">{{story.story_title|e}}&nbsp;</a>
+        </div>
+    </div>
     {% endfor %}
 </section>
 
