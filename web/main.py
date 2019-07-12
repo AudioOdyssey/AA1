@@ -795,6 +795,9 @@ def contact():
 def verification_view():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     stories = Story.story_list_ready_for_verification()
     return render_template("verification/view.html", stories=stories)
 
@@ -802,6 +805,9 @@ def verification_view():
 @app.route("/verification/review")
 @authentication_required
 def verification_review():
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     objects = StoryObject.obj_list(story_id)
@@ -814,6 +820,9 @@ def verification_review():
 @app.route("/verification/review_new")
 @authentication_required
 def verification_review_new():
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     objects = StoryObject.obj_list(story_id)
@@ -826,6 +835,9 @@ def verification_review_new():
 @app.route("/verification/review/update", methods=['POST'])
 @authentication_required
 def review_update():
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     details = request.form
     story_id = details['story_id']
     entity_type = details['type']
@@ -864,6 +876,9 @@ def review_update():
 def verification_object():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     story_id = request.args["story_id"]
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
@@ -875,6 +890,9 @@ def verification_object():
 def verification_location():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     story_id = request.args["story_id"]
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
@@ -887,6 +905,9 @@ def verification_location():
 def verfication_event():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     story_id = request.args["story_id"]
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
@@ -898,6 +919,9 @@ def verfication_event():
 def verfication_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     story_id = request.args["story_id"]
     locations = StoryLocation.loc_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
@@ -913,6 +937,8 @@ def treeview():
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
     locations = StoryLocation.loc_list(story_id)
     loc_id = request.args.get('location_id')
     decisions = []
@@ -930,6 +956,9 @@ def treeview():
 def verify_treeview():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    uid = getUid()
+    if not checkEditorAdmin(uid):
+        abort(404)
     story_id = request.args['story_id']
     story = Story.get(story_id)
     locations = StoryLocation.loc_list(story_id)
