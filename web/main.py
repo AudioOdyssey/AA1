@@ -278,7 +278,7 @@ def story_show():
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 def story_update():
     story = Story.get(int(request.args['story_id']))
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
@@ -290,7 +290,7 @@ def story_update():
 @app.route("/story/image")
 def story_image():
     story = Story.get(int(request.args['story_id']))
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     # print(story.get_image_base64())
     return story.get_image_base64()
@@ -302,7 +302,7 @@ def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
@@ -348,7 +348,7 @@ def object_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
@@ -388,7 +388,7 @@ def object_update():
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     object_id = details['obj_id']
     if object_id == '':
@@ -427,7 +427,7 @@ def object_new():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     obj = StoryObject(story_id)
     obj.add_to_server()
@@ -438,7 +438,7 @@ def object_new():
 @app.route("/story/object/destroy", methods=['POST'])
 def object_destroy():
     story = Story.get(request.form['story_id'])
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryObject.obj_del(request.form['obj_id'])
     return '{"status":"ok"}'
@@ -451,7 +451,7 @@ def event_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
@@ -467,7 +467,7 @@ def event_update():
         details = request.form
         story_id = details['story_id']
         story = Story.get(story_id)
-        if story.user_creator_id != getUid():
+        if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
             abort(403)
         event_id = details['event_id']
         if event_id == '':
@@ -495,7 +495,7 @@ def event_new():
     details = request.args
     story_id = details['story_id']
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     evnt = StoryEvent(story_id)
     evnt.add_to_server()
@@ -506,7 +506,7 @@ def event_new():
 @app.route("/story/event/destroy", methods=['POST'])
 def event_destroy():
     story = Story.get(request.form['story_id'])
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryEvent.event_del(request.form['event_id'])
     return '{"status":"ok"}'
@@ -519,7 +519,7 @@ def location_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
@@ -533,7 +533,7 @@ def location_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
@@ -549,7 +549,7 @@ def object_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
@@ -565,7 +565,7 @@ def decision_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
@@ -583,7 +583,7 @@ def event_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
@@ -599,7 +599,7 @@ def location_update():
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = details['loc_id']
     if loc_id is None:
@@ -632,7 +632,7 @@ def location_new():
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc = StoryLocation(story_id)
     loc.add_to_server()
@@ -643,7 +643,7 @@ def location_new():
 @app.route("/story/location/destroy", methods=['POST'])
 def location_destroy():
     story = Story.get(request.form['story_id'])
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryLocation.loc_del(request.form['loc_id'])
     return '{"status":"ok"}'
@@ -655,7 +655,7 @@ def decision_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story = Story.get(request.args['story_id'])
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     decisions = StoryDecision.dec_list_for_story_loc(
         request.args['story_id'], request.args['location_id'])
@@ -680,7 +680,7 @@ def decision_update():
     details = request.form
     story_id = details["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
     decision_id = details['decision_id']
@@ -758,7 +758,7 @@ def decision_new():
     details = request.args
     story_id = details["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
     dec = StoryDecision(story_id, location_id)
@@ -770,7 +770,7 @@ def decision_new():
 @app.route("/story/location/decision/destroy", methods=['POST'])
 def decision_destroy():
     story = Story.get(request.form['story_id'])
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryDecision.dec_del(request.form['decision_id'])
     return '{"status":"ok"}'
@@ -967,7 +967,7 @@ def story_run():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
-    if story.user_creator_id != getUid():
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = request.args.get("location_id")
     location = None
@@ -1020,7 +1020,9 @@ def treeview_help():
 @authentication_required
 @app.route("/admin")
 def admin_index():
-    uid = session['user_id']
+    uid = getUid()
+    if not checkAdmin(uid):
+        abort(404)
     acct = User.get(uid)
     if not acct.is_admin:
         abort(403)
@@ -1032,7 +1034,9 @@ def admin_index():
 @authentication_required
 @app.route("/admin/users", methods=["GET", "POST"])
 def admin_users():
-    uid = session['user_id']
+    uid = getUid()
+    if not checkAdmin(uid):
+        abort(404)
     acct = User.get(uid)
     if not acct.is_admin:
         abort(403)
@@ -1057,6 +1061,12 @@ def admin_users():
         print(user.user_id)
         user.update_admin()
         return '{"status":"ok"}'
+
+
+@app.errorhandler(403)
+def page_not_found(e):
+    # Pretend all 403s are 404s for security
+    return render_template('404.html'), 404
 
 
 @app.errorhandler(404)
@@ -1086,6 +1096,13 @@ def getUid():
         token = request.cookies.get('remember_')
     return decode_auth_token(token)
 
+def checkEditorAdmin(uid):
+    user = User.get(uid)
+    return user.is_admin or user.is_copy_editor or user.is_content_editor
+
+def checkAdmin(uid):
+    user = User.get(uid)
+    return user.is_admin
 
 if __name__ == '__main__':
     app.run()
