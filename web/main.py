@@ -128,8 +128,6 @@ def sign_up(details_dict):
 
 @app.route("/session/new", methods=['GET', 'POST'])
 def session_new():
-    if 'user_id' in session:
-        return redirect(url_for('home'))
     error = None
     if request.method == 'POST':
         details = request.form
