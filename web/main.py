@@ -173,7 +173,9 @@ def authentication_required(func):
                 print(4)
                 return func(*args, **kwargs)
         else:
-            print(2)
+            uid = decode_auth_token(remember)
+            if uid == 'Invalid token. please log in again' or uid == 0:
+                return redirect(url_for('session_new'))
             return func(*args, **kwargs)
     return func_wrapper
 
