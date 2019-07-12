@@ -145,10 +145,6 @@ lable {
 	color: #734f96;
 	font-family: "Helvetica"sans-serif;
 	text-align: center;
-	height: 100%;
-    text-align: left;
-    padding: 0.25rem;
-    border-radius: 0.5rem;
 }
 
 .title {
@@ -159,4 +155,23 @@ lable {
 .body {
 	text-align: left;
 	font-family: "Helvetica"sans-serif;
+}
+
+#save-bubble {
+    position: fixed;
+    bottom: 20px;
+    left: 0px;
+    width: 100%;
+    display: none;
+}
+
+#save-bubble-inner {
+    background: #d4edda;
+    margin: auto;
+    padding: .5rem 1em;
+    border-radius: 5rem;
+    border: solid 1px #c3e6cb;
+    width: max-content;
+    font-size: .75em;
+    color: #155724;
 }

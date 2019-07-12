@@ -16,10 +16,11 @@
     <h2 class="text">Locations:</h2>
     <br>
 </form>
-<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
-    <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
+<section>
+    
     {% for location in locations %}
-    <section class="location-row">
+    <form class="location-row"  method="POST" action="/verification/review/update">
+        <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
         <input name="type" value="location" readonly class="hidden-in">
         <input name="ent_id" value="{{location.location_id}}" readonly class="hidden-in">
         <p><strong>{{location.location_name|e}}</strong></p>
@@ -39,7 +40,7 @@
         <section class="flex-0" onclick="show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
-    </section>
+    </form>
 
     <section class="row details" style="display: none">
         <hr>
@@ -60,14 +61,15 @@
     </section>
 
     {% endfor %}
-</form>
-<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+</section>
+<section>
     <hr>
     <h2 class="text">Decisions:</h2>
     <br>
 
     {%for decision in decisions%}
-    <section class="decision-row">
+    <form class="decision-row" method="POST" action="/verification/review/update">
+        <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
         <input name="type" value="decision" readonly class="hidden-in">
         <input name="ent_id" value="{{decision.decision_id}}" readonly class="hidden-in">
         <input name="loc_id" value="{{decision.loc_id}}" readonly class="hidden-in">
@@ -88,7 +90,7 @@
         <section class="flex-0" onclick="show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
-    </section>
+    </form>
 
     <section class="row details" style="display: none">
         <hr>
@@ -103,15 +105,16 @@
     </section>
 
     {%endfor%}
-</form>
-<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+</section>
+<section method="POST" action="/verification/review/update">
     <hr>
     <h2>Objects:</h2>
     <br>
     {%for object in objects%}
-    <section class="object-row">
+    <form method="POST" action="/verification/review/update" class="object-row">
+        <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
         <input name="type" value="object" readonly class="hidden-in">
-        <input name="ent_id" value="{{object.object_id}}" readonly class="hidden-in">
+        <input name="ent_id" value="{{object.obj_id}}" readonly class="hidden-in">
         <p><strong>{{object.obj_name|e}}</strong></p>
         <label>Objects Verified</label>
         {% if object.is_verified==1%}
@@ -130,7 +133,7 @@
         <section class="flex-0" onclick="show(this)">
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
-    </section>
+    </form>
 
     <section class="row details" style="display: none">
         <hr>
@@ -140,13 +143,14 @@
     </section>
 
     {%endfor%}
-</form>
+</section>
 <hr><br>
-<form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+<section>
     <h2>Events:</h2>
     <br>
     {%for event in events%}
-    <section class="event-row">
+    <form method="POST" action="/verification/review/update" class="event-row">
+        <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
         <input name="type" value="event" readonly class="hidden-in">
         <input name="ent_id" value="{{event.event_id|e}}" readonly class="hidden-in">
         <p><strong>{{event.event_name|e}}</strong></p>
@@ -165,7 +169,7 @@
             <i class="fas fa-chevron-down fa-lg down-arrow"></i>
         </section>
 
-    </section>
+    </form>
 
     <section class="row details" style="display: none">
         <hr>
@@ -173,10 +177,13 @@
         <p>{{event.event_description|e}}</p>
     </section>
     {%endfor%}
-</form>
+</section>
 <br>
 <hr><br>
 <form onclick="set_focus(this)" method="POST" action="/verification/review/update">
+    <input name="story_id" class="details hidden-in" value="{{story_id}}" readonly>
+    <input name="type" value="story" readonly class="hidden-in">
+    <input name="ent_id" class="details hidden-in" value="{{story_id}}" readonly>
     <label>Suggested Rating:</label>
     <!--where do we want to store this info @sonny @brian-->
     <select class="form-control details" onchange="verify_changed(this)" name="parental_ratings">

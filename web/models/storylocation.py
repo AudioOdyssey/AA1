@@ -20,14 +20,14 @@ class StoryLocation:
     auto_goto = 0
     next_loc_id = 0
     reviewer_comments = ''
-    is_verified = False
+    verification_status = False
 
     rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
     name = "AA_admin"
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
 
-    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, auto_goto=False, next_loc_id=0, reviewer_comments = '', is_verified = False):
+    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, auto_goto=False, next_loc_id=0, reviewer_comments = '', verification_status = False):
         self.story_id = story_id
         self.location_id = location_id
         self.location_name = location_name
@@ -38,7 +38,7 @@ class StoryLocation:
         self.auto_goto = auto_goto
         self.next_loc_id = next_loc_id
         self.reviewer_comments = reviewer_comments
-        self.is_verified = is_verified
+        self.verification_status = verification_status
 
     def add_to_server(self):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -75,7 +75,7 @@ class StoryLocation:
             if result is None:
                 return None
             result_location = cls(story_id, location_id, result['location_name'], result['original_description'], result['short_description'], result['post_event_description'],
-                                  result['location_event_id'], result['auto_goto'], result['next_loc_id'], result['reviewer_comments'], result['is_verified'])
+                                  result['location_event_id'], result['auto_goto'], result['next_loc_id'], result['reviewer_comments'], result['verification_status'])
         conn.close()
         return result_location
 
@@ -100,12 +100,12 @@ class StoryLocation:
             conn.commit()
         conn.close()
 
-    def update_admin(self, is_verified, reviewer_comments):
-        self.is_verified = is_verified
+    def update_admin(self, verification_status, reviewer_comments):
+        self.verification_status = verification_status
         self.reviewer_comments = reviewer_comments
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `locations` SET is_verified = %s, reviewer_comments = %s WHERE story_id = %s AND location_id = %s"), (self.is_verified, self.reviewer_comments, self.story_id, self.location_id))
+            cur.execute(("UPDATE `locations` SET verification_status = %s, reviewer_comments = %s WHERE story_id = %s AND location_id = %s"), (self.verification_status, self.reviewer_comments, self.story_id, self.location_id))
             conn.commit()
         conn.close()
 
@@ -150,7 +150,7 @@ class StoryLocation:
             results = cur.fetchall()
             for row in results:
                 loc_list.append(
-                    cls(row['story_id'], row['location_id'], row['location_name'], row['original_description'], row['short_description'], row['post_event_description'], next_loc_id = row['next_loc_id'], reviewer_comments=row['reviewer_comments'], is_verified = row['is_verified']))
+                    cls(row['story_id'], row['location_id'], row['location_name'], row['original_description'], row['short_description'], row['post_event_description'], next_loc_id = row['next_loc_id'], reviewer_comments=row['reviewer_comments'], verification_status = row['verification_status']))
         return loc_list
 
     @classmethod

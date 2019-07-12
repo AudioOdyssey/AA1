@@ -2,6 +2,14 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/show.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/story/location/show.js') }}"></script>
+
+<a href="/story/update?story_id={{story_id}}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a href="/story/treeview?story_id={{story_id}}"><button id="bottom" class="btn btn-light">Back to TreeView</button></a>
+<a href="/verification/location?story_id={{story_id}}&location_id={{location_id}}" class="btn btn-light">View
+    Verification Info</button></a>
+<a href="/story/run?story_id={{story_id}}&location_id={{location_id}}" class="btn btn-light">Run from Here</a>
+<button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
+
 <form class="location-main-row" onclick="set_focus(this)" method="POST" action="/story/location/update">
     <input name="story_id" value="{{ story_id }}" readonly class="hidden-in">
     <input name="loc_id" value="{{ location_id }}" readonly class="hidden-in">
@@ -79,9 +87,16 @@
 
 <br>
 
+
 <a href="/story/update?story_id={{story_id}}"><button class="btn btn-light">Back to Main Story Page</button></a>
 <a href="/story/treeview?story_id={{story_id}}"><button id="bottom" class="btn btn-light">Back to TreeView</button></a>
-<a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
-<a href="/verification/location?story_id={{story_id}}&location_id={{location_id}}"><button id="bottom"
-        class="btn btn-light">View Verification Info</button></a>
+<a href="/verification/location?story_id={{story_id}}&location_id={{location_id}}" class="btn btn-light">View
+    Verification Info</button></a>
+<a href="/story/run?story_id={{story_id}}&location_id={{location_id}}" class="btn btn-light">Run from Here</a>
+<button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
+
+<div id="save-bubble">
+    <div id="save-bubble-inner">Location Saved</div>
+</div>
+
 {% endblock %}

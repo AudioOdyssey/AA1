@@ -30,7 +30,7 @@ class Story:
     number_of_decisions = 0
     story_in_store = False
     story_verification_date = None
-    name_of_verifier = ''
+    verifier_id = 0
     story_ratings = 0
     story_language_id = 0
     storage_size = 0
@@ -44,7 +44,7 @@ class Story:
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
-                 story_verification_date='', name_of_verifier='', verification_status='',
+                 story_verification_date='', verifier_id=0, verification_status='',
                  story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0):
         if story_id:
             self.story_id = story_id
@@ -59,7 +59,7 @@ class Story:
         self.number_of_decisions = number_of_decisions
         self.story_in_store = story_in_store
         self.story_verification_date = story_verification_date
-        self.name_of_verifier = name_of_verifier
+        self.verifier_id = verifier_id
         self.story_ratings = story_ratings
         self.story_language_id = story_language_id
         self.storage_size = storage_size
@@ -109,10 +109,10 @@ class Story:
                 return cls(story_id=story_id, story_title=results["story_title"], story_author=results["story_author"], story_synopsis=results["story_synopsis"],
                            story_price=results["story_price"], author_paid=results[
                                "author_paid"], genre=results['genre'], length_of_story=results["length_of_story"],
-                           number_of_locations=results["number_of_location"], number_of_decisions=results[
+                           number_of_locations=results["number_of_locations"], number_of_decisions=results[
                                "number_of_decisions"], story_in_store=results["story_in_store"],
-                           story_verification_date=results["story_verification_date"], name_of_verifier=results[
-                               "name_of_verifier"], verification_status=results['verification_status'], story_ratings=results["story_ratings"],
+                           story_verification_date=results["story_verification_date"], verifier_id=results[
+                               "verifier_id"], verification_status=results['verification_status'], story_ratings=results["story_ratings"],
                            story_language_id=results["story_language_id"], storage_size=results[
                                "storage_size"], user_creator_id=results["user_creator_id"],
                            reviewer_comments=results['reviewer_comments'], starting_loc=results['starting_loc'], inventory_size=results['inventory_size'], parental_ratings=results['parental_ratings'])
@@ -148,8 +148,8 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET story_ratings = %s, story_verification_date = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s, updated_at = NOW(), story_verification_date = CURDATE(), name_of_verifier = %s WHERE story_id = %s"),
-                        (self.story_ratings, self.story_verification_date, self.storage_size, self.reviewer_comments, self.name_of_verifier, self.story_id))
+            cur.execute(("UPDATE master_stories SET story_ratings = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s, story_verification_date = CURDATE(), name_of_verifier = %s WHERE story_id = %s"),
+                        (self.story_ratings, self.story_verification_status, self.storage_size, self.reviewer_comments, self.name_of_verifier, self.story_id))
             conn.commit()
             cur.execute(
                 ("SELECT updated_at, story_verification_date WHERE story_id = %s"), (self.story_id))
@@ -241,7 +241,8 @@ class Story:
                 "cover": story.get_image_base64()
             }
             result.append(stry_schema)
-        return json.dumps(result)
+        library_dict = {'stories' : result}
+        return json.dumps(library_dict)
 
     @classmethod
     def story_list_ready_for_verification(cls):

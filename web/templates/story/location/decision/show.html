@@ -9,7 +9,7 @@
 <a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{location.location_id}}">Back to Location</a>
 <a href="#bottom"><button class="btn btn-light">Bottom of Page</button></a>
 
-<a class="btn btn-primary" style="float:right" href="/save/saving?story_id={{ story_id }}">Save</a>
+<button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
 
 <section class="row">
     <h3>Decisions</h3>
@@ -73,5 +73,10 @@
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
 <a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{location.location_id}}">Back to Location</a>
 <a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>
-<a class="btn btn-primary" style="float:right" href="/save/saving?story_id={{ story_id }}">Save</a>
+<button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
+
+<div id="save-bubble">
+    <div id="save-bubble-inner">Decisions Saved</div>
+</div>
+
 {% endblock %}

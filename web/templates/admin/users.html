@@ -1,6 +1,8 @@
 {%extends "template.html" %}
 {% block content%}
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/index.css') }}" type="text/css" />
+
 <script>
     function onchangefield(elem) {
         var xhttp = new XMLHttpRequest();
@@ -21,12 +23,14 @@
         border-top-left-radius: 2em;
         border-top-right-radius: 2em;
     }
+
     .user {
         border: solid grey 1px;
         background: white;
-        padding: 0.25rem;
+        padding: 0.5rem 1rem;
     }
-    .user:first-of-type {
+
+    .user:last-of-type {
         border-bottom-left-radius: 2em;
         border-bottom-right-radius: 2em;
     }
@@ -35,20 +39,27 @@
 
 <section>
     {%for user in users%}
-    <form class="user">
-        <input type="number" style="display: none" name="user_id" value="{{user.user_id}}">
-        <label>User-Id:</label>
-        <input type="number" value="{{user.user_id}}" disabled>
-        <label>Username</label>
-        <input type="text" name="username" value="{{user.username|e}}" onchange="onchangefield(this)">
-        <label>Admin:</label>
-        <input type="checkbox" value="admin" name="is_admin" {%if user.is_admin%}checked{%endif%} onchange="onchangefield(this)">
-        <label>Content Editor:</label>
-        <input type="checkbox" value="content" name="is_content_editor" {%if user.is_content_editor%}checked{%endif%}
-            onchange="onchangefield(this)">
-        <label>Copy Editor:</label>
-        <input type="checkbox" value="copy" name="is_copy_editor" {%if user.is_copy_editor%}checked{%endif%}
-            onchange="onchangefield(this)">
+    <form class="user row">
+        <div class="input-group col-sm-4">
+            <label>User-Id:</label>
+            <input class="form-control" type="number" name="user_id" value="{{user.user_id}}" readonly>
+        </div>
+        <div class="input-group col-sm-4">
+            <label>Username</label>
+            <input class="form-control" type="text" name="username" value="{{user.username|e}}"
+                onchange="onchangefield(this)">
+        </div>
+        <div class="col-sm-4">
+            <label>Admin:</label>
+            <input type="checkbox" value="admin" name="is_admin" {%if user.is_admin%}checked{%endif%}
+                onchange="onchangefield(this)">
+            <label>Content Editor:</label>
+            <input type="checkbox" value="content" name="is_content_editor"
+                {%if user.is_content_editor%}checked{%endif%} onchange="onchangefield(this)">
+            <label>Copy Editor:</label>
+            <input type="checkbox" value="copy" name="is_copy_editor" {%if user.is_copy_editor%}checked{%endif%}
+                onchange="onchangefield(this)">
+        </div>
     </form>
     {%endfor%}
 </section>

@@ -1,8 +1,13 @@
+function transferFailed(e) {
+    console.log("Error");
+}
+
 function story_changed(elem) {
     var xhttp = new XMLHttpRequest();
+    xhttp.addEventListener("abort", transferFailed);
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+            save();
         } else if (this.readyState == 4) {
             console.log(this.responseText);
         }
@@ -80,7 +85,22 @@ function add_btn_loc(story_id) {
     xhttp.send();
 }
 
-function publish_story(story_id) //TODO ??
-{
+function handleFileSelect(evt) {
+    var files = evt.target.files;
+    var f = files[0];
+    var filesize = ((f.size / 1024) / 1024).toFixed(4);
+    if (filesize > 7.5) {
+        // The image id DUMMY THICC and the clap alerted the server!
+        document.getElementById("dummy-thicc").style.display = "block";
+        return;
+    }
+    var reader = new FileReader();
 
+    reader.onload = (function (theFile) {
+        return function (e) {
+            document.getElementById('cover-photo').style.backgroundImage = "url('" + e.target.result + "')";
+        };
+    })(f);
+
+    reader.readAsDataURL(f);
 }
