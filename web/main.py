@@ -1074,7 +1074,7 @@ def page_not_found(e):
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found_404(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
