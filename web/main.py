@@ -54,8 +54,7 @@ random.seed()
 @app.route("/")
 @app.route("/home")
 @app.route("/index")
-def home():
-    
+def home(): 
     auth_token = request.cookies.get('remember_')
     if auth_token is None:
         token = session.get('token')
@@ -65,10 +64,10 @@ def home():
             return redirect(url_for('story_show'))
     else:
         user_id = decode_auth_token(auth_token)
-        if user_id:
-            return redirect(url_for('story_show'))
-        else:
+        if user_id == 'Signature expired. Please log in again.' or user_id == 0:
             return render_template('index.html')
+        else:
+            return redirect(url_for('story_show'))
     return render_template('index.html')
 
 
