@@ -68,6 +68,7 @@ def home():
             return render_template('index.html')
     return render_template('index.html')
 
+
 @app.route("/user/new", methods=['GET', 'POST'])
 def user_new():  # fix later
     if request.method == "POST":
@@ -204,14 +205,14 @@ def app_session_new():
         details = request.json
         user_id = authenticate(details)
         current_time = datetime.utcnow()
-        expired_date = datetime.utcnow() + timedelta(days = 30)
+        expired_date = datetime.utcnow() + timedelta(days=30)
         if user_id:
             result = {
-                'auth_token' : encode_auth_token(user_id, current_time, expired_date)
+                'auth_token': encode_auth_token(user_id, current_time, expired_date)
             }
         else:
             result = {
-                'message' : 'Username/password is incorrect'
+                'message': 'Username/password is incorrect'
             }
     return jsonify(result)
 
@@ -272,21 +273,28 @@ def story_show():
     stories = Story.story_list_by_creator(user_id)
     return render_template("story/show.html", stories=stories)
 
+
 @authentication_required
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 def story_update():
     story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid():
+        abort(403)
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
     return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
 
+
 @authentication_required
 @app.route("/story/image")
 def story_image():
     story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid():
+        abort(403)
     # print(story.get_image_base64())
     return story.get_image_base64()
+
 
 @authentication_required
 @app.route("/story/update", methods=["POST"])
@@ -294,6 +302,8 @@ def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     story_title = details['story_title']
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
@@ -321,6 +331,7 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @authentication_required
 @app.route("/story/new", methods=["POST"])
 def story_new():
@@ -336,6 +347,9 @@ def object_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     objects = StoryObject.obj_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
@@ -351,6 +365,7 @@ def app_story_logistics():
 def app_store_info():
     return Story.display_for_store()
 
+
 @authentication_required
 @app.route("/store/story/info", methods=['GET'])
 def app_store_expand():
@@ -364,6 +379,7 @@ def stories_show_owned_by_user():
     user_id = decode_auth_token(request.args.get("auth"))
     return Story.json_story_library(user_id)
 
+
 @authentication_required
 @app.route("/story/object/update", methods=['POST'])
 def object_update():
@@ -371,6 +387,9 @@ def object_update():
     #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     object_id = details['obj_id']
     if object_id == '':
         object_id = StoryObject.get_last_id(story_id)
@@ -400,19 +419,27 @@ def object_update():
     # return redirect(url_for("object_show"))
     return "ok"
 
+
 @authentication_required
 @app.route("/story/object/new", methods=['POST'])
 def object_new():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     obj = StoryObject(story_id)
     obj.add_to_server()
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
+
 @authentication_required
 @app.route("/story/object/destroy", methods=['POST'])
 def object_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid():
+        abort(403)
     StoryObject.obj_del(request.form['obj_id'])
     return '{"status":"ok"}'
 
@@ -423,9 +450,13 @@ def event_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/show.html", locations=locations, events=events, story_id=story_id)
+
 
 @authentication_required
 @app.route('/story/event/update', methods=['POST'])
@@ -435,6 +466,9 @@ def event_update():
     if request.method == 'POST':
         details = request.form
         story_id = details['story_id']
+        story = Story.get(story_id)
+        if story.user_creator_id != getUid():
+            abort(403)
         event_id = details['event_id']
         if event_id == '':
             event_id = StoryEvent.get_last_id(story_id)
@@ -452,6 +486,7 @@ def event_update():
         evnt.update(story_id, event_id, name, location, desc, is_global)
     return '{"status":"ok"}'
 
+
 @authentication_required
 @app.route('/story/event/new', methods=['POST'])
 def event_new():
@@ -459,15 +494,23 @@ def event_new():
     #     return redirect(url_for("session_new"))
     details = request.args
     story_id = details['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     evnt = StoryEvent(story_id)
     evnt.add_to_server()
     return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
 
+
 @authentication_required
 @app.route("/story/event/destroy", methods=['POST'])
 def event_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid():
+        abort(403)
     StoryEvent.event_del(request.form['event_id'])
     return '{"status":"ok"}'
+
 
 @authentication_required
 @app.route("/story/location/show")
@@ -475,9 +518,13 @@ def location_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
+
 
 @authentication_required
 @app.route("/story/location/indiv")
@@ -485,11 +532,15 @@ def location_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
+
 
 @authentication_required
 @app.route("/story/object/indiv")
@@ -497,11 +548,15 @@ def object_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
+
 
 @authentication_required
 @app.route("/story/location/decision/indiv")
@@ -509,6 +564,9 @@ def decision_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
     decision = StoryDecision.get(story_id, location_id, decision_id)
@@ -517,16 +575,21 @@ def decision_indiv():
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/location/decision/indiv.html", locations=locations, decision=decision, story_id=story_id, decision_id=decision_id, events=events, objects=objects)
 
+
 @authentication_required
 @app.route("/story/event/indiv")
 def event_indiv():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)
+
 
 @authentication_required
 @app.route('/story/location/update', methods=['POST'])
@@ -535,6 +598,9 @@ def location_update():
     #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     loc_id = details['loc_id']
     if loc_id is None:
         loc_id = StoryLocation.get_last_id(story_id)
@@ -558,19 +624,27 @@ def location_update():
                post_event_description, event_id, auto_goto, next_location_id)
     return '{"status":"ok"}'
 
+
 @authentication_required
 @app.route('/story/location/new', methods=['POST'])
 def location_new():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     loc = StoryLocation(story_id)
     loc.add_to_server()
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
+
 @authentication_required
 @app.route("/story/location/destroy", methods=['POST'])
 def location_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid():
+        abort(403)
     StoryLocation.loc_del(request.form['loc_id'])
     return '{"status":"ok"}'
 
@@ -580,6 +654,9 @@ def location_destroy():
 def decision_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
+    story = Story.get(request.args['story_id'])
+    if story.user_creator_id != getUid():
+        abort(403)
     decisions = StoryDecision.dec_list_for_story_loc(
         request.args['story_id'], request.args['location_id'])
     locations = StoryLocation.loc_list(
@@ -594,6 +671,7 @@ def decision_show():
         request.args['story_id'])
     return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
+
 @authentication_required
 @app.route("/story/location/decision/update", methods=['POST'])
 def decision_update():
@@ -601,6 +679,9 @@ def decision_update():
     #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     location_id = details["location_id"]
     decision_id = details['decision_id']
     if decision_id == '':
@@ -668,6 +749,7 @@ def decision_update():
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
     return '{"status":"ok"}'
 
+
 @authentication_required
 @app.route("/story/location/decision/new", methods=['POST'])
 def decision_new():
@@ -675,14 +757,21 @@ def decision_new():
         # return redirect(url_for("session_new"))
     details = request.args
     story_id = details["story_id"]
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     location_id = details["location_id"]
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
+
 @authentication_required
 @app.route("/story/location/decision/destroy", methods=['POST'])
 def decision_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid():
+        abort(403)
     StoryDecision.dec_del(request.form['decision_id'])
     return '{"status":"ok"}'
 
@@ -695,6 +784,7 @@ def about():
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
 
 @authentication_required
 @app.route("/verification/view")
@@ -727,13 +817,6 @@ def verification_review_new():
     events = StoryEvent.event_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
     return render_template("verification/review_new.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
-
-
-def getUid():
-    token = session.get('token')
-    if token is None:
-        token = request.cookies.get('remember_')
-    return decode_auth_token(token)
 
 
 @authentication_required
@@ -884,6 +967,8 @@ def story_run():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story.user_creator_id != getUid():
+        abort(403)
     loc_id = request.args.get("location_id")
     location = None
     if loc_id is None:
@@ -994,6 +1079,12 @@ def load_user(user_id):
 # @login_manager.unauthorized_handler
 # def unauthorized():
 #     return redirect(url_for("session_new"))
+
+def getUid():
+    token = session.get('token')
+    if token is None:
+        token = request.cookies.get('remember_')
+    return decode_auth_token(token)
 
 
 if __name__ == '__main__':
