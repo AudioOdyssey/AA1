@@ -1162,8 +1162,7 @@ def story_run():
             inv.append(StoryObject.get(story_id, itm))
         for ent in obj['events']:
             evts.append(StoryEvent.get(story_id, ent))
-        for decision in obj['decs']:
-            triggered.append(StoryDecision.get(story_id, 0, decision))
+        triggered = obj['decs']
         for back in obj['back']:
             backs.append(StoryLocation.get(story_id, back))
 
