@@ -5,6 +5,7 @@ function show(activ) {
     else
         elem.style.display = "block";
 }
+
 function verify_changed(elem) {
     // elem.form.submit()
     var xhttp = new XMLHttpRequest();
@@ -21,14 +22,14 @@ function verify_changed(elem) {
 }
 
 function set_focus(elem) {
-        try {
-            document.getElementById("active").id = "";
-        } catch (err) {
-    
-        }
-        elem.id = "active";
+    try {
+        document.getElementById("active").id = "";
+    } catch (err) {
+
+    }
+    elem.id = "active";
 }
+
 function verify_story(story_id) {
 
 }
-

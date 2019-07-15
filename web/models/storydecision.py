@@ -112,9 +112,7 @@ class StoryDecision:
             conn.commit()
         conn.close()
 
-    def update_admin(self, reviewer_comments, verification_status):
-        self.reviewer_comments = reviewer_comments
-        self.verification_status = verification_status
+    def update_admin(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `decisions` SET reviewer_comments = %s, verification_status = %s WHERE story_id = %s AND loc_id = %s AND decision_id = %s"), (self.reviewer_comments, self.verification_status, self.story_id, self.loc_id, self.decision_id))
