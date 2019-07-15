@@ -346,6 +346,10 @@ def story_image():
     return story.get_image_base64()
 
 
+valid_genres = {"Mystery", "Romance", "Sci-Fi", "Fantasy", "Historical Fiction", "Drama",
+                "Horror", "Thriller", "Comedy", "Adventure", "Sports", "Non-Fiction", "Other Fiction"}
+
+
 @app.route("/story/update", methods=["POST"])
 @authentication_required
 def story_update_post():
@@ -358,7 +362,7 @@ def story_update_post():
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
     genre = details.get('genre')
-    if genre is None:
+    if genre is None or genre not in valid_genres:
         genre = "Miscellaneous"
     story.length_of_story = details['length_of_story']
     story.inventory_size = details.get('inventory_size')
