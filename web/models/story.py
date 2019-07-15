@@ -68,6 +68,7 @@ class Story:
         self.starting_loc = starting_loc
         self.inventory_size = inventory_size
         self.parental_ratings = parental_ratings
+        self.verification_status = verification_status
 
     def add_to_server(self):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -137,10 +138,7 @@ class Story:
             conn.commit()
         conn.close()
 
-    def update_admin(self, reviewer_comments, parental_ratings, name_of_verifier):
-        self.reviewer_comments = reviewer_comments
-        self.parental_ratings = parental_ratings
-        self.name_of_verifier = name_of_verifier
+    def update_verify(self):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -148,14 +146,9 @@ class Story:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET story_ratings = %s, obj_verification_status = %s, event_verification_status = %s, storage_size = %s, reviewer_comments = %s, story_verification_date = CURDATE(), name_of_verifier = %s WHERE story_id = %s"),
-                        (self.story_ratings, self.story_verification_status, self.storage_size, self.reviewer_comments, self.name_of_verifier, self.story_id))
+            cur.execute(("UPDATE master_stories SET parental_ratings = %s, verification_status = %s, verifier_id = %s, reviewer_comments = %s, story_verification_date = CURDATE() WHERE story_id = %s"),
+                        (self.parental_ratings, self.verification_status, self.verifier_id, self.reviewer_comments, self.story_id))
             conn.commit()
-            cur.execute(
-                ("SELECT updated_at, story_verification_date WHERE story_id = %s"), (self.story_id))
-            query_data = cur.fetchall()
-            self.updated_at = query_data['updated_at']
-            self.story_verification_date = query_data['story_verification_date']
         conn.close()
 
     def get_image_base64(self):
@@ -184,7 +177,7 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19]))
+                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19], verification_status=row[15]))
         conn.close()
         return story_list
 
@@ -386,3 +379,16 @@ class Story:
                 result.append(stry_info)
         storefront = {"stories": result}
         return json.dumps(storefront)
+
+    @classmethod
+    def destroy(cls, story_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
+                               db=db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(("DELETE FROM `master_stories` WHERE `story_id` = %s"), (story_id))
+            conn.commit()
+        conn.close()

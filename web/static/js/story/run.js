@@ -81,11 +81,11 @@ function poploc() {
 }
 
 function dec_clicked(story_id, dec_id, loc_id, transition, transition_loc_id, can_occur_once, cause_event, effect_event_id) {
-    if (cause_event && effect_event_id != 0)
+    if (cause_event == 1 && effect_event_id != 0)
         addEvent(effect_event_id);
-    if (can_occur_once && !decDone())
+    if (can_occur_once == 1 && !decDone())
         addDec(dec_id);
-    if (transition) {
+    if (transition == 1) {
         addBack(loc_id);
         window.location.href = "/story/run?story_id=" + story_id + "&location_id=" + transition_loc_id;
     }

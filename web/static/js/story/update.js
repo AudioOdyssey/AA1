@@ -22,13 +22,13 @@ function story_delete(story_id) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+            window.location.href = "/story/show"
         } else if (this.readyState == 4) {
             console.log(this.responseText);
         }
     };
-    xhttp.open("POST", "/story/destroy", true);
-    xhttp.send("story_id=" + story_id);
+    xhttp.open("POST", "/story/destroy?story_id=" + story_id, true);
+    xhttp.send();
 }
 
 function add_btn_obj(story_id) {
@@ -103,4 +103,22 @@ function handleFileSelect(evt) {
     })(f);
 
     reader.readAsDataURL(f);
+}
+
+function publishStory(uid) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var json = JSON.parse(this.responseText);
+            if (json.status == "ok") {
+                window.location.href = "/story/show";
+            } else {
+                console.log(json);
+            }
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", "/verification/submit?story_id=" + uid, true);
+    xhttp.send();
 }

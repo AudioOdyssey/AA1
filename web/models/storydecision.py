@@ -79,7 +79,7 @@ class StoryDecision:
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND decision_id = %s"), (story_id, decision_id))
+            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND loc_id = %s AND decision_id = %s"), (story_id, location_id, decision_id))
             results = cur.fetchone()
             if results is None:
                 return None
@@ -112,9 +112,7 @@ class StoryDecision:
             conn.commit()
         conn.close()
 
-    def update_admin(self, reviewer_comments, verification_status):
-        self.reviewer_comments = reviewer_comments
-        self.verification_status = verification_status
+    def update_admin(self):
         conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `decisions` SET reviewer_comments = %s, verification_status = %s WHERE story_id = %s AND loc_id = %s AND decision_id = %s"), (self.reviewer_comments, self.verification_status, self.story_id, self.loc_id, self.decision_id))
@@ -131,9 +129,23 @@ class StoryDecision:
                 return None
             else:
                 return json.dumps(results)
+    
+    @classmethod
+    def check_verify(cls, story_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT COUNT(decision_id) FROM decisions WHERE story_id = %s AND verification_status != 3"), (story_id))
+            results = cur.fetchone()
+            if results is None:
+                return None
+            return results['COUNT(decision_id)'] == 0
 
     @classmethod
-    def dec_del(cls, dec_id):
+    def dec_del(cls, story_id, loc_id, dec_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -142,7 +154,7 @@ class StoryDecision:
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
-                ("DELETE FROM `decisions` WHERE `decision_id` = %s"), (dec_id))
+                ("DELETE FROM `decisions` WHERE `story_id` = %s AND `loc_id` = %s AND `decision_id` = %s"), (story_id, loc_id, dec_id))
             conn.commit()
         conn.close()
     
