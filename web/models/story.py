@@ -379,3 +379,16 @@ class Story:
                 result.append(stry_info)
         storefront = {"stories": result}
         return json.dumps(storefront)
+
+    @classmethod
+    def destroy(cls, story_id):
+        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
+        name = "AA_admin"
+        rds_password = "z9QC3pvQ"
+        db_name = "audio_adventures_dev"
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
+                               db=db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(("DELETE FROM `master_stories` WHERE `story_id` = %s"), (story_id))
+            conn.commit()
+        conn.close()

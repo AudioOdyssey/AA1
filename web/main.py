@@ -347,6 +347,16 @@ def story_update_post():
     return '{"status":"ok"}'
 
 
+@app.route("/story/destory", methods=["POST"])
+@authentication_required
+def story_destroy():
+    story = Story.get(request.form['story_id'])
+    if story.user_creator_id != getUid() and not checkAdmin(getUid()):
+        abort(403)
+    Story.destroy(request.form['story_id'])
+    return '{"status":"ok"}'
+
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

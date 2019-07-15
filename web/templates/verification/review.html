@@ -43,6 +43,20 @@
         xhttp.open("POST", "/verification/review/update", true);
         xhttp.send(new FormData(elem.form));
     }
+
+    function passfailstory(pass, elem) {
+        elem.form.getElementsByClassName("verified")[0].value = pass ? "3" : "2";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                window.location.href = "/verification/view";
+            } else if (this.readyState == 4) {
+                console.log(this.responseText);
+            }
+        };
+        xhttp.open("POST", "/verification/review/update", true);
+        xhttp.send(new FormData(elem.form));
+    }
 </script>
 
 <h1>{{story.story_title|e}}</h1>
@@ -249,11 +263,11 @@
     </select>
     <section class="row">
         <div class="input-group col-sm-6">
-            <button type="button" onclick="passfail(true, this)" class="btn-passfail btn btn-success">Certify
+            <button type="button" onclick="passfailstory(true, this)" class="btn-passfail btn btn-success">Certify
                 Story</button>
         </div>
         <div class="input-group col-sm-6">
-            <button type="button" onclick="passfail(false, this)" class="btn-passfail btn btn-danger">Fail
+            <button type="button" onclick="passfailstory(false, this)" class="btn-passfail btn btn-danger">Fail
                 Story</button>
         </div>
     </section>
