@@ -62,27 +62,6 @@
 
         <hr>
 
-
-        <div>
-            <label for="autogo">Auto Goto</label>
-            <input id="autogo" type="checkbox" autocomplete="off" name="auto_goto"
-                onclick="checkbox_visability_check(this)" onchange="location_changed(this)">
-            <br>
-            <div class="checkbox_hide" style="display: none;">
-                <label>Select Next Location Name:</label>
-                <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
-                    onchange="location_changed(this)">
-                    <option value="0">None</option>
-                    {%for loc in locations%}
-                    <option value="{{loc.location_id}}">{{loc.location_name|e}}</option>
-                    {%endfor%}
-                </select>
-            </div>
-        </div>
-        <br>
-        <hr>
-
-
     </section>
 </form>
 
@@ -138,32 +117,6 @@
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="location_post_event_description"
             onchange="location_changed(this)">{{ location.post_event_description|e }}</textarea>
-        <hr>
-
-        <div>
-            <label>Auto Go To</label>
-            {% if location.auto_goto %}
-            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)"
-                onchange="location_changed(this)" checked>
-            {% else %}
-            <input type="checkbox" autocomplete="off" name="auto_goto" onclick="checkbox_visability_check(this)"
-                onchange="location_changed(this)">
-            {% endif %}
-            <br>
-
-            <div class="checkbox_hide" {%if not location.auto_goto%}style="display: none;" {%endif%}>
-                <label>Next Location Name</label>
-
-                <select class="form-control" type="text" autocomplete="off" name="next_loc_id"
-                    onchange="location_changed(this)">
-                    <option value="0">None</option>
-                    {%for loc in locations%}
-                    <option {%if location.next_loc_id|int==loc.location_id|int%}selected{%endif%}
-                        value="{{loc.location_id}}">{{loc.location_name|e}}</option>
-                    {%endfor%}
-                </select>
-            </div>
-        </div>
         <hr>
         <br>
         <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}">Edit

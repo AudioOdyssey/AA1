@@ -17,7 +17,6 @@ class StoryLocation:
     short_description = ""
     post_event_description = ""
     location_event_id = 0
-    auto_goto = 0
     next_loc_id = 0
     reviewer_comments = ''
     verification_status = False
@@ -27,7 +26,7 @@ class StoryLocation:
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
 
-    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, auto_goto=False, next_loc_id=0, reviewer_comments='', verification_status=False):
+    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, next_loc_id=0, reviewer_comments='', verification_status=False):
         self.story_id = story_id
         self.location_id = location_id
         self.location_name = location_name
@@ -35,7 +34,6 @@ class StoryLocation:
         self.short_description = short_description
         self.post_event_description = post_event_description
         self.location_event_id = location_event_id
-        self.auto_goto = auto_goto
         self.next_loc_id = next_loc_id
         self.reviewer_comments = reviewer_comments
         self.verification_status = verification_status
@@ -75,17 +73,16 @@ class StoryLocation:
             if result is None:
                 return None
             result_location = cls(story_id, location_id, result['location_name'], result['original_description'], result['short_description'], result['post_event_description'],
-                                  result['location_event_id'], result['auto_goto'], result['next_loc_id'], result['reviewer_comments'], result['verification_status'])
+                                  result['location_event_id'], result['next_loc_id'], result['reviewer_comments'], result['verification_status'])
         conn.close()
         return result_location
 
-    def update(self, story_id, location_id, name, original_description, short_description, post_event_description, location_event_id, auto_goto, next_loc_id):
+    def update(self, story_id, location_id, name, original_description, short_description, post_event_description, location_event_id, next_loc_id):
         self.location_name = name
         self.original_description = original_description
         self.short_description = short_description
         self.post_event_description = post_event_description
         self.location_event_id = location_event_id
-        self.auto_goto = auto_goto
         self.next_loc_id = next_loc_id
 
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
@@ -95,8 +92,8 @@ class StoryLocation:
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
                                db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `locations` SET location_name = %s, original_description = %s, short_description = %s, post_event_description = %s, location_event_id = %s, auto_goto = %s, next_loc_id = %s WHERE story_id = %s and location_id = %s"),
-                        (self.location_name, self.original_description, self.short_description, self.post_event_description, self.location_event_id, self.auto_goto, self.next_loc_id, story_id, location_id))
+            cur.execute(("UPDATE `locations` SET location_name = %s, original_description = %s, short_description = %s, post_event_description = %s, location_event_id = %s, next_loc_id = %s WHERE story_id = %s and location_id = %s"),
+                        (self.location_name, self.original_description, self.short_description, self.post_event_description, self.location_event_id, self.next_loc_id, story_id, location_id))
             conn.commit()
         conn.close()
 
@@ -169,13 +166,8 @@ class StoryLocation:
             if query_data is None:
                 return None
             for row in query_data:
-                auto_goto_bool = False
-                if row[7] == 0:
-                    auto_goto_bool = False
-                else:
-                    auto_goto_bool = True
                 loc_dict = {'loc_id': row[1], 'location_name': row[2], 'original_description': row[3], 'short_description': row[4],
-                            'post_event_description': row[5], 'location_event_id': row[6], 'auto_goto': auto_goto_bool, 'next_loc_id': row[8],
+                            'post_event_description': row[5], 'location_event_id': row[6], 'next_loc_id': row[8],
                             'decisions': StoryDecision.decs_list_json(story_id, row[1])}
                 result.append(loc_dict)
         return result

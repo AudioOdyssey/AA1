@@ -699,17 +699,12 @@ def location_update():
     event_id = details.get("location_event_id")
     if event_id is None:
         event_id = 0
-    auto_goto = details.get('auto_goto')
-    if auto_goto is None:
-        auto_goto = 0
-    else:
-        auto_goto = 1
     next_location_id = details.get('next_loc_id')
     if next_location_id is None:
         next_location_id = 0
     loc = StoryLocation.get(story_id, loc_id)
     loc.update(story_id, loc_id, name, original_desc, short_desc,
-               post_event_description, event_id, auto_goto, next_location_id)
+               post_event_description, event_id, next_location_id)
     loc.verification_status = 0
     loc.update_admin()
     story.verification_status = 0

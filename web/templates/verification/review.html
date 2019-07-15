@@ -157,10 +157,6 @@
             <p>Location Changed by Event {{StoryEvent.get(story.story_id, location.location_event_id).event_name|e}}</p>
             <p>Post Event Description: {{location.post_event|e}}</p>
             {%endif%}
-            {%if location.auto_goto%}
-            <p>Visiting Will Automatically Redirect to
-                <i>{{StoryLocation.get(story.story_id, location.next_loc_id).location_name|e}}</i></p>
-            {%endif%}
 
             <input class="form-control" type="text" name="comment" placeholder="Comments...">
             <section class="row">
