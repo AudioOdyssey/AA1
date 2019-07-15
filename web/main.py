@@ -52,6 +52,7 @@ random.seed()
 
 refresh_t = None
 
+
 def check_header(func):
     @wraps(func)
     def func_wrapper(*args, **kwargs):
@@ -167,23 +168,30 @@ def session_new():
             else:
                 session['token'] = token
             conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
-                           cursorclass=pymysql.cursors.DictCursor)
+                                   cursorclass=pymysql.cursors.DictCursor)
             with conn.cursor() as cur:
-                cur.execute(("SELECT encoded_token, expires FROM auth_tokens WHERE userid=%s"), (user_id))
+                cur.execute(
+                    ("SELECT encoded_token, expires FROM auth_tokens WHERE userid=%s"), (user_id))
                 query_data = cur.fetchone()
                 if query_data is None:
-                    expired_date_refresh = datetime.utcnow(days = 30)
-                    refresh_t = encode_auth_token(user_id, current_time, expired_date_refresh)
-                    cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (refresh_t, user_id, expired_date_refresh))
+                    expired_date_refresh = datetime.utcnow(days=30)
+                    refresh_t = encode_auth_token(
+                        user_id, current_time, expired_date_refresh)
+                    cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
+                        refresh_t, user_id, expired_date_refresh))
                     conn.commit()
                 else:
                     refresh_t = query_data['encoded_token']
                     expires = query_data['expires']
                     if current_time > expires:
-                        cur.execute(("INSERT INTO invalid_tokens(invalid_token, user_id) VALUES(%s, %s)"), (refresh_t, user_id))
-                        cur.execute(("DELETE FROM auth_tokens WHERE id = (SELECT id WHERE encoded_token = %s)"), (refresh_t))
-                        refresh_t = encode_auth_token(user_id, current_time, expired_date_refresh)
-                        cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (refresh_t, user_id, expired_date_refresh))
+                        cur.execute(
+                            ("INSERT INTO invalid_tokens(invalid_token, user_id) VALUES(%s, %s)"), (refresh_t, user_id))
+                        cur.execute(
+                            ("DELETE FROM auth_tokens WHERE id = (SELECT id WHERE encoded_token = %s)"), (refresh_t))
+                        refresh_t = encode_auth_token(
+                            user_id, current_time, expired_date_refresh)
+                        cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
+                            refresh_t, user_id, expired_date_refresh))
                         cur.commit()
             cur.close()
             return resp
@@ -209,6 +217,7 @@ def app_session_new():
                 'message': 'Username/password is incorrect'
             }
     return jsonify(result)
+
 
 def authentication_required(func):
     @wraps(func)
@@ -236,7 +245,8 @@ def authenticate(details):
                            cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cur:
         username = details['username']
-        cur.execute(("SELECT user_id, last_login_date FROM users WHERE username = %s"), username)
+        cur.execute(
+            ("SELECT user_id, last_login_date FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
             return None
@@ -247,6 +257,7 @@ def authenticate(details):
             else:
                 return None
     return None
+
 
 def encode_auth_token(user_id, current_time, expired_date):
     payload = {
@@ -295,11 +306,13 @@ def logout():
         resp.set_cookie('remember_', '', 0)
         return resp
 
+
 @app.route("/app/user/info", methods=['GET'])
 def app_user_info():
     user_id = request.args.get('token')
     usr = User.get(user_id)
     return usr.user_profile_info()
+
 
 @app.route("/story/show")
 @authentication_required
@@ -358,6 +371,8 @@ def story_update_post():
     if file and allowed_file(file.filename):
         filename = str(story_id) + ".jpg"
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    story.verification_status = 0
+    story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
 
     #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
@@ -461,6 +476,10 @@ def object_update():
     # unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
     obj.unhide_event_id = unhide_event_id
+    obj.verification_status = 0
+    obj.update_admin()
+    story.verification_status = 0
+    story.update_verify()
     obj.update(story_id, object_id, name=name, starting_loc=starting_loc,
                desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
     # return redirect(url_for("object_show"))
@@ -478,6 +497,8 @@ def object_new():
         abort(403)
     obj = StoryObject(story_id)
     obj.add_to_server()
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
@@ -488,6 +509,8 @@ def object_destroy():
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryObject.obj_del(request.form['obj_id'])
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok"}'
 
 
@@ -531,6 +554,10 @@ def event_update():
         else:
             is_global = True
         evnt = StoryEvent.get(story_id, event_id)
+        evnt.verification_status = 0
+        evnt.update_admin()
+        story.verification_status = 0
+        story.update_verify()
         evnt.update(story_id, event_id, name, location, desc, is_global)
     return '{"status":"ok"}'
 
@@ -547,6 +574,8 @@ def event_new():
         abort(403)
     evnt = StoryEvent(story_id)
     evnt.add_to_server()
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
 
 
@@ -557,6 +586,8 @@ def event_destroy():
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryEvent.event_del(request.form['event_id'])
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok"}'
 
 
@@ -675,6 +706,10 @@ def location_update():
     loc = StoryLocation.get(story_id, loc_id)
     loc.update(story_id, loc_id, name, original_desc, short_desc,
                post_event_description, event_id, auto_goto, next_location_id)
+    loc.verification_status = 0
+    loc.update_admin()
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok"}'
 
 
@@ -689,6 +724,8 @@ def location_new():
         abort(403)
     loc = StoryLocation(story_id)
     loc.add_to_server()
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
 
@@ -699,6 +736,8 @@ def location_destroy():
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryLocation.loc_del(request.form['loc_id'])
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok"}'
 
 
@@ -801,6 +840,13 @@ def decision_update():
     dec = StoryDecision.get(story_id, location_id, decision_id)
     dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
+    dec.verification_status = 0
+    dec.update_admin()
+    loc = StoryLocation.get(story_id, location_id)
+    loc.verification_status = 0
+    loc.update_admin()
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok"}'
 
 
@@ -817,6 +863,11 @@ def decision_new():
     location_id = details["location_id"]
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
+    loc = StoryLocation.get(story_id, location_id)
+    loc.verification_status = 0
+    loc.update_admin()
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
 
@@ -827,6 +878,8 @@ def decision_destroy():
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryDecision.dec_del(request.form['decision_id'])
+    story.verification_status = 0
+    story.update_verify()
     return '{"status":"ok"}'
 
 
@@ -979,6 +1032,7 @@ def verification_story():
     events = StoryEvent.event_list(story_id)
     return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
+
 @app.route("/verification/submit", methods=["POST"])
 @authentication_required
 @check_header
@@ -1011,6 +1065,7 @@ def verification_submit():
             obj.verification_status = 1
             obj.update_admin()
     return '{"status":"ok"}'
+
 
 @app.route("/story/treeview")
 @authentication_required

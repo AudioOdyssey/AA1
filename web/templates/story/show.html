@@ -17,15 +17,17 @@
     {% for story in stories %}
     <a class="col-sm-4" href="/story/update?story_id={{story.story_id}}">
         <div class="storycard">
-            <h3>{{ story.story_title|e }}
-                {%if story.verification_status == 1%}
-                <i class="text-info far fa-clock"></i>
-                {%elif story.verification_status == 2%}
-                <i class="text-warning fas fa-times"></i>
-                {%elif story.verification_status == 3%}
-                <i class="text-success fas fa-check"></i>
-                {%endif%}
-            </h3>
+            <h3>{{ story.story_title|e }}</h3>
+            {%if story.verification_status == 1%}
+            <i class="text-info far fa-clock"></i>
+            <i>Pending Verification</i>
+            {%elif story.verification_status == 2%}
+            <i class="text-warning fas fa-times"></i>
+            <i>Failed Verification</i>
+            {%elif story.verification_status == 3%}
+            <i class="text-success fas fa-check"></i>
+            <i>Passed Verification</i>
+            {%endif%}
             <hr>
             <p>{{ story.story_synopsis|e }}</p>
         </div>
