@@ -840,23 +840,7 @@ def verification_review():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
-    return render_template("verification/review.html", story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
-
-
-@app.route("/verification/review_new")
-@authentication_required
-@check_header
-def verification_review_new():
-    uid = getUid()
-    if not checkEditorAdmin(uid):
-        abort(403)
-    story_id = request.args["story_id"]
-    story = Story.get(story_id)
-    objects = StoryObject.obj_list(story_id)
-    locations = StoryLocation.loc_list(story_id)
-    events = StoryEvent.event_list(story_id)
-    decisions = StoryDecision.dec_list_story(story_id)
-    return render_template("verification/review_new.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+    return render_template("verification/review.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
 @app.route("/verification/review/update", methods=['POST'])
