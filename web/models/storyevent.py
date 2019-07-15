@@ -96,7 +96,7 @@ class StoryEvent:
                 return json.dumps(results)
 
     @classmethod
-    def event_del(cls, event_id):
+    def event_del(cls, story_id, event_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -105,7 +105,7 @@ class StoryEvent:
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
-                ("DELETE FROM `events` WHERE `event_id` = %s"), (event_id))
+                ("DELETE FROM `events` WHERE `story_id` = %s AND `event_id` = %s"), (story_id, event_id))
             conn.commit()
         conn.close()
 

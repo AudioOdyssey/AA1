@@ -508,7 +508,7 @@ def object_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    StoryObject.obj_del(request.form['obj_id'])
+    StoryObject.obj_del(request.form['story_id'], request.form['obj_id'])
     story.verification_status = 0
     story.update_verify()
     return '{"status":"ok"}'
@@ -585,7 +585,7 @@ def event_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    StoryEvent.event_del(request.form['event_id'])
+    StoryEvent.event_del(request.form['story_id'], request.form['event_id'])
     story.verification_status = 0
     story.update_verify()
     return '{"status":"ok"}'
@@ -735,7 +735,7 @@ def location_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    StoryLocation.loc_del(request.form['loc_id'])
+    StoryLocation.loc_del(request.form['story_id'], request.form['loc_id'])
     story.verification_status = 0
     story.update_verify()
     return '{"status":"ok"}'
@@ -877,7 +877,12 @@ def decision_destroy():
     story = Story.get(request.form['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    StoryDecision.dec_del(request.form['decision_id'])
+    StoryDecision.dec_del(
+        request.form['story_id'], request.form['location_id'], request.form['decision_id'])
+    loc = StoryLocation.get(
+        request.form['story_id'], request.form['location_id'])
+    loc.verification_status = 0
+    loc.update_verify()
     story.verification_status = 0
     story.update_verify()
     return '{"status":"ok"}'

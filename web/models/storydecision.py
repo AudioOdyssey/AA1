@@ -79,7 +79,7 @@ class StoryDecision:
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user = name, passwd = rds_password, db = db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND location_id = %s AND decision_id = %s"), (story_id, location_id, decision_id))
+            cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND loc_id = %s AND decision_id = %s"), (story_id, location_id, decision_id))
             results = cur.fetchone()
             if results is None:
                 return None
@@ -145,7 +145,7 @@ class StoryDecision:
             return results['COUNT(decision_id)'] == 0
 
     @classmethod
-    def dec_del(cls, dec_id):
+    def dec_del(cls, story_id, loc_id, dec_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -154,7 +154,7 @@ class StoryDecision:
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
-                ("DELETE FROM `decisions` WHERE `decision_id` = %s"), (dec_id))
+                ("DELETE FROM `decisions` WHERE `story_id` = %s AND `loc_id` = %s AND `decision_id` = %s"), (story_id, loc_id, dec_id))
             conn.commit()
         conn.close()
     

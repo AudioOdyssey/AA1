@@ -27,7 +27,7 @@ class StoryLocation:
     rds_password = "z9QC3pvQ"
     db_name = "audio_adventures_dev"
 
-    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, auto_goto=False, next_loc_id=0, reviewer_comments = '', verification_status = False):
+    def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, auto_goto=False, next_loc_id=0, reviewer_comments='', verification_status=False):
         self.story_id = story_id
         self.location_id = location_id
         self.location_name = location_name
@@ -101,9 +101,11 @@ class StoryLocation:
         conn.close()
 
     def update_admin(self):
-        conn = pymysql.connect(self.rds_host, user = self.name, passwd = self.rds_password, db = self.db_name, connect_timeout = 5, cursorclass = pymysql.cursors.DictCursor)
+        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
+                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE `locations` SET verification_status = %s, reviewer_comments = %s WHERE story_id = %s AND location_id = %s"), (self.verification_status, self.reviewer_comments, self.story_id, self.location_id))
+            cur.execute(("UPDATE `locations` SET verification_status = %s, reviewer_comments = %s WHERE story_id = %s AND location_id = %s"),
+                        (self.verification_status, self.reviewer_comments, self.story_id, self.location_id))
             conn.commit()
         conn.close()
 
@@ -120,7 +122,7 @@ class StoryLocation:
                 return json.dumps(result)
 
     @classmethod
-    def loc_del(cls, location_id):
+    def loc_del(cls, story_id, location_id):
         rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
@@ -129,7 +131,7 @@ class StoryLocation:
             rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
-                ("DELETE FROM `locations` WHERE `location_id` = %s"), (location_id))
+                ("DELETE FROM `locations` WHERE `story_id` = %s AND `location_id` = %s"), (story_id, location_id))
             conn.commit()
         conn.close()
 
@@ -140,7 +142,7 @@ class StoryLocation:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass = pymysql.cursors.DictCursor)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         loc_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -148,7 +150,7 @@ class StoryLocation:
             results = cur.fetchall()
             for row in results:
                 loc_list.append(
-                    cls(row['story_id'], row['location_id'], row['location_name'], row['original_description'], row['short_description'], row['post_event_description'], next_loc_id = row['next_loc_id'], reviewer_comments=row['reviewer_comments'], verification_status = row['verification_status']))
+                    cls(row['story_id'], row['location_id'], row['location_name'], row['original_description'], row['short_description'], row['post_event_description'], next_loc_id=row['next_loc_id'], reviewer_comments=row['reviewer_comments'], verification_status=row['verification_status']))
         return loc_list
 
     @classmethod
@@ -172,9 +174,9 @@ class StoryLocation:
                     auto_goto_bool = False
                 else:
                     auto_goto_bool = True
-                loc_dict = {'loc_id' : row[1], 'location_name': row[2], 'original_description': row[3], 'short_description': row[4],
-                                          'post_event_description': row[5], 'location_event_id': row[6], 'auto_goto': auto_goto_bool, 'next_loc_id': row[8],
-                                          'decisions': StoryDecision.decs_list_json(story_id, row[1])}
+                loc_dict = {'loc_id': row[1], 'location_name': row[2], 'original_description': row[3], 'short_description': row[4],
+                            'post_event_description': row[5], 'location_event_id': row[6], 'auto_goto': auto_goto_bool, 'next_loc_id': row[8],
+                            'decisions': StoryDecision.decs_list_json(story_id, row[1])}
                 result.append(loc_dict)
         return result
 
@@ -201,9 +203,11 @@ class StoryLocation:
         name = "AA_admin"
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
+                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT COUNT(location_id) FROM locations WHERE story_id = %s AND verification_status != 3"), (story_id))
+            cur.execute(
+                ("SELECT COUNT(location_id) FROM locations WHERE story_id = %s AND verification_status != 3"), (story_id))
             results = cur.fetchone()
             if results is None:
                 return None
