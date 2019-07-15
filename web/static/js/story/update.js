@@ -22,13 +22,13 @@ function story_delete(story_id) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+            window.location.href = "/story/show"
         } else if (this.readyState == 4) {
             console.log(this.responseText);
         }
     };
-    xhttp.open("POST", "/story/destroy", true);
-    xhttp.send("story_id=" + story_id);
+    xhttp.open("POST", "/story/destroy?story_id=" + story_id, true);
+    xhttp.send();
 }
 
 function add_btn_obj(story_id) {

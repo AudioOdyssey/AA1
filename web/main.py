@@ -347,13 +347,13 @@ def story_update_post():
     return '{"status":"ok"}'
 
 
-@app.route("/story/destory", methods=["POST"])
+@app.route("/story/destroy", methods=["POST"])
 @authentication_required
 def story_destroy():
-    story = Story.get(request.form['story_id'])
+    story = Story.get(request.args['story_id'])
     if story.user_creator_id != getUid() and not checkAdmin(getUid()):
         abort(403)
-    Story.destroy(request.form['story_id'])
+    Story.destroy(request.args['story_id'])
     return '{"status":"ok"}'
 
 
