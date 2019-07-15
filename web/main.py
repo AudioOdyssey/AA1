@@ -50,6 +50,7 @@ db_name = "audio_adventures_dev"
 
 random.seed()
 
+refresh_t = None
 
 def check_header(func):
     @wraps(func)
@@ -157,19 +158,57 @@ def session_new():
         details = request.form
         user_id = authenticate(details)
         if user_id:
-            current_time = datetime.utcnow()
-            expired_date = datetime.utcnow() + timedelta(days=30)
-            token = encode_auth_token(user_id, current_time, expired_date)
             resp = make_response(redirect(url_for('story_show')))
+            current_time = datetime.utcnow()
+            expired_date = datetime.utcnow() + timedelta(minutes=1)
+            token = encode_auth_token(user_id, current_time, expired_date)
             if 'remember' in details:
                 resp.set_cookie("remember_", token, expires=expired_date)
             else:
                 session['token'] = token
+            conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
+                           cursorclass=pymysql.cursors.DictCursor)
+            with conn.cursor() as cur:
+                cur.execute(("SELECT encoded_token, expires FROM auth_tokens WHERE userid=%s"), (user_id))
+                query_data = cur.fetchone()
+                if query_data is None:
+                    expired_date_refresh = datetime.utcnow(days = 30)
+                    refresh_t = encode_auth_token(user_id, current_time, expired_date_refresh)
+                    cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (refresh_t, user_id, expired_date_refresh))
+                    conn.commit()
+                else:
+                    refresh_t = query_data['encoded_token']
+                    expires = query_data['expires']
+                    if current_time > expires:
+                        cur.execute(("INSERT INTO invalid_tokens(invalid_token, user_id) VALUES(%s, %s)"), (refresh_t, user_id))
+                        cur.execute(("DELETE FROM auth_tokens WHERE id = (SELECT id WHERE encoded_token = %s)"), (refresh_t))
+                        refresh_t = encode_auth_token(user_id, current_time, expired_date_refresh)
+                        cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (refresh_t, user_id, expired_date_refresh))
+                        cur.commit()
+            cur.close()
             return resp
         else:
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
+
+@app.route("/app/session/new", methods=['POST', 'GET'])
+def app_session_new():
+    result = None
+    if request.method == 'POST':
+        details = request.json
+        user_id = authenticate(details)
+        current_time = datetime.utcnow()
+        expired_date = datetime.utcnow() + timedelta(days=30)
+        if user_id:
+            result = {
+                'auth_token': encode_auth_token(user_id, current_time, expired_date)
+            }
+        else:
+            result = {
+                'message': 'Username/password is incorrect'
+            }
+    return jsonify(result)
 
 def authentication_required(func):
     @wraps(func)
@@ -197,7 +236,7 @@ def authenticate(details):
                            cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cur:
         username = details['username']
-        cur.execute(("SELECT * FROM users WHERE username = %s"), username)
+        cur.execute(("SELECT user_id, last_login_date FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
             return None
@@ -208,26 +247,6 @@ def authenticate(details):
             else:
                 return None
     return None
-
-
-@app.route("/app/session/new", methods=['POST', 'GET'])
-def app_session_new():
-    result = None
-    if request.method == 'POST':
-        details = request.json
-        user_id = authenticate(details)
-        current_time = datetime.utcnow()
-        expired_date = datetime.utcnow() + timedelta(days=30)
-        if user_id:
-            result = {
-                'auth_token': encode_auth_token(user_id, current_time, expired_date)
-            }
-        else:
-            result = {
-                'message': 'Username/password is incorrect'
-            }
-    return jsonify(result)
-
 
 def encode_auth_token(user_id, current_time, expired_date):
     payload = {
@@ -276,6 +295,11 @@ def logout():
         resp.set_cookie('remember_', '', 0)
         return resp
 
+@app.route("/app/user/info", methods=['GET'])
+def app_user_info():
+    user_id = request.args.get('token')
+    usr = User.get(user_id)
+    return usr.user_profile_info()
 
 @app.route("/story/show")
 @authentication_required
