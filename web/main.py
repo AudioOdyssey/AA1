@@ -281,14 +281,7 @@ def logout():
 @authentication_required
 @check_header
 def story_show():
-    print(session)
-    token = None
-    if 'token' in session:
-        token = session['token']
-    else:
-        token = request.cookies.get('remember_')
-    user_id = decode_auth_token(token)
-    stories = Story.story_list_by_creator(user_id)
+    stories = Story.story_list_by_creator(getUid())
     return render_template("story/show.html", stories=stories)
 
 
