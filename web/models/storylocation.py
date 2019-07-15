@@ -157,7 +157,7 @@ class StoryLocation:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -166,9 +166,9 @@ class StoryLocation:
             if query_data is None:
                 return None
             for row in query_data:
-                loc_dict = {'loc_id': row[1], 'location_name': row[2], 'original_description': row[3], 'short_description': row[4],
-                            'post_event_description': row[5], 'location_event_id': row[6], 'next_loc_id': row[8],
-                            'decisions': StoryDecision.decs_list_json(story_id, row[1])}
+                loc_dict = {'loc_id': row['location_id'], 'location_name': row['location_name'], 'original_description': row['original_description'], 'short_description': row['short_description'],
+                            'post_event_description': row['post_event_description'], 'location_event_id': row['location_event_id'], 'next_loc_id': row['next_loc_id'],
+                            'decisions': StoryDecision.decs_list_json(story_id, row['location_id'])}
                 result.append(loc_dict)
         return result
 

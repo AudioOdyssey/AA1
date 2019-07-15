@@ -169,7 +169,7 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -177,7 +177,7 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19], verification_status=row[15]))
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"]))
         conn.close()
         return story_list
 
@@ -188,7 +188,7 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -196,7 +196,7 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19]))
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"]))
         conn.close()
         return story_list
 
@@ -207,7 +207,7 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -215,7 +215,7 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row[0], row[1], row[2], row[3], row[4], row[6], user_creator_id=row[19]))
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"]))
         conn.close()
         return story_list
 
@@ -244,14 +244,14 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
                 "SELECT story_id, story_title FROM `master_stories` WHERE verification_status = 1 ORDER BY updated_at ASC LIMIT 20")
             results = cur.fetchall()
             for row in results:
-                story_list.append(cls(row[0], row[1]))
+                story_list.append(cls(row["story_id"], row["story_title"]))
         conn.close()
         return story_list
 
@@ -262,14 +262,14 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
                 "SELECT story_id, story_title FROM `master_stories`")
             results = cur.fetchall()
             for row in results:
-                story_list.append(cls(row[0], row[1]))
+                story_list.append(cls(row["story_id"], row["story_title"]))
         conn.close()
         return story_list
 
@@ -280,7 +280,7 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -289,11 +289,11 @@ class Story:
             if query_data is None:
                 return None
             for row in query_data:
-                story_dict = {'story_id': row[0], 'story_title': row[1], 'story_author': row[2], 'story_synopsis': row[3], 'story_price': row[4],
-                              'author_paid': row[5], 'genre': row[6], 'length_of_story': row[7], 'number_of_locations': row[8],
-                              'number_of_decisions': row[9], 'story_in_store': row[10], 'story_verification_date': row[11], 'name_of_verifier': row[12],
-                              'verification_status':  row[13], 'story_ratings': row[14], 'story_language_id': row[15], 'storage_size': row[16],
-                              'obj_verification_status': row[17], 'event_verification_status': row[18], 'user_creator_id': row[19]}
+                story_dict = {'story_id': row['story_id'], 'story_title': row['story_title'], 'story_author': row['story_author'], 'story_synopsis': row['story_synopsis'], 'story_price': row['story_price'],
+                              'author_paid': row['author_paid'], 'genre': row['genre'], 'length_of_story': row['length_of_story'], 'number_of_locations': row['number_of_locations'],
+                              'number_of_decisions': row['number_of_decisions'], 'story_in_store': row['story_in_store'], 'story_verification_date': row['story_verification_date'], 'name_of_verifier': row['name_of_verifier'],
+                              'verification_status':  row['verification_status'], 'story_ratings': row['story_ratings'], 'story_language_id': row['story_language_id'], 'storage_size': row['storage_size'],
+                              'obj_verification_status': row['obj_verification_status'], 'event_verification_status': row['event_verification_status'], 'user_creator_id': row['user_creator_id']}
                 result.append(story_dict)
         conn.close()
         return json.dumps(result)
@@ -365,16 +365,16 @@ class Story:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5)
+                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
             query_data = cur.fetchall()
             for row in query_data:
-                stry = cls.get(row[0])
-                stry_info = {'story_id': row[0], 'story_title': row[1],
-                             'story_author': row[2], 'story_synopsis': row[3],
-                             'story_price': row[4], 'genre': row[5],
+                stry = cls.get(row['story_id'])
+                stry_info = {'story_id': row['story_id'], 'story_title': row['story_title'],
+                             'story_author': row['story_author'], 'story_synopsis': row['story_synopsis'],
+                             'story_price': row['story_price'], 'genre': row['genre'],
                              'cover': stry.get_image_base64()}
                 result.append(stry_info)
         storefront = {"stories": result}
