@@ -867,13 +867,19 @@ def review_update():
     reviewer_comment = details['comment']
     if entity_type.lower() == 'object':
         obj = StoryObject.get(story_id, ent_id)
-        obj.update_admin(is_verified, reviewer_comment)
+        obj.reviewer_comments = reviewer_comment
+        obj.is_verified = is_verified
+        obj.update_admin()
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
-        loc.update_admin(is_verified, reviewer_comment)
+        loc.reviewer_comments = reviewer_comment
+        loc.is_verified = is_verified
+        loc.update_admin()
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
-        evnt.update_admin(reviewer_comment, is_verified)
+        evnt.reviewer_comments = reviewer_comment
+        evnt.is_verified = is_verified
+        evnt.update_admin()
     elif entity_type.lower() == 'story':
         story = Story.get(story_id)
         print(story.verification_status)
@@ -888,7 +894,9 @@ def review_update():
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
-        dec.update_admin(reviewer_comment, is_verified)
+        dec.reviewer_comments = reviewer_comment
+        dec.is_verified = is_verified
+        dec.update_admin()
     return '{"status":"ok"}'
 
 
@@ -926,7 +934,7 @@ def verification_location():
 @app.route("/verification/event")
 @authentication_required
 @check_header
-def verfication_event():
+def verification_event():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     uid = getUid()
@@ -941,7 +949,7 @@ def verfication_event():
 @app.route("/verification/story")
 @authentication_required
 @check_header
-def verfication_story():
+def verification_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     uid = getUid()
@@ -954,6 +962,38 @@ def verfication_story():
     events = StoryEvent.event_list(story_id)
     return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
+@app.route("/verification/submit", methods=["POST"])
+@authentication_required
+@check_header
+def verification_submit():
+    details = request.args
+    story_id = details['story_id']
+    story = Story.get(story_id)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
+    story.verification_status = 1
+    story.update_verify()
+    decs = StoryDecision.dec_list_story(story_id)
+    for dec in decs:
+        if dec.verification_status != 3:
+            dec.verification_status = 1
+            dec.update_admin()
+    evts = StoryEvent.event_list(story_id)
+    for evt in evts:
+        if evt.verification_status != 3:
+            evt.verification_status = 1
+            evt.update_admin()
+    locs = StoryLocation.loc_list(story_id)
+    for loc in locs:
+        if loc.verification_status != 3:
+            loc.verification_status = 1
+            loc.update_admin()
+    objs = StoryObject.obj_list(story_id)
+    for obj in objs:
+        if obj.verification_status != 3:
+            obj.verification_status = 1
+            obj.update_admin()
+    return '{"status":"ok"}'
 
 @app.route("/story/treeview")
 @authentication_required
