@@ -135,7 +135,7 @@ class StoryEvent:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -145,11 +145,11 @@ class StoryEvent:
                 return None
             for row in query_data:
                 event_is_global_bool = False
-                if row[5] == 0:
+                if row["event_is_global"] == 0:
                     event_is_global_bool = False
                 else:
                     event_is_global_bool = True
-                event_dict = {"event_id": row[1], "event_name": row[2], "event_description": row[3], "event_location_id": row[4],
+                event_dict = {"event_id": row["event_id"], "event_name": row["event_name"], "event_description": row["event_description"], "event_location_id": row["event_location_id"],
                               "event_is_global": event_is_global_bool}
                 result.append(event_dict)
         return result

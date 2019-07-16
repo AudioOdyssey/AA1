@@ -170,7 +170,7 @@ class StoryObject:
         rds_password = "z9QC3pvQ"
         db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -180,17 +180,17 @@ class StoryObject:
                 return None
             for row in query_data:
                 is_hidden_bool = False
-                if row[6] == 0:
+                if row['is_hidden'] == 0:
                     is_hidden_bool = False
                 else:
                     is_hidden_bool = True
                 can_pickup_bool = False
-                if row[5] == 0:
+                if row['can_pickup_obj'] == 0:
                     can_pickup_bool = False
                 else:
                     can_pickup_bool = True
-                obj_info = {"obj_id": row[1], "obj_starting_loc": row[2], "obj_name": row[3], "obj_description": row[4],
-                            "can_pickup": can_pickup_bool, "is_hidden": is_hidden_bool, "unhide_event_id": row[7]}
+                obj_info = {"obj_id": row["obj_id"], "obj_starting_loc": row["obj_starting_loc"], "obj_name": row["obj_name"], "obj_description": row["obj_description"],
+                            "can_pickup": can_pickup_bool, "is_hidden": is_hidden_bool, "unhide_event_id": row["obj_description"]}
                 result.append(obj_info)
         return result
 
