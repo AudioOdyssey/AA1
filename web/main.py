@@ -323,7 +323,7 @@ def upload_profile_pic():
     uid = decode_auth_token(auth_token)
     pic_name = str(uid) + '.jpg'
     with open(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', pic_name), 'wb') as fh:
-        fh.write(profile_pic.decode('base64')) 
+        fh.write(base64.b64decode(profile_pic)) 
     return "{message : success}", 200
 
 @app.route("/story/show")
