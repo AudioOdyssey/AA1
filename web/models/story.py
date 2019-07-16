@@ -1,15 +1,15 @@
 import pymysql
 import pymysql.cursors
 
+import web.config as config
+from . import *
+
 import sys
 import os
 
 import simplejson as json
 
-from .storyobject import StoryObject
-from .storyevent import StoryEvent
-from .storylocation import StoryLocation
-from .storydecision import StoryDecision
+from . import *
 
 from decimal import Decimal
 
@@ -71,12 +71,8 @@ class Story:
         self.verification_status = verification_status
 
     def add_to_server(self):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(("INSERT INTO master_stories(story_title, story_author, story_price, user_creator_id) VALUES(%s, %s, %s, %s)"),
                         (self.story_title, self.story_author, self.story_price, self.user_creator_id))
@@ -94,12 +90,8 @@ class Story:
 
     @classmethod
     def get(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT * FROM `master_stories` WHERE story_id = %s"), (story_id))
@@ -125,13 +117,9 @@ class Story:
         self.story_language_id = story_language_id
         self.genre = genre
         self.story_synopsis = story_synopsis
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
 
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `master_stories` SET story_title = %s, story_author = %s, story_price = %s, story_language_id = %s, genre = %s, story_synopsis = %s, inventory_size = %s, starting_loc = %s, length_of_story = %s WHERE story_id = %s"),
                         (self.story_title, self.story_author, self.story_price, self.story_language_id, self.genre, self.story_synopsis, self.inventory_size, self.starting_loc, self.length_of_story, self.story_id))
@@ -139,12 +127,8 @@ class Story:
         conn.close()
 
     def update_verify(self):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE master_stories SET parental_ratings = %s, verification_status = %s, verifier_id = %s, reviewer_comments = %s, story_verification_date = CURDATE() WHERE story_id = %s"),
                         (self.parental_ratings, self.verification_status, self.verifier_id, self.reviewer_comments, self.story_id))
@@ -164,12 +148,8 @@ class Story:
 
     @classmethod
     def story_list_by_creator(cls, user_creator_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -183,12 +163,8 @@ class Story:
 
     @classmethod
     def story_list_for_purchase(cls):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -202,12 +178,8 @@ class Story:
 
     @classmethod
     def story_list_purchased_by_user(cls, user_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -239,12 +211,8 @@ class Story:
 
     @classmethod
     def story_list_ready_for_verification(cls):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -257,12 +225,8 @@ class Story:
 
     @classmethod
     def story_list_master(cls):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -275,12 +239,8 @@ class Story:
 
     @classmethod
     def story_list_json(cls, user_creator_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -300,13 +260,9 @@ class Story:
 
     @classmethod
     def get_last_story_id(cls, user_creator_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         last_id = 0
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             # unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
             cur.execute(
@@ -318,13 +274,9 @@ class Story:
 
     @classmethod
     def get_story_count(cls):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         last_id = 0
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT COUNT(story_id) FROM master_stories"))
@@ -360,12 +312,8 @@ class Story:
     @classmethod
     def display_for_store(cls):
         result = []
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
@@ -382,12 +330,8 @@ class Story:
 
     @classmethod
     def destroy(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(("DELETE FROM `master_stories` WHERE `story_id` = %s"), (story_id))
             conn.commit()

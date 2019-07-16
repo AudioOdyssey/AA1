@@ -1,9 +1,6 @@
-from models.storyobject import StoryObject
-from models.User import User
-from models.story import Story
-from models.storyevent import StoryEvent
-from models.storylocation import StoryLocation
-from models.storydecision import StoryDecision
+from web import config
+
+from .models import *
 
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
@@ -40,13 +37,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "session/new.html"
 login_manager.login_message = "Please login"
-
-REGION = 'us-east-2b'
-
-rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-name = "AA_admin"
-rds_password = "z9QC3pvQ"
-db_name = "audio_adventures_dev"
 
 random.seed()
 
@@ -167,7 +157,7 @@ def session_new():
                 resp.set_cookie("remember_", token, expires=expired_date)
             else:
                 session['token'] = token
-            # conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
+            # conn = pymysql.connect(db_host, user=db_user, passwd=db_password, db=db_name, connect_timeout=5,
             #                        cursorclass=pymysql.cursors.DictCursor)
             # with conn.cursor() as cur:
             #     cur.execute(
@@ -238,7 +228,7 @@ def authentication_required(func):
 
 
 def authenticate(details):
-    conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
+    conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5,
                            cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cur:
         username = details['username']
@@ -1109,28 +1099,6 @@ def verify_treeview():
 
     location = StoryLocation.get(story_id, loc_id)
     return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
-
-
-# @app.route("/verification/treeview/update", methods=['POST'])
-# def verify_treeview_update():
-#     details = request.form
-#     story_id = details.get('story_id')
-#     ent_type = details['type']
-#     ent_id = details['ent_id']
-#     reviewer_comment = details['comment']
-#     is_verified = details.get("is_verified")
-#     if is_verified is None:
-#         is_verified = False
-#     else:
-#         is_verified = True
-#     if ent_type.lower() == 'location':
-#         loc = StoryLocation.get(story_id, ent_id)
-#         loc.update_admin(is_verified, reviewer_comment)
-#     else:
-#         loc_id = details['loc_id']
-#         dec = StoryDecision.get(story_id, loc_id, ent_id)
-#         dec.update_admin(is_verified, reviewer_comment)
-#     return '{"status":"ok"}'
 
 
 @app.route("/story/run")

@@ -2,6 +2,9 @@ import pymysql
 import pymysql.cursors
 import sys
 
+import web.config as config
+from . import *
+
 import json
 
 
@@ -30,11 +33,6 @@ class StoryDecision:
     reviewer_comments = ''
     verification_status = False
 
-    rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-    name = "AA_admin"
-    rds_password = "z9QC3pvQ"
-    db_name = "audio_adventures_dev"
-
     def __init__(self, story_id=0, loc_id=0, sequence_num=0, decision_id=0, decision_name="", transition=False, transition_loc_id=0, hidden=False, locked=False, decision_description="", show_event_id=0, show_object_id=0, unlock_event_id=0, unlock_object_id=0, locked_descr="", aftermath_descr="", cause_event=False, effect_event_id=0, can_occur_once=False, is_locked_by_event_id=0, locked_by_event_description="", reviewer_comments='', verification_status=False):
         self.story_id = story_id
         self.loc_id = loc_id
@@ -61,8 +59,8 @@ class StoryDecision:
         self.verification_status = verification_status
 
     def add_to_server(self):
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             self.decision_id = self.get_last_id(self.story_id, self.loc_id)
             cur.execute(("INSERT INTO decisions(story_id, loc_id, decision_id) VALUES (%s, %s, %s)"),
@@ -76,12 +74,8 @@ class StoryDecision:
 
     @classmethod
     def get(cls, story_id, location_id, decision_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND loc_id = %s AND decision_id = %s"),
                         (story_id, location_id, decision_id))
@@ -110,8 +104,8 @@ class StoryDecision:
         self.can_occur_once = can_occur_once
         self.is_locked_by_event_id = is_locked_by_event_id
         self.locked_by_event_description = locked_by_event_description
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `decisions` SET sequence_num = %s, decision_name=%s, transition = %s, transition_loc_id = %s, hidden = %s,  locked = %s, decision_description = %s, show_event_id = %s, show_object_id = %s, unlock_event_id = %s, unlock_object_id = %s, locked_descr = %s, aftermath_descr = %s, cause_event = %s, effect_event_id = %s, can_occur_once = %s, is_locked_by_event_id = %s, locked_by_event_description = %s WHERE story_id = %s AND decision_id= %s AND loc_id = %s"),
                         (self.sequence_num, self.decision_name, self.transition, self.transition_loc_id, self.hidden, self.locked, self.decision_description, self.show_event_id, self.show_object_id, self.unlock_event_id, self.unlock_object_id, self.locked_descr, self.aftermath_descr, self.cause_event, self.effect_event_id, self.can_occur_once, self.is_locked_by_event_id, self.locked_by_event_description, story_id, decision_id, loc_id))
@@ -119,8 +113,8 @@ class StoryDecision:
         conn.close()
 
     def update_admin(self):
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `decisions` SET reviewer_comments = %s, verification_status = %s WHERE story_id = %s AND loc_id = %s AND decision_id = %s"),
                         (self.reviewer_comments, self.verification_status, self.story_id, self.loc_id, self.decision_id))
@@ -128,8 +122,8 @@ class StoryDecision:
         conn.close()
 
     def show_info(self):
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM `decisions` WHERE story_id = %s AND decision_id = %s"),
                         (self.story_id, self.decision_id))
@@ -141,12 +135,8 @@ class StoryDecision:
 
     @classmethod
     def check_verify(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT COUNT(decision_id) FROM decisions WHERE story_id = %s AND verification_status != 3"), (story_id))
@@ -157,12 +147,8 @@ class StoryDecision:
 
     @classmethod
     def dec_del(cls, story_id, loc_id, dec_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
                 ("DELETE FROM `decisions` WHERE `story_id` = %s AND `loc_id` = %s AND `decision_id` = %s"), (story_id, loc_id, dec_id))
@@ -171,12 +157,8 @@ class StoryDecision:
 
     @classmethod
     def dec_list_for_story_loc(cls, story_id, loc_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         decs_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -190,12 +172,8 @@ class StoryDecision:
 
     @classmethod
     def dec_list_story(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         decs_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -215,12 +193,8 @@ class StoryDecision:
 
     @classmethod
     def decs_list_json(cls, story_id, loc_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -263,13 +237,9 @@ class StoryDecision:
 
     @classmethod
     def get_last_id(cls, story_id, loc_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         last_id = 0
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(("SELECT MAX(decision_id)+1 FROM `decisions`"))
             query_data = cur.fetchone()

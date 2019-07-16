@@ -2,6 +2,9 @@ import pymysql
 import pymysql.cursors
 import sys
 
+import web.config as config
+from . import *
+
 import json
 
 from datetime import datetime
@@ -21,11 +24,6 @@ class StoryLocation:
     reviewer_comments = ''
     verification_status = False
 
-    rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-    name = "AA_admin"
-    rds_password = "z9QC3pvQ"
-    db_name = "audio_adventures_dev"
-
     def __init__(self, story_id=0, location_id=0, location_name='', original_description='', short_description='', post_event_description='', location_event_id=0, next_loc_id=0, reviewer_comments='', verification_status=False):
         self.story_id = story_id
         self.location_id = location_id
@@ -39,12 +37,8 @@ class StoryLocation:
         self.verification_status = verification_status
 
     def add_to_server(self):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             self.location_id = self.get_last_id(self.story_id)
             print(self.location_id)
@@ -59,13 +53,9 @@ class StoryLocation:
 
     @classmethod
     def get(cls, story_id, location_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         result_location = None
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT * FROM `locations` WHERE story_id = %s AND location_id = %s"), (story_id, location_id))
@@ -85,12 +75,8 @@ class StoryLocation:
         self.location_event_id = location_event_id
         self.next_loc_id = next_loc_id
 
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `locations` SET location_name = %s, original_description = %s, short_description = %s, post_event_description = %s, location_event_id = %s, next_loc_id = %s WHERE story_id = %s and location_id = %s"),
                         (self.location_name, self.original_description, self.short_description, self.post_event_description, self.location_event_id, self.next_loc_id, story_id, location_id))
@@ -98,8 +84,8 @@ class StoryLocation:
         conn.close()
 
     def update_admin(self):
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `locations` SET verification_status = %s, reviewer_comments = %s WHERE story_id = %s AND location_id = %s"),
                         (self.verification_status, self.reviewer_comments, self.story_id, self.location_id))
@@ -107,8 +93,8 @@ class StoryLocation:
         conn.close()
 
     def show_info(self):
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("SELECT * FROM `locations` WHERE story_id = %s AND location_id = %s"),
                         (self.story_id, self.location_id))
@@ -120,12 +106,8 @@ class StoryLocation:
 
     @classmethod
     def loc_del(cls, story_id, location_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
                 ("DELETE FROM `locations` WHERE `story_id` = %s AND `location_id` = %s"), (story_id, location_id))
@@ -134,12 +116,8 @@ class StoryLocation:
 
     @classmethod
     def loc_list(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         loc_list = []
         with conn.cursor() as cur:
             cur.execute(
@@ -152,12 +130,8 @@ class StoryLocation:
 
     @classmethod
     def loc_list_json(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -174,13 +148,9 @@ class StoryLocation:
 
     @classmethod
     def get_last_id(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         last_id = 0
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT MAX(location_id)+1 FROM locations"))
@@ -191,12 +161,8 @@ class StoryLocation:
 
     @classmethod
     def check_verify(cls, story_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT COUNT(location_id) FROM locations WHERE story_id = %s AND verification_status != 3"), (story_id))
