@@ -1,7 +1,7 @@
 import pymysql
 import pymysql.cursors
 
-import web.config as config
+from .. import config as config
 from . import *
 
 import sys
@@ -137,11 +137,10 @@ class Story:
         conn.close()
 
     def get_image_base64(self):
-        upload_folder = '/var/lib/audio_od/covers'
         cover_file = str(self.story_id) + ".jpg"
         result = ''
         try:
-            with open(os.path.join(upload_folder, cover_file), 'rb') as image_file:
+            with open(os.path.join(config.upload_folder, "covers", cover_file), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
             return ''

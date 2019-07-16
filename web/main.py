@@ -1,4 +1,4 @@
-from web import config
+from . import config
 
 from .models import *
 
@@ -27,12 +27,10 @@ from functools import wraps
 
 import base64
 
-UPLOAD_FOLDER = '/var/lib/audio_od'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
 app = Flask(__name__)
 app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 
 login_manager = LoginManager()
@@ -312,7 +310,7 @@ def upload_profile_pic():
     auth_token = request.args.get('token')
     uid = decode_auth_token(auth_token)
     pic_name = str(uid) + '.jpg'
-    with open(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', pic_name), 'wb') as fh:
+    with open(os.path.join(config.upload_folder, 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
     return "{message : success}", 200
 
@@ -376,7 +374,7 @@ def story_update_post():
         pass
     if file and allowed_file(file.filename):
         filename = str(story_id) + ".jpg"
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'covers', filename))
+        file.save(os.path.join(config.upload_folder, 'covers', filename))
     story.verification_status = 0
     story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)

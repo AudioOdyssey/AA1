@@ -2,7 +2,7 @@ import pymysql
 import pymysql.cursors
 import sys
 
-import web.config as config
+from .. import config as config
 from . import *
 
 import random
