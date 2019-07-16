@@ -199,11 +199,10 @@ class User(UserMixin):
         return self.last_login_date
 
     def get_profile_pic_base64(self):
-        upload_folder = "/var/lib/audio_od/profile_pics"
         profile_pic = str(self.user_id) + ".jpg"
         result = ''
         try:
-            with open(os.path.join(upload_folder, profile_pic), 'rb') as image_file:
+            with open(os.path.join(config.upload_folder, "profile_pics", profile_pic), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
             return ''
