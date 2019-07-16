@@ -1,0 +1,108 @@
+{% extends "template_new.html" %}
+{% block content%}
+
+<style>
+    #hero-slider {
+        position: relative;
+    }
+
+    #hero-images {
+        width: 100vw;
+        overflow: hidden;
+        color: white;
+        padding: 0px;
+        height: 30rem;
+    }
+
+    #hero-images li {
+        width: 100vw;
+        text-align: center;
+        list-style-type: none;
+        display: inline-block;
+        height: 30rem;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #cccccc;
+        background-size: cover;
+        background-image: url("{{ url_for('static', filename='image/backdrop.jpg') }}");
+    }
+
+    #hero-dots li {
+        list-style-type: none;
+        display: inline-block;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: -1;
+    }
+
+    .hero-arrows {
+        position: absolute;
+        height: 100%;
+        z-index: 1;
+        font-size: 3rem;
+        display: flex;
+    }
+
+    .hero-arrows * {
+        margin: auto;
+    }
+
+    .hero-right {
+        right: 16px;
+        top: 0%;
+    }
+
+    .hero-left {
+        left: 16px;
+    }
+
+    .center-box {
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+
+    .center-box-inner {
+        margin: auto;
+        width: max-content;
+    }
+</style>
+
+<section id="hero-slider">
+    <div class="hero-arrows hero-left">
+        <i class="fas fa-chevron-left text-light"></i>
+    </div>
+    <ul id="hero-images">
+        <li>
+            <div class="center-box">
+                <div class="center-box-inner">
+                    <h2>Engage Audiances</h2>
+                    <p>Engage Audiances with a while new type of story, one where <i>they</i> are the main character.
+                    </p>
+                    <a href="#about" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="center-box">
+                <div class="center-box-inner">
+                    <h2>Keep drivers awake</h2>
+                    <p>AudioOdyssey helps drivers stay awake on long car journeys, meaning drivers can driver further
+                        and
+                        longer.</p>
+                    <a href="/corperate/home" class="btn btn-primary">Corperate Gateway</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <ul id="hero-dots">
+        <li><i class="fas fa-circle"></i></li>
+        <li><i class="fas fa-circle"></i></li>
+    </ul>
+    <div class="hero-arrows hero-right">
+        <i class="fas fa-chevron-right text-light"></i>
+    </div>
+</section>
+
+{% endblock %}

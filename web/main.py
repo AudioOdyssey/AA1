@@ -58,6 +58,9 @@ def check_header(func):
         g.uid = getUid()
         if g.uid == 'Invalid token. please log in again':
             g.uid = 0
+            g.user = None
+            return func(*args, **kwargs)
+        g.user = User.get(g.uid)
         return func(*args, **kwargs)
     return func_wrapper
 
@@ -1300,6 +1303,13 @@ def reset_token(token):
         user.update_password()
         return redirect(url_for("session_new"))
     return render_template("/password_reset/form.html")
+
+
+@app.route("/index_new.html")
+@check_header
+def index_new():
+    return render_template("/index_new.html")
+
 
 @app.errorhandler(403)
 @check_header
