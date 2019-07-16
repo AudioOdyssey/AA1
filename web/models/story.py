@@ -41,6 +41,7 @@ class Story:
     inventory_size = 0
     parental_ratings = 0.0
     updated_at = None
+    starting_loc = 0
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
@@ -136,7 +137,7 @@ class Story:
         conn.close()
 
     def get_image_base64(self):
-        upload_folder = '/var/www/pictures/'
+        upload_folder = '/var/lib/audio_od/covers'
         cover_file = str(self.story_id) + ".jpg"
         result = ''
         try:
@@ -301,8 +302,11 @@ class Story:
 
     @classmethod
     def get_entities(cls, story_id):
+        stry = cls.get(story_id)
         result = {
             'story_id': story_id,
+            'starting_loc' : stry.starting_loc,
+            'inventory_size' : stry.inventory_size,
             'objects': StoryObject.obj_list_json(story_id),
             'events': StoryEvent.event_list_json(story_id),
             'locations': StoryLocation.loc_list_json(story_id)
