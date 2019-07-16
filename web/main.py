@@ -313,7 +313,7 @@ def upload_profile_pic():
     pic_name = str(uid) + '.jpg'
     with open(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
-    return "{message : success}", 200
+    return json.dumps({'message' : 'success'}), 200
 
 @app.route("/story/show")
 @authentication_required
