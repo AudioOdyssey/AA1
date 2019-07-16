@@ -153,7 +153,7 @@ class Story:
         conn.close()
 
     def get_image_base64(self):
-        upload_folder = '/var/www/pictures/'
+        upload_folder = '/var/lib/audio_od/covers'
         cover_file = str(self.story_id) + ".jpg"
         result = ''
         try:

@@ -28,7 +28,9 @@ import jwt
 
 from functools import wraps
 
-UPLOAD_FOLDER = '/var/www/pictures/'
+import base64
+
+UPLOAD_FOLDER = '/var/lib/audio_od'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
 app = Flask(__name__)
@@ -303,6 +305,9 @@ def logout():
         resp.set_cookie('remember_', '', 0)
         return resp
 
+@app.route("/session/password/change", methods=['GET', 'POST'])
+def change_password():
+    pass
 
 @app.route("/app/user/info", methods=['GET'])
 def app_user_info():
@@ -310,6 +315,16 @@ def app_user_info():
     usr = User.get(user_id)
     return usr.user_profile_info()
 
+@app.route("/app/user/profile/upload", methods=['POST'])
+def upload_profile_pic():
+    details = request.json
+    profile_pic = details.get('profile_pic')
+    auth_token = request.args.get('token')
+    uid = decode_auth_token(auth_token)
+    pic_name = str(uid) + '.jpg'
+    with open(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', pic_name), 'wb') as fh:
+        fh.write(profile_pic.decode('base64')) 
+    return "{message : success}", 200
 
 @app.route("/story/show")
 @authentication_required
@@ -371,11 +386,10 @@ def story_update_post():
         pass
     if file and allowed_file(file.filename):
         filename = str(story_id) + ".jpg"
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'covers', filename))
     story.verification_status = 0
     story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
-
     #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
     return '{"status":"ok"}'
 
@@ -398,7 +412,8 @@ def allowed_file(filename):
 @app.route("/story/new", methods=["POST"])
 @authentication_required
 def story_new():
-    story = Story(decode_auth_token(request.cookies.get('remember_')))
+    uid = getUid()
+    story = Story(user_creator_id=uid)
     story.story_synopsis = ""
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
@@ -1245,7 +1260,7 @@ def admin_users():
 @check_header
 def page_not_found(e):
     # Pretend all 403s are 404s for security
-    return render_template('404.html'), 404
+    return render_template('404.html'), 403
 
 
 @app.errorhandler(404)
