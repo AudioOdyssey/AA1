@@ -2,6 +2,9 @@ import pymysql
 import pymysql.cursors
 import sys
 
+import web.config as config
+from . import *
+
 import random
 import hashlib
 import binascii
@@ -40,11 +43,6 @@ class User(UserMixin):
     last_login_date = None
 
     REGION = 'us-east-2b'
-
-    rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-    name = "AA_admin"
-    rds_password = "z9QC3pvQ"
-    db_name = "audio_adventures_dev"
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
                  gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, 
@@ -96,8 +94,8 @@ class User(UserMixin):
         return password_hex_string.decode('utf-8')
 
     def add_to_server(self):
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             password_input = self.password
             self.password = self.encrypt_password(
@@ -131,15 +129,11 @@ class User(UserMixin):
 
     @classmethod
     def get(cls, user_id):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         if user_id == 0 or user_id == '':
             return None
         int_user_id = int(user_id)
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(
             ("SELECT `username`, `password`, `password_salt`, `user_type`, `last_login_date` FROM users WHERE `user_id` = %s"), (int_user_id))
@@ -153,13 +147,9 @@ class User(UserMixin):
 
     @classmethod
     def get_user_count(cls):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
         last_id = 0
         conn = pymysql.connect(
-            rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5)
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT COUNT(user_id) FROM users"))
@@ -177,12 +167,8 @@ class User(UserMixin):
 
     @classmethod
     def list_of_all_users(cls):
-        rds_host = "audio-adventures-dev.cjzkxyqaaqif.us-east-2.rds.amazonaws.com"
-        name = "AA_admin"
-        rds_password = "z9QC3pvQ"
-        db_name = "audio_adventures_dev"
-        conn = pymysql.connect(rds_host, user=name, passwd=rds_password,
-                               db=db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         result = []
         with conn.cursor() as cur:
             cur.execute(
@@ -201,8 +187,8 @@ class User(UserMixin):
             self.user_type += 2
         if self.is_copy_editor:
             self.user_type += 1
-        conn = pymysql.connect(self.rds_host, user=self.name, passwd=self.rds_password,
-                               db=self.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(("UPDATE `users` SET username = %s, user_type = %s WHERE user_id = %s"),
                         (self.username, self.user_type, self.user_id))
