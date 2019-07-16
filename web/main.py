@@ -27,6 +27,8 @@ from functools import wraps
 
 import base64
 
+import re
+
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
 app = Flask(__name__)
@@ -81,6 +83,8 @@ def user_new():  # fix later
         username = details['username']
         raw_password = details['password']
         email = details['email_address']
+        if not isValidEmail(email):
+            return render_template("user/new.html", error="Invalid email")
         gender = int(details['gender'])
         country_of_origin = (details['country_of_origin'])
         profession = details['profession']
@@ -101,6 +105,12 @@ def user_new():  # fix later
     return render_template("user/new.html")
 
 
+def isValidEmail(email):
+    if len(email) > 7:
+        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
+            return True
+    return False
+    
 @app.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
     result = {}
@@ -150,7 +160,7 @@ def session_new():
         if user_id:
             resp = make_response(redirect(url_for('story_show')))
             current_time = datetime.utcnow()
-            expired_date = datetime.utcnow() + timedelta(days=30)
+            expired_date = current_time + timedelta(days=30)
             token = encode_auth_token(user_id, current_time, expired_date)
             if 'remember' in details:
                 resp.set_cookie("remember_", token, expires=expired_date)
@@ -220,11 +230,26 @@ def authentication_required(func):
                 return func(*args, **kwargs)
         else:
             uid = decode_auth_token(remember)
-            if uid == 'Invalid token. please log in again' or uid == 0:
+            if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
                 return redirect(url_for('session_new'))
             return func(*args, **kwargs)
     return func_wrapper
 
+
+@app.before_first_request
+def load_id():
+    token = request.cookies.get('remember_')
+    if token is None:
+        return redirect(url_for('session_new'))
+    uid = decode_auth_token(token)
+    if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
+        return redirect(url_for('session_new'))
+    resp = make_response(url_for('home'))
+    current_time = datetime.utcnow()
+    expiry_time = datetime.utcnow() + timedelta(days = 30)
+    new_token = encode_auth_token(uid, current_time, expiry_time)
+    resp.set_cookie("remember_", new_token, expires=expiry_time)
+    return resp
 
 def authenticate(details):
     conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5,
@@ -244,6 +269,16 @@ def authenticate(details):
                 return None
     return None
 
+@app.route("/refresh/token", methods=['GET'])
+def issue_new_token():
+    token = request.args.get('token')
+    uid = decode_auth_token(token)
+    if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
+        return json.dumps({'token' : '0'}), 404
+    current_time = datetime.utcnow()
+    expiry_time = datetime.utcnow() + timedelta(days=30)
+    new_token = encode_auth_token(uid, current_time, expiry_time)
+    return json.dumps({'token' : new_token}), 200
 
 def encode_auth_token(user_id, current_time, expired_date):
     payload = {
@@ -266,7 +301,6 @@ def decode_auth_token(auth_token):
         return 'Signature expired. Please log in again.'
     except jwt.InvalidTokenError:
         return 'Invalid token. please log in again'
-
 
 @app.route("/app/session/logout")
 def app_logout():
@@ -319,6 +353,7 @@ def upload_profile_pic():
 def story_show():
     stories = Story.story_list_by_creator(getUid())
     return render_template("story/show.html", stories=stories)
+
 
 
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
