@@ -10,3 +10,4 @@ AudioOdysseyTests
 AudioOdysseyUITests
 *.pyc
 config.py
+.idea
