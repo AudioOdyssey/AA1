@@ -52,8 +52,7 @@ db_name = "audio_adventures_dev"
 
 random.seed()
 
-refresh_t = None
-
+# refresh_t = None
 
 def check_header(func):
     @wraps(func)
