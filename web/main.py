@@ -161,39 +161,39 @@ def session_new():
         if user_id:
             resp = make_response(redirect(url_for('story_show')))
             current_time = datetime.utcnow()
-            expired_date = datetime.utcnow() + timedelta(minutes=1)
+            expired_date = datetime.utcnow() + timedelta(days=30)
             token = encode_auth_token(user_id, current_time, expired_date)
             if 'remember' in details:
                 resp.set_cookie("remember_", token, expires=expired_date)
             else:
                 session['token'] = token
-            conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
-                                   cursorclass=pymysql.cursors.DictCursor)
-            with conn.cursor() as cur:
-                cur.execute(
-                    ("SELECT encoded_token, expires FROM auth_tokens WHERE userid=%s"), (user_id))
-                query_data = cur.fetchone()
-                if query_data is None:
-                    expired_date_refresh = datetime.utcnow(days=30)
-                    refresh_t = encode_auth_token(
-                        user_id, current_time, expired_date_refresh)
-                    cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
-                        refresh_t, user_id, expired_date_refresh))
-                    conn.commit()
-                else:
-                    refresh_t = query_data['encoded_token']
-                    expires = query_data['expires']
-                    if current_time > expires:
-                        cur.execute(
-                            ("INSERT INTO invalid_tokens(invalid_token, user_id) VALUES(%s, %s)"), (refresh_t, user_id))
-                        cur.execute(
-                            ("DELETE FROM auth_tokens WHERE id = (SELECT id WHERE encoded_token = %s)"), (refresh_t))
-                        refresh_t = encode_auth_token(
-                            user_id, current_time, expired_date_refresh)
-                        cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
-                            refresh_t, user_id, expired_date_refresh))
-                        cur.commit()
-            cur.close()
+            # conn = pymysql.connect(rds_host, user=name, passwd=rds_password, db=db_name, connect_timeout=5,
+            #                        cursorclass=pymysql.cursors.DictCursor)
+            # with conn.cursor() as cur:
+            #     cur.execute(
+            #         ("SELECT encoded_token, expires FROM auth_tokens WHERE userid=%s"), (user_id))
+            #     query_data = cur.fetchone()
+            #     if query_data is None:
+            #         expired_date_refresh = datetime.utcnow(days=30)
+            #         refresh_t = encode_auth_token(
+            #             user_id, current_time, expired_date_refresh)
+            #         cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
+            #             refresh_t, user_id, expired_date_refresh))
+            #         conn.commit()
+            #     else:
+            #         refresh_t = query_data['encoded_token']
+            #         expires = query_data['expires']
+            #         if current_time > expires:
+            #             cur.execute(
+            #                 ("INSERT INTO invalid_tokens(invalid_token, user_id) VALUES(%s, %s)"), (refresh_t, user_id))
+            #             cur.execute(
+            #                 ("DELETE FROM auth_tokens WHERE id = (SELECT id WHERE encoded_token = %s)"), (refresh_t))
+            #             refresh_t = encode_auth_token(
+            #                 user_id, current_time, expired_date_refresh)
+            #             cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
+            #                 refresh_t, user_id, expired_date_refresh))
+            #             cur.commit()
+            # cur.close()
             return resp
         else:
             error = "Username and/or password not valid"
@@ -224,13 +224,10 @@ def authentication_required(func):
     def func_wrapper(*args, **kwargs):
         remember = request.cookies.get('remember_')
         if remember is None:
-            print(1)
             token = session.get('token')
             if token is None or decode_auth_token(token) == 0:
-                print(3)
                 return redirect(url_for('session_new'))
             else:
-                print(4)
                 return func(*args, **kwargs)
         else:
             uid = decode_auth_token(remember)
@@ -401,7 +398,7 @@ def allowed_file(filename):
 @app.route("/story/new", methods=["POST"])
 @authentication_required
 def story_new():
-    story = Story(user_creator_id=session['user_id'])
+    story = Story(decode_auth_token(request.cookies.get('remember_')))
     story.story_synopsis = ""
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
