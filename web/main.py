@@ -878,7 +878,7 @@ def decision_destroy():
     loc = StoryLocation.get(
         request.form['story_id'], request.form['location_id'])
     loc.verification_status = 0
-    loc.update_verify()
+    loc.update_admin()
     story.verification_status = 0
     story.update_verify()
     return '{"status":"ok"}'
