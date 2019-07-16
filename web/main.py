@@ -4,6 +4,7 @@ from .models import *
 
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
+from flask_mail import Message, Mail
 
 from werkzeug.utils import secure_filename
 
@@ -37,6 +38,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "session/new.html"
 login_manager.login_message = "Please login"
+
+app.config['MAIL_SERVER'] = config.mail_server
+app.config['MAIL_PORT'] = config.mail_port
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = config.mail_name
+app.config['MAIL_PASSWORD'] = config.mail_pass
+mail = Mail(app)
 
 random.seed()
 
@@ -1220,6 +1228,43 @@ def admin_users():
         user.update_admin()
         return '{"status":"ok"}'
 
+
+@app.route("/password_reset", methods=["GET", "POST"])
+@check_header
+def password_request():
+    if request.method == "POST":
+        email = request.form.get('email')
+        if email is not None:
+            token = User.get_reset_token(email, 900)
+            print("Token Got")
+            if token is not None:
+                msg = Message('Password Reset Request',
+                                sender='noreply@myaudioodyssey.com',
+                                recipients=[email])
+                msg.body = f'''To reset your password, visit the following link:
+{url_for('reset_token', token=token, _external=True)}
+If you did not make this request then simply ignore this email and no changes will be made.
+'''
+                mail.send(msg)
+                print("Message Sent")
+    return render_template("/password_reset/request.html")
+
+@app.route("/password_reset/<token>",  methods=["GET", "POST"])
+@check_header
+def reset_token(token):
+    user = User.get_reset_user(token)
+    if user is None:
+        return redirect(url_for("session_new"))
+    if request.method == "POST":
+        passwd = request.form.get('password')
+        passco = request.form.get('password_confirm')
+        if passwd != passco:
+            return render_template("/password_reset/form.html", error="Passwords don't match!")
+        user.password_salt = User.generate_password_salt()
+        user.password = User.encrypt_password(passwd, user.password_salt)
+        user.update_password()
+        return redirect(url_for("session_new"))
+    return render_template("/password_reset/form.html")
 
 @app.errorhandler(403)
 @check_header

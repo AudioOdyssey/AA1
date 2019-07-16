@@ -13,6 +13,8 @@ from datetime import datetime, date
 
 from flask_login import UserMixin
 
+from itsdangerous import TimedJSONWebSignatureSerializer as ResetSerializer
+
 import json
 
 import os
@@ -142,6 +144,7 @@ class User(UserMixin):
             return None
         result = User(result['username'], result['password'],
                       result['password_salt'], user_type=result['user_type'], last_login_date=result['last_login_date'])
+        result.user_id = user_id
         conn.close()
         return result
 
@@ -217,3 +220,40 @@ class User(UserMixin):
             'profile_picture' : self.get_profile_pic_base64()
         }
         return json.dumps(result)
+
+
+    @staticmethod
+    def get_reset_token(email, duration=900):
+        uid = User.get_uid_email(email)
+        if uid is None:
+            return None
+        rs = ResetSerializer(config.reset_token, duration)
+        return rs.dumps({'user_id': uid}).decode('utf-8')
+    
+    @classmethod
+    def get_reset_user(cls, token):
+        rs = ResetSerializer(config.reset_token)
+        try: 
+            uid = rs.loads(token)['user_id']
+        except:
+            return None
+        return cls.get(uid)
+
+    @staticmethod
+    def get_uid_email(email):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT `user_id` FROM users WHERE `email_address` = %s"), (email))
+            result = cur.fetchone()
+        conn.close()
+        return result['user_id']
+    
+    def update_password(self):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE `users` SET password = %s, password_salt = %s WHERE user_id = %s"),
+                        (self.password, self.password_salt, self.user_id))
+            conn.commit()
+        conn.close()
