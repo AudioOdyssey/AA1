@@ -40,8 +40,7 @@ login_manager.login_message = "Please login"
 
 random.seed()
 
-refresh_t = None
-
+# refresh_t = None
 
 def check_header(func):
     @wraps(func)
@@ -312,7 +311,7 @@ def upload_profile_pic():
     pic_name = str(uid) + '.jpg'
     with open(os.path.join(config.upload_folder, 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
-    return "{message : success}", 200
+    return json.dumps({'message' : 'success'}), 200
 
 @app.route("/story/show")
 @authentication_required
