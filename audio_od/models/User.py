@@ -1,9 +1,13 @@
+import sys
+sys.path.append("..")
+
+
 import pymysql
 import pymysql.cursors
 import sys
 
-from .. import config as config
-from . import *
+import config
+# from . import *
 
 import random
 import hashlib
