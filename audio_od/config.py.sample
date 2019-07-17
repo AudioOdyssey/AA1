@@ -11,3 +11,5 @@ mail_server = 'example.com'
 mail_port = port
 mail_name = 'username'
 mail_pass = 'password'
+
+secret_key = 'this is a secret'
