@@ -311,9 +311,9 @@ def decode_auth_token(auth_token):
         payload = jwt.decode(auth_token, app.secret_key)
         return payload['sub']
     except jwt.ExpiredSignatureError:
-        return 'Signature expired. Please log in again.'
+        return 0
     except jwt.InvalidTokenError:
-        return 'Invalid token. please log in again'
+        return 0
 
 @app.route("/app/session/logout")
 def app_logout():
