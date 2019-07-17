@@ -1307,6 +1307,11 @@ def reset_token(token):
         return redirect(url_for("session_new"))
     return render_template("/password_reset/form.html")
 
+@app.route("/dashboard")
+@check_header
+def dashboard():
+    return render_template("/dashboard.html")
+
 
 @app.errorhandler(403)
 @check_header

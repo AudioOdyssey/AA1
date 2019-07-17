@@ -117,7 +117,6 @@ body {
     background-position: top center;
     background-color: #cccccc;
     background-size: cover;
-    background-image: url("{{ url_for('static', filename='image/backdrop-stock.jpg') }}");
     -webkit-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
     -moz-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
     box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
