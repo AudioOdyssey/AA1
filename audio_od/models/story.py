@@ -1,15 +1,19 @@
+import sys
+sys.path.append("..")
+
 import pymysql
 import pymysql.cursors
 
-from .. import config as config
-from . import *
+import config
+from .storydecision import StoryDecision
+from .storyevent import StoryEvent
+from .storylocation import StoryLocation
+from .storyobject import StoryObject
 
 import sys
 import os
 
 import simplejson as json
-
-from . import *
 
 from decimal import Decimal
 

@@ -1,0 +1,12 @@
+{% extends "template.html" %}
+
+{% block content %}
+<meta http-equiv="Refresh" content="3; url=/story/update?story_id={{ story.story_id }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/saving.css') }}" type="text/css" />
+<img class="gif" src="{{ url_for('static', filename='image/yay.gif') }}">
+<br>
+<h1 style="text-align: center">Saving {{story.story_title}}...</h1>
+<!--redirect-->
+<br>
+
+{% endblock %}
