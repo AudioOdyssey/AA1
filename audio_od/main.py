@@ -1,6 +1,6 @@
-from . import config
+import config
 
-from .models import *
+from models import *
 
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url

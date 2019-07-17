@@ -2,8 +2,8 @@ import pymysql
 import pymysql.cursors
 import sys
 
-from .. import config as config
-from . import *
+import config
+from .storydecision import StoryDecision
 
 import json
 
