@@ -1,0 +1,15 @@
+db_host = "hostname"
+db_user = "username"
+db_password = "password"
+db_name = "database"
+
+upload_folder = 'folder'
+
+reset_token = 'token-key'
+
+mail_server = 'example.com'
+mail_port = port
+mail_name = 'username'
+mail_pass = 'password'
+
+secret_key = 'this is a secret'

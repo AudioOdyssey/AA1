@@ -1,0 +1,198 @@
+{% extends "template.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/update.css') }}" type="text/css" />
+<script src="{{ url_for('static', filename='js/story/update.js') }}"></script>
+
+<script>
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("cover-photo").style.backgroundImage =
+                "url(data:image/png;base64," + this.responseText + ")";
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("GET", "/story/image?story_id={{story.story_id}}", true);
+    xhttp.send();
+</script>
+
+<section id="3-left-rows">
+    <section class="1-3-left-row">
+        <!-- Summary Row -->
+        <section class="row">
+            <h3 style="width:max-content">Story Summary</h3>
+            <button onclick="save()" style="margin-left: auto" class="btn btn-primary">Save</button>
+        </section>
+        <hr>
+
+        <form id="edit-story-details" method="POST" action="/story/update">
+            <input name="story_id" value="{{ story.story_id }}" readonly class="hidden-in">
+
+            <div class="form-group update-form-group">
+                <label>Title:</label>
+                <input autocomplete="none" class="form-control col" onchange="story_changed(this)" type="text"
+                    name="story_title" value="{{story.story_title|e}}" placeholder="Story Title...">
+            </div>
+            <div class="form-group update-form-group">
+                <label>Synopsis:</label>
+                <textarea autocomplete="none" class="form-control" onchange="story_changed(this)" name="story_synopsis"
+                    placeholder="Story Synopsis..." rows="3">{{story.story_synopsis|e}}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Genre:</label>
+                <select autocomplete="none" class="form-control" value="{{story.genre|e}}"
+                    onchange="story_changed(this)" name="genre">
+                    <option value="" selected disabled>Select a genre...</option>
+                    <option {%if story.genre|e=="Mystery"%}selected{%endif%} value="Mystery">Mystery</option>
+                    <option {%if story.genre|e=="Romance"%}selected{%endif%} value="Romance">Romance</option>
+                    <option {%if story.genre|e=="Sci-Fi"%}selected{%endif%} value="Sci-Fi">Sci-Fi</option>
+                    <option {%if story.genre|e=="Fantasy"%}selected{%endif%} value="Fantasy">Fantasy</option>
+                    <option {%if story.genre|e=="Historical Fiction"%}selected{%endif%} value="Historical Fiction">
+                        Historical Fiction</option>
+                    <option {%if story.genre|e=="Drama"%}selected{%endif%} value="Drama">Drama</option>
+                    <option {%if story.genre|e=="Horror"%}selected{%endif%} value="Horror">Horror</option>
+                    <option {%if story.genre|e=="Thriller"%}selected{%endif%} value="Thriller">Thriller</option>
+                    <option {%if story.genre|e=="Comedy"%}selected{%endif%} value="Comedy">Comedy</option>
+                    <option {%if story.genre|e=="Adventure"%}selected{%endif%} value="Adventure">Adventure</option>
+                    <option {%if story.genre|e=="Sports"%}selected{%endif%} value="Sports">Sports</option>
+                    <option {%if story.genre|e=="Non-Fiction"%}selected{%endif%} value="Non-Fiction">Non-Fiction
+                    </option>
+                    <option {%if story.genre|e=="Other Fiction"%}selected{%endif%} value="Other Fiction">Other Fiction
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input autocomplete="none" class="form-control" type="number" min="0" step="0.01"
+                    onchange="story_changed(this)" value="{{story.story_price|e}}" name="story_price"
+                    placeholder="Price in USD">
+            </div>
+
+            <div class="form-group">
+                <label>Length:</label>
+                <input autocomplete="none" class="form-control" type="number" min="0" step="1"
+                    onchange="story_changed(this)" value="{{story.length_of_story|e}}" name="length_of_story"
+                    placeholder="Number of Hours">
+            </div>
+            <div class="form-group">
+                <label>Inventory Size:</label>
+                <input autocomplete="none" class="form-control" type="number" min="0" step="1"
+                    onchange="story_changed(this)" value="{{story.inventory_size|e}}" name="inventory_size"
+                    placeholder="Inventory Size">
+            </div>
+            <div class="form-group">
+                <label>Starting Location:</label>
+                <select autocomplete="none" class="form-control" onchange="story_changed(this)" name="starting_loc">
+                    <option value="0" disabled>Starting Location</option>
+                    {%for loc in locations%}
+                    <option {%if story.starting_loc|int==loc.location_id|int%}selected{%endif%}
+                        value="{{loc.location_id}}">{{loc.location_name|e}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+            <label>Cover Image:</label>
+            <div id="dummy-thicc" style="display: none;" class="alert alert-danger">
+                <strong>Danger!</strong> The uploaded image was too big! It must be less than <u>7.5MB.</u>
+            </div>
+            <div id="cover-photo"
+                style="margin: 1rem auto; max-width: 100%;height:28em; width:20em; background-repeat: no-repeat; background-position: center; background-color: #cccccc; background-size: cover;">
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="cover-upload" onchange="story_changed(this)"
+                        aria-describedby="inputGroupFileAddon01" name="cover">
+                    <label class="custom-file-label" for="cover-upload">Choose file</label>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <br><br>
+    <!-- Object Row -->
+
+    <h3>Objects</h3>
+
+
+
+    <button type="button" onclick="add_btn_obj('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
+            class="fas fa-plus"></i></button>
+    <hr>
+    <section class="row 1-3-left-row">
+        {% for object in objects %}
+        <a class="col-sm-4 small-card"
+            href="/story/object/indiv?story_id={{story.story_id}}&object_id={{object.obj_id}}">
+            <h4>{{ object.obj_name|e }}</h4>
+            <hr>
+            <h5>{{ object.obj_starting_loc_name|e }}</h5>
+            <p>{{ StoryLocation.get(story.story_id,object.obj_starting_loc).location_name|e }}</p>
+        </a>
+        {% endfor %}
+    </section>
+
+    <!-- Event Row -->
+
+    <h3>Events</h3>
+
+    <button type="button" onclick="add_btn_evt('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
+            class="fas fa-plus"></i></button>
+    <hr>
+    <section class="row 1-3-left-row">
+        {% for event in events %}
+        <a class="col-sm-4 small-card"
+            href="/story/event/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}">
+            <h4>{{ event.event_name|e }}</h4>
+            <hr>
+            <h5>{{ event.event_location_name|e }}</h5>
+            <p>{{ event.event_description|e }}</p>
+        </a>
+        {% endfor %}
+    </section>
+</section>
+<section id="1-right-col">
+    <!-- Locations Row -->
+
+    <h3>Locations</h3>
+
+
+    <button type="button" onclick="add_btn_loc('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
+            class="fas fa-plus"></i></button></a>
+    <br>
+    <a href="/story/treeview?story_id={{story.story_id}}">Click Here for Tree View</a>
+    <hr>
+    <section class="row">
+        {% for location in locations %}
+        <a class="col-sm-6 small-card"
+            href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">
+            <h4>{{ location.location_name|e }}</h4>
+            <hr>
+            {%if location.short_description != ""%}
+            <p>{{ location.short_description|e }}</p>
+            {%else%}
+            <p>{{ location.original_description|e }}</p>
+            {%endif%}
+        </a>
+        {% endfor %}
+    </section>
+</section>
+<hr>
+<button class="btn btn-light" onclick="publishStory('{{story.story_id}}')">Submit for Verification</button>
+<a href="/verification/story?story_id={{story.story_id}}"> <button class="btn btn-light">View Verification
+        Status</button></a>
+<a href="/story/run?story_id={{story.story_id}}"> <button class="btn btn-light">Run Story</button></a>
+<button class="btn btn-danger" onclick="story_delete('{{story.story_id}}')">Delete Story</button>
+
+<button onclick="save()" style="float: right" class="btn btn-primary">Save</button>
+
+<script>
+    document.getElementById('cover-upload').addEventListener('change', handleFileSelect, false);
+</script>
+
+<div id="save-bubble">
+    <div id="save-bubble-inner">Story Saved</div>
+</div>
+
+{% endblock %}

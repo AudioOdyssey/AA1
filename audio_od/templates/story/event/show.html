@@ -1,0 +1,120 @@
+{% extends "template.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/event/show.css') }}" type="text/css" />
+<script src="{{ url_for('static', filename='js/story/event/show.js') }}"></script>
+
+<a href="#bottom"><button class="btn btn-light">Bottom of Page</button></a>
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a href="/story/location/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Locations</button></a>
+<a href="/story/object/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Objects</button></a>
+
+<br>
+<section class="row">
+    <h3>Events</h3>
+    <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
+            class="fas fa-plus"></i></button>
+</section>
+<form id="ev-template" class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
+
+    <input name="story_id" readonly class="hidden-in">
+    <input name="event_id" readonly class="hidden-in">
+
+    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
+            class="fa fa-xs fa-trash-alt"></i></button>
+
+    <section class="event-row row">
+        <section class="row flex-1">
+            <div class="col-sm-4">
+                <label for="event_name"><b>Name:</b></label>
+                <input id="event_name" class="form-control" type="text" name="event_name"
+                    onchange="event_changed(this)">
+            </div>
+            <div class="col-sm-8">
+                <label for="locations"><b>Select Location or</b><a href="#"
+                        onclick="add_btn_pressed_loc('{{story_id}}')">
+                        Add New Location</a></label>
+                <select name="event_loc" id="locations" onchange="event_changed(this)">
+                    <option value="0">None</option>
+                    {% for location in locations %}
+                    <option value="{{location.location_id}}">{{location.location_name|e}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+        </section>
+
+        <section class="flex-0" onclick="event_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+
+    <section class="row details" style="display: none">
+        <hr>
+        <label for="event_descr">Description</label>
+        <textarea id="event_descr" class="form-control" rows="3" name="ev_description"
+            onchange="event_changed(this)"></textarea>
+        <label>Is global?</label>
+        <input id="is_global" type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)">
+        <br>
+    </section>
+</form>
+
+<div id="content-marker"></div>
+
+{% for event in events %}
+<form class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
+    <input name="story_id" value="{{ event.story_id }}" readonly class="hidden-in">
+    <input name="event_id" value="{{ event.event_id }}" readonly class="hidden-in">
+
+    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
+            class="fa fa-xs fa-trash-alt"></i></button>
+
+    <section class="event-row row">
+        <section class="row flex-1">
+            <div class="col-sm-4">
+                <label><b>Name:</b></label>
+                <input class="form-control" type="text" name="event_name" onchange="event_changed(this)"
+                    value="{{ event.event_name|e }}">
+            </div>
+
+            <div class="col-sm-8">
+                <label><b>Select Location or:</b><a href="#" onclick="add_btn_pressed_loc('{{event.story_id}}')"> Add
+                        New Location</a></label>
+                <select class="form-control" type="text" name="event_loc" onchange="event_changed(this)">
+                    <option value="0">None</option>
+                    {% for loc in locations %}
+                    <option {%if loc.location_id|int==event.event_loc|int%}selected{%endif%}
+                        value="{{loc.location_id}}">{{ loc.location_name|e }}</option>
+                    {%endfor%}
+                </select>
+            </div>
+        </section>
+        <section class="flex-0" onclick="event_show(this)">
+            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        </section>
+    </section>
+
+    <section class="row details" style="display: none">
+        <hr>
+        <label>Description</label>
+        <textarea class="form-control" rows="3" name="ev_description"
+            onchange="event_changed(this)">{{ event.event_description|e }}</textarea>
+
+        <label>Is Global?</label>
+        {% if event.event_is_global %}
+        <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)" checked>
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)">
+        {% endif %}
+        <br>
+
+    </section>
+
+</form>
+
+{% endfor %}
+<br>
+<a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
+
+{% endblock %}

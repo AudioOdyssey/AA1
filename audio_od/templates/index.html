@@ -1,0 +1,122 @@
+{% extends "template_new.html" %}
+{% block content%}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css" />
+
+<style>
+    /* Styles must stay in html file */
+    #backdrop-collaborate {
+        background-repeat: no-repeat;
+        background-position: top center;
+        background-color: #cccccc;
+        background-size: cover;
+        background-image: url("{{ url_for('static', filename='image/backdrop-stock.jpg') }}");
+        -webkit-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
+        -moz-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
+        box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
+    }
+
+    #hero-images li {
+        width: 100vw;
+        text-align: center;
+        list-style-type: none;
+        height: 30rem;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #cccccc;
+        background-size: cover;
+        background-image: url("{{ url_for('static', filename='image/backdrop.jpg') }}");
+        position: relative;
+        float: left;
+        list-style: none;
+    }
+</style>
+
+<section id="hero-slider">
+    <div class="hero-arrows hero-left">
+        <i class="fas fa-chevron-left text-light"></i>
+    </div>
+    <ul id="hero-images">
+        <li>
+            <div class="center-box">
+                <div class="center-box-inner">
+                    <h2>Engage Audiances</h2>
+                    <p>Engage Audiances with a while new type of story, one where <i>they</i> are the main character.
+                    </p>
+                    <a href="#about" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="center-box">
+                <div class="center-box-inner">
+                    <h2>Keep drivers awake</h2>
+                    <p>AudioOdyssey helps drivers stay awake on long car journeys, meaning drivers can driver further
+                        and longer.</p>
+                    <a href="/corperate/home" class="btn btn-primary">Corperate Gateway</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div id="hero-dots">
+        <div>
+            <i class="fas fa-circle"></i>
+            <i class="fas fa-circle"></i>
+        </div>
+    </div>
+    <div class="hero-arrows hero-right">
+        <i class="fas fa-chevron-right text-light"></i>
+    </div>
+</section>
+
+<section class="row" id="cols3">
+    <div class="col-md-4">
+        <div>
+            <div class="circle-image-container">
+                <img class="circle-image" src="{{ url_for('static', filename='image/media.svg') }}">
+            </div>
+            <h3>A whole new Media</h3>
+            <p>Connect with your customers and readers in a whole new way, have them be the main character. Guide them
+                through you world and your stories with our easy to use story editor. Earn profits for each story that
+                you sell and axpand your brand.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div>
+            <div class="circle-image-container">
+                <img class="circle-image" src="{{ url_for('static', filename='image/truck.svg') }}">
+            </div>
+            <h3>Keep drivers awake and safe</h3>
+            <p>Connect with your customers and readers in a whole new way, have them be the main character. Guide them
+                through you world and your stories with our easy to use story editor. Earn profits for each story that
+                you sell and axpand your brand.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div>
+            <div class="circle-image-container">
+                <img class="circle-image" src="{{ url_for('static', filename='image/blind.svg') }}">
+            </div>
+            <h3>Accessable to the vision impaired</h3>
+            <p>Connect with your customers and readers in a whole new way, have them be the main character. Guide them
+                through you world and your stories with our easy to use story editor. Earn profits for each story that
+                you sell and axpand your brand.</p>
+        </div>
+    </div>
+</section>
+
+<section class="row backdrop-dark">
+    <div class="col-md-8 d-none d-md-block" id="backdrop-collaborate"></div>
+    <div class="col-md-3" id="backdrop-text">
+        <h3>Simple, yet Powerful</h3>
+        <p>AudioOdyssey's toolset allows authors to create stories their way, with the reader experiencing the excitment
+            and fun of living inside of your world. Expand your brand and connect with audiances to increase engagement
+            across your properties. Lorem ipsum dolor amet yr gastropub cold-pressed proident XOXO pitchfork normcore
+            photo booth YOLO drinking vinegar semiotics hot chicken chartreuse shoreditch salvia. Velit venmo pickled
+            beard, asymmetrical fugiat irony incididunt pour-over et master cleanse cillum helvetica chillwave
+            letterpress. Beard pug organic mumblecore authentic.</p>
+    </div>
+    <div class="col-md-1 d-none d-md-block"></div>
+</section>
+
+{% endblock %}

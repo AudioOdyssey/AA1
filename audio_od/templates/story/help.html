@@ -1,0 +1,254 @@
+{%extends "template.html" %}
+{% block content%}
+<div>
+    <h1 class="title">Story Creation Instructions</h1>
+
+    <h3>Contents: </h3>
+    <a href="#intro">Introduction</a> <br>
+    <a href="#story">Main Story Form</a> <br>
+    <a href="#location">Location Entry</a><br>
+    <a href="#decision">Decision Entry</a><br>
+    <a href="#object">Object Entry</a><br>
+    <a href="#event">Event Entry</a><br>
+    <br>
+    <hr>
+    <h2 id="intro" class="title">Welcome to our Community of Contributors!</h2>
+
+    <body>AudioOdyssey, Inc. contributors are a community of passionate individuals who love creating stories that are
+        fun
+        and also encourage safe driving habits! This website is where you will be able to create stories that will be
+        available for purchase
+        by our users on our app (AudioOdyssey). This help page provides a description of all of the information fields
+        you will be offered while creating your story.
+        Please note that your progress is saved automatically each time you edit any form. Also note that before your
+        story is published it will be verified by an employee of AudioOdyssey, Inc.
+        Overly offensive content will not be published. We hope you find this page helpful and feel free to use the <a
+            href="/contact"> contact page</a>
+        to ask us any additional questions! </body>
+    <br>
+    <hr><br>
+    <h2 id="story" class="title">Main Story Entry Form </h2>
+
+    <body class="body">This important form is where you will be routed to automatically when you begin a new story. It
+        contains general information
+        about your story and is also a place where you can view lists of all the locations, objects and events you have
+        entered so far. You can click on the boxes containing
+        information about locations, objects or events to edit them. It is on the individual location, decision, object
+        and event forms that you can use the '+' and 'trash' icons to add or
+        remove elements.
+    </body>
+    <br><br>
+    <h6 class="title">Fields you may fill out for each Story are: </h6>
+    <br>
+    <div class="body">
+
+        <body><b>RRRStory Title: </b>Each story requires a title</body>
+        <br>
+
+        <body><b>Synopsis: </b>Enter a brief summary of your story here</body>
+        <br>
+
+        <body><b>Genre: </b>Select a genre for your story from the drop down menu</body>
+        <br>
+
+        <body><b>!!!Price: </b>Enter a suggested price for your story (USD)</body>
+        <br>
+
+        <body><b>Length: </b>Enter the number of hours you expect a user to go through this story</body>
+        <br>
+
+        <body>Select the "Save for Later" button to return to the story home page and save your progress for later
+        </body>
+        <br>
+
+        <body>Select the "Publish Story" button upon completion to submit the story for verification and return to the
+            story home page</body>
+
+
+    </div>
+    <br>
+    <hr><br>
+    <h2 id="location" class="title">Location Entry</h2>
+
+    <body class="body">Locations contain the main audio messages that are played each time the user enters a new
+        "location" in the game. Locations do not necessarily need to be literal locations as you would think of them
+        in real life (ex "the grocery store" "school" etc.). They can also be abstract "locations" that represent
+        points in the your story (anywhere a new description is required).
+    </body>
+    <br><br>
+    <h6 class="title">Fields you may fill out for each Location are: </h6>
+    <br>
+    <div class="body">
+
+        <body><b>RRRLocation Name: </b>Each location requries a name (will not be seen by user)</body>
+        <br>
+
+        <body><b>RRROriginal Description: </b>This will be read the first time a player goes to this location</body>
+        <br>
+
+        <body><b>Short Description: </b>This will be read any subsequent time a player enters this location (can be the
+            same as above if desired)
+            <br>
+
+            <body><b>Select Event Name: </b>Select the name of the event which causes the post event description to be
+                read, or use the
+                link to navigate to the create event page</body>
+            <br>
+
+            <body><b>Post Event Description: </b>This will be read when the user enters this location after it has been
+                affected by an event</body>
+
+
+
+            <br>
+
+            <body><b>!!!Auto Go To: </b>If auto go to is checked the user will automatically be sent to the next
+                location
+                without being provided with decisions</body>
+            <br>
+
+            <body><b>RRRNext Location: </b>Only can be filled out if auto go to is checked. Select name of next location
+                or use the link to navigate to the create location page</body>
+            <br>
+
+            <body>Use the blue "edit decision" link at the bottom of the page to add decisions if auto go to is not
+                checked</body>
+    </div><br>
+    <hr><br>
+    <h2 id="decision" class="title">Decision Entry</h2>
+
+    <body class="body">Decisions are the options which users are presented with everytime they enter a new location.
+        Each location can
+        have as many of as few decisions as you would like. The decision entry page can be accessed throught the blue
+        "edit decision" link at
+        the bottom of the location entry page but will only be available while auto go to is unchecked.
+    </body>
+    <br><br>
+    <h6 class="title">Fields you may fill out for each Decision are: </h6>
+    <div class="body">
+        <br>
+
+        <body><b>RRRDecision Name: </b>Each decision requires a name (will not be seen by user)</body>
+        <br>
+
+        <body><b>Decision Sequence Number: </b>This number must be between 1 and the number of decisions for thsi
+            location. It represents the order in which the decisions are read (first decision has sequence number 1,
+            second decision has 2 etc.)</body>
+        <br>
+
+        <body><b>RRRDecision Description: </b>This is read each time this decision is presented to the user</body>
+        <br>
+
+        <body><b>Causes a Transition: </b>Check this box if this decision causes a transition to a new location</body>
+        <br>
+
+        <body>RRRSelect Transition Location: <b></b>Only can be filled out if transition is checked. Select name of the
+            location this decision transitions into or use the link to navigate to the create location page</body>
+        <br>
+
+        <body>Can only Occur Once: <b></b>Check this box if you only want the user to be presented with this decision
+            once</body>
+        <br>
+
+        <body><b>Is Hidden? </b>Check this box if you don't want the user to be presented with this decision until it
+            has been unhidden by an event or object</body>
+        <br>
+
+        <body><b>Select Event/Object to Show Decision: </b>Select an object OR an event which will unhide the decision.
+            Or you may use the links to navigate to the create event or object page</body>
+        <br>
+
+        <body><b>Is Locked? </b>Check this box if you want this decision to be unavailable but still give a description
+            of it to the user</body>
+        <br>
+
+        <body><b>Select Object/Event to Unlock Decision: </b>Select an object OR an event which will unlock this
+            decision. Or you may use the links to navigate to the create event or object page</body>
+        <br>
+
+        <body><b>Description when Locked: </b>This despcription is read while the decision is locked and will most
+            likely be a hint about how to unlock this description</body>
+        <br>
+
+        <body><b>Description of Decision Aftermath: </b>This optional description will be read after the decision is
+            selected by the user</body>
+        <br>
+
+        <body><b>Does this Decision Trigger an Event? </b>Check this box if this decision causes an event to occur
+        </body>
+        <br>
+
+        <body><b>RRRSelect Event Triggered By This Decision: </b>Only able to be filled in if trigger event is checked.
+            Select the name of the event that is caused by this decision or use the link to navigate to the create event
+            page</body>
+    </div>
+    <br>
+    <hr><br>
+    <h2 id="object" class="title">Object Entry</h2>
+    <br>
+
+    <body class="body">Objects are anything that can be picked up and moved throughout locations in a story. Note:
+        things that can NOT be transferred
+        between locations do not need to be entered as objects and can just be written about in a description. Also note
+        that items entered as objects do not need to be
+        mentioned in a description because upon entry to a location the user will be told which objects are in the room
+        (unless the object is hidden).
+    </body>
+    <br><br>
+    <h6 class="title">Fields you may fill out for each Object are: </h6>
+    <br>
+    <div class="body">
+
+        <body><b>RRRObject Name: </b>Each object requires a name</body>
+        <br>
+
+        <body><b>RRRSelect Starting Location: </b>Select the name of the location you want this object to start the game
+            in or use the link to create a new location. Remember objects can be moved from location to location</body>
+        <br>
+
+        <body><b>RRRDescription: </b>Enter a brief description of this object</body>
+        <br>
+
+        <body><b>Is Hidden? </b>Check this box if you don't want the user to be able to see this object until a specific
+            event occurs</body>
+        <br>
+
+        <body><b>Select Unhide Event Name: </b>Only will be able to be filled in if the above is checked. Select the
+            name of the event that makes this object available or use the link to create a new event.</body>
+        <br>
+    </div>
+
+    <br>
+    <hr><br>
+    <h2 id="event" class="title">Event Entry</h2>
+    <br>
+
+    <body class="body">Events are things that change the state of a location or of the game. Occurences only need to be
+        entered as events if they will affect decisions later, otherwise they can just be entered as part of a
+        decsription.</body>
+    <br><br>
+    <h6 class="title">Fields you may fill out for each Event are: </h6>
+    <br>
+    <div class="body">
+
+        <body><b>RRREvent Name: </b>Each event requires a name</body>
+        <br>
+
+        <body><b>!!!RRRSelect Location: </b>Select the location in which this event occurs or use the link to create a
+            new location</body>
+        <br>
+
+        <body><b>RRRDescription: </b>This description will be read when this event occurs</body>
+        <br>
+
+        <body><b>!!!Is global: </b>Check this box if this event will effect more than the location you selected above
+        </body>
+
+    </div>
+    <br>
+    <hr><br>
+    <h4 class="title">Thank You for your interest! We look forward to experiencing your AudioOdyssey!</h4>
+    <br>
+    <a href="/story/show"><button id="createstory" class="btn btn-primary">Return to Story Menu</button> </a>
+
+    {% endblock %}

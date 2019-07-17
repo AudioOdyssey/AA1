@@ -1,0 +1,17 @@
+#story {
+    background-color: #fffff1;
+    font-family: "Helvetica"sans-serif;
+    font-style: bold;
+    color: #734f96;
+    width: 102%;
+    border-color: #fffff1;
+}
+.storycard {
+    height: 100%;
+    text-align: left;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+}
+.col-sm-4 {
+    padding: 0.5rem;
+}

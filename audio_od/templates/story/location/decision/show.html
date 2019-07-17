@@ -1,0 +1,82 @@
+{% extends "template.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/decision/show.css') }}"
+    type="text/css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/update.css') }}" type="text/css" />
+<script src="{{ url_for('static', filename='js/story/location/decision/show.js') }}"></script>
+
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{location.location_id}}">Back to Location</a>
+<a href="#bottom"><button class="btn btn-light">Bottom of Page</button></a>
+
+<button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
+
+<section class="row">
+    <h3>Decisions</h3>
+    <hr>
+    <h3>Location Name: '<i>{{ location.location_name|e }}</i>'</h3>
+
+    <button type="button" onclick="add_btn_pressed_dec('{{ story_id }}', '{{ location.location_id }}')" id="add-btn"
+        class="btn btn-light"><i class="fas fa-plus"></i></button>
+</section>
+{% for decision in decisions %}
+<a
+    href="/story/location/decision/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}&decision_id={{decision.decision_id}}">Edit
+    Decision</a>
+<section class="row 1-3-left-row small-card">
+
+    <section col-sm-4>
+        <div class="row">
+            <h5><b>Name:</b></h5>
+            <p type="text" name="decision_name">{{ decision.decision_name|e }}</p>
+        </div>
+        <div class="row">
+            <label><b>Properties:</b></label>
+            <br>
+            <p>
+                {%if decision.hidden%}
+                Hidden,
+                {%else%}
+                Not Hidden,
+                {%endif%}
+
+                {%if decision.locked%}
+                Locked
+                {%else%}
+                Not Locked
+                {%endif%}
+            </p>
+        </div>
+
+    </section>
+    <div class="row col-sm-4">
+        <p>
+            {%if decision.transition%}
+            <b>Transition</b> to {{StoryLocation.get(story_id,decision.transition_loc_id).location_name|e}}
+            {%else%}
+            <b>Not a Transtion</b>
+            {%endif%}
+        </p>
+    </div>
+    <section class="col-sm-4 row">
+        <!-- TODO: add max value -->
+        <h6><b>Decision Sequence Number: </b></h6>
+        <p name="sequence_number" type="number">{{decision.sequence_num|e}}</p>
+    </section>
+</section>
+
+
+
+
+{% endfor %}
+<br>
+<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{location.location_id}}">Back to Location</a>
+<a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>
+<button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
+
+<div id="save-bubble">
+    <div id="save-bubble-inner">Decisions Saved</div>
+</div>
+
+{% endblock %}
