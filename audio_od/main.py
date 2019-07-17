@@ -35,7 +35,7 @@ import re
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
 app = Flask(__name__)
-app.secret_key = b"jk_\xf7\xa7':\xea$/\x88\xc0\xa3\x0e:d"
+app.secret_key = config.secret_key  
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 
 login_manager = LoginManager()
@@ -253,7 +253,7 @@ def authentication_required(func):
 def load_id():
     token = request.cookies.get('remember_')
     if token is None:
-        return redirect(url_for('session_new'))
+        return redirect(url_for('home'))
     uid = decode_auth_token(token)
     if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
         return redirect(url_for('session_new'))
@@ -345,7 +345,8 @@ def change_password():
 
 @app.route("/app/user/info", methods=['GET'])
 def app_user_info():
-    user_id = request.args.get('token')
+    token = request.args.get('token')
+    user_id = decode_auth_token(token)
     usr = User.get(user_id)
     return usr.user_profile_info()
 
