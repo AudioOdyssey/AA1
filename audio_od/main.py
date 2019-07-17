@@ -1308,12 +1308,6 @@ def reset_token(token):
     return render_template("/password_reset/form.html")
 
 
-@app.route("/index_new.html")
-@check_header
-def index_new():
-    return render_template("/index_new.html")
-
-
 @app.errorhandler(403)
 @check_header
 def page_not_found(e):
