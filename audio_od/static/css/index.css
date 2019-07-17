@@ -1,5 +1,11 @@
+body {
+	overflow-x: hidden;
+}
+
 #hero-slider {
 	position: relative;
+	width: 100vw;
+	overflow: hidden;
 }
 
 #hero-images {
@@ -8,6 +14,8 @@
 	padding: 0px;
 	height: 30rem;
 	margin: 0px;
+	width: max-content;
+	position: relative;
 }
 
 .hero-arrows {

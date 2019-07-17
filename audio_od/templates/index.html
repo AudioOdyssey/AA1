@@ -25,19 +25,63 @@
         background-position: center;
         background-color: #cccccc;
         background-size: cover;
-        background-image: url("{{ url_for('static', filename='image/backdrop.jpg') }}");
         position: relative;
         float: left;
         list-style: none;
     }
 </style>
 
+<script>
+    var current_image = 0;
+
+    function left_image() {
+        var elem = document.getElementById('hero-images');
+        var oldid = current_image;
+
+        if (current_image == 0)
+            current_image = elem.childElementCount-1;
+        else
+            current_image--;
+
+        // elem.style.right = 100 * current_image + "vw";
+        transition_image(oldid);
+    }
+
+    function right_image() {
+        var elem = document.getElementById('hero-images');
+        var oldid = current_image;
+
+        if (current_image == elem.childElementCount-1)
+            current_image = 0;
+        else
+            current_image++;
+
+        // elem.style.right = 100 * current_image + "vw";
+        transition_image(oldid);
+    }
+
+    function transition_image(oldid) {
+        var elem = document.getElementById('hero-images');
+        var oldpos = oldid * 100;
+        var newpos = current_image * 100;
+        var count = 50;
+        var timer = setInterval(function () {
+            if (count == 0){
+                clearInterval(timer);
+                elem.style.right = newpos + "vw";
+            }
+            elem.style.right = (count/50.0 * oldpos + (50.0-count)/50.0 * newpos) + "vw";
+            count--;
+        }, 10);
+    }
+</script>
+
 <section id="hero-slider">
     <div class="hero-arrows hero-left">
-        <i class="fas fa-chevron-left text-light"></i>
+        <i onclick="left_image()" class="fas fa-chevron-left text-light"></i>
     </div>
     <ul id="hero-images">
-        <li>
+        <li style="background-image:url('{{url_for('static',filename='image/hero-engage.jpg')}}')">
             <div class="center-box">
                 <div class="center-box-inner">
                     <h2>Engage Audiances</h2>
@@ -47,7 +91,7 @@
                 </div>
             </div>
         </li>
-        <li>
+        <li style="background-image:url('{{url_for('static',filename='image/hero-trucks.jpg')}}')">
             <div class="center-box">
                 <div class="center-box-inner">
                     <h2>Keep drivers awake</h2>
@@ -65,7 +109,7 @@
         </div>
     </div>
     <div class="hero-arrows hero-right">
-        <i class="fas fa-chevron-right text-light"></i>
+        <i onclick="right_image()" class="fas fa-chevron-right text-light"></i>
     </div>
 </section>
 
