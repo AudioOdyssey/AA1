@@ -111,3 +111,28 @@ body {
 	text-align: justify;
 	margin: 3rem 0px;
 }
+
+#backdrop-collaborate {
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-color: #cccccc;
+    background-size: cover;
+    background-image: url("{{ url_for('static', filename='image/backdrop-stock.jpg') }}");
+    -webkit-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
+    -moz-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
+    box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
+}
+
+#hero-images li {
+    width: 100vw;
+    text-align: center;
+    list-style-type: none;
+    height: 30rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #cccccc;
+    background-size: cover;
+    position: relative;
+    float: left;
+    list-style: none;
+}
