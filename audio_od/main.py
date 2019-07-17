@@ -5,6 +5,8 @@ from models import *
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 from flask_mail import Message, Mail
+from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+from flask_dance.contrib.github import make_github_blueprint, github
 
 from werkzeug.utils import secure_filename
 
