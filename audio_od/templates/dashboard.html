@@ -61,11 +61,17 @@
 	}
 </style>
 
+<script>
+	function loadcontent(url) {
+		// TODO: Load iframe with updated content
+	}
+</script>
+
 <section id="content-grow" class="row">
 	<!-- Side Bar -->
 	<section id="sidebar" class="col-sm-3 d-none d-sm-block">
 		<!-- User Info -->
-		<section>
+		<section onclick="loadcontent('user')">
 			<section class="pb-4 row">
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
@@ -84,17 +90,18 @@
 		<!-- Navigation -->
 		<section id="sidebar-nav">
 			<section id="sidebar-nav-inner">
-				<p class="sidebar-navlink">My Stories</p>
-				<p class="sidebar-navlink">Shared with Me</p>
-				<p class="sidebar-navlink">Verified Stories</p>
-				<p class="sidebar-navlink">Published Stories</p>
+				<p onclick="loadcontent('stories')" class="sidebar-navlink">My Stories</p>
+				<p onclick="loadcontent('shared')" class="sidebar-navlink">Shared with Me</p>
+				<p onclick="loadcontent('verified')" class="sidebar-navlink">Verified Stories</p>
+				<p onclick="loadcontent('published')" class="sidebar-navlink">Published Stories</p>
 			</section>
 		</section>
 		<!-- /Navigation -->
 	</section>
 	<!-- /Side Bar -->
-	<!-- Dropdown for small screens -->
-	<!-- TODO -->
+	<!-- Dropdown (For small screens) -->
+	<section>
+	</section>
 	<!-- /Dropdown -->
 	<!-- Content -->
 	<!-- /Content -->
