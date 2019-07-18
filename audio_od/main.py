@@ -361,6 +361,16 @@ def upload_profile_pic():
         fh.write(base64.b64decode(profile_pic)) 
     return json.dumps({'message' : 'success'}), 200
 
+
+@app.route("/user/picture", methods=['GET'])
+@authentication_required
+@check_header
+def get_profile():
+    if (g.user is None):
+        abort(403)
+    return g.user.get_profile_pic_base64()
+
+
 @app.route("/story/show")
 @authentication_required
 @check_header
