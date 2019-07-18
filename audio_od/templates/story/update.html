@@ -1,5 +1,3 @@
-{% extends "template.html" %}
-{% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/update.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/story/update.js') }}"></script>
 
@@ -21,7 +19,7 @@
     <section class="1-3-left-row">
         <!-- Summary Row -->
         <section class="row">
-            <h3 style="width:max-content">Story Summary</h3>
+            <h3 style="width: max-content">Story Summary</h3>
             <button onclick="save()" style="margin-left: auto" class="btn btn-primary">Save</button>
         </section>
         <hr>
@@ -124,7 +122,7 @@
     <section class="row 1-3-left-row">
         {% for object in objects %}
         <a class="col-sm-4 small-card"
-            href="/story/object/indiv?story_id={{story.story_id}}&object_id={{object.obj_id}}">
+            onclick="loadpage('/story/object/indiv?story_id={{story.story_id}}&object_id={{object.obj_id}}')">
             <h4>{{ object.obj_name|e }}</h4>
             <hr>
             <h5>{{ object.obj_starting_loc_name|e }}</h5>
@@ -143,7 +141,7 @@
     <section class="row 1-3-left-row">
         {% for event in events %}
         <a class="col-sm-4 small-card"
-            href="/story/event/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}">
+            onclick="loadpage('/story/event/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}')">
             <h4>{{ event.event_name|e }}</h4>
             <hr>
             <h5>{{ event.event_location_name|e }}</h5>
@@ -161,12 +159,12 @@
     <button type="button" onclick="add_btn_loc('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button></a>
     <br>
-    <a href="/story/treeview?story_id={{story.story_id}}">Click Here for Tree View</a>
+    <a onclick="loadpage('/story/treeview?story_id={{story.story_id}}')">Click Here for Tree View</a>
     <hr>
     <section class="row">
         {% for location in locations %}
         <a class="col-sm-6 small-card"
-            href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">
+            onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">
             <h4>{{ location.location_name|e }}</h4>
             <hr>
             {%if location.short_description != ""%}
@@ -180,9 +178,9 @@
 </section>
 <hr>
 <button class="btn btn-light" onclick="publishStory('{{story.story_id}}')">Submit for Verification</button>
-<a href="/verification/story?story_id={{story.story_id}}"> <button class="btn btn-light">View Verification
+<a onclick="loadpage('/verification/story?story_id={{story.story_id}}')"> <button class="btn btn-light">View Verification
         Status</button></a>
-<a href="/story/run?story_id={{story.story_id}}"> <button class="btn btn-light">Run Story</button></a>
+<a onclick="loadpage('/story/run?story_id={{story.story_id}}')"> <button class="btn btn-light">Run Story</button></a>
 <button class="btn btn-danger" onclick="story_delete('{{story.story_id}}')">Delete Story</button>
 
 <button onclick="save()" style="float: right" class="btn btn-primary">Save</button>
@@ -194,5 +192,3 @@
 <div id="save-bubble">
     <div id="save-bubble-inner">Story Saved</div>
 </div>
-
-{% endblock %}

@@ -2,15 +2,19 @@
 {% block content %}
 
 <style>
-	#content-grow {
+	body {
+		height: 100vh;
+	}
+
+	#content-grow, #dash-content {
 		flex-grow: 1;
 	}
 
 	#sidebar {
 		background: rgb(42, 42, 46);
 		color: white;
-		padding: 3rem 2rem;
-		flex-grow : 1;
+		padding: 1rem 1rem 0rem 1rem;
+		width: max-content;
 	}
 
 	hr { 
@@ -27,15 +31,17 @@
 		width: 100%;
 		height: 100%;
 		background-repeat: no-repeat;
-	    background-position: top center;
+	    background-position: center center;
 	    background-color: #cccccc;
 	    background-size: cover;
 	    background-image: url("{{ url_for('static', filename='image/user-default.png') }}");
+	   	-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+		box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 	}
 
 	.image {
 	    position: relative;
-	    overflow: hidden;
 	    padding-bottom: 100%;
 	}
 
@@ -43,68 +49,118 @@
 		display: flex;
 	}
 
-	#sidebar-nav-inner {
-		margin: auto;
-		width: max-content;
-	}
-
 	.sidebar-navlink {
-		font-size: 1.1rem;
+		font-size: .9rem;
 		padding: 0.25rem 1rem;
 		border-radius: 5px;
-		transition: background-color .1s;
+		color: lightgrey;
+		transition: color .1s;
 	}
 
 	.sidebar-navlink:hover {
-		background-color: #666;
-		transition: background-color .1s;
+		color: white;
+		cursor: pointer;
+		transition: color .1s;
+	}
+
+	.center-50 {
+		width: 30%;
+		margin-left: 35%;
+	}
+
+	.heading-navbar {
+		margin-top: 1rem;
+	}
+
+	.hack {
+		display: inline-block;
+		text-align: center;
+		width: 1em;
+		margin-right: .5rem;
 	}
 </style>
 
 <script>
-	function loadcontent(url) {
-		// TODO: Load iframe with updated content
+	loadprofile();
+
+	function loadprofile() {
+		var xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function () {
+	        if (this.readyState == 4 && this.status == 200) {
+	        	if (this.responseText != '')
+	            	document.getElementById("sidebar-profile").style.backgroundImage = 
+	            		"url(data:image/png;base64," + this.responseText + ")";
+	        } else if (this.readyState == 4) {
+	            console.log(this.responseText);
+	        }
+	    };
+	    xhttp.open("GET", "/user/picture", true);
+	    xhttp.send();
+	}
+
+	function loadpage(url) {
+		var xhttp = new XMLHttpRequest();
+	    xhttp.onreadystatechange = function () {
+	        if (this.readyState == 4 && this.status == 200) {
+	        	if (this.responseText != '')
+	            	document.getElementById("dash-content").innerHTML = this.responseText;
+	        } else if (this.readyState == 4) {
+	            console.log(this.responseText);
+	        }
+	    };
+	    xhttp.open("GET", url, true);
+	    xhttp.send();
 	}
 </script>
 
-<section id="content-grow" class="row">
-	<!-- Side Bar -->
-	<section id="sidebar" class="col-sm-3 d-none d-sm-block">
-		<!-- User Info -->
-		<section onclick="loadcontent('user')">
-			<section class="pb-4 row">
-				<div class="col-sm-4"></div>
-				<div class="col-sm-4">
-					<a href="#" class="thumbnail">
-					    <div class="image">
-					    	<div id="sidebar-profile"></div>
-					    </div>
-					</a>
-				</div>
+<section id="content-grow" class="row" style="overflow: hidden;">
+	<section style="height: 100%; width: 100%; display: flex;">
+		<!-- Side Bar -->
+		<section id="sidebar" class="d-none d-sm-block">
+			<!-- User Info -->
+			<section onclick="loadpage('/dash/user')">
+				<section class="pb-1">
+					<div class="center-50">
+						<a href="#" class="thumbnail">
+						    <div class="image">
+						    	<div id="sidebar-profile"></div>
+						    </div>
+						</a>
+					</div>
+				</section>
+				<h5 class="text-center">{{g.user.first_name}} {{g.user.last_name}}</h5>
+				<h6 class="text-center"><i class="text-muted">@{{g.user.username}}</i></h6>
 			</section>
-			<h3 class="text-center">{{g.user.first_name}} {{g.user.last_name}}</h3>
-			<h5 class="text-center"><i class="text-muted">@{{g.user.username}}</i></h5>
-		</section>
-		<!-- /User Info -->
-		<hr>
-		<!-- Navigation -->
-		<section id="sidebar-nav">
-			<section id="sidebar-nav-inner">
-				<p onclick="loadcontent('stories')" class="sidebar-navlink">My Stories</p>
-				<p onclick="loadcontent('shared')" class="sidebar-navlink">Shared with Me</p>
-				<p onclick="loadcontent('verified')" class="sidebar-navlink">Verified Stories</p>
-				<p onclick="loadcontent('published')" class="sidebar-navlink">Published Stories</p>
+			<!-- /User Info -->
+			<hr>
+			<!-- Navigation -->
+			<section id="sidebar-nav">
+				<section class="sidebar-nav-inner">
+					<p class="sidebar-navlink" onclick="loadpage('/dash/story')"><i class="fas hack fa-book-open"></i>My Stories</p>
+					<p class="sidebar-navlink" onclick="loadpage('/dash/shared')"><i class="fas hack fa-user-friends"></i>Shared with Me</p>
+					<p class="sidebar-navlink" onclick="loadpage('/dash/verified')"><i class="far hack fa-check-square"></i>Verified</p>
+					<p class="sidebar-navlink" onclick="loadpage('/dash/published')"><i class="fas hack fa-dollar-sign"></i>Published</p>
+				</section>
 			</section>
+			<h6 class="heading-navbar">Recent Stories</h6>
+			<hr>
+			<section class="sidebar-nav-inner">
+				{%for story in stories[:5]%}
+					<p onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="sidebar-navlink">{{story.story_title|e}}&nbsp;</p>
+				{%endfor%}
+			</section>
+			<!-- /Navigation -->
 		</section>
-		<!-- /Navigation -->
+		<!-- /Side Bar -->
+		<!-- Dropdown (For small screens) -->
+		<section class="d-block d-sm-none">
+		</section>
+		<!-- /Dropdown -->
+		<!-- Content -->
+		<section id="dash-content" style="overflow-y: scroll">
+		</section>
+		<!-- /Content -->
 	</section>
-	<!-- /Side Bar -->
-	<!-- Dropdown (For small screens) -->
-	<section>
-	</section>
-	<!-- /Dropdown -->
-	<!-- Content -->
-	<!-- /Content -->
 </section>
 
 {% endblock %}

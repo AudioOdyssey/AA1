@@ -1,13 +1,11 @@
-{% extends "template.html" %}
-{% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/decision/show.css') }}"
     type="text/css" />
 <script src="{{ url_for('static', filename='js/story/location/decision/show.js') }}"></script>
 
-<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Location</a>
-<a class="btn btn-light" href="/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Decision List</a>
-<a class="btn btn-primary" style="float:right" href="/save/saving?story_id={{ story_id }}">Save</a>
+<a href="#" onclick="loadpage('/story/update?story_id={{ story_id }}')"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a class="btn btn-light" href="#" onclick="loadpage('/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Location</a>
+<a class="btn btn-light" href="#" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</a>
+<a class="btn btn-primary" style="float:right" href="#" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</a>
 
 <form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
@@ -120,8 +118,7 @@
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label>Select Event to show decision: or <a href="#"
-                                onclick="add_btn_pressed_evt('{{ story_id }}')">
+                        <label>Select Event to show decision: or <a href="#" onclick="add_btn_pressed_evt('{{ story_id }}')">
                                 Add New Event</a></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="show_event_id"
                             onchange="decision_changed(this);check_exclusivity(this)">
@@ -241,9 +238,7 @@
 
 <br>
 
-<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a class="btn btn-light" href="/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Location</a>
-<a class="btn btn-light" href="/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}">Back to Decision List</a>
-<a class="btn btn-primary" style="float:right" href="/save/saving?story_id={{ story_id }}">Save</a>
-
-{% endblock %}
+<a href="#" onclick="loadpage('/story/update?story_id={{ story_id }}')"><button class="btn btn-light">Back to Main Story Page</button></a>
+<a class="btn btn-light" href="#" onclick="loadpage('/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Location</a>
+<a class="btn btn-light" href="#" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</a>
+<a class="btn btn-primary" style="float:right" href="#" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</a>

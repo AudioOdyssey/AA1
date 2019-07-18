@@ -362,7 +362,6 @@ def upload_profile_pic():
     return json.dumps({'message' : 'success'}), 200
 
 
-
 @app.route("/user/picture", methods=['GET'])
 @authentication_required
 @check_header
@@ -372,12 +371,12 @@ def get_profile():
     return g.user.get_profile_pic_base64()
 
 
-@app.route("/user/picture/post", methods=['POST'])
+@app.route("/user/picture", methods=['POST'])
 @authentication_required
 @check_header
-def get_profile_post():
+def put_profile():
     filename = ''
-    file = request.files['cover']
+    file = request.files['picture']
     if file.filename == '':
         return '{"status" : "error"}'
     if file and allowed_file(file.filename):
@@ -385,6 +384,13 @@ def get_profile_post():
         file.save(os.path.join(config.upload_folder, 'profile_pics', filename))
         return '{"status":"ok"}'
     return '{"status" : "error"}'
+
+
+@app.route("/user/dummy_upload")
+@authentication_required
+@check_header
+def dummy_upload():
+    return render_template("/dummy_image.html")
 
 
 @app.route("/story/show")
@@ -1334,9 +1340,12 @@ def reset_token(token):
     return render_template("/password_reset/form.html")
 
 @app.route("/dashboard")
+@authentication_required
 @check_header
 def dashboard():
-    return render_template("/dashboard.html")
+    stories = Story.story_list_by_creatordate(g.uid)
+    base_url = ""
+    return render_template("/dashboard.html", stories=stories, base_url=base_url)
 
 
 @app.errorhandler(403)
@@ -1379,7 +1388,6 @@ def getUid():
 def checkEditorAdmin(uid):
     user = User.get(uid)
     return user.is_admin or user.is_copy_editor or user.is_content_editor
-
 
 def checkAdmin(uid):
     user = User.get(uid)

@@ -166,6 +166,21 @@ class Story:
         return story_list
 
     @classmethod
+    def story_list_by_creatordate(cls, user_creator_id):
+        conn = pymysql.connect(
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT * FROM `master_stories` WHERE user_creator_id = %s ORDER BY updated_at ASC"), (user_creator_id))
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"]))
+        conn.close()
+        return story_list
+
+    @classmethod
     def story_list_for_purchase(cls):
         conn = pymysql.connect(
             config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
