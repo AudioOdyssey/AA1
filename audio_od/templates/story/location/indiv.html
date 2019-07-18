@@ -8,14 +8,14 @@
 <a href="#" onclick="loadpage('/story/run?story_id={{story_id}}&location_id={{location_id}}" class="btn btn-light">Run from Here</a>
 <button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
 
-<form class="location-main-row" onclick="set_focus(this)" method="POST" action="/story/location/update">
-    <input name="story_id" value="{{ story_id }}" readonly class="hidden-in">
-    <input name="loc_id" value="{{ location_id }}" readonly class="hidden-in">
+<form class="show-main-row" onclick="set_focus(this)" method="POST" action="/story/location/update">
+    <input name="story_id" value="{{ story_id }}" readonly class="d-none">
+    <input name="loc_id" value="{{ location_id }}" readonly class="d-none">
     <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-danger"><i
         class="fa fa-trash-alt fa-xs"></i></button>
 
-    <section class="location-row row">
-        <section class="row flex-1">
+    <section class="align-items-center row m0">
+        <section class="row m0 fg-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="location_name" onchange="location_changed(this)"
@@ -26,7 +26,7 @@
 
     </section>
     <hr>
-    <section class="row details">
+    <section class="row m0 p-2">
 
         <label> Original Description</label>
         <textarea class="form-control" rows="3" name="location_origin_description"
@@ -69,7 +69,3 @@
     Verification Info</button></a>
 <a href="#" onclick="loadpage('/story/run?story_id={{story_id}}&location_id={{location_id}}')" class="btn btn-light">Run from Here</a>
 <button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
-
-<div id="save-bubble">
-    <div id="save-bubble-inner">Location Saved</div>
-</div>

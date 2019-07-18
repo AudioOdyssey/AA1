@@ -7,14 +7,14 @@
 <a class="btn btn-light" href="#" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</a>
 <a class="btn btn-primary" style="float:right" href="#" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</a>
 
-<form class="decision-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
-    <input name="story_id" value="{{ decision.story_id }}" readonly class="hidden-in">
-    <input name="location_id" value="{{ decision.loc_id}}" readonly class="hidden-in">
-    <input name="decision_id" value="{{ decision.decision_id }}" readonly class="hidden-in">
+<form class="show-main-row" onclick="set_focus(this)" method="POST" action="/story/location/decision/update">
+    <input name="story_id" value="{{ decision.story_id }}" readonly class="d-none">
+    <input name="location_id" value="{{ decision.loc_id}}" readonly class="d-none">
+    <input name="decision_id" value="{{ decision.decision_id }}" readonly class="d-none">
     <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-danger"><i
         class="fa fa-trash-alt fa-xs"></i></button>
-    <section class="decision-row row">
-        <section class="row flex-1">
+    <section class="align-items-center row m0">
+        <section class="row m0 fg-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="decision_name" onchange="decision_changed(this)"
@@ -46,7 +46,7 @@
             </div>
         </section>
     </section>
-    <section class="details">
+    <section class="p-2">
         <!-- TODO: add max value -->
         <label>Decision Sequence Number:</label>
         <input class="form-control" name="sequence_number" min="1" type="number" onchange="decision_changed(this)"
@@ -57,7 +57,7 @@
         <textarea class="form-control" rows="3" name="dec_description"
             onchange="decision_changed(this)">{{ decision.decision_description|e }}</textarea>
 
-        <div class="row">
+        <div class="row m0">
             <label>Causes a transition?</label>
             {% if decision.transition %}
             <input type="checkbox" autocomplete="off" name="transition" onclick="checkbox_visability_check(this)"
@@ -91,7 +91,7 @@
         {% endif %}
 
 
-        <div class="row">
+        <div class="row m0">
             <label>Is Hidden?</label>
             {% if decision.hidden %}
             <input type="checkbox" autocomplete="off" name="hidden" onclick="checkbox_visability_check(this)"
@@ -103,7 +103,7 @@
             <br>
 
             <div class="checkbox_hide" {%if not decision.hidden%}style="display: none;" {%endif%}>
-                <section class="row flex-1">
+                <section class="row m0 fg-1">
                     <div class="col-sm-6">
                         <label>Select Object to show decision: or <a href="#"
                                 onclick="add_btn_pressed_obj('{{ story_id }}')">
@@ -147,7 +147,7 @@
             <br>
 
             <div class="checkbox_hide" {%if not decision.locked%}style="display: none;" {%endif%}>
-                <section class="row flex-1">
+                <section class="row m0 fg-1">
                     <div class="col-sm-6">
 
                         <label>Select Object to unlock decision: or <a href="#"

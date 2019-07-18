@@ -8,11 +8,11 @@ function event_show(activ) {
 
 function set_focus(elem) {
     try {
-        document.getElementById("active").id = "";
+        document.getElementById("show-active").id = "";
     } catch (err) {
 
     }
-    elem.id = "active";
+    elem.id = "show-active";
 }
 
 function checkbox_visability_check(elem) { //does not work

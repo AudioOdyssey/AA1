@@ -25,7 +25,7 @@
         <hr>
 
         <form id="edit-story-details" method="POST" action="/story/update">
-            <input name="story_id" value="{{ story.story_id }}" readonly class="hidden-in">
+            <input name="story_id" value="{{ story.story_id }}" readonly class="d-none">
 
             <div class="form-group update-form-group">
                 <label>Title:</label>
@@ -188,7 +188,3 @@
 <script>
     document.getElementById('cover-upload').addEventListener('change', handleFileSelect, false);
 </script>
-
-<div id="save-bubble">
-    <div id="save-bubble-inner">Story Saved</div>
-</div>

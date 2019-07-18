@@ -11,7 +11,7 @@
 <br>
 
 {% for location in locations %}
-<section class="location-row">
+<section class="align-items-center">
     <p><strong>{{location.location_name|e}}</strong></p>
     {% if location.is_verified == 1%}
     <h6 style="color: green">VERIFIED</h6>
@@ -30,7 +30,7 @@
 <br>
 
 {%for decision in decisions%}
-<section class="location-row">
+<section class="align-items-center">
     <p><strong>{{decision.decision_name|e}}</strong></p>
     {% if decision.is_verified == 1%}
     <h6 style="color: green">VERIFIED</h6>

@@ -9,21 +9,21 @@
 <a href="/story/object/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Objects</button></a>
 
 <br>
-<section class="row">
+<section class="row m0">
     <h3>Events</h3>
     <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
 </section>
-<form id="ev-template" class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
+<form id="d-none" class="show-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
 
-    <input name="story_id" readonly class="hidden-in">
-    <input name="event_id" readonly class="hidden-in">
+    <input name="story_id" readonly class="d-none">
+    <input name="event_id" readonly class="d-none">
 
     <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
             class="fa fa-xs fa-trash-alt"></i></button>
 
-    <section class="event-row row">
-        <section class="row flex-1">
+    <section class="align-items-center row m0">
+        <section class="row m0 fg-1">
             <div class="col-sm-4">
                 <label for="event_name"><b>Name:</b></label>
                 <input id="event_name" class="form-control" type="text" name="event_name"
@@ -42,12 +42,12 @@
             </div>
         </section>
 
-        <section class="flex-0" onclick="event_show(this)">
-            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        <section class="fg-0" onclick="event_show(this)">
+            <i class="fas fa-chevron-down fa-lg show-down-arrow"></i>
         </section>
     </section>
 
-    <section class="row details" style="display: none">
+    <section class="row m0 p-2" style="display: none">
         <hr>
         <label for="event_descr">Description</label>
         <textarea id="event_descr" class="form-control" rows="3" name="ev_description"
@@ -61,15 +61,15 @@
 <div id="content-marker"></div>
 
 {% for event in events %}
-<form class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
-    <input name="story_id" value="{{ event.story_id }}" readonly class="hidden-in">
-    <input name="event_id" value="{{ event.event_id }}" readonly class="hidden-in">
+<form class="show-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
+    <input name="story_id" value="{{ event.story_id }}" readonly class="d-none">
+    <input name="event_id" value="{{ event.event_id }}" readonly class="d-none">
 
     <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
             class="fa fa-xs fa-trash-alt"></i></button>
 
-    <section class="event-row row">
-        <section class="row flex-1">
+    <section class="align-items-center row m0">
+        <section class="row m0 fg-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
                 <input class="form-control" type="text" name="event_name" onchange="event_changed(this)"
@@ -88,12 +88,12 @@
                 </select>
             </div>
         </section>
-        <section class="flex-0" onclick="event_show(this)">
-            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        <section class="fg-0" onclick="event_show(this)">
+            <i class="fas fa-chevron-down fa-lg show-down-arrow"></i>
         </section>
     </section>
 
-    <section class="row details" style="display: none">
+    <section class="row m0 p-2" style="display: none">
         <hr>
         <label>Description</label>
         <textarea class="form-control" rows="3" name="ev_description"

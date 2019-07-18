@@ -6,8 +6,9 @@
 		height: 100vh;
 	}
 
-	#content-grow, #dash-content {
+	#dash-content {
 		flex-grow: 1;
+		overflow-y: scroll;
 	}
 
 	#sidebar {
@@ -113,7 +114,7 @@
 	}
 </script>
 
-<section id="content-grow" class="row" style="overflow: hidden;">
+<section class="row fg-1" style="overflow: hidden;">
 	<section style="height: 100%; width: 100%; display: flex;">
 		<!-- Side Bar -->
 		<section id="sidebar" class="d-none d-sm-block">
@@ -157,7 +158,7 @@
 		</section>
 		<!-- /Dropdown -->
 		<!-- Content -->
-		<section id="dash-content" style="overflow-y: scroll">
+		<section id="dash-content">
 		</section>
 		<!-- /Content -->
 	</section>
