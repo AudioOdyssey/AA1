@@ -13,3 +13,6 @@ mail_name = 'username'
 mail_pass = 'password'
 
 secret_key = 'this is a secret'
+
+google_client_id="google will kill me if this gets out"
+google_client_secret="google told me that this is supposed to be a secret"
