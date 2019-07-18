@@ -31,6 +31,9 @@
 
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}" type="text/css" />
 	<script src="{{ url_for('static', filename='js/site.js') }}"></script>
+
+	<!-- Page Specific Styles -->
+	{% block header %}{% endblock %}
 </head>
 
 <body>
