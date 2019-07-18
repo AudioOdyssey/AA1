@@ -11,3 +11,5 @@ AudioOdysseyUITests
 *.pyc
 config.py
 .idea
+*.sublime-project
+*.sublime-workspace
