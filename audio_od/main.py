@@ -362,6 +362,7 @@ def upload_profile_pic():
     return json.dumps({'message' : 'success'}), 200
 
 
+
 @app.route("/user/picture", methods=['GET'])
 @authentication_required
 @check_header
@@ -369,6 +370,21 @@ def get_profile():
     if (g.user is None):
         abort(403)
     return g.user.get_profile_pic_base64()
+
+
+@app.route("/user/picture/post", methods=['POST'])
+@authentication_required
+@check_header
+def get_profile_post():
+    filename = ''
+    file = request.files['cover']
+    if file.filename == '':
+        return '{"status" : "error"}'
+    if file and allowed_file(file.filename):
+        filename = str(getUid()) + ".jpg"
+        file.save(os.path.join(config.upload_folder, 'profile_pics', filename))
+        return '{"status":"ok"}'
+    return '{"status" : "error"}'
 
 
 @app.route("/story/show")
