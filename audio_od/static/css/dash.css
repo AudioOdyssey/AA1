@@ -5,6 +5,7 @@ body {
 #dash-content {
 	flex-grow: 1;
 	overflow-y: scroll;
+	padding: 2rem;
 }
 
 #sidebar {
