@@ -1036,8 +1036,10 @@ def review_update():
         story.reviewer_comments = reviewer_comment
         if StoryDecision.check_verify(story_id) and StoryLocation.check_verify(story_id) and StoryObject.check_verify(story_id) and StoryEvent.check_verify(story_id):
             story.verification_status = is_verified
+            story.story_in_store = True
         if int(is_verified) == 2:
             story.verification_status = is_verified
+            story.story_in_store=False
         story.update_verify()
     else:
         loc_id = details['loc_id']
