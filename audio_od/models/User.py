@@ -148,7 +148,8 @@ class User(UserMixin):
             return None
         result = User(result['username'], result['password'],result['password_salt'],
                         user_type=result['user_type'], last_login_date=result['last_login_date'],
-                        first_name_input=result['first_name'], last_name_input=result['last_name'], email_input = result['email_address'])
+                        first_name_input=result['first_name'], last_name_input=result['last_name'],
+                        email_input=result['email_address'])
         result.user_id = user_id
         conn.close()
         return result
