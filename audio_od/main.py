@@ -1,36 +1,31 @@
-import config
-
-from models import *
-
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
-from flask_mail import Message, Mail
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
-from flask_dance.contrib.github import make_github_blueprint, github
-
-from werkzeug.utils import secure_filename
-
-import pymysql
-import pymysql.cursors
-
+#Python standard libraries
 import os
 import sys
-
 import random
 import hashlib
 import binascii
-
 import json
-
 from datetime import datetime, timedelta
-
-import jwt
-
 from functools import wraps
-
 import base64
-
 import re
+
+#Third-party libraries
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
+from flask_mail import Message, Mail
+from flask_dance.contrib.google import make_google_blueprint, google
+from werkzeug.utils import secure_filename
+import pymysql
+import pymysql.cursors
+import jwt
+from oauthlib.oauth2 import WebApplicationClient
+import requests
+
+#Internal imports
+import config
+from models import *
+
 
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
@@ -50,9 +45,20 @@ app.config['MAIL_USERNAME'] = config.mail_name
 app.config['MAIL_PASSWORD'] = config.mail_pass
 mail = Mail(app)
 
+GOOGLE_CLIENT_ID=config.google_client_id
+GOOGLE_CLIENT_SECRET=config.google_client_secret
+GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
+
 random.seed()
 
 # refresh_t = None
+
+# google_blueprint = make_google_blueprint(client_id=config.google_client_id, client_secret=config.google_client_secret, scope=["profile","email"])
+
+# app.register_blueprint(google_blueprint, url_prefix='/google_login'
+
+client=WebApplicationClient(config.google_client_id)
+
 
 def check_header(func):
     @wraps(func)
@@ -99,7 +105,7 @@ def user_new():  # fix later
         if not isValidEmail(email):
             return render_template("user/new.html", error="Invalid email")
         gender = int(details['gender'])
-        country_of_origin = (details['country_of_origin'])
+        country_of_origin = (details.get('country_of_origin'))
         profession = details['profession']
         disabilities = details.get('disabilities')
         if disabilities is None:
@@ -114,28 +120,29 @@ def user_new():  # fix later
         usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
                    profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth,
                    first_name_input=first_name, last_name_input=last_name, language=language)
-        usr.add_to_server()
+        result = usr.add_to_server()
+        if result==-1:
+            return render_template("user/new.html", error="Username already in use")
+        elif result==-2:
+            return render_template("user/new.html", error="Email already in use")
+        else:
+            return redirect(url_for("home"))
     return render_template("user/new.html")
 
 
 def isValidEmail(email):
     if len(email) > 7:
-        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
+        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
             return True
     return False
+    
     
 @app.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
     result = {}
     if request.method == "POST":
         details = request.get_json(force=True)
-        user_id = sign_up(details)
-        if user_id:
-            result['user_id'] = str(user_id)
-            result['message'] = "Successfully registered"
-        else:
-            result['message'] = 'Username already exists'
-    return make_response(json.dumps(result))
+    return make_response(sign_up(details))
 
 
 def sign_up(details_dict):
@@ -157,10 +164,15 @@ def sign_up(details_dict):
     usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
                profession_input=profession, disabilities_input=disabilities_bool,
                first_name_input=first_name, last_name_input=last_name, language=language)
-    if usr.add_to_server():
-        return usr.get_id()
+    result=usr.add_to_server()
+    if result==-1:
+        return json.dumps({"message" : "username already exists"})
+    elif result==-2:
+        return json.dumps({"message" : "email already in use"})
     else:
-        return None
+        cur = datetime.utcnow()
+        exp = datetime.utcnow() + timedelta(days=30)
+        return json.dumps({"token" : encode_auth_token(result, cur, exp), "message": "success"})
 
 
 @app.route("/session/new", methods=['GET', 'POST'])
@@ -210,6 +222,53 @@ def session_new():
         else:
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
+
+
+def get_google_provider_cfg():
+    return requests.get(GOOGLE_DISCOVERY_URL).json()
+
+
+@app.route('/google_login')
+def google_login():
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+    request_uri=client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=request.base_url+"/google/authorized",
+        scope=["openid", "email", "profile"]
+    )
+    return redirect(request_uri)
+
+@app.route('/google_login/google/authorized')
+def callback():
+    code = request.args.get("code")
+    google_provider_cfg = get_google_provider_cfg()
+    token_endpoint = google_provider_cfg["token_endpoint"]
+    token_url, headers, body = client.prepare_token_request(
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code
+    )
+    token_response = requests.post(
+        token_url,
+        headers=headers,
+        data=body,
+        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+    )
+    client.parse_request_body_response(json.dumps(token_response.json()))
+    userinfo_endpoint=google_provider_cfg["userinfo_endpoint"]
+    uri, headers, body = client.add_token(userinfo_endpoint)
+    userinfo_response=requests.get(uri, headers=headers,data=body)
+    userinfo=userinfo_response.json()
+    if userinfo.get("email_verified"):
+        unique_id = userinfo["sub"]
+        user_email = userinfo["email"]
+        picture = userinfo["picture"]
+        user_name = userinfo["given_name"]
+        return "Your name:{name}\nYour email:{email}\n".format(name=user_name, email=user_email), 200
+    else:
+        return "User email not found or not verified by Google.", 404
 
 
 @app.route("/app/session/new", methods=['POST', 'GET'])
@@ -396,7 +455,7 @@ def story_show():
 
 
 
-@app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
+@app.route("/story/update", methods=["GET"])  
 @authentication_required
 @check_header
 def story_update():
@@ -1389,4 +1448,4 @@ def checkAdmin(uid):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(ssl_context="adhoc")

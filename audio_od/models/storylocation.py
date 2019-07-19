@@ -1,14 +1,15 @@
-import pymysql
-import pymysql.cursors
+#Python standard libraries
 import sys
-
-import config
-from .storydecision import StoryDecision
-
 import json
-
 from datetime import datetime
 
+
+#Third-party libraries
+import pymysql
+import pymysql.cursors
+
+#Internal imports
+import config
 from .storydecision import StoryDecision
 
 

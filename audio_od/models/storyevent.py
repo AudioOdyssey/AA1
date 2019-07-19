@@ -1,16 +1,15 @@
+#Python standard libraries
+import json
 import sys
 sys.path.append("..")
 
-
+#Third-party libraries
 import pymysql
 import pymysql.cursors
-import sys
 
+#Internal imports
 import config
 # from . import *
-
-import json
-
 
 class StoryEvent:
     #event_location_name = ""

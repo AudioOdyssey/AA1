@@ -1,29 +1,25 @@
+#Python standard libraries
+import os
 import sys
-sys.path.append("..")
-
-
-import pymysql
-import pymysql.cursors
-import sys
-
-import config
-# from . import *
-
 import random
 import hashlib
 import binascii
-
 from datetime import datetime, date
+import base64
+sys.path.append("..")
 
+
+#Third-party libraries
+import pymysql
+import pymysql.cursors
 from flask_login import UserMixin
-
 from itsdangerous import TimedJSONWebSignatureSerializer as ResetSerializer
-
 import simplejson as json
 
-import os
+#Internal imports
+import config
+# from . import *
 
-import base64
 
 class User(UserMixin):
     username = ""
@@ -111,7 +107,12 @@ class User(UserMixin):
             results = cur.fetchone()
             if results:
                 conn.close()
-                return False
+                return -1
+            cur.execute(("SELECT * FROM users WHERE email_address = %s"),
+                        (self.email_address))
+            if results:
+                return -2
+            results = cur.fetchone()
             self.user_type = 0
             if self.is_admin:
                 self.user_type += 4
@@ -128,7 +129,7 @@ class User(UserMixin):
             result = cur.fetchone()
             self.user_id = result['user_id']
         conn.close()
-        return True
+        return self.user_id
 
     def get_id(self):
         return self.user_id
