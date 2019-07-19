@@ -19,7 +19,7 @@ from flask_login import UserMixin
 
 from itsdangerous import TimedJSONWebSignatureSerializer as ResetSerializer
 
-import json
+import simplejson as json
 
 import os
 
