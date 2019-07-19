@@ -1350,23 +1350,21 @@ def dashboard():
 
 @app.errorhandler(403)
 @check_header
-def page_not_found(e):
-    # Pretend all 403s are 404s for security
-    return render_template('404.html'), 403
+def forbidden_403(e):
+    # Pretend all 403s are 404s for security purposes
+    return render_template('error/404.html'), 403
 
 
 @app.errorhandler(404)
 @check_header
 def page_not_found_404(e):
-    # note that we set the 404 status explicitly
-    return render_template('404.html'), 404
+    return render_template('error/404.html'), 404
 
 
 @app.errorhandler(500)
 @check_header
-def page_not_found_500(e):
-    # note that we set the 404 status explicitly
-    return render_template('500.html'), 500
+def server_error_500(e):
+    return render_template('error/500.html'), 500
 
 
 @login_manager.user_loader

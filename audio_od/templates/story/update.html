@@ -116,7 +116,7 @@
 
 
 
-    <button type="button" onclick="add_btn_obj('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
+    <button type="button" onclick="add_obj_redir('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
     <hr>
     <section class="row 1-3-left-row">
@@ -135,7 +135,7 @@
 
     <h3>Events</h3>
 
-    <button type="button" onclick="add_btn_evt('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
+    <button type="button" onclick="add_evt_redir('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
     <hr>
     <section class="row 1-3-left-row">
@@ -156,7 +156,7 @@
     <h3>Locations</h3>
 
 
-    <button type="button" onclick="add_btn_loc('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
+    <button type="button" onclick="add_loc_redir('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button></a>
     <br>
     <a onclick="loadpage('/story/treeview?story_id={{story.story_id}}')">Click Here for Tree View</a>
@@ -177,7 +177,7 @@
     </section>
 </section>
 <hr>
-<button class="btn btn-light" onclick="publishStory('{{story.story_id}}')">Submit for Verification</button>
+<button class="btn btn-light" onclick="storySubmitForVerify('{{story.story_id}}')">Submit for Verification</button>
 <a onclick="loadpage('/verification/story?story_id={{story.story_id}}')"> <button class="btn btn-light">View Verification
         Status</button></a>
 <a onclick="loadpage('/story/run?story_id={{story.story_id}}')"> <button class="btn btn-light">Run Story</button></a>
@@ -186,5 +186,5 @@
 <button onclick="save()" style="float: right" class="btn btn-primary">Save</button>
 
 <script>
-    document.getElementById('cover-upload').addEventListener('change', handleFileSelect, false);
+    document.getElementById('cover-upload').addEventListener('change', storyHandleFileSelect, false);
 </script>

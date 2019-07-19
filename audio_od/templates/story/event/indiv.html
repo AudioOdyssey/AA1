@@ -3,26 +3,26 @@
 
 <button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
 
-<form class="show-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
+<form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">
     <input name="story_id" value="{{ event.story_id }}" readonly class="d-none">
     <input name="event_id" value="{{ event.event_id }}" readonly class="d-none">
 
-    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-danger"><i
+    <button type="button" onclick="show_delete_pressed(this, 'event')" class="trash btn btn-danger"><i
         class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="align-items-center row m0">
         <section class="row m0 fg-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="event_name" onchange="event_changed(this)"
+                <input class="form-control" type="text" name="event_name" onchange="show_changed(this, 'event')"
                     value="{{ event.event_name|e }}">
             </div>
 
             <div class="col-sm-8">
-                <label><b>Select Location or:</b><a href="#" onclick="add_btn_pressed_loc('{{event.story_id}}')"> Add
+                <label><b>Select Location or:</b><a href="#" onclick="add_loc_redir('{{event.story_id}}')"> Add
                         New
                         Location</a></label>
-                <select class="form-control" autocomplete="off" name="event_loc" onchange="event_changed(this)"
+                <select class="form-control" autocomplete="off" name="event_loc" onchange="show_changed(this, 'event')"
                     value="{{event.event_location_id}}">
                     <option value="0">None</option>
                     {% for loc in locations %}
@@ -40,13 +40,13 @@
 
         <label>Description</label>
         <textarea class="form-control" rows="3" name="ev_description"
-            onchange="event_changed(this)">{{ event.event_description|e }}</textarea>
+            onchange="show_changed(this, 'event')">{{ event.event_description|e }}</textarea>
 
         <label>Is Global?</label>
         {% if event.event_is_global %}
-        <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)" checked>
+        <input type="checkbox" autocomplete="off" name="is_global" onchange="show_changed(this, 'event')" checked>
         {% else %}
-        <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)">
+        <input type="checkbox" autocomplete="off" name="is_global" onchange="show_changed(this, 'event')">
         {% endif %}
         <br>
 

@@ -14,7 +14,7 @@
     <hr>
     <h3>Location Name: '<i>{{ location.location_name|e }}</i>'</h3>
 
-    <button type="button" onclick="add_btn_pressed_dec('{{ story_id }}', '{{ location.location_id }}')" id="add-btn"
+    <button type="button" onclick="add_dec_redir('{{ story_id }}', '{{ location.location_id }}')" id="add-btn"
         class="btn btn-light"><i class="fas fa-plus"></i></button>
 </section>
 {% for decision in decisions %}

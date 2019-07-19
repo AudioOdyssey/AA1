@@ -1,10 +1,5 @@
-function transferFailed(e) {
-    console.log("Error");
-}
-
 function story_changed(elem) {
     var xhttp = new XMLHttpRequest();
-    xhttp.addEventListener("abort", transferFailed);
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             save();
@@ -31,66 +26,12 @@ function story_delete(story_id) {
     xhttp.send();
 }
 
-function add_btn_obj(story_id) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var json = JSON.parse(this.responseText);
-            if (json.status == "ok") {
-                window.location.href = "/story/object/indiv?story_id=" + story_id + "&object_id=" + json.object.obj_id;
-            } else {
-                console.log(json);
-            }
-        } else if (this.readyState == 4) {
-            console.log(this.responseText);
-        }
-    };
-    xhttp.open("POST", "/story/object/new?story_id=" + story_id, true);
-    xhttp.send();
-}
-
-function add_btn_evt(story_id) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var json = JSON.parse(this.responseText);
-            if (json.status == "ok") {
-                window.location.href = "/story/event/indiv?story_id=" + story_id + "&event_id=" + json.event.event_id;
-            } else {
-                console.log(json);
-            }
-        } else if (this.readyState == 4) {
-            console.log(this.responseText);
-        }
-    };
-    xhttp.open("POST", "/story/event/new?story_id=" + story_id, true);
-    xhttp.send();
-}
-
-function add_btn_loc(story_id) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var json = JSON.parse(this.responseText);
-            if (json.status == "ok") {
-                window.location.href = "/story/location/indiv?story_id=" + story_id + "&location_id=" + json.location.location_id;
-            } else {
-                console.log(json);
-            }
-        } else if (this.readyState == 4) {
-            console.log(this.responseText);
-        }
-    };
-    xhttp.open("POST", "/story/location/new?story_id=" + story_id, true);
-    xhttp.send();
-}
-
-function handleFileSelect(evt) {
+function storyHandleFileSelect(evt) {
     var files = evt.target.files;
     var f = files[0];
     var filesize = ((f.size / 1024) / 1024).toFixed(4);
     if (filesize > 7.5) {
-        // The image id DUMMY THICC and the clap alerted the server!
+        // The image is DUMMY THICC and the clap alerted the server!
         document.getElementById("dummy-thicc").style.display = "block";
         return;
     }
@@ -105,7 +46,7 @@ function handleFileSelect(evt) {
     reader.readAsDataURL(f);
 }
 
-function publishStory(uid) {
+function storySubmitForVerify(uid) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
