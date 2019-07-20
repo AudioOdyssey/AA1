@@ -42,13 +42,13 @@ class User(UserMixin):
     is_anonymous = True
     user_id = 0
     is_editor = 0
-    last_login_date = None
+
 
     REGION = 'us-east-2b'
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
                  gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, 
-                 date_of_birth_input=date.min, language=0, user_type=0, user_id=0, last_login_date = 0):
+                 date_of_birth_input=date.min, language=0, user_type=0, user_id=0):
         self.username = username_input
         if password_salt_input == "":
             self.password_salt = self.generate_password_salt()
@@ -78,7 +78,6 @@ class User(UserMixin):
             self.is_copy_editor = True
         if user_id != 0:
             self.user_id = user_id
-        self.last_login_date = last_login_date
     
     @staticmethod
     def generate_password_salt():
@@ -109,7 +108,7 @@ class User(UserMixin):
                 conn.close()
                 return -1
             cur.execute(("SELECT * FROM users WHERE email_address = %s"),
-                        (self.email_address))
+                        (self.email))
             if results:
                 return -2
             results = cur.fetchone()
@@ -138,20 +137,19 @@ class User(UserMixin):
     def get(cls, user_id):
         if user_id == 0 or user_id == '':
             return None
-        int_user_id = int(user_id)
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(
-            ("SELECT `username`, `password`, `password_salt`, `user_type`, `last_login_date`, `first_name`, `last_name`, `email_address` FROM users WHERE `user_id` = %s"), (int_user_id))
+            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name`, `email_address`, `user_id` FROM users WHERE `user_id` = %s or email_address= %s")
+            , (user_id, user_id))
         result = cur.fetchone()
         if result['username'] is None:
             return None
         result = User(result['username'], result['password'],result['password_salt'],
-                        user_type=result['user_type'], last_login_date=result['last_login_date'],
+                        user_type=result['user_type'],
                         first_name_input=result['first_name'], last_name_input=result['last_name'],
-                        email_input=result['email_address'])
-        result.user_id = user_id
+                        email_input=result['email_address'], user_id = result['user_id'])
         conn.close()
         return result
 
@@ -204,9 +202,6 @@ class User(UserMixin):
                         (self.username, self.user_type, self.user_id))
             conn.commit()
         conn.close()
-
-    def get_last_login_date(self):
-        return self.last_login_date
 
     def get_profile_pic_base64(self):
         profile_pic = str(self.user_id) + ".jpg"

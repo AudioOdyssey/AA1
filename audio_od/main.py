@@ -9,7 +9,8 @@ from datetime import datetime, timedelta
 from functools import wraps
 import base64
 import re
-
+from urllib.request import (
+    urlopen, urlparse, urlunparse, urlretrieve)
 #Third-party libraries
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
@@ -21,6 +22,7 @@ import pymysql.cursors
 import jwt
 from oauthlib.oauth2 import WebApplicationClient
 import requests
+from bs4 import BeautifulSoup as bs
 
 #Internal imports
 import config
@@ -44,6 +46,8 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = config.mail_name
 app.config['MAIL_PASSWORD'] = config.mail_pass
 mail = Mail(app)
+
+UPLOAD_FOLDER = config.upload_folder
 
 GOOGLE_CLIENT_ID=config.google_client_id
 GOOGLE_CLIENT_SECRET=config.google_client_secret
@@ -261,14 +265,17 @@ def callback():
     uri, headers, body = client.add_token(userinfo_endpoint)
     userinfo_response=requests.get(uri, headers=headers,data=body)
     userinfo=userinfo_response.json()
-    if userinfo.get("email_verified"):
-        unique_id = userinfo["sub"]
-        user_email = userinfo["email"]
-        picture = userinfo["picture"]
-        user_name = userinfo["given_name"]
-        return "Your name:{name}\nYour email:{email}\n".format(name=user_name, email=user_email), 200
-    else:
-        return "User email not found or not verified by Google.", 404
+    username=userinfo["given_name"]+userinfo['family_name']
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], family_name=userinfo['family_name'])
+    result = usr.add_to_server()
+    if result == -2:
+        usr = User.get(userinfo['email'])
+    resp = make_response(url_for('index'))
+    cur = datetime.utcnow()
+    exp = datetime.utcnow() + timedelta(days=30)
+    token = encode_auth_token(usr.user_id, cur, exp)
+    resp.set_cookie("remember_", token, expires=exp)
+    return resp
 
 
 @app.route("/app/session/new", methods=['POST', 'GET'])
@@ -329,7 +336,7 @@ def authenticate(details):
     with conn.cursor() as cur:
         username = details['username']
         cur.execute(
-            ("SELECT user_id, last_login_date FROM users WHERE username = %s"), username)
+            ("SELECT user_id FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
             return None
@@ -416,7 +423,7 @@ def upload_profile_pic():
     auth_token = request.args.get('token')
     uid = decode_auth_token(auth_token)
     pic_name = str(uid) + '.jpg'
-    with open(os.path.join(config.upload_folder, 'profile_pics', pic_name), 'wb') as fh:
+    with open(os.path.join(UPLOAD_FOLDER, 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
     return json.dumps({'message' : 'success'}), 200
 
@@ -441,7 +448,7 @@ def get_profile_post():
         return '{"status" : "error"}'
     if file and allowed_file(file.filename):
         filename = str(getUid()) + ".jpg"
-        file.save(os.path.join(config.upload_folder, 'profile_pics', filename))
+        file.save(os.path.join(UPLOAD_FOLDER, 'profile_pics', filename))
         return '{"status":"ok"}'
     return '{"status" : "error"}'
 
@@ -507,7 +514,7 @@ def story_update_post():
         pass
     if file and allowed_file(file.filename):
         filename = str(story_id) + ".jpg"
-        file.save(os.path.join(config.upload_folder, 'covers', filename))
+        file.save(os.path.join(UPLOAD_FOLDER, 'covers', filename))
     story.verification_status = 0
     story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
