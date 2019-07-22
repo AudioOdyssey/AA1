@@ -52,25 +52,24 @@
 						</li>
 					</ul>
 					<ul class="navbar-nav ml-auto">
-						<!-- TODO: If statement based on login status -->
-						{%if g.uid == 0%}
+						{% if g.user is none %}
 						<li class="nav-item">
 							<a class="nav-link" href="/session/new">Login</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/user/new">Register</a>
 						</li>
-						{%else%}
+						{% else %}
 						<li class="nav-item">
-							<a class="nav-link" href="/story/show">My Stories</a>
+							<a class="nav-link" href="/dash/stories">Dashboard</a>
 						</li>
-						<form class="nav-item" action="/session/logout" method="post">
-							<input style="background: none; border: 0px;" type="submit" class="nav-link" name="Logout"
-								value="Logout" />
-						</form>
-						{%endif%}
-
-
+						<li>
+							<a class="nav-link" href="/dash/users">{{g.user.first_name}}</a>
+						</li>
+						<li>
+							<a class="nav-link" href="#" onclick="logout()">Logout</a>
+						</li>
+						{% endif %}
 					</ul>
 				</div>
 			</div>
