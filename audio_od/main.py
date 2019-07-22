@@ -1316,6 +1316,14 @@ def dash_story():
     return render_template("/dash/story.html", stories=stories)
 
 
+@app.route("/dash/share")
+@authentication_required
+@check_header
+def dash_share():
+    stories = Story.story_shares_by_uid(g.user.user_id)
+    return render_template("/dash/story.html", stories=stories)
+
+
 @app.route("/dash/user")
 @authentication_required
 @check_header

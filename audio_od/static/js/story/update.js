@@ -17,7 +17,7 @@ function story_delete(story_id) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            window.location.href = "/story/show"
+            loadpage("/dash/story")
         } else if (this.readyState == 4) {
             console.log(this.responseText);
         }
@@ -52,7 +52,7 @@ function storySubmitForVerify(uid) {
         if (this.readyState == 4 && this.status == 200) {
             var json = JSON.parse(this.responseText);
             if (json.status == "ok") {
-                window.location.href = "/story/show";
+                loadpage("/dash/story");
             } else {
                 console.log(json);
             }

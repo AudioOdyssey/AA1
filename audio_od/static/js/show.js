@@ -135,3 +135,21 @@ function show_check_exclusivity(elem) {
 function tree_go_starting_loc(endpoint, story_id, elem) {
     loadpage(endpoint + "?story_id=" + story_id + "&location_id=" + elem.options[elem.selectedIndex].value);
 }
+
+function create_story_btn() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var json = JSON.parse(this.responseText);
+            if (json.status == "ok") {
+                loadpage("/story/update?story_id=" + json.story.story_id);
+            } else {
+                console.log(json);
+            }
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", "/story/new", true);
+    xhttp.send();
+}
