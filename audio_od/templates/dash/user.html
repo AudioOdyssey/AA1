@@ -34,25 +34,25 @@
 </style>
 
 <!-- User Settings -->
-<form class="row">
+<section class="row">
 	<!-- User Image -->
-	<section class="col-sm-3">
+	<form class="col-sm-3">
 		<div class="fifty">
 			<div class="image">
 				<div id="user-image" style="background-image: url('data:image/png;base64,{{userimage}}')"></div>
 			</div>
 			<div class="mt-4">
 	            <div class="custom-file">
-	                <input type="file" class="custom-file-input" id="cover-upload" onchange="user_changed(this)"
-	                    aria-describedby="inputGroupFileAddon01" name="cover">
+	                <input type="file" class="custom-file-input" id="cover-upload" onchange="profile_changed(this)"
+	                    aria-describedby="inputGroupFileAddon01" name="picture">
 	                <label class="custom-file-label" for="cover-upload">Choose file</label>
 	            </div>
 	        </div>
 		</div>
-	</section>
+	</form>
 	<!-- /User Image -->
 	<!-- User Details -->
-	<section id="profile-section" class="col-sm-9">
+	<form id="profile-section" class="col-sm-9">
 		<section>
 			<label>Username:</label>
 	        <div class="input-group mb-2 icon-input">
@@ -60,7 +60,7 @@
 	                <div class="input-group-text"><i class="fas fa-hashtag"></i></div>
 	            </div>
 	            <input type="text" name="username" placeholder="Username" class="form-control" autocomplete="username"
-	                required onchange="user_changed(this)">
+	                required onchange="user_changed(this)" value="{{g.user.username|e}}">
 	        </div>
 		</section>
 		<section>
@@ -70,7 +70,7 @@
 	                <div class="input-group-text"><i class="fas fa-user"></i></div>
 	            </div>
 	            <input type="text" name="first-name" placeholder="First Name" class="form-control" autocomplete="given-name"
-	                required onchange="user_changed(this)">
+	                required onchange="user_changed(this)" value="{{g.user.first_name|e}}">
 	        </div>
 		</section>
 		<section>
@@ -80,7 +80,7 @@
 	                <div class="input-group-text"><i class="fas fa-users"></i></div>
 	            </div>
 	            <input type="text" name="last-name" placeholder="Family Name" class="form-control" autocomplete="family-name"
-	                required onchange="user_changed(this)">
+	                required onchange="user_changed(this)" value="{{g.user.last_name|e}}">
 	        </div>
 		</section>
 		<section>
@@ -90,10 +90,10 @@
 	                <div class="input-group-text"><i class="fas fa-at"></i></div>
 	            </div>
 	            <input type="email" name="last-name" placeholder="Last Name" class="form-control" autocomplete="email"
-	                required onchange="user_changed(this)">
+	                required onchange="user_changed(this)" value="{{g.user.email|e}}">
 	        </div>
 		</section>
-	</section>
+	</form>
 	<!-- /User Details -->
-</form>
+</section>
 <!-- /User Settings -->

@@ -172,7 +172,7 @@ class Story:
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT * FROM `master_stories` WHERE user_creator_id = %s ORDER BY updated_at ASC"), (user_creator_id))
+                ("SELECT * FROM `master_stories` WHERE user_creator_id = %s ORDER BY updated_at DESC"), (user_creator_id))
             results = cur.fetchall()
             for row in results:
                 story_list.append(

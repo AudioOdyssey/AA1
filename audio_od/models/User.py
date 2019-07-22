@@ -141,13 +141,13 @@ class User(UserMixin):
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(
-            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name` FROM users WHERE `user_id` = %s"), (int_user_id))
+            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name`, `email_address` FROM users WHERE `user_id` = %s"), (int_user_id))
         result = cur.fetchone()
         if result['username'] is None:
             return None
         result = User(result['username'], result['password'],result['password_salt'],
                         user_type=result['user_type'], first_name_input=result['first_name'], 
-                        last_name_input=result['last_name'])
+                        last_name_input=result['last_name'], email_input=result['email_address'])
         result.user_id = user_id
         conn.close()
         return result

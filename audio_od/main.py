@@ -399,13 +399,6 @@ def put_profile():
     return '{"status" : "error"}'
 
 
-@app.route("/user/dummy_upload")
-@authentication_required
-@check_header
-def dummy_upload():
-    return render_template("/dummy_image.html")
-
-
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 @authentication_required
 @check_header

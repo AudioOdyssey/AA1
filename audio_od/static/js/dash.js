@@ -41,3 +41,16 @@ function user_changed(elem) {
     xhttp.open("POST", "/user/update", true);
     xhttp.send(new FormData(elem.form));
 }
+
+function profile_changed(elem) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            save();
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("POST", "/user/picture", true);
+    xhttp.send(new FormData(elem.form));
+}
