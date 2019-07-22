@@ -131,3 +131,7 @@ body {
 .fg-0 {
     flex-grow: 0;
 }
+
+.hover-cursor:hover {
+	cursor: pointer;
+}

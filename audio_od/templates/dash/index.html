@@ -16,7 +16,7 @@
 		<!-- Side Bar -->
 		<section id="sidebar" class="d-none d-sm-block">
 			<!-- User Info -->
-			<section onclick="loadpage('/dash/user')">
+			<section class="hover-cursor" onclick="loadpage('/dash/user')">
 				<section class="pb-1">
 					<div class="center-50">
 						<a href="#" class="thumbnail">
@@ -56,6 +56,7 @@
 		<!-- /Dropdown -->
 		<!-- Content -->
 		<section id="dash-content">
+			{{content|safe}}
 		</section>
 		<!-- /Content -->
 	</section>

@@ -1324,6 +1324,23 @@ def dash_user():
     return render_template("/dash/user.html", userimage=userimage)
 
 
+@app.route("/dash/stories")
+@authentication_required
+@check_header
+def dash_story_full():
+    stories = Story.story_list_by_creatordate(g.uid)
+    return render_template("/dash/index.html", stories=stories, content=render_template("/dash/story.html", stories=stories))
+
+
+@app.route("/dash/users")
+@authentication_required
+@check_header
+def dash_user_full():
+    stories = Story.story_list_by_creatordate(g.uid)
+    userimage = g.user.get_profile_pic_base64().decode("utf-8")
+    return render_template("/dash/index.html", stories=stories, content=render_template("/dash/user.html", userimage=userimage))
+
+
 @app.errorhandler(403)
 @check_header
 def forbidden_403(e):
