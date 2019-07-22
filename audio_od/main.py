@@ -266,7 +266,8 @@ def callback():
     userinfo_response=requests.get(uri, headers=headers,data=body)
     userinfo=userinfo_response.json()
     username=userinfo["given_name"]+userinfo['family_name']
-    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'])
+    passwd = os.urandom(16).decode('latin-1')
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd)
     result = usr.search_by_email()
     if result == -1:
         result.add_to_server()
