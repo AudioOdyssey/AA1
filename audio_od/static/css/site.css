@@ -13,6 +13,7 @@ body {
 .navbar {
 	box-shadow: 0 0 5px 5px RGBA(50, 50, 50, 0.5);
 	background-color: whitesmoke;
+	z-index: 2;
 }
 
 .footer {
@@ -22,6 +23,7 @@ body {
 	padding-bottom: 2em;
 	display: block;
 	flex: 0 1 40px;
+	z-index: 2;
 }
 
 #main-site {
