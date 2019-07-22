@@ -42,13 +42,13 @@ class User(UserMixin):
     is_anonymous = True
     user_id = 0
     is_editor = 0
-
+    logged_in_with = ''
 
     REGION = 'us-east-2b'
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
                  gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, 
-                 date_of_birth_input=date.min, language=0, user_type=0, user_id=0):
+                 date_of_birth_input=date.min, language=0, user_type=0, user_id=0, logged_in_with =  ''):
         self.username = username_input
         if password_salt_input == "":
             self.password_salt = self.generate_password_salt()
@@ -78,6 +78,7 @@ class User(UserMixin):
             self.is_copy_editor = True
         if user_id != 0:
             self.user_id = user_id
+        self.logged_in_with = logged_in_with
     
     @staticmethod
     def generate_password_salt():
@@ -119,7 +120,7 @@ class User(UserMixin):
                 self.user_type += 2
             if self.is_copy_editor:
                 self.user_type += 1
-            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth, user_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            cur.execute("INSERT INTO users(username, password, password_salt, email_address, profession, gender, country_of_origin, disabilities, language_id, first_name, last_name, date_of_birth, user_type, logged_in_with) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         (self.username, self.password, self.password_salt, self.email,
                          self.profession, self.gender, self.country_of_origin, self.disabilities, self.language_id, self.first_name, self.last_name, self.date_of_birth, self.user_type))
             conn.commit()
@@ -153,7 +154,7 @@ class User(UserMixin):
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(
-            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name`, `email_address`, `user_id` FROM users WHERE `user_id` = %s or email_address= %s")
+            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name`, `email_address`, `user_id` FROM users WHERE `user_id` = %s")
             , (user_id, user_id))
         result = cur.fetchone()
         if result['username'] is None:
