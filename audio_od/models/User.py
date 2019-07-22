@@ -130,6 +130,18 @@ class User(UserMixin):
         conn.close()
         return self.user_id
 
+
+    def search_by_email(self):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT user_id FROM users WHERE email_address=%s"),(self.email))
+            query_data = cur.fetchone()
+            if query_data is None:
+                return -1
+            return query_data['user_id']
+
+
     def get_id(self):
         return self.user_id
 
@@ -222,7 +234,6 @@ class User(UserMixin):
             'profile_picture' : self.get_profile_pic_base64()
         }
         return json.dumps(result)
-
 
     @staticmethod
     def get_reset_token(email, duration=900):

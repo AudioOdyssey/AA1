@@ -11,11 +11,11 @@ import base64
 import re
 from urllib.request import (
     urlopen, urlparse, urlunparse, urlretrieve)
+
 #Third-party libraries
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 from flask_mail import Message, Mail
-from flask_dance.contrib.google import make_google_blueprint, google
 from werkzeug.utils import secure_filename
 import pymysql
 import pymysql.cursors
@@ -266,15 +266,22 @@ def callback():
     userinfo_response=requests.get(uri, headers=headers,data=body)
     userinfo=userinfo_response.json()
     username=userinfo["given_name"]+userinfo['family_name']
-    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], family_name=userinfo['family_name'])
-    result = usr.add_to_server()
-    if result == -2:
-        usr = User.get(userinfo['email'])
-    resp = make_response(url_for('index'))
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'])
+    result = usr.search_by_email()
+    if result == -1:
+        result.add_to_server()
+    else:
+        usr = User.get(result)
+    resp = make_response(redirect(url_for('home')))
     cur = datetime.utcnow()
     exp = datetime.utcnow() + timedelta(days=30)
     token = encode_auth_token(usr.user_id, cur, exp)
     resp.set_cookie("remember_", token, expires=exp)
+    # soup = bs(urlopen(userinfo['picture']))
+    # for image in soup.findAll("img"):
+    #     filename=str(usr.user_id)+".jpg"
+    #     outpath = os.path.join(UPLOAD_FOLDER,"profile_pics", filename)
+    #     urlretrieve(image['src'], outpath)
     return resp
 
 
@@ -330,6 +337,7 @@ def load_id():
     resp.set_cookie("remember_", new_token, expires=expiry_time)
     return resp
 
+
 def authenticate(details):
     conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5,
                            cursorclass=pymysql.cursors.DictCursor)
@@ -348,6 +356,7 @@ def authenticate(details):
                 return None
     return None
 
+
 @app.route("/refresh/token", methods=['GET'])
 def issue_new_token():
     token = request.args.get('token')
@@ -358,6 +367,7 @@ def issue_new_token():
     expiry_time = datetime.utcnow() + timedelta(days=30)
     new_token = encode_auth_token(uid, current_time, expiry_time)
     return json.dumps({'token' : new_token}), 200
+
 
 def encode_auth_token(user_id, current_time, expired_date):
     payload = {
@@ -380,6 +390,7 @@ def decode_auth_token(auth_token):
         return 0
     except jwt.InvalidTokenError:
         return 0
+
 
 @app.route("/app/session/logout")
 def app_logout():
@@ -405,9 +416,11 @@ def logout():
         resp.set_cookie('remember_', '', 0)
         return resp
 
+
 @app.route("/session/password/change", methods=['GET', 'POST'])
 def change_password():
     pass
+
 
 @app.route("/app/user/info", methods=['GET'])
 def app_user_info():
@@ -415,6 +428,7 @@ def app_user_info():
     user_id = decode_auth_token(token)
     usr = User.get(user_id)
     return usr.user_profile_info()
+
 
 @app.route("/app/user/profile/upload", methods=['POST'])
 def upload_profile_pic():
@@ -426,7 +440,6 @@ def upload_profile_pic():
     with open(os.path.join(UPLOAD_FOLDER, 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
     return json.dumps({'message' : 'success'}), 200
-
 
 
 @app.route("/user/picture", methods=['GET'])
@@ -1377,9 +1390,9 @@ def password_request():
                                 sender='noreply@myaudioodyssey.com',
                                 recipients=[email])
                 msg.body = f'''To reset your password, visit the following link:
-{url_for('reset_token', token=token, _external=True)}
-If you did not make this request then simply ignore this email and no changes will be made.
-'''
+                                {url_for('reset_token', token=token, _external=True)}
+                                If you did not make this request then simply ignore this email and no changes will be made.
+                            '''
                 mail.send(msg)
                 print("Message Sent")
     return render_template("/password_reset/request.html")
