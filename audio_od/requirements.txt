@@ -1,0 +1,9 @@
+requests
+Flask
+oauthlib
+Flask-Mail
+simplejson
+Flask-Login
+PyMySQL
+pyjwt
+itsdangerous

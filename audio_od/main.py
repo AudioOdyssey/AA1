@@ -1,36 +1,33 @@
-import config
-
-from models import *
-
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
-from flask_mail import Message, Mail
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
-from flask_dance.contrib.github import make_github_blueprint, github
-
-from werkzeug.utils import secure_filename
-
-import pymysql
-import pymysql.cursors
-
+#Python standard libraries
 import os
 import sys
-
 import random
 import hashlib
 import binascii
-
 import json
-
 from datetime import datetime, timedelta
-
-import jwt
-
 from functools import wraps
-
 import base64
-
 import re
+from urllib.request import (
+    urlopen, urlparse, urlunparse, urlretrieve)
+
+#Third-party libraries
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
+from flask_mail import Message, Mail
+from werkzeug.utils import secure_filename
+import pymysql
+import pymysql.cursors
+import jwt
+from oauthlib.oauth2 import WebApplicationClient
+import requests
+from bs4 import BeautifulSoup as bs
+
+#Internal imports
+import config
+from models import *
+
 
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
@@ -49,6 +46,12 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = config.mail_name
 app.config['MAIL_PASSWORD'] = config.mail_pass
 mail = Mail(app)
+
+UPLOAD_FOLDER = config.upload_folder
+
+GOOGLE_CLIENT_ID=config.google_client_id
+GOOGLE_CLIENT_SECRET=config.google_client_secret
+GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
 
 random.seed()
 
@@ -70,6 +73,12 @@ def authentication_required(func):
                 return redirect(url_for('session_new'))
             return func(*args, **kwargs)
     return func_wrapper
+# google_blueprint = make_google_blueprint(client_id=config.google_client_id, client_secret=config.google_client_secret, scope=["profile","email"])
+
+# app.register_blueprint(google_blueprint, url_prefix='/google_login'
+
+client=WebApplicationClient(config.google_client_id)
+
 
 def check_header(func):
     @wraps(func)
@@ -116,7 +125,7 @@ def user_new():  # fix later
         if not isValidEmail(email):
             return render_template("user/new.html", error="Invalid email")
         gender = int(details['gender'])
-        country_of_origin = (details['country_of_origin'])
+        country_of_origin = (details.get('country_of_origin'))
         profession = details['profession']
         disabilities = details.get('disabilities')
         if disabilities is None:
@@ -131,7 +140,13 @@ def user_new():  # fix later
         usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
                    profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth,
                    first_name_input=first_name, last_name_input=last_name, language=language)
-        usr.add_to_server()
+        result = usr.add_to_server()
+        if result==-1:
+            return render_template("user/new.html", error="Username already in use")
+        elif result==-2:
+            return render_template("user/new.html", error="Email already in use")
+        else:
+            return redirect(url_for("home"))
     return render_template("user/new.html")
 
 
@@ -151,22 +166,17 @@ def user_update():
 
 def isValidEmail(email):
     if len(email) > 7:
-        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
+        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
             return True
     return False
+    
     
 @app.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
     result = {}
     if request.method == "POST":
         details = request.get_json(force=True)
-        user_id = sign_up(details)
-        if user_id:
-            result['user_id'] = str(user_id)
-            result['message'] = "Successfully registered"
-        else:
-            result['message'] = 'Username already exists'
-    return make_response(json.dumps(result))
+    return make_response(sign_up(details))
 
 
 def sign_up(details_dict):
@@ -188,10 +198,15 @@ def sign_up(details_dict):
     usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
                profession_input=profession, disabilities_input=disabilities_bool,
                first_name_input=first_name, last_name_input=last_name, language=language)
-    if usr.add_to_server():
-        return usr.get_id()
+    result=usr.add_to_server()
+    if result==-1:
+        return json.dumps({"message" : "username already exists"})
+    elif result==-2:
+        return json.dumps({"message" : "email already in use"})
     else:
-        return None
+        cur = datetime.utcnow()
+        exp = datetime.utcnow() + timedelta(days=30)
+        return json.dumps({"token" : encode_auth_token(result, cur, exp), "message": "success"})
 
 
 @app.route("/session/new", methods=['GET', 'POST'])
@@ -243,6 +258,64 @@ def session_new():
     return render_template("session/new.html", error=error)
 
 
+def get_google_provider_cfg():
+    return requests.get(GOOGLE_DISCOVERY_URL).json()
+
+
+@app.route('/google_login')
+def google_login():
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+    request_uri=client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=request.base_url+"/google/authorized",
+        scope=["openid", "email", "profile"]
+    )
+    return redirect(request_uri)
+
+@app.route('/google_login/google/authorized')
+def callback():
+    code = request.args.get("code")
+    google_provider_cfg = get_google_provider_cfg()
+    token_endpoint = google_provider_cfg["token_endpoint"]
+    token_url, headers, body = client.prepare_token_request(
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code
+    )
+    token_response = requests.post(
+        token_url,
+        headers=headers,
+        data=body,
+        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+    )
+    client.parse_request_body_response(json.dumps(token_response.json()))
+    userinfo_endpoint=google_provider_cfg["userinfo_endpoint"]
+    uri, headers, body = client.add_token(userinfo_endpoint)
+    userinfo_response=requests.get(uri, headers=headers,data=body)
+    userinfo=userinfo_response.json()
+    username=userinfo["given_name"]+userinfo['family_name']
+    passwd = os.urandom(16).decode('latin-1')
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd, signed_in_with="Google")
+    result = usr.search_by_email()
+    if result == -1:
+        result.add_to_server()
+    else:
+        usr = User.get(result)
+    resp = make_response(redirect(url_for('home')))
+    cur = datetime.utcnow()
+    exp = datetime.utcnow() + timedelta(days=30)
+    token = encode_auth_token(usr.user_id, cur, exp)
+    resp.set_cookie("remember_", token, expires=exp)
+    # soup = bs(urlopen(userinfo['picture']))
+    # for image in soup.findAll("img"):
+    #     filename=str(usr.user_id)+".jpg"
+    #     outpath = os.path.join(UPLOAD_FOLDER,"profile_pics", filename)
+    #     urlretrieve(image['src'], outpath)
+    return resp
+
+
 @app.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
     result = None
@@ -277,6 +350,7 @@ def load_id():
     resp.set_cookie("remember_", new_token, expires=expiry_time)
     return resp
 
+
 def authenticate(details):
     conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5,
                            cursorclass=pymysql.cursors.DictCursor)
@@ -295,6 +369,7 @@ def authenticate(details):
                 return None
     return None
 
+
 @app.route("/refresh/token", methods=['GET'])
 def issue_new_token():
     token = request.args.get('token')
@@ -305,6 +380,7 @@ def issue_new_token():
     expiry_time = datetime.utcnow() + timedelta(days=30)
     new_token = encode_auth_token(uid, current_time, expiry_time)
     return json.dumps({'token' : new_token}), 200
+
 
 def encode_auth_token(user_id, current_time, expired_date):
     payload = {
@@ -327,6 +403,7 @@ def decode_auth_token(auth_token):
         return 0
     except jwt.InvalidTokenError:
         return 0
+
 
 @app.route("/app/session/logout")
 def app_logout():
@@ -352,9 +429,6 @@ def logout():
         resp.set_cookie('remember_', '', 0)
         return resp
 
-@app.route("/session/password/change", methods=['GET', 'POST'])
-def change_password():
-    pass
 
 @app.route("/app/user/info", methods=['GET'])
 def app_user_info():
@@ -363,6 +437,7 @@ def app_user_info():
     usr = User.get(user_id)
     return usr.user_profile_info()
 
+
 @app.route("/app/user/profile/upload", methods=['POST'])
 def upload_profile_pic():
     details = request.json
@@ -370,7 +445,7 @@ def upload_profile_pic():
     auth_token = request.args.get('token')
     uid = decode_auth_token(auth_token)
     pic_name = str(uid) + '.jpg'
-    with open(os.path.join(config.upload_folder, 'profile_pics', pic_name), 'wb') as fh:
+    with open(os.path.join(UPLOAD_FOLDER, 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
     return json.dumps({'message' : 'success'}), 200
 
@@ -394,7 +469,7 @@ def put_profile():
         return '{"status" : "error"}'
     if file and allowed_file(file.filename):
         filename = str(getUid()) + ".jpg"
-        file.save(os.path.join(config.upload_folder, 'profile_pics', filename))
+        file.save(os.path.join(UPLOAD_FOLDER, 'profile_pics', filename))
         return '{"status":"ok"}'
     return '{"status" : "error"}'
 
@@ -452,7 +527,7 @@ def story_update_post():
         pass
     if file and allowed_file(file.filename):
         filename = str(story_id) + ".jpg"
-        file.save(os.path.join(config.upload_folder, 'covers', filename))
+        file.save(os.path.join(UPLOAD_FOLDER, 'covers', filename))
     story.verification_status = 0
     story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
@@ -1040,8 +1115,10 @@ def review_update():
         story.reviewer_comments = reviewer_comment
         if StoryDecision.check_verify(story_id) and StoryLocation.check_verify(story_id) and StoryObject.check_verify(story_id) and StoryEvent.check_verify(story_id):
             story.verification_status = is_verified
+            story.story_in_store = True
         if int(is_verified) == 2:
             story.verification_status = is_verified
+            story.story_in_store=False
         story.update_verify()
     else:
         loc_id = details['loc_id']
@@ -1261,6 +1338,13 @@ def password_request():
         email = request.form.get('email')
         if email is not None:
             token = User.get_reset_token(email, 900)
+            usr = User(email_input = email)
+            result = usr.search_by_email()
+            if result != -1:
+                usr = User.get(result)
+            if usr.signed_in_with != "native" or usr.signed_in_with != '':
+                error = "You signed in with " + usr.signed_in_with + "."
+                return render_template("session/new.html", error=error)
             print("Token Got")
             if token is not None:
                 msg = Message('Password Reset Request',
@@ -1269,7 +1353,7 @@ def password_request():
                 msg.body = f'''To reset your password, visit the following link:
 {url_for('reset_token', token=token, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
-'''
+                            '''
                 mail.send(msg)
                 print("Message Sent")
     return render_template("/password_reset/request.html")
@@ -1387,4 +1471,4 @@ def checkAdmin(uid):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(ssl_context="adhoc")

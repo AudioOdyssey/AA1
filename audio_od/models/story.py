@@ -1,25 +1,23 @@
+#Python standard libraries
+import os
 import sys
+from decimal import Decimal
+from datetime import datetime, date
+import base64
 sys.path.append("..")
 
+#Third-party libraries
 import pymysql
 import pymysql.cursors
+import simplejson as json
 
+
+#Internal imports
 import config
 from .storydecision import StoryDecision
 from .storyevent import StoryEvent
 from .storylocation import StoryLocation
 from .storyobject import StoryObject
-
-import sys
-import os
-
-import simplejson as json
-
-from decimal import Decimal
-
-from datetime import datetime, date
-
-import base64
 
 
 class Story:
@@ -135,8 +133,8 @@ class Story:
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET parental_ratings = %s, verification_status = %s, verifier_id = %s, reviewer_comments = %s, story_verification_date = CURDATE() WHERE story_id = %s"),
-                        (self.parental_ratings, self.verification_status, self.verifier_id, self.reviewer_comments, self.story_id))
+            cur.execute(("UPDATE master_stories SET story_in_store = %s, parental_ratings = %s, verification_status = %s, verifier_id = %s, reviewer_comments = %s, story_verification_date = CURDATE() WHERE story_id = %s"),
+                        (self.story_in_store, self.parental_ratings, self.verification_status, self.verifier_id, self.reviewer_comments, self.story_id))
             conn.commit()
         conn.close()
 
