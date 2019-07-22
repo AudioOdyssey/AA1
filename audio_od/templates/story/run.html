@@ -1,5 +1,3 @@
-{% extends "template.html" %}
-{% block content %}
 <script src="{{ url_for('static', filename='js/story/run.js') }}"></script>
 
 {%if location is none%}
@@ -8,13 +6,13 @@
 {%else%}
 
 {%if backs|length > 0%}
-<button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</button>
+<button onclick="runBackOne('{{story.story_id}}')" class="btn btn-light">Back one location</button>
 {%endif%}
 
-<button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Restart</button>
-<a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
-<a class="btn btn-primary" style="float:right"
-    href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+<button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
+<a onclick="loadpage('/story/update?story_id={{story.story_id}}')" href="#" class="btn btn-light">Back to Main Story Page</a>
+<a class="btn btn-primary" style="float:right" href="#"
+    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</a>
 
 <h1>Running {{story.story_title|e}}</h1>
 <br>
@@ -53,7 +51,7 @@
 <!--for objects at this location (brian idk how to keep track of that)-->
 <!--print their names and have a pick up option-->
 {%for obj in objects%}
-<a onclick="addItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up
+<a onclick="runAddItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up
     <i>{{obj.obj_name}}</i></a>
 {%endfor%}
 <p>Would you like to ...</p>
@@ -74,7 +72,7 @@
     <div class="col-sm-4 card-outer">
         <div class="storycard">
             <a href="#"
-                onclick="dec_clicked('{{story.story_id}}','{{dec.decision_id}}','{{location.location_id}}','{{dec.transition}}','{{dec.transition_loc_id}}','{{dec.can_occur_once}}','{{dec.cause_event}}','{{dec.effect_event_id}}')">
+                onclick="runDecClicked('{{story.story_id}}','{{dec.decision_id}}','{{location.location_id}}','{{dec.transition}}','{{dec.transition_loc_id}}','{{dec.can_occur_once}}','{{dec.cause_event}}','{{dec.effect_event_id}}')">
                 <h3>{{dec.decision_name|e}}</h3>
                 <hr>
                 <h4>Transitions to
@@ -154,13 +152,12 @@
 <hr>
 
 {%if backs|length > 0%}
-<button onclick="backone('{{story.story_id}}')" class="btn btn-light">Back one location</button>
+<button onclick="runBackOne('{{story.story_id}}')" class="btn btn-light">Back one location</button>
 {%endif%}
 
-<button onclick="start_over('{{story.story_id}}')" class="btn btn-light">Restart</button>
-<a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
-<a class="btn btn-primary" style="float:right"
-    href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+<button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
+<a onclick="loadpage('/story/update?story_id={{story.story_id}}')" href="#" class="btn btn-light">Back to Main Story Page</a>
+<a class="btn btn-primary" style="float:right" href="#"
+    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</a>
 
 {%endif%}
-{% endblock %}

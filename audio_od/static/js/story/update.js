@@ -63,3 +63,19 @@ function storySubmitForVerify(uid) {
     xhttp.open("POST", "/verification/submit?story_id=" + uid, true);
     xhttp.send();
 }
+
+function storyLoadCover(sid) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("cover-photo").style.backgroundImage =
+                "url(data:image/png;base64," + this.responseText + ")";
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("GET", "/story/image?story_id=" + sid, true);
+    xhttp.send();
+
+    document.getElementById('cover-upload').addEventListener('change', storyHandleFileSelect, false);
+}

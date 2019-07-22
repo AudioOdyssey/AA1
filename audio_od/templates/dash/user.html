@@ -1,0 +1,99 @@
+<style>
+	#user-image {
+		width: 100%;
+		height: 100%;
+		margin-left: auto;
+		position: absolute;
+		border-radius: 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-color: #cccccc;
+		background-size: cover;
+		-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+		box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	}
+
+	.image {
+	    position: relative;
+	    padding-bottom: 100%;
+	}
+
+	.fifty {
+		width: 80%;
+		margin: auto;
+	}
+
+	.name-row {
+	    margin-left: 0px;
+	}
+
+	#profile-section {
+		border-left: solid 1px lightgrey;
+	}
+</style>
+
+<!-- User Settings -->
+<form class="row">
+	<!-- User Image -->
+	<section class="col-sm-3">
+		<div class="fifty">
+			<div class="image">
+				<div id="user-image" style="background-image: url('data:image/png;base64,{{userimage}}')"></div>
+			</div>
+			<div class="mt-4">
+	            <div class="custom-file">
+	                <input type="file" class="custom-file-input" id="cover-upload" onchange="user_changed(this)"
+	                    aria-describedby="inputGroupFileAddon01" name="cover">
+	                <label class="custom-file-label" for="cover-upload">Choose file</label>
+	            </div>
+	        </div>
+		</div>
+	</section>
+	<!-- /User Image -->
+	<!-- User Details -->
+	<section id="profile-section" class="col-sm-9">
+		<section>
+			<label>Username:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-hashtag"></i></div>
+	            </div>
+	            <input type="text" name="username" placeholder="Username" class="form-control" autocomplete="username"
+	                required onchange="user_changed(this)">
+	        </div>
+		</section>
+		<section>
+			<label>First Name:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-user"></i></div>
+	            </div>
+	            <input type="text" name="first-name" placeholder="First Name" class="form-control" autocomplete="given-name"
+	                required onchange="user_changed(this)">
+	        </div>
+		</section>
+		<section>
+			<label>Family Name:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-users"></i></div>
+	            </div>
+	            <input type="text" name="last-name" placeholder="Family Name" class="form-control" autocomplete="family-name"
+	                required onchange="user_changed(this)">
+	        </div>
+		</section>
+		<section>
+			<label>Email:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-at"></i></div>
+	            </div>
+	            <input type="email" name="last-name" placeholder="Last Name" class="form-control" autocomplete="email"
+	                required onchange="user_changed(this)">
+	        </div>
+		</section>
+	</section>
+	<!-- /User Details -->
+</form>
+<!-- /User Settings -->

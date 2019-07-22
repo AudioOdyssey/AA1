@@ -1,19 +1,4 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/update.css') }}" type="text/css" />
-<script src="{{ url_for('static', filename='js/story/update.js') }}"></script>
-
-<script>
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("cover-photo").style.backgroundImage =
-                "url(data:image/png;base64," + this.responseText + ")";
-        } else if (this.readyState == 4) {
-            console.log(this.responseText);
-        }
-    };
-    xhttp.open("GET", "/story/image?story_id={{story.story_id}}", true);
-    xhttp.send();
-</script>
 
 <section id="3-left-rows">
     <section class="1-3-left-row">
@@ -94,7 +79,7 @@
                 <strong>Danger!</strong> The uploaded image was too big! It must be less than <u>7.5MB.</u>
             </div>
             <div id="cover-photo"
-                style="margin: 1rem auto; max-width: 100%;height:28em; width:20em; background-repeat: no-repeat; background-position: center; background-color: #cccccc; background-size: cover;">
+                style="margin: 1rem auto; max-width: 100%;height:28em; width:20em; background-repeat: no-repeat; background-position: center; background-color: #cccccc; background-size: cover; background-image:url('data:image/png;base64,{{coverimage}}')">
             </div>
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -178,7 +163,7 @@
 </section>
 <hr>
 <button class="btn btn-light" onclick="storySubmitForVerify('{{story.story_id}}')">Submit for Verification</button>
-<a onclick="loadpage('/verification/story?story_id={{story.story_id}}')"> <button class="btn btn-light">View Verification
+<a onclick="loadpage('/verification/status?story_id={{story.story_id}}')"> <button class="btn btn-light">View Verification
         Status</button></a>
 <a onclick="loadpage('/story/run?story_id={{story.story_id}}')"> <button class="btn btn-light">Run Story</button></a>
 <button class="btn btn-danger" onclick="story_delete('{{story.story_id}}')">Delete Story</button>
@@ -186,5 +171,5 @@
 <button onclick="save()" style="float: right" class="btn btn-primary">Save</button>
 
 <script>
-    document.getElementById('cover-upload').addEventListener('change', storyHandleFileSelect, false);
+    
 </script>

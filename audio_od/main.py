@@ -54,6 +54,23 @@ random.seed()
 
 # refresh_t = None
 
+def authentication_required(func):
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
+        remember = request.cookies.get('remember_')
+        if remember is None:
+            token = session.get('token')
+            if token is None or decode_auth_token(token) == 0:
+                return redirect(url_for('session_new'))
+            else:
+                return func(*args, **kwargs)
+        else:
+            uid = decode_auth_token(remember)
+            if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
+                return redirect(url_for('session_new'))
+            return func(*args, **kwargs)
+    return func_wrapper
+
 def check_header(func):
     @wraps(func)
     def func_wrapper(*args, **kwargs):
@@ -116,6 +133,20 @@ def user_new():  # fix later
                    first_name_input=first_name, last_name_input=last_name, language=language)
         usr.add_to_server()
     return render_template("user/new.html")
+
+
+@app.route("/user/update", methods=['POST'])
+@authentication_required
+@check_header
+def user_update():
+    user = g.user
+    user.username = request.form.get('username')
+    user.first_name = request.form.get('first-name')
+    user.last_name = request.form.get('last-name')
+    if isValidEmail(request.form.get('email')):
+        user.email = request.form.get('email')
+    user.update_user_info()
+    return '{"status":"ok"}'
 
 
 def isValidEmail(email):
@@ -231,24 +262,6 @@ def app_session_new():
     return jsonify(result)
 
 
-def authentication_required(func):
-    @wraps(func)
-    def func_wrapper(*args, **kwargs):
-        remember = request.cookies.get('remember_')
-        if remember is None:
-            token = session.get('token')
-            if token is None or decode_auth_token(token) == 0:
-                return redirect(url_for('session_new'))
-            else:
-                return func(*args, **kwargs)
-        else:
-            uid = decode_auth_token(remember)
-            if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
-                return redirect(url_for('session_new'))
-            return func(*args, **kwargs)
-    return func_wrapper
-
-
 @app.before_first_request
 def load_id():
     token = request.cookies.get('remember_')
@@ -270,7 +283,7 @@ def authenticate(details):
     with conn.cursor() as cur:
         username = details['username']
         cur.execute(
-            ("SELECT user_id, last_login_date FROM users WHERE username = %s"), username)
+            ("SELECT user_id FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
             return None
@@ -393,15 +406,6 @@ def dummy_upload():
     return render_template("/dummy_image.html")
 
 
-@app.route("/story/show")
-@authentication_required
-@check_header
-def story_show():
-    stories = Story.story_list_by_creator(getUid())
-    return render_template("story/show.html", stories=stories)
-
-
-
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
 @authentication_required
 @check_header
@@ -412,7 +416,8 @@ def story_update():
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
-    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
+    coverimage = story.get_image_base64().decode("utf-8")
+    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, coverimage=coverimage)
 
 
 @app.route("/story/image")
@@ -1054,53 +1059,7 @@ def review_update():
     return '{"status":"ok"}'
 
 
-@app.route("/verification/object")
-@authentication_required
-@check_header
-def verification_object():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
-        abort(403)
-    story_id = request.args["story_id"]
-    object_id = request.args["object_id"]
-    obj = StoryObject.get(story_id, object_id)
-    return render_template("verification/object.html", obj=obj, story_id=story_id, object_id=object_id)
-
-
-@app.route("/verification/location")
-@authentication_required
-@check_header
-def verification_location():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
-        abort(403)
-    story_id = request.args["story_id"]
-    location_id = request.args["location_id"]
-    location = StoryLocation.get(story_id, location_id)
-    decisions = StoryDecision.dec_list_for_story_loc(story_id, location_id)
-    return render_template("verification/location.html", location=location, story_id=story_id, location_id=location_id, decisions=decisions)
-
-
-@app.route("/verification/event")
-@authentication_required
-@check_header
-def verification_event():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
-        abort(403)
-    story_id = request.args["story_id"]
-    event_id = request.args["event_id"]
-    event = StoryEvent.get(story_id, event_id)
-    return render_template("verification/event.html", event=event, story_id=story_id, event_id=event_id)
-
-
-@app.route("/verification/story")
+@app.route("/verification/status")
 @authentication_required
 @check_header
 def verification_story():
@@ -1114,7 +1073,7 @@ def verification_story():
     decisions = StoryDecision.dec_list_story(story_id)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
+    return render_template("verification/status.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
 
 @app.route("/verification/submit", methods=["POST"])
@@ -1339,13 +1298,30 @@ def reset_token(token):
         return redirect(url_for("session_new"))
     return render_template("/password_reset/form.html")
 
-@app.route("/dashboard")
+
+@app.route("/dash")
 @authentication_required
 @check_header
 def dashboard():
     stories = Story.story_list_by_creatordate(g.uid)
     base_url = ""
-    return render_template("/dashboard.html", stories=stories, base_url=base_url)
+    return render_template("/dash/index.html", stories=stories, base_url=base_url)
+
+
+@app.route("/dash/story")
+@authentication_required
+@check_header
+def dash_story():
+    stories = Story.story_list_by_creatordate(g.uid)
+    return render_template("/dash/story.html", stories=stories)
+
+
+@app.route("/dash/user")
+@authentication_required
+@check_header
+def dash_user():
+    userimage = g.user.get_profile_pic_base64().decode("utf-8")
+    return render_template("/dash/user.html", userimage=userimage)
 
 
 @app.errorhandler(403)

@@ -52,7 +52,7 @@ class User(UserMixin):
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
                  gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, 
-                 date_of_birth_input=date.min, language=0, user_type=0, user_id=0, last_login_date = 0):
+                 date_of_birth_input=date.min, language=0, user_type=0, user_id=0):
         self.username = username_input
         if password_salt_input == "":
             self.password_salt = self.generate_password_salt()
@@ -82,7 +82,6 @@ class User(UserMixin):
             self.is_copy_editor = True
         if user_id != 0:
             self.user_id = user_id
-        self.last_login_date = last_login_date
     
     @staticmethod
     def generate_password_salt():
@@ -142,13 +141,13 @@ class User(UserMixin):
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(
-            ("SELECT `username`, `password`, `password_salt`, `user_type`, `last_login_date`, `first_name`, `last_name` FROM users WHERE `user_id` = %s"), (int_user_id))
+            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name` FROM users WHERE `user_id` = %s"), (int_user_id))
         result = cur.fetchone()
         if result['username'] is None:
             return None
         result = User(result['username'], result['password'],result['password_salt'],
-                        user_type=result['user_type'], last_login_date=result['last_login_date'],
-                        first_name_input=result['first_name'], last_name_input=result['last_name'])
+                        user_type=result['user_type'], first_name_input=result['first_name'], 
+                        last_name_input=result['last_name'])
         result.user_id = user_id
         conn.close()
         return result
@@ -213,7 +212,7 @@ class User(UserMixin):
             with open(os.path.join(config.upload_folder, "profile_pics", profile_pic), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
-            return ''
+            return b''
         return result
 
     def user_profile_info(self):
@@ -260,5 +259,14 @@ class User(UserMixin):
         with conn.cursor() as cur:
             cur.execute(("UPDATE `users` SET password = %s, password_salt = %s WHERE user_id = %s"),
                         (self.password, self.password_salt, self.user_id))
+            conn.commit()
+        conn.close()
+
+    def update_user_info(self):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE `users` SET `username` = %s, `first_name` = %s, `last_name` = %s, `email_address` = %s WHERE user_id = %s"),
+                        (self.username, self.first_name, self.last_name, self.email, self.user_id))
             conn.commit()
         conn.close()

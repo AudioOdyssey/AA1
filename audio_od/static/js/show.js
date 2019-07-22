@@ -131,3 +131,7 @@ function show_check_exclusivity(elem) {
         }
     }
 }
+
+function tree_go_starting_loc(endpoint, story_id, elem) {
+    loadpage(endpoint + "?story_id=" + story_id + "&location_id=" + elem.options[elem.selectedIndex].value);
+}

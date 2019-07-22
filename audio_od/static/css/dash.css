@@ -6,13 +6,14 @@ body {
 	flex-grow: 1;
 	overflow-y: scroll;
 	padding: 2rem;
+	width: min-content;
 }
 
 #sidebar {
 	background: rgb(42, 42, 46);
 	color: white;
 	padding: 1rem 1rem 0rem 1rem;
-	width: max-content;
+	width: 15rem;
 }
 
 hr { 
@@ -53,6 +54,9 @@ hr {
 	border-radius: 5px;
 	color: lightgrey;
 	transition: color .1s;
+	height: 1rem;
+	overflow: auto;
+	box-sizing: content-box;
 }
 
 .sidebar-navlink:hover {

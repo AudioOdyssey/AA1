@@ -87,13 +87,14 @@ body {
 }
 
 .storycard {
-	border: 5px solid !important;
+	border: 5px solid;
 	border-color: #073884;
 	background-color: white;
 	color: #073884;
 	text-align: center;
 	padding: 10px !important;
 	transition: border 0.1s, padding 0.1s;
+	border-radius: 3px;
 }
 
 .storycard:hover {
@@ -109,6 +110,7 @@ body {
     left: 0px;
     width: 100%;
     display: none;
+    z-index: 10;
 }
 
 #save-bubble-inner {

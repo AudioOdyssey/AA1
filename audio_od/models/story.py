@@ -147,7 +147,7 @@ class Story:
             with open(os.path.join(config.upload_folder, "covers", cover_file), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
-            return ''
+            return b''
         return result
 
     @classmethod
