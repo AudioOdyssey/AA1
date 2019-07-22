@@ -267,7 +267,7 @@ def callback():
     userinfo=userinfo_response.json()
     username=userinfo["given_name"]+userinfo['family_name']
     passwd = os.urandom(16).decode('latin-1')
-    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd)
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd, signed_in_with="Google")
     result = usr.search_by_email()
     if result == -1:
         result.add_to_server()
@@ -416,11 +416,6 @@ def logout():
     else:
         resp.set_cookie('remember_', '', 0)
         return resp
-
-
-@app.route("/session/password/change", methods=['GET', 'POST'])
-def change_password():
-    pass
 
 
 @app.route("/app/user/info", methods=['GET'])
@@ -1385,14 +1380,21 @@ def password_request():
         email = request.form.get('email')
         if email is not None:
             token = User.get_reset_token(email, 900)
+            usr = User(email_input = email)
+            result = usr.search_by_email()
+            if result != -1:
+                usr = User.get(result)
+            if usr.signed_in_with != "native" or usr.signed_in_with != '':
+                error = "You signed in with " + usr.signed_in_with + "."
+                return render_template("session/new.html", error=error)
             print("Token Got")
             if token is not None:
                 msg = Message('Password Reset Request',
                                 sender='noreply@myaudioodyssey.com',
                                 recipients=[email])
                 msg.body = f'''To reset your password, visit the following link:
-                                {url_for('reset_token', token=token, _external=True)}
-                                If you did not make this request then simply ignore this email and no changes will be made.
+{url_for('reset_token', token=token, _external=True)}
+If you did not make this request then simply ignore this email and no changes will be made.
                             '''
                 mail.send(msg)
                 print("Message Sent")
