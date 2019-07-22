@@ -145,7 +145,7 @@ class Story:
             with open(os.path.join(config.upload_folder, "covers", cover_file), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
-            return ''
+            return b''
         return result
 
     @classmethod
@@ -156,6 +156,21 @@ class Story:
         with conn.cursor() as cur:
             cur.execute(
                 ("SELECT * FROM `master_stories` WHERE user_creator_id = %s"), (user_creator_id))
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"]))
+        conn.close()
+        return story_list
+
+    @classmethod
+    def story_list_by_creatordate(cls, user_creator_id):
+        conn = pymysql.connect(
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT * FROM `master_stories` WHERE user_creator_id = %s ORDER BY updated_at DESC"), (user_creator_id))
             results = cur.fetchall()
             for row in results:
                 story_list.append(
@@ -341,3 +356,17 @@ class Story:
             cur.execute(("DELETE FROM `master_stories` WHERE `story_id` = %s"), (story_id))
             conn.commit()
         conn.close()
+
+    @classmethod
+    def story_shares_by_uid(cls, uid):
+        conn = pymysql.connect(
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT story_id, story_title FROM `master_stories` WHERE `story_id` IN (SELECT `story_id` FROM `story_shares` WHERE user_id = %s)", (uid))
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(cls(row["story_id"], row["story_title"]))
+        conn.close()
+        return story_list

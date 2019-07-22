@@ -1,9 +1,11 @@
 {% extends "template_new.html" %}
-{% block content%}
 
+{% block header %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
 
+{% block content%}
 <section id="hero-slider">
     <div class="hero-arrows hero-left">
         <i onclick="left_image()" class="fas fa-chevron-left text-light"></i>

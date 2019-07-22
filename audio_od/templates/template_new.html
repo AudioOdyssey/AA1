@@ -31,6 +31,9 @@
 
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}" type="text/css" />
 	<script src="{{ url_for('static', filename='js/site.js') }}"></script>
+
+	<!-- Page Specific Styles -->
+	{% block header %}{% endblock %}
 </head>
 
 <body>
@@ -44,7 +47,6 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarCollapse">
 					<ul class="navbar-nav ml-auto">
-						<!-- TODO: If statement based on login status -->
 						{% if g.user is none %}
 						<li class="nav-item">
 							<a class="nav-link" href="/session/new">Login</a>
@@ -54,10 +56,13 @@
 						</li>
 						{% else %}
 						<li class="nav-item">
-							<a class="nav-link" href="/dashboard">Dashboard</a>
+							<a class="nav-link" href="/dash/stories">Dashboard</a>
 						</li>
 						<li>
-							<a class="nav-link" href="/user/show">{{ g.user.first_name }}</a>
+							<a class="nav-link" href="/dash/users">{{g.user.first_name}}</a>
+						</li>
+						<li>
+							<a class="nav-link" href="#" onclick="logout()">Logout</a>
 						</li>
 						{% endif %}
 					</ul>
@@ -70,8 +75,11 @@
 	{% block content %}
 	{% endblock %}
 	<!-- /Main Site -->
+	<div id="save-bubble">
+	    <div id="save-bubble-inner">Everything Saved</div>
+	</div>
 	<!-- Footer -->
-	<footer class="footer">
+	<footer class="p-2 footer">
 		<!-- Copyright -->
 		<div class="container">
 			<p class="text-center text-muted mb-0">&copy; 2019 AudioOdyssey, Inc.</p>

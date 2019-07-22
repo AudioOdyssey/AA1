@@ -1,0 +1,65 @@
+{% extends "template_new.html" %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/show.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dash.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/story/update.css') }}" type="text/css" />
+<script src="{{ url_for('static', filename='js/dash.js') }}"></script>
+<script src="{{ url_for('static', filename='js/show.js') }}"></script>
+<script src="{{ url_for('static', filename='js/story/update.js') }}"></script>
+<script src="{{ url_for('static', filename='js/story/run.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="row fg-1" style="overflow: hidden;">
+	<section style="height: 100%; width: 100%; display: flex;">
+		<!-- Side Bar -->
+		<section id="sidebar" class="d-none d-sm-block">
+			<!-- User Info -->
+			<section class="hover-cursor" onclick="loadpage('/dash/user')">
+				<section class="pb-1">
+					<div class="center-50">
+						<a href="#" class="thumbnail">
+						    <div class="image">
+						    	<div id="sidebar-profile"></div>
+						    </div>
+						</a>
+					</div>
+				</section>
+				<h5 class="text-center">{{g.user.first_name}} {{g.user.last_name}}</h5>
+				<h6 class="text-center"><i class="text-muted">@{{g.user.username}}</i></h6>
+			</section>
+			<!-- /User Info -->
+			<hr>
+			<!-- Navigation -->
+			<section id="sidebar-nav">
+				<section class="sidebar-nav-inner">
+					<p class="sidebar-navlink" onclick="loadpage('/dash/story')"><i class="fas hack fa-book-open"></i>My Stories</p>
+					<p class="sidebar-navlink" onclick="loadpage('/dash/share')"><i class="fas hack fa-user-friends"></i>Shared with Me</p>
+					<p class="sidebar-navlink" onclick="loadpage('/dash/verify')"><i class="far hack fa-check-square"></i>Verified</p>
+					<p class="sidebar-navlink" onclick="loadpage('/dash/publish')"><i class="fas hack fa-dollar-sign"></i>Published</p>
+				</section>
+			</section>
+			<h6 class="heading-navbar">Recent Stories</h6>
+			<hr>
+			<section class="sidebar-nav-inner">
+				{%for story in stories[:5]%}
+					<p onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="sidebar-navlink">{{story.story_title|e}}&nbsp;</p>
+				{%endfor%}
+			</section>
+			<!-- /Navigation -->
+		</section>
+		<!-- /Side Bar -->
+		<!-- Dropdown (For small screens) -->
+		<section class="d-block d-sm-none">
+		</section>
+		<!-- /Dropdown -->
+		<!-- Content -->
+		<section id="dash-content">
+			{{content|safe}}
+		</section>
+		<!-- /Content -->
+	</section>
+</section>
+
+{% endblock %}

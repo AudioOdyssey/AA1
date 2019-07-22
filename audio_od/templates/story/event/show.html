@@ -9,31 +9,31 @@
 <a href="/story/object/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Objects</button></a>
 
 <br>
-<section class="row">
+<section class="row m0">
     <h3>Events</h3>
     <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
 </section>
-<form id="ev-template" class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
+<form id="d-none" class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">
 
-    <input name="story_id" readonly class="hidden-in">
-    <input name="event_id" readonly class="hidden-in">
+    <input name="story_id" readonly class="d-none">
+    <input name="event_id" readonly class="d-none">
 
-    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
+    <button type="button" onclick="show_delete_pressed(this, 'event')" class="trash btn btn-light"><i
             class="fa fa-xs fa-trash-alt"></i></button>
 
-    <section class="event-row row">
-        <section class="row flex-1">
+    <section class="align-items-center row m0">
+        <section class="row m0 fg-1">
             <div class="col-sm-4">
                 <label for="event_name"><b>Name:</b></label>
                 <input id="event_name" class="form-control" type="text" name="event_name"
-                    onchange="event_changed(this)">
+                    onchange="show_changed(this, 'event')">
             </div>
             <div class="col-sm-8">
                 <label for="locations"><b>Select Location or</b><a href="#"
-                        onclick="add_btn_pressed_loc('{{story_id}}')">
+                        onclick="add_loc_redir('{{story_id}}')">
                         Add New Location</a></label>
-                <select name="event_loc" id="locations" onchange="event_changed(this)">
+                <select name="event_loc" id="locations" onchange="show_changed(this, 'event')">
                     <option value="0">None</option>
                     {% for location in locations %}
                     <option value="{{location.location_id}}">{{location.location_name|e}}</option>
@@ -42,18 +42,18 @@
             </div>
         </section>
 
-        <section class="flex-0" onclick="event_show(this)">
-            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        <section class="fg-0" onclick="show_show(this)">
+            <i class="fas fa-chevron-down fa-lg show-down-arrow"></i>
         </section>
     </section>
 
-    <section class="row details" style="display: none">
+    <section class="row m0 p-2" style="display: none">
         <hr>
         <label for="event_descr">Description</label>
         <textarea id="event_descr" class="form-control" rows="3" name="ev_description"
-            onchange="event_changed(this)"></textarea>
+            onchange="show_changed(this, 'event')"></textarea>
         <label>Is global?</label>
-        <input id="is_global" type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)">
+        <input id="is_global" type="checkbox" autocomplete="off" name="is_global" onchange="show_changed(this, 'event')">
         <br>
     </section>
 </form>
@@ -61,25 +61,25 @@
 <div id="content-marker"></div>
 
 {% for event in events %}
-<form class="event-main-row" onclick="set_focus(this)" method="POST" action="/story/event/update">
-    <input name="story_id" value="{{ event.story_id }}" readonly class="hidden-in">
-    <input name="event_id" value="{{ event.event_id }}" readonly class="hidden-in">
+<form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">
+    <input name="story_id" value="{{ event.story_id }}" readonly class="d-none">
+    <input name="event_id" value="{{ event.event_id }}" readonly class="d-none">
 
-    <button type="button" onclick="delete_btn_pressed(this)" class="trash btn btn-light"><i
+    <button type="button" onclick="show_delete_pressed(this, 'event')" class="trash btn btn-light"><i
             class="fa fa-xs fa-trash-alt"></i></button>
 
-    <section class="event-row row">
-        <section class="row flex-1">
+    <section class="align-items-center row m0">
+        <section class="row m0 fg-1">
             <div class="col-sm-4">
                 <label><b>Name:</b></label>
-                <input class="form-control" type="text" name="event_name" onchange="event_changed(this)"
+                <input class="form-control" type="text" name="event_name" onchange="show_changed(this, 'event')"
                     value="{{ event.event_name|e }}">
             </div>
 
             <div class="col-sm-8">
-                <label><b>Select Location or:</b><a href="#" onclick="add_btn_pressed_loc('{{event.story_id}}')"> Add
+                <label><b>Select Location or:</b><a href="#" onclick="add_loc_redir('{{event.story_id}}')"> Add
                         New Location</a></label>
-                <select class="form-control" type="text" name="event_loc" onchange="event_changed(this)">
+                <select class="form-control" type="text" name="event_loc" onchange="show_changed(this, 'event')">
                     <option value="0">None</option>
                     {% for loc in locations %}
                     <option {%if loc.location_id|int==event.event_loc|int%}selected{%endif%}
@@ -88,22 +88,22 @@
                 </select>
             </div>
         </section>
-        <section class="flex-0" onclick="event_show(this)">
-            <i class="fas fa-chevron-down fa-lg down-arrow"></i>
+        <section class="fg-0" onclick="show_show(this)">
+            <i class="fas fa-chevron-down fa-lg show-down-arrow"></i>
         </section>
     </section>
 
-    <section class="row details" style="display: none">
+    <section class="row m0 p-2" style="display: none">
         <hr>
         <label>Description</label>
         <textarea class="form-control" rows="3" name="ev_description"
-            onchange="event_changed(this)">{{ event.event_description|e }}</textarea>
+            onchange="show_changed(this, 'event')">{{ event.event_description|e }}</textarea>
 
         <label>Is Global?</label>
         {% if event.event_is_global %}
-        <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)" checked>
+        <input type="checkbox" autocomplete="off" name="is_global" onchange="show_changed(this, 'event')" checked>
         {% else %}
-        <input type="checkbox" autocomplete="off" name="is_global" onchange="event_changed(this)">
+        <input type="checkbox" autocomplete="off" name="is_global" onchange="show_changed(this, 'event')">
         {% endif %}
         <br>
 

@@ -223,7 +223,7 @@ class User(UserMixin):
             with open(os.path.join(config.upload_folder, "profile_pics", profile_pic), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
-            return ''
+            return b''
         return result
 
     def user_profile_info(self):
@@ -269,5 +269,14 @@ class User(UserMixin):
         with conn.cursor() as cur:
             cur.execute(("UPDATE `users` SET password = %s, password_salt = %s WHERE user_id = %s"),
                         (self.password, self.password_salt, self.user_id))
+            conn.commit()
+        conn.close()
+
+    def update_user_info(self):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE `users` SET `username` = %s, `first_name` = %s, `last_name` = %s, `email_address` = %s WHERE user_id = %s"),
+                        (self.username, self.first_name, self.last_name, self.email, self.user_id))
             conn.commit()
         conn.close()
