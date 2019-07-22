@@ -95,13 +95,13 @@ def home():
         if token is None or not decode_auth_token(token):
             return render_template("index.html")
         else:
-            return redirect(url_for('story_show'))
+            return redirect(url_for('dash_story_full'))
     else:
         user_id = decode_auth_token(auth_token)
         if user_id == 'Signature expired. Please log in again.' or user_id == 0:
             return render_template('index.html')
         else:
-            return redirect(url_for('story_show'))
+            return redirect(url_for('dash_story_full'))
     return render_template('index.html')
 
 
@@ -202,7 +202,7 @@ def session_new():
         details = request.form
         user_id = authenticate(details)
         if user_id:
-            resp = make_response(redirect(url_for('story_show')))
+            resp = make_response(redirect(url_for('dash_story_full')))
             current_time = datetime.utcnow()
             expired_date = current_time + timedelta(days=30)
             token = encode_auth_token(user_id, current_time, expired_date)
