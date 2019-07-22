@@ -212,6 +212,64 @@ def session_new():
     return render_template("session/new.html", error=error)
 
 
+def get_google_provider_cfg():
+    return requests.get(GOOGLE_DISCOVERY_URL).json()
+
+
+@app.route('/google_login')
+def google_login():
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+    request_uri=client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=request.base_url+"/google/authorized",
+        scope=["openid", "email", "profile"]
+    )
+    return redirect(request_uri)
+
+@app.route('/google_login/google/authorized')
+def callback():
+    code = request.args.get("code")
+    google_provider_cfg = get_google_provider_cfg()
+    token_endpoint = google_provider_cfg["token_endpoint"]
+    token_url, headers, body = client.prepare_token_request(
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code
+    )
+    token_response = requests.post(
+        token_url,
+        headers=headers,
+        data=body,
+        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+    )
+    client.parse_request_body_response(json.dumps(token_response.json()))
+    userinfo_endpoint=google_provider_cfg["userinfo_endpoint"]
+    uri, headers, body = client.add_token(userinfo_endpoint)
+    userinfo_response=requests.get(uri, headers=headers,data=body)
+    userinfo=userinfo_response.json()
+    username=userinfo["given_name"]+userinfo['family_name']
+    passwd = os.urandom(16).decode('latin-1')
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd)
+    result = usr.search_by_email()
+    if result == -1:
+        usr.add_to_server()
+    else:
+        usr = User.get(result)
+    resp = make_response(redirect(url_for('home')))
+    cur = datetime.utcnow()
+    exp = datetime.utcnow() + timedelta(days=30)
+    token = encode_auth_token(usr.user_id, cur, exp)
+    resp.set_cookie("remember_", token, expires=exp)
+    # soup = bs(urlopen(userinfo['picture']))
+    # for image in soup.findAll("img"):
+    #     filename=str(usr.user_id)+".jpg"
+    #     outpath = os.path.join(UPLOAD_FOLDER,"profile_pics", filename)
+    #     urlretrieve(image['src'], outpath)
+    return resp
+
+
 @app.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
     result = None
