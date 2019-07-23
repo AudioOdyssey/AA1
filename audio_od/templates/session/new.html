@@ -1,5 +1,38 @@
 {% extends "template.html" %}
 {% block content %}
+
+<style type="text/css">
+    #google-button {
+        margin: auto;
+        -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+        -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+        -webkit-transition: background-color .218s,border-color .218s,box-shadow .218s;
+        transition: background-color .218s,border-color .218s,box-shadow .218s;
+        border-radius: 1px;
+    }
+    #google-button:hover {
+        cursor: pointer;
+        -webkit-box-shadow: 0 0 3px 3px rgba(66,133,244,.3);
+        box-shadow: 0 0 3px 3px rgba(66,133,244,.3);
+        text-decoration: none !important;
+    }
+    span.google-icon {
+        background: url('/static/image/google-logo.png') transparent 5px 50% no-repeat;
+        display: inline-block;
+        vertical-align: middle;
+        width: 42px;
+        height: 42px;
+    }
+    span.google-text {
+        vertical-align: middle;
+        font-family: 'Roboto', sans-serif;
+        margin-right: 1rem;
+        text-decoration: none;
+    }
+</style>
+
+
 <section class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
@@ -41,6 +74,13 @@
                 <input type="submit" value="Login" class="btn btn-primary"
                     style="margin: 0em 0.75em; width: 100%; text-align: center">
                 <a href="{{url_for('password_request')}}">Forgot Password?</a>
+            </div>
+
+            <div class="row">
+                <a href="/google_login" id="google-button">
+                    <span class="google-icon"></span>
+                    <span class="text-muted google-text">Sign in with Google</span>
+                </a>
             </div>
         </form>
     </div>
