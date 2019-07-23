@@ -83,7 +83,7 @@ def authentication_required(func):
 
 # app.register_blueprint(google_blueprint, url_prefix='/google_login'
 
-client=WebApplicationClient(config.google_client_id)
+google_client=WebApplicationClient(GOOGLE_CLIENT_ID)
 
 
 def check_header(func):
@@ -274,7 +274,7 @@ def get_google_provider_cfg():
 def google_login():
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-    request_uri=client.prepare_request_uri(
+    request_uri=google_client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url+"/google/authorized",
         scope=["openid", "email", "profile"]
@@ -286,7 +286,7 @@ def callback():
     code = request.args.get("code")
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
-    token_url, headers, body = client.prepare_token_request(
+    token_url, headers, body = google_client.prepare_token_request(
         token_endpoint,
         authorization_response=request.url,
         redirect_url=request.base_url,
@@ -298,7 +298,7 @@ def callback():
         data=body,
         auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
     )
-    client.parse_request_body_response(json.dumps(token_response.json()))
+    google_client.parse_request_body_response(json.dumps(token_response.json()))
     userinfo_endpoint=google_provider_cfg["userinfo_endpoint"]
     uri, headers, body = client.add_token(userinfo_endpoint)
     userinfo_response=requests.get(uri, headers=headers,data=body)
@@ -1354,9 +1354,11 @@ def password_request():
             result = usr.search_by_email()
             if result != -1:
                 usr = User.get(result)
-            if usr.signed_in_with != "native" or usr.signed_in_with != '':
-                error = "You signed in with " + usr.signed_in_with + "."
-                return render_template("session/new.html", error=error)
+                if usr.signed_in_with != "native" or usr.signed_in_with != '':
+                    error = "You signed in with " + usr.signed_in_with + "."
+                    return render_template("session/new.html", error=error)
+            else:
+                return render_template("session/new.html", error="Email not found.")
             print("Token Got")
             if token is not None:
                 msg = Message('Password Reset Request',
