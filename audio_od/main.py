@@ -49,9 +49,15 @@ mail = Mail(app)
 
 UPLOAD_FOLDER = config.upload_folder
 
+# oauth = OAuth(app)
+
 GOOGLE_CLIENT_ID=config.google_client_id
 GOOGLE_CLIENT_SECRET=config.google_client_secret
 GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
+
+FACEBOOK_APP_ID=config.facebook_client_id
+FACEBOOK_APP_SECRET=config.facebook_client_secret
+
 
 random.seed()
 
@@ -121,6 +127,8 @@ def user_new():  # fix later
         details = request.form
         username = details['username']
         raw_password = details['password']
+        if len(raw_password) < 8:
+            return render_template("user/new.html", error="Please enter a password greater than 8 characters.")
         email = details['email_address']
         if not isValidEmail(email):
             return render_template("user/new.html", error="Invalid email")
@@ -315,6 +323,10 @@ def callback():
     #     urlretrieve(image['src'], outpath)
     return resp
 
+
+@app.route('/facebook_login')
+def facebook_login():
+    pass
 
 @app.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
@@ -1471,4 +1483,4 @@ def checkAdmin(uid):
 
 
 if __name__ == '__main__':
-    app.run(ssl_context="adhoc")
+    app.run()
