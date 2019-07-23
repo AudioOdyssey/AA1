@@ -136,7 +136,7 @@ class User(UserMixin):
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT user_id FROM users WHERE email_address=%s"),(self.email))
+            cur.execute(("SELECT user_id FROM users WHERE email_address = %s"),(self.email))
             query_data = cur.fetchone()
             if query_data is None:
                 return -1
@@ -154,8 +154,8 @@ class User(UserMixin):
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()
         cur.execute(
-            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name`, `email_address`, `signed_in_with`, `user_id` FROM users WHERE `user_id` = %s or email_address= %s")
-            , (user_id, user_id))
+            ("SELECT `username`, `password`, `password_salt`, `user_type`, `first_name`, `last_name`, `email_address`, `signed_in_with`, `user_id` FROM users WHERE `user_id` = %s OR `email_address` = %s")
+            , (user_id, str(user_id)))
         result = cur.fetchone()
         if result['username'] is None:
             return None

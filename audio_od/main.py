@@ -225,33 +225,6 @@ def session_new():
                 resp.set_cookie("remember_", token, expires=expired_date)
             else:
                 session['token'] = token
-            # conn = pymysql.connect(db_host, user=db_user, passwd=db_password, db=db_name, connect_timeout=5,
-            #                        cursorclass=pymysql.cursors.DictCursor)
-            # with conn.cursor() as cur:
-            #     cur.execute(
-            #         ("SELECT encoded_token, expires FROM auth_tokens WHERE userid=%s"), (user_id))
-            #     query_data = cur.fetchone()
-            #     if query_data is None:
-            #         expired_date_refresh = datetime.utcnow(days=30)
-            #         refresh_t = encode_auth_token(
-            #             user_id, current_time, expired_date_refresh)
-            #         cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
-            #             refresh_t, user_id, expired_date_refresh))
-            #         conn.commit()
-            #     else:
-            #         refresh_t = query_data['encoded_token']
-            #         expires = query_data['expires']
-            #         if current_time > expires:
-            #             cur.execute(
-            #                 ("INSERT INTO invalid_tokens(invalid_token, user_id) VALUES(%s, %s)"), (refresh_t, user_id))
-            #             cur.execute(
-            #                 ("DELETE FROM auth_tokens WHERE id = (SELECT id WHERE encoded_token = %s)"), (refresh_t))
-            #             refresh_t = encode_auth_token(
-            #                 user_id, current_time, expired_date_refresh)
-            #             cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
-            #                 refresh_t, user_id, expired_date_refresh))
-            #             cur.commit()
-            # cur.close()
             return resp
         else:
             error = "Username and/or password not valid"
