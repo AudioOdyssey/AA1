@@ -452,7 +452,7 @@ def put_profile():
     file = request.files['picture']
     if file.filename == '':
         return '{"status" : "error"}'
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file):
         filename = str(getUid()) + ".jpg"
         file.save(os.path.join(UPLOAD_FOLDER, 'profile_pics', filename))
         return '{"status":"ok"}'
@@ -510,7 +510,7 @@ def story_update_post():
     file = request.files['cover']
     if file.filename == '':
         pass
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file):
         filename = str(story_id) + ".jpg"
         file.save(os.path.join(UPLOAD_FOLDER, 'covers', filename))
     story.verification_status = 0
@@ -529,10 +529,11 @@ def story_destroy():
     Story.destroy(request.args['story_id'])
     return '{"status":"ok"}'
 
+valid_mimetypes = ['image/jpeg', 'image/png', 'image/bmp']
 
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def allowed_file(file):
+    mimetype = file.content_type
+    return mimetype in valid_mimetypes
 
 
 @app.route("/story/new", methods=["POST"])
