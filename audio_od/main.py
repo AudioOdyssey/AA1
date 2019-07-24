@@ -24,7 +24,7 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 from bs4 import BeautifulSoup as bs
 from authlib.flask.client import OAuth
-from loginpass import create_flask_blueprint, Facebook
+from loginpass import create_flask_blueprint, Facebook, Google
 
 #Internal imports
 import config
@@ -53,8 +53,8 @@ UPLOAD_FOLDER = config.upload_folder
 
 # oauth = OAuth(app)
 
-GOOGLE_CLIENT_ID=config.google_client_id
-GOOGLE_CLIENT_SECRET=config.google_client_secret
+app.config['GOOGLE_CLIENT_ID']=config.google_client_id
+app.config['GOOGLE_CLIENT_SECRET']=config.google_client_secret
 GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
 
 app.config['FACEBOOK_CLIENT_ID'] = config.facebook_client_id
@@ -86,7 +86,7 @@ def authentication_required(func):
 
 random.seed()
 
-google_client=WebApplicationClient(GOOGLE_CLIENT_ID)
+# google_client=WebApplicationClient(GOOGLE_CLIENT_ID)
 
 def check_header(func):
     @wraps(func)
@@ -241,42 +241,7 @@ def session_new():
     return render_template("session/new.html", error=error)
 
 
-def get_google_provider_cfg():
-    return requests.get(GOOGLE_DISCOVERY_URL).json()
-
-@app.route('/google_login')
-def google_login():
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-    request_uri=google_client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url+"/google/authorized",
-        scope=["openid", "email", "profile"]
-    )
-    return redirect(request_uri)
-
-@app.route('/google_login/google/authorized')
-def google_callback():
-    code = request.args.get("code")
-    google_provider_cfg = get_google_provider_cfg()
-    token_endpoint = google_provider_cfg["token_endpoint"]
-    token_url, headers, body = google_client.prepare_token_request(
-        token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
-        code=code
-    )
-    token_response = requests.post(
-        token_url,
-        headers=headers,
-        data=body,
-        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
-    )
-    google_client.parse_request_body_response(json.dumps(token_response.json()))
-    userinfo_endpoint=google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = google_client.add_token(userinfo_endpoint)
-    userinfo_response=requests.get(uri, headers=headers,data=body)
-    userinfo=userinfo_response.json()
+def google_callback(remote, token, userinfo):
     username=userinfo["given_name"]+userinfo['family_name']
     passwd = os.urandom(16).decode('latin-1')
     usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd, signed_in_with="Google")
@@ -297,8 +262,11 @@ def google_callback():
     #     urlretrieve(image['src'], outpath)
     return resp
 
+google_bp = create_flask_blueprint(Google, oauth, google_callback)
+app.register_blueprint(google_bp, url_prefix='/google')
 
-def handle_authorize(remote, token, user_info):
+
+def facebook_callback(remote, token, user_info):
     username = user_info['given_name']+user_info['family_name']
     email=user_info['email']
     passwd = os.urandom(16).decode('latin-1')
@@ -315,7 +283,7 @@ def handle_authorize(remote, token, user_info):
     resp.set_cookie("remember_", token, expires=exp)
     return resp
 
-facebook_bp = create_flask_blueprint(Facebook, oauth, handle_authorize)
+facebook_bp = create_flask_blueprint(Facebook, oauth, facebook_callback)
 app.register_blueprint(facebook_bp, url_prefix='/facebook')
 
 
