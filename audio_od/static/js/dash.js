@@ -15,11 +15,20 @@ function loadprofile() {
     xhttp.send();
 }
 
+window.onpopstate = function () {
+    window.history.go();
+}
+
 function loadpage(url) {
 	var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
         	if (this.responseText != '') {
+                let stateObj = {
+                    page: url,
+                };
+
+                history.pushState(stateObj, "", "/dashboard"+url);
             	document.getElementById("dash-content").innerHTML = this.responseText;
             }
         } else if (this.readyState == 4) {
