@@ -42,7 +42,6 @@ class StoryLocation:
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             self.location_id = self.get_last_id(self.story_id)
-            print(self.location_id)
             cur.execute(("INSERT INTO locations(story_id, location_id) VALUES (%s, %s)"),
                         (self.story_id, self.location_id))
             conn.commit()

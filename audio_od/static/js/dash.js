@@ -16,7 +16,6 @@ function loadprofile() {
 }
 
 window.onpopstate = function (e) {
-    console.log(event.state.page)
     bareloadpage(event.state.page)
 }
 
@@ -42,8 +41,6 @@ function loadpage(url) {
                 let stateObj = {
                     page: url,
                 };
-
-                console.log(url)
 
                 history.pushState(stateObj, "", "/dashboard"+url);
             	document.getElementById("dash-content").innerHTML = this.responseText;
