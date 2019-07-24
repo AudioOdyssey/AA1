@@ -110,13 +110,13 @@ def home():
         if token is None or not decode_auth_token(token):
             return render_template("index.html")
         else:
-            return redirect(url_for('dash_story_full'))
+            return redirect(url_for('dashboard'))
     else:
         user_id = decode_auth_token(auth_token)
         if user_id == 'Signature expired. Please log in again.' or user_id == 0:
             return render_template('index.html')
         else:
-            return redirect(url_for('dash_story_full'))
+            return redirect(url_for('dashboard'))
     return render_template('index.html')
 
 
@@ -225,7 +225,7 @@ def session_new():
         details = request.form
         user_id = authenticate(details)
         if user_id:
-            resp = make_response(redirect(url_for('dash_story_full')))
+            resp = make_response(redirect(url_for('dashboard')))
             current_time = datetime.utcnow()
             expired_date = current_time + timedelta(days=30)
             token = encode_auth_token(user_id, current_time, expired_date)
@@ -1377,7 +1377,9 @@ def dashboard():
 @check_header
 def dashboard_full(page):
     stories = Story.story_list_by_creatordate(g.uid)
-    return render_template("/dash/index.html", stories=stories, base_url="/"+page)
+    base_url = base64.b64encode(request.full_path[10:].encode()).decode("utf-8")
+    print(base_url)
+    return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
 @app.route("/dash/story")
