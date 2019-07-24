@@ -48,7 +48,7 @@ class Story:
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', verifier_id=0, verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0, updated_at=None):
         if story_id:
             self.story_id = story_id
         self.story_title = story_title
@@ -72,6 +72,7 @@ class Story:
         self.inventory_size = inventory_size
         self.parental_ratings = parental_ratings
         self.verification_status = verification_status
+        self.updated_at = updated_at
 
     def add_to_server(self):
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
@@ -174,7 +175,7 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"]))
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"],updated_at=row['updated_at']))
         conn.close()
         return story_list
 
