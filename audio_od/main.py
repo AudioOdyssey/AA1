@@ -1118,15 +1118,16 @@ def review_update():
 def verification_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
+    story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
     locations = StoryLocation.loc_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("verification/status.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
+    return render_template("verification/status.html", events=events, story=story, locations=locations, decisions=decisions, objects=objects)
 
 
 @app.route("/verification/submit", methods=["POST"])
