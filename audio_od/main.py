@@ -23,6 +23,8 @@ import jwt
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 from bs4 import BeautifulSoup as bs
+from authlib.flask.client import OAuth
+from loginpass import create_flask_blueprint, Facebook
 
 #Internal imports
 import config
@@ -53,16 +55,28 @@ GOOGLE_CLIENT_ID=config.google_client_id
 GOOGLE_CLIENT_SECRET=config.google_client_secret
 GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
 
+app.config['FACEBOOK_CLIENT_ID'] = config.facebook_client_id
+app.config['FACEBOOK_CLIENT_SECRET'] = config.facebook_client_secret
+
+oauth = OAuth(app)
+
+def handle_authorize(remote, token, user_info):
+    return jsonify(user_info)
+
 random.seed()
 
+
+facebook_bp = create_flask_blueprint(Facebook, oauth, handle_authorize)
+app.register_blueprint(facebook_bp, url_prefix='/facebook')
 # refresh_t = None
 
 # google_blueprint = make_google_blueprint(client_id=config.google_client_id, client_secret=config.google_client_secret, scope=["profile","email"])
 
 # app.register_blueprint(google_blueprint, url_prefix='/google_login'
 
-client=WebApplicationClient(config.google_client_id)
 
+
+google_client=WebApplicationClient(GOOGLE_CLIENT_ID)
 
 def check_header(func):
     @wraps(func)
@@ -231,12 +245,11 @@ def session_new():
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
-
 @app.route('/google_login')
 def google_login():
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-    request_uri=client.prepare_request_uri(
+    request_uri=google_client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url+"/google/authorized",
         scope=["openid", "email", "profile"]
@@ -244,11 +257,11 @@ def google_login():
     return redirect(request_uri)
 
 @app.route('/google_login/google/authorized')
-def callback():
+def google_callback():
     code = request.args.get("code")
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
-    token_url, headers, body = client.prepare_token_request(
+    token_url, headers, body = google_client.prepare_token_request(
         token_endpoint,
         authorization_response=request.url,
         redirect_url=request.base_url,
@@ -260,9 +273,9 @@ def callback():
         data=body,
         auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
     )
-    client.parse_request_body_response(json.dumps(token_response.json()))
+    google_client.parse_request_body_response(json.dumps(token_response.json()))
     userinfo_endpoint=google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = client.add_token(userinfo_endpoint)
+    uri, headers, body = google_client.add_token(userinfo_endpoint)
     userinfo_response=requests.get(uri, headers=headers,data=body)
     userinfo=userinfo_response.json()
     username=userinfo["given_name"]+userinfo['family_name']
@@ -285,6 +298,17 @@ def callback():
     #     urlretrieve(image['src'], outpath)
     return resp
 
+
+# @app.route('/facebook/login')
+# def facebook_login():
+#     redirect_uri= url_for('facebook_authorize', _external=True)
+#     return oauth.facebook.authorize_redirect(redirect_uri)
+
+
+# @app.route('/facebook/authenticate')
+# def facebook_authenticate():
+#     token = oauth.facebook.authorize_access_token()
+#     resp = outh.facebook.
 
 @app.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
@@ -1384,9 +1408,11 @@ def password_request():
             result = usr.search_by_email()
             if result != -1:
                 usr = User.get(result)
-            if usr.signed_in_with != "native" or usr.signed_in_with != '':
-                error = "You signed in with " + usr.signed_in_with + "."
-                return render_template("session/new.html", error=error)
+                if usr.signed_in_with != "native" or usr.signed_in_with != '':
+                    error = "You signed in with " + usr.signed_in_with + "."
+                    return render_template("session/new.html", error=error)
+            else:
+                return render_template("session/new.html", error="Email not found.")
             print("Token Got")
             if token is not None:
                 msg = Message('Password Reset Request',
