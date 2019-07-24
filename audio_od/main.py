@@ -60,21 +60,13 @@ app.config['FACEBOOK_CLIENT_SECRET'] = config.facebook_client_secret
 
 oauth = OAuth(app)
 
-def handle_authorize(remote, token, user_info):
-    return jsonify(user_info)
-
-random.seed()
-
-
-facebook_bp = create_flask_blueprint(Facebook, oauth, handle_authorize)
-app.register_blueprint(facebook_bp, url_prefix='/facebook')
 # refresh_t = None
 
 # google_blueprint = make_google_blueprint(client_id=config.google_client_id, client_secret=config.google_client_secret, scope=["profile","email"])
 
 # app.register_blueprint(google_blueprint, url_prefix='/google_login'
 
-
+random.seed()
 
 google_client=WebApplicationClient(GOOGLE_CLIENT_ID)
 
@@ -297,6 +289,28 @@ def google_callback():
     #     outpath = os.path.join(UPLOAD_FOLDER,"profile_pics", filename)
     #     urlretrieve(image['src'], outpath)
     return resp
+
+
+def handle_authorize(remote, token, user_info):
+    username = user_info['given_name']+user_info['family_name']
+    email=user_info['email']
+    passwd = os.urandom(16).decode('latin-1')
+    usr = User(username_input=username, email_input=email, first_name_input=user_info['given_name'], last_name_input=user_info['family_name'], password_input = passwd, signed_in_with="Facebook")
+    result = usr.search_by_email()
+    if result == -1:
+        result.add_to_server()
+    else:
+        usr = User.get(result)
+    resp = make_response(redirect(url_for('home')))
+    cur = datetime.utcnow()
+    exp = datetime.utcnow() + timedelta(days=30)
+    token = encode_auth_token(usr.user_id, cur, exp)
+    resp.set_cookie("remember_", token, expires=exp)
+    return resp
+
+facebook_bp = create_flask_blueprint(Facebook, oauth, handle_authorize)
+app.register_blueprint(facebook_bp, url_prefix='/facebook')
+
 
 
 # @app.route('/facebook/login')
