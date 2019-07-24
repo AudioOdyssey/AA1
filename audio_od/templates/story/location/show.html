@@ -46,9 +46,9 @@
         <textarea class="form-control" rows="3" name="location_short_description"
             onchange="show_changed(this, 'location')"></textarea>
         <hr>
-        <label for="loc_ev_name">Select Event Name (will occur upon entry): or <a href="#"
+        <label for="loc_ev_name">Select Event Name (will occur upon entry): or <span class="hover-cursor"
                 onclick="add_evt_redir('{{story_id}}')"> Add New
-                Event</a></label>
+                Event</span></label>
         <select id="loc_ev_name" class="form-control" type="text" autocomplete="off" name="location_event_id"
             onchange="show_changed(this, 'location')">
             <option value="0">None</option>
@@ -102,9 +102,9 @@
         <hr>
 
 
-        <label>Select Event Name (changes description): or <a href="#"
+        <label>Select Event Name (changes description): or <span class="hover-cursor"
                 onclick="add_evt_redir('{{location.story_id}}')">Add New
-                Event</a></label>
+                Event</span></label>
 
         <select class="form-control" rows="3" name="location_event_id" onchange="show_changed(this, 'location')">
             <option value="0">None</option>

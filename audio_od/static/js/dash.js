@@ -15,8 +15,23 @@ function loadprofile() {
     xhttp.send();
 }
 
-window.onpopstate = function () {
-    window.history.go();
+window.onpopstate = function (e) {
+    console.log(event.state.page)
+    bareloadpage(event.state.page)
+}
+
+function bareloadpage(url) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText != '')
+                document.getElementById("dash-content").innerHTML = this.responseText;
+        } else if (this.readyState == 4) {
+            console.log(this.responseText);
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
 }
 
 function loadpage(url) {
@@ -27,6 +42,8 @@ function loadpage(url) {
                 let stateObj = {
                     page: url,
                 };
+
+                console.log(url)
 
                 history.pushState(stateObj, "", "/dashboard"+url);
             	document.getElementById("dash-content").innerHTML = this.responseText;

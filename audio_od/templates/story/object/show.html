@@ -31,8 +31,8 @@
             </div>
 
             <div class="col-sm-8">
-                <label for="starting_loc"><b>Select Starting Location: or <a href="#"
-                            onclick="add_loc_redir('{{story_id}}')"> Add New Location</a></b></label>
+                <label for="starting_loc"><b>Select Starting Location: or <span class="hover-cursor"
+                            onclick="add_loc_redir('{{story_id}}')"> Add New Location</span></b></label>
                 <select id="starting_loc" autocomplete="off" type="text" class="form-control"
                     onchange="show_changed(this, 'object')" name="obj_starting_loc">
                     <option value="0">None</option>
@@ -93,8 +93,8 @@
                     value="{{ object.obj_name|e }}" required>
             </div>
             <div class="col-sm-8">
-                <label><b>Select Starting Location: or <a href="#" onclick="add_loc_redir('{{object.story_id}}')">
-                            Add New Location</a></b></label>
+                <label><b>Select Starting Location: or <span class="hover-cursor" onclick="add_loc_redir('{{object.story_id}}')">
+                            Add New Location</span></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc"
                     value="{{object.obj_starting_loc}}" onchange="show_changed(this, 'object')">
                     <option value="0">None</option>

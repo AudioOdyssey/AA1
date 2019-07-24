@@ -2,10 +2,10 @@
     type="text/css" />
 <script src="{{ url_for('static', filename='js/story/location/decision/show.js') }}"></script>
 
-<a href="#" onclick="loadpage('/story/update?story_id={{ story_id }}')"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a class="btn btn-light" href="#" onclick="loadpage('/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Location</a>
-<a class="btn btn-light" href="#" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</a>
-<a class="btn btn-primary" style="float:right" href="#" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</a>
+<button onclick="loadpage('/story/update?story_id={{ story_id }}')" class="btn btn-light">Back to Main Story Page</button>
+<button class="btn btn-light" onclick="loadpage('/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Location</button>
+<button class="btn btn-light" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</button>
+<button class="btn btn-primary" style="float:right" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</button>
 
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="d-none">
@@ -69,8 +69,7 @@
             <br>
 
             <div class="checkbox_hide" {%if not decision.transition%}style="display: none;" {%endif%}>
-                <label>Select Transition Location: or <a href="#" onclick="add_loc_redir('{{ story_id }}')"> Add
-                        New Location</a></label>
+                <label>Select Transition Location: or <span class="hover-cursor" onclick="add_loc_redir('{{ story_id }}')"> Add New Location</span></label>
                 <select type="text" class="form-control" autocomplete="off" name="transition_loc_id"
                     onchange="show_changed(this, 'location/decision')">
                     <option value="0">None</option>
@@ -105,9 +104,9 @@
             <div class="checkbox_hide" {%if not decision.hidden%}style="display: none;" {%endif%}>
                 <section class="row m0 fg-1">
                     <div class="col-sm-6">
-                        <label>Select Object to show decision: or <a href="#"
+                        <label>Select Object to show decision: or <span class="hover-cursor"
                                 onclick="add_obj_redir('{{ story_id }}')">
-                                Add New Object</a></label>
+                                Add New Object</span></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="show_object_id"
                             onchange="show_changed(this, 'location/decision');show_check_exclusivity(this)">
                             <option value="0">None</option>
@@ -118,8 +117,8 @@
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label>Select Event to show decision: or <a href="#" onclick="add_evt_redir('{{ story_id }}')">
-                                Add New Event</a></label>
+                        <label>Select Event to show decision: or <span class="hover-cursor" onclick="add_evt_redir('{{ story_id }}')">
+                                Add New Event</span></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="show_event_id"
                             onchange="show_changed(this, 'location/decision');show_check_exclusivity(this)">
                             <option value="0">None</option>
@@ -150,9 +149,9 @@
                 <section class="row m0 fg-1">
                     <div class="col-sm-6">
 
-                        <label>Select Object to unlock decision: or <a href="#"
+                        <label>Select Object to unlock decision: or <span class="hover-cursor"
                                 onclick="add_obj_redir('{{ story_id }}')"> Add New
-                                Object</a></label>
+                                Object</span></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="unlock_object_id"
                             onchange="show_changed(this, 'location/decision');show_check_exclusivity(this)">
                             <option value="0">None</option>
@@ -163,9 +162,9 @@
                         </select>
                     </div>
                     <div class="col-sm-6">
-                        <label>Select Event to unlock decision: or <a href="#"
+                        <label>Select Event to unlock decision: or <span class="hover-cursor"
                                 onclick="add_evt_redir('{{ story_id }}')">
-                                Add New Event</a></label>
+                                Add New Event</span></label>
                         <select type="text" class="form-control exclusive" autocomplete="off" name="unlock_event_id"
                             onchange="show_changed(this, 'location/decision');show_check_exclusivity(this)">
                             <option value="0">None</option>
@@ -202,10 +201,10 @@
             <br>
 
             <div class="checkbox_hide" {%if not decision.cause_event%}style="display: none;" {%endif%}>
-                <label>Select Event triggered by this decision: or <a href="#"
+                <label>Select Event triggered by this decision: or <span class="hover-cursor"
                         onclick="add_evt_redir('{{ story_id }}')">
                         Add New
-                        Event</a></label>
+                        Event</span></label>
                 <select type="text" class="form-control" autocomplete="off" name="effect_event_id"
                     onchange="show_changed(this, 'location/decision')">
                     <option value="0">None</option>
@@ -217,10 +216,10 @@
             </div>
             <hr>
             <!--'location/decision' add checkbox here?-->
-            <label>Select Event that locks this decision: or <a href="#"
+            <label>Select Event that locks this decision: or <span class="hover-cursor"
                     onclick="add_evt_redir('{{ story_id }}')">
                     Add New
-                    Event</a></label>
+                    Event</span></label>
             <select type="text" class="form-control" autocomplete="off" name="is_locked_by_event_id"
                 onchange="show_changed(this, 'location/decision')">
                 <option value="0">None</option>
@@ -238,7 +237,7 @@
 
 <br>
 
-<a href="#" onclick="loadpage('/story/update?story_id={{ story_id }}')"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a class="btn btn-light" href="#" onclick="loadpage('/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Location</a>
-<a class="btn btn-light" href="#" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</a>
-<a class="btn btn-primary" style="float:right" href="#" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</a>
+<button onclick="loadpage('/story/update?story_id={{ story_id }}')" class="btn btn-light">Back to Main Story Page</button>
+<button class="btn btn-light" onclick="loadpage('/story/location/indiv?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Location</button>
+<button class="btn btn-light" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</button>
+<button class="btn btn-primary" style="float:right" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</button>

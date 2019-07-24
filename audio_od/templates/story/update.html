@@ -106,13 +106,13 @@
     <hr>
     <section class="row 1-3-left-row">
         {% for object in objects %}
-        <a class="col-sm-4 small-card"
+        <span class="hover-cursor col-sm-4 small-card"
             onclick="loadpage('/story/object/indiv?story_id={{story.story_id}}&object_id={{object.obj_id}}')">
             <h4>{{ object.obj_name|e }}</h4>
             <hr>
             <h5>{{ object.obj_starting_loc_name|e }}</h5>
             <p>{{ StoryLocation.get(story.story_id,object.obj_starting_loc).location_name|e }}</p>
-        </a>
+        </span>
         {% endfor %}
     </section>
 
@@ -125,13 +125,13 @@
     <hr>
     <section class="row 1-3-left-row">
         {% for event in events %}
-        <a class="col-sm-4 small-card"
+        <span class="hover-cursor col-sm-4 small-card"
             onclick="loadpage('/story/event/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}')">
             <h4>{{ event.event_name|e }}</h4>
             <hr>
             <h5>{{ event.event_location_name|e }}</h5>
             <p>{{ event.event_description|e }}</p>
-        </a>
+        </span>
         {% endfor %}
     </section>
 </section>
@@ -144,11 +144,11 @@
     <button type="button" onclick="add_loc_redir('{{story.story_id}}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button></a>
     <br>
-    <a onclick="loadpage('/story/treeview?story_id={{story.story_id}}')">Click Here for Tree View</a>
+    <span class="hover-cursor" onclick="loadpage('/story/treeview?story_id={{story.story_id}}')">Click Here for Tree View</span>
     <hr>
     <section class="row">
         {% for location in locations %}
-        <a class="col-sm-6 small-card"
+        <span class="hover-cursor col-sm-6 small-card"
             onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">
             <h4>{{ location.location_name|e }}</h4>
             <hr>
@@ -157,15 +157,14 @@
             {%else%}
             <p>{{ location.original_description|e }}</p>
             {%endif%}
-        </a>
+        </span>
         {% endfor %}
     </section>
 </section>
 <hr>
 <button class="btn btn-light" onclick="storySubmitForVerify('{{story.story_id}}')">Submit for Verification</button>
-<a onclick="loadpage('/verification/status?story_id={{story.story_id}}')"> <button class="btn btn-light">View Verification
-        Status</button></a>
-<a onclick="loadpage('/story/run?story_id={{story.story_id}}')"> <button class="btn btn-light">Run Story</button></a>
+<button onclick="loadpage('/verification/status?story_id={{story.story_id}}')" class="btn btn-light">View Verification Status</button>
+<button onclick="loadpage('/story/run?story_id={{story.story_id}}')" class="btn btn-light">Run Story</button>
 <button class="btn btn-danger" onclick="story_delete('{{story.story_id}}')">Delete Story</button>
 
 <button onclick="save()" style="float: right" class="btn btn-primary">Save</button>

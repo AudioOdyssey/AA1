@@ -1,11 +1,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/location/show.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/story/location/show.js') }}"></script>
 
-<a href="#" onclick="loadpage('/story/update?story_id={{story_id}}')"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a href="#" onclick="loadpage('/story/treeview?story_id={{story_id}}')"><button id="bottom" class="btn btn-light">Back to TreeView</button></a>
-<a href="#" onclick="loadpage('/verification/location?story_id={{story_id}}&location_id={{location_id}}')" class="btn btn-light">View
-    Verification Info</button></a>
-<a href="#" onclick="loadpage('/story/run?story_id={{story_id}}&location_id={{location_id}}" class="btn btn-light">Run from Here</a>
+<button onclick="loadpage('/story/update?story_id={{story_id}}')" class="btn btn-light">Back to Main Story Page</button>
+<button onclick="loadpage('/story/treeview?story_id={{story_id}}')" id="bottom" class="btn btn-light">Back to TreeView</button>
+<button onclick="loadpage('/verification/location?story_id={{story_id}}&location_id={{location_id}}')" class="btn btn-light">View
+    Verification Info</button>
+<button onclick="loadpage('/story/run?story_id={{story_id}}&location_id={{location_id}}" class="btn btn-light">Run from Here</button>
 <button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
 
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/location/update">
@@ -38,8 +38,8 @@
 
 
 
-        <label>Select Event Name (changes description): or <a href="#" onclick="add_evt_redir('{{story_id}}')">Add
-                New Event</a></label>
+        <label>Select Event Name (changes description): or <span class="hover-cursor" onclick="add_evt_redir('{{story_id}}')">Add
+                New Event</span></label>
 
         <select class="form-control" rows="3" name="location_event_id" onchange="show_changed(this, 'location')">
             <option value="0">None</option>
@@ -55,17 +55,17 @@
 
         <hr>
         <br>
-        <a href="#" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}')">Edit
-            Decisions</a>
+        <span class="hover-cursor" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}')">Edit
+            Decisions</span>
     </section>
 </form>
 
 <br>
 
 
-<a href="#" onclick="loadpage('/story/update?story_id={{story_id}}')"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a href="#" onclick="loadpage('/story/treeview?story_id={{story_id}}')"><button id="bottom" class="btn btn-light">Back to TreeView</button></a>
-<a href="#" onclick="loadpage('/verification/location?story_id={{story_id}}&location_id={{location_id}}')" class="btn btn-light">View
-    Verification Info</button></a>
-<a href="#" onclick="loadpage('/story/run?story_id={{story_id}}&location_id={{location_id}}')" class="btn btn-light">Run from Here</a>
+<button onclick="loadpage('/story/update?story_id={{story_id}}')" class="btn btn-light">Back to Main Story Page</button>
+<button onclick="loadpage('/story/treeview?story_id={{story_id}}')" id="bottom" class="btn btn-light">Back to TreeView</button>
+<button onclick="loadpage('/verification/location?story_id={{story_id}}&location_id={{location_id}}')" class="btn btn-light">View
+    Verification Info</button>
+<button onclick="loadpage('/story/run?story_id={{story_id}}&location_id={{location_id}}')" class="btn btn-light">Run from Here</button>
 <button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
