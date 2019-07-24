@@ -20,7 +20,6 @@ from werkzeug.utils import secure_filename
 import pymysql
 import pymysql.cursors
 import jwt
-from oauthlib.oauth2 import WebApplicationClient
 import requests
 from bs4 import BeautifulSoup as bs
 from authlib.flask.client import OAuth

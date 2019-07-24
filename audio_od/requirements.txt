@@ -7,3 +7,5 @@ Flask-Login
 PyMySQL
 pyjwt
 itsdangerous
+authlib
+loginpass
