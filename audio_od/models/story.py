@@ -18,6 +18,7 @@ from .storydecision import StoryDecision
 from .storyevent import StoryEvent
 from .storylocation import StoryLocation
 from .storyobject import StoryObject
+from .User import User
 
 
 class Story:
@@ -44,11 +45,12 @@ class Story:
     parental_ratings = 0.0
     updated_at = None
     starting_loc = 0
+    author_name = ''
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', verifier_id=0, verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0, updated_at=None):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0, updated_at=None, author_name=''):
         if story_id:
             self.story_id = story_id
         self.story_title = story_title
@@ -73,6 +75,7 @@ class Story:
         self.parental_ratings = parental_ratings
         self.verification_status = verification_status
         self.updated_at = updated_at
+        self.author_name = author_name
 
     def add_to_server(self):
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
@@ -365,9 +368,14 @@ class Story:
         story_list = []
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT story_id, story_title FROM `master_stories` WHERE `story_id` IN (SELECT `story_id` FROM `story_shares` WHERE user_id = %s)", (uid))
+                "SELECT story_id, story_title, user_creator_id FROM `master_stories` WHERE `story_id` IN (SELECT `story_id` FROM `story_shares` WHERE user_id = %s)", (uid))
             results = cur.fetchall()
             for row in results:
-                story_list.append(cls(row["story_id"], row["story_title"]))
+                auth = User.get(row['user_creator_id'])
+                if auth is None:
+                    author_name = ""
+                else:
+                    author_name = auth.username
+                story_list.append(cls(row["story_id"], row["story_title"], author_name=author_name))
         conn.close()
         return story_list

@@ -1362,11 +1362,13 @@ def reset_token(token):
 
 
 @app.route("/dashboard")
+@app.route("/dashboard/")
 @authentication_required
 @check_header
 def dashboard():
     stories = Story.story_list_by_creatordate(g.uid)
-    return render_template("/dash/index.html", stories=stories, base_url="")
+    base_url = base64.b64encode("/dash/story".encode()).decode("utf-8")
+    return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
 @app.route('/dashboard/<path:page>')
@@ -1375,7 +1377,6 @@ def dashboard():
 def dashboard_full(page):
     stories = Story.story_list_by_creatordate(g.uid)
     base_url = base64.b64encode(request.full_path[10:].encode()).decode("utf-8")
-    print(base_url)
     return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
@@ -1392,7 +1393,7 @@ def dash_story():
 @check_header
 def dash_share():
     stories = Story.story_shares_by_uid(g.user.user_id)
-    return render_template("/dash/story.html", stories=stories)
+    return render_template("/dash/shared.html", stories=stories)
 
 
 @app.route("/dash/user")
