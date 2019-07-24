@@ -35,6 +35,8 @@ function storyHandleFileSelect(evt) {
         document.getElementById("dummy-thicc").style.display = "block";
         return;
     }
+    document.getElementById("dummy-thicc").style.display = "none";
+
     var reader = new FileReader();
 
     reader.onload = (function (theFile) {

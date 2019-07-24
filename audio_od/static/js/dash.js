@@ -52,6 +52,8 @@ function profile_changed(evt, elem) {
         document.getElementById("dummy-thicc").style.display = "block";
         return;
     }
+    document.getElementById("dummy-thicc").style.display = "none";
+    
     var reader = new FileReader();
 
     reader.onload = (function (theFile) {
