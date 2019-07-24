@@ -1,60 +1,6 @@
 {% extends "template.html" %}
 {% block content %}
-
-<style type="text/css">
-    #google-button {
-        margin: auto;
-        -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
-        -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
-        -webkit-transition: background-color .218s,border-color .218s,box-shadow .218s;
-        transition: background-color .218s,border-color .218s,box-shadow .218s;
-        border-radius: 1px;
-    }
-    #google-button:hover {
-        cursor: pointer;
-        -webkit-box-shadow: 0 0 3px 3px rgba(66,133,244,.3);
-        box-shadow: 0 0 3px 3px rgba(66,133,244,.3);
-        text-decoration: none !important;
-    }
-    .google-icon {
-        background: url('/static/image/google-logo.png') transparent 5px 50% no-repeat;
-        display: inline-block;
-        vertical-align: middle;
-        width: 42px;
-        height: 42px;
-    }
-    #facebook-button {
-        margin: auto;
-        background-color: #3b5998;
-        -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
-        -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
-        -webkit-transition: background-color .218s,border-color .218s,box-shadow .218s;
-        transition: background-color .218s,border-color .218s,box-shadow .218s;
-        border-radius: 1px;
-    }
-    #facebook-button:hover {
-        cursor: pointer;
-        -webkit-box-shadow: 0 0 3px 3px rgba(66,133,244,.3);
-        box-shadow: 0 0 3px 3px rgba(66,133,244,.3);
-        text-decoration: none !important;
-    }
-    .facebook-icon {
-        display: inline-block;
-        vertical-align: middle;
-        width: 24px;
-        height: 24px;
-        margin: 9px;
-    }
-    .login-text {
-        vertical-align: middle;
-        font-family: 'Roboto', sans-serif;
-        margin-right: 1rem;
-        text-decoration: none;
-    }
-</style>
-
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user/new.css') }}" type="text/css" />
 
 <section class="row">
     <div class="col-lg-3"></div>
