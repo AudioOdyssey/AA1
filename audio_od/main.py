@@ -1364,13 +1364,20 @@ def reset_token(token):
     return render_template("/password_reset/form.html")
 
 
-@app.route("/dash")
+@app.route("/dashboard")
 @authentication_required
 @check_header
 def dashboard():
     stories = Story.story_list_by_creatordate(g.uid)
-    base_url = ""
-    return render_template("/dash/index.html", stories=stories, base_url=base_url)
+    return render_template("/dash/index.html", stories=stories, base_url="")
+
+
+@app.route('/dashboard/<path:page>')
+@authentication_required
+@check_header
+def dashboard_full(page):
+    stories = Story.story_list_by_creatordate(g.uid)
+    return render_template("/dash/index.html", stories=stories, base_url="/"+page)
 
 
 @app.route("/dash/story")
@@ -1395,23 +1402,6 @@ def dash_share():
 def dash_user():
     userimage = g.user.get_profile_pic_base64().decode("utf-8")
     return render_template("/dash/user.html", userimage=userimage)
-
-
-@app.route("/dash/stories")
-@authentication_required
-@check_header
-def dash_story_full():
-    stories = Story.story_list_by_creatordate(g.uid)
-    return render_template("/dash/index.html", stories=stories, content=render_template("/dash/story.html", stories=stories))
-
-
-@app.route("/dash/users")
-@authentication_required
-@check_header
-def dash_user_full():
-    stories = Story.story_list_by_creatordate(g.uid)
-    userimage = g.user.get_profile_pic_base64().decode("utf-8")
-    return render_template("/dash/index.html", stories=stories, content=render_template("/dash/user.html", userimage=userimage))
 
 
 @app.errorhandler(403)
