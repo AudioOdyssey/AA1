@@ -10,9 +10,9 @@
 {%endif%}
 
 <button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
-<a onclick="loadpage('/story/update?story_id={{story.story_id}}')" href="#" class="btn btn-light">Back to Main Story Page</a>
-<a class="btn btn-primary" style="float:right" href="#"
-    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</a>
+<span onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="hover-cursor btn btn-light">Back to Main Story Page</span>
+<span class="btn btn-primary hover-cursor" style="float:right"
+    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</span>
 
 <h1>Running {{story.story_title|e}}</h1>
 <br>
@@ -71,7 +71,7 @@
     {%for dec in decisions%}
     <div class="col-sm-4 card-outer">
         <div class="storycard">
-            <a href="#"
+            <span class="hover-cursor"
                 onclick="runDecClicked('{{story.story_id}}','{{dec.decision_id}}','{{location.location_id}}','{{dec.transition}}','{{dec.transition_loc_id}}','{{dec.can_occur_once}}','{{dec.cause_event}}','{{dec.effect_event_id}}')">
                 <h3>{{dec.decision_name|e}}</h3>
                 <hr>
@@ -142,7 +142,7 @@
                 {%endif%}
 
                 <p>{{dec.decision_description|e}}</p>
-            </a>
+            </span>
         </div>
     </div>
     {%endfor%}
@@ -156,8 +156,8 @@
 {%endif%}
 
 <button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
-<a onclick="loadpage('/story/update?story_id={{story.story_id}}')" href="#" class="btn btn-light">Back to Main Story Page</a>
-<a class="btn btn-primary" style="float:right" href="#"
-    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</a>
+<span onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light hover-cursor">Back to Main Story Page</span>
+<span class="btn btn-primary hover-cursor" style="float:right"
+    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</span>
 
 {%endif%}

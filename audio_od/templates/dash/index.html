@@ -63,8 +63,10 @@
 </section>
 
 <script>
-	if ("{{base_url}}" !== "")
-		loadpage("{{base_url}}")
+	var url = atob("{{base_url|string|safe}}");
+	console.log(url)
+	if (url !== "")
+		loadpage(url)
 </script>
 
 {% endblock %}

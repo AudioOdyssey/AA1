@@ -17,8 +17,8 @@
                     value="{{ obj.obj_name|e }}" required>
             </div>
             <div class="col-sm-8">
-                <label><b>Select Starting Location: or <a onclick="add_loc_redir('{{story_id}}')" href="#"> Add
-                            New Location</a></b></label>
+                <label><b>Select Starting Location: or <span class="hover-cursor" onclick="add_loc_redir('{{story_id}}')"> Add
+                            New Location</span></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc" value="{{obj.obj_starting_loc}}"
                     onchange="show_changed(this, 'object')">
                     <option value="0">None</option>
@@ -49,8 +49,7 @@
             {%endif%}
 
             <div class="checkbox_hide" {%if not obj.is_hidden%}style="display: none;" {%endif%}>
-                <label>Select Unhide Event Name: or <a href="#" onclick="loadpage('/story/event/show?story_id={{ story_id }}"> Add New
-                        Event</a></label>
+                <label>Select Unhide Event Name: or <span class="hover-cursor" onclick="loadpage('/story/event/show?story_id={{ story_id }}"> Add New Event</span></label>
                 <select class="form-control" type="text" autocomplete="off" name="obj_unhide_event"
                     onchange="show_changed(this, 'object')" value="{{ obj.unhide_event_id}}">
                     <option value="0">None</option>
@@ -67,8 +66,8 @@
 
 <br>
 
-<a href="#" onclick="loadpage('/story/update?story_id={{ story_id }}')"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a href="#" onclick="loadpage('/story/treeview?story_id={{story_id}}')"><button id="bottom" class="btn btn-light">Back to TreeView</button></a>
-<a href="#" onclick="loadpage('/verification/object?story_id={{story_id}}&object_id={{object_id}}')"><button id="bottom"
-        class="btn btn-light">View Verification Info</button></a>
+<button onclick="loadpage('/story/update?story_id={{ story_id }}')" class="btn btn-light">Back to Main Story Page</button></a>
+<button onclick="loadpage('/story/treeview?story_id={{story_id}}')" class="btn btn-light">Back to TreeView</button>
+<button onclick="loadpage('/verification/object?story_id={{story_id}}&object_id={{object_id}}')" id="bottom"
+        class="btn btn-light">View Verification Info</button>
 <button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>

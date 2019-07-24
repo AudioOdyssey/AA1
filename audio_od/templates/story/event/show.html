@@ -30,9 +30,9 @@
                     onchange="show_changed(this, 'event')">
             </div>
             <div class="col-sm-8">
-                <label for="locations"><b>Select Location or</b><a href="#"
+                <label for="locations"><b>Select Location or</b><span class="hover-cursor"
                         onclick="add_loc_redir('{{story_id}}')">
-                        Add New Location</a></label>
+                        Add New Location</span></label>
                 <select name="event_loc" id="locations" onchange="show_changed(this, 'event')">
                     <option value="0">None</option>
                     {% for location in locations %}
@@ -77,8 +77,7 @@
             </div>
 
             <div class="col-sm-8">
-                <label><b>Select Location or:</b><a href="#" onclick="add_loc_redir('{{event.story_id}}')"> Add
-                        New Location</a></label>
+                <label><b>Select Location or:</b><span class="hover-cursor" onclick="add_loc_redir('{{event.story_id}}')"> Add New Location</span></label>
                 <select class="form-control" type="text" name="event_loc" onchange="show_changed(this, 'event')">
                     <option value="0">None</option>
                     {% for loc in locations %}
