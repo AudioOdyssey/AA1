@@ -1471,7 +1471,11 @@ def dashboard_full(page):
 @authentication_required
 @check_header
 def dash_story():
-    stories = Story.story_list_by_creatordate(g.uid)
+    raw_stories = Story.story_list_by_creatordate(g.uid)
+    stories = []
+    for story in raw_stories:
+        if story.verification_status != 3:
+            stories.append(story)
     return render_template("/dash/story.html", stories=stories)
 
 

@@ -134,6 +134,8 @@ class Story:
         conn.close()
 
     def update_verify(self):
+        if self.verification_status != 3:
+            self.story_in_store = 0
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
