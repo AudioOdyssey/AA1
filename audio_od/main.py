@@ -633,6 +633,7 @@ def object_update():
     else:
         can_pickup_obj = 0
     is_hidden = details.get('is_hidden')
+    import pdb; pdb.set_trace()  # breakpoint 05593b65 //
     if is_hidden:
         is_hidden = 1
     else:

@@ -14,8 +14,7 @@
                     value="{{ obj.obj_name|e }}" required>
             </div>
             <div class="col-sm-8">
-                <label><b>Select Starting Location: or <span class="hover-cursor" onclick="add_loc_redir('{{story_id}}')"> Add
-                            New Location</span></b></label>
+                <label><b>Select Starting Location: or <span class="hover-cursor" onclick="add_loc_redir('{{story_id}}')"> Add New Location</span></b></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc" value="{{obj.obj_starting_loc}}"
                     onchange="show_changed(this, 'object')">
                     <option value="0">None</option>
@@ -38,17 +37,14 @@
         <div>
             <label>Is Hidden? </label>
             {%if obj.is_hidden%}
-            <input id="chk1" type="checkbox" name="is_hidden" autocomplete="off"
-                onclick="show_checkbox_visability_check(this)" onchange="show_changed(this, 'object')" checked>
+            <input id="chk1" type="checkbox" name="is_hidden" autocomplete="off" onclick="show_checkbox_visability_check(this)" onchange="show_changed(this, 'object')" checked>
             {%else%}
-            <input id="chk2" type="checkbox" name="is_hidden" autocomplete="off"
-                onclick="show_checkbox_visability_check(this)" onchange="show_changed(this, 'object')">
+            <input id="chk2" type="checkbox" name="is_hidden" autocomplete="off" onclick="show_checkbox_visability_check(this)" onchange="show_changed(this, 'object')">
             {%endif%}
 
             <div class="checkbox_hide" {%if not obj.is_hidden%}style="display: none;" {%endif%}>
                 <label>Select Unhide Event Name: or <span class="hover-cursor" onclick="loadpage('/story/event/show?story_id={{ story_id }}"> Add New Event</span></label>
-                <select class="form-control" type="text" autocomplete="off" name="obj_unhide_event"
-                    onchange="show_changed(this, 'object')" value="{{ obj.unhide_event_id}}">
+                <select class="form-control" type="text" autocomplete="off" name="unhide_event_id" onchange="show_changed(this, 'object')" value="{{ obj.unhide_event_id}}">
                     <option value="0">None</option>
                     {% for event in events %}
                     <option {% if event.event_id|int==obj.unhide_event_id|int%}selected{%endif%}
