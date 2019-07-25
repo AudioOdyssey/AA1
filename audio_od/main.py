@@ -1078,17 +1078,17 @@ def review_update():
     if entity_type.lower() == 'object':
         obj = StoryObject.get(story_id, ent_id)
         obj.reviewer_comments = reviewer_comment
-        obj.is_verified = is_verified
+        obj.verification_status = is_verified
         obj.update_admin()
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
         loc.reviewer_comments = reviewer_comment
-        loc.is_verified = is_verified
+        loc.verification_status = is_verified
         loc.update_admin()
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
         evnt.reviewer_comments = reviewer_comment
-        evnt.is_verified = is_verified
+        evnt.verification_status = is_verified
         evnt.update_admin()
     elif entity_type.lower() == 'story':
         story = Story.get(story_id)
@@ -1101,13 +1101,14 @@ def review_update():
             story.story_in_store = True
         if int(is_verified) == 2:
             story.verification_status = is_verified
-            story.story_in_store=False
+            story.story_in_store = False
+
         story.update_verify()
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
         dec.reviewer_comments = reviewer_comment
-        dec.is_verified = is_verified
+        dec.verification_status = is_verified
         dec.update_admin()
     return '{"status":"ok"}'
 
