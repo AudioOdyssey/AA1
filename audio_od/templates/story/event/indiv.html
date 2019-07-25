@@ -7,9 +7,6 @@
     <input name="story_id" value="{{ event.story_id }}" readonly class="d-none">
     <input name="event_id" value="{{ event.event_id }}" readonly class="d-none">
 
-    <button type="button" onclick="show_delete_pressed(this, 'event')" class="trash btn btn-danger"><i
-        class="fa fa-trash-alt fa-xs"></i></button>
-
     <section class="align-items-center row m0">
         <section class="row m0 fg-1">
             <div class="col-sm-4">
@@ -48,8 +45,10 @@
         {% endif %}
         <br>
 
+        <section style="width: 100%" class="row">
+            <button type="button" onclick="show_delete_pressed(this, 'location')" class="ml-auto btn btn-danger"><i class="fa fa-trash-alt"></i> Delete Story</button>
+        </section>
     </section>
-
 </form>
 
 <br>

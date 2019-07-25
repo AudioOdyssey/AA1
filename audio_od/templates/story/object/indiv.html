@@ -1,13 +1,13 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/story/object/show.css') }}" type="text/css" />
 <script src="{{ url_for('static', filename='js/story/object/show.js') }}"></script>
 
-<button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
+<button onclick="save()" style="float: right;" class="btn btn-primary mb-2">Save</button>
+
+<div class="clearfix"></div>
+
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/object/update">
     <input name="story_id" value="{{ story_id }}" readonly class="d-none">
     <input name="obj_id" value="{{ object_id }}" readonly class="d-none">
-
-    <button type="button" onclick="show_delete_pressed(this, 'object')" class="trash btn btn-danger"><i
-        class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="align-items-center row m0">
         <section class="row m0 fg-1">
@@ -61,6 +61,10 @@
                 </select>
             </div>
         </div>
+
+        <section style="width: 100%" class="row">
+            <button type="button" onclick="show_delete_pressed(this, 'location')" class="ml-auto btn btn-danger"><i class="fa fa-trash-alt"></i> Delete Story</button>
+        </section>
     </section>
 </form>
 

@@ -86,15 +86,14 @@
                     <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                 </div>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="cover-upload" onchange="story_changed(this)"
-                        aria-describedby="inputGroupFileAddon01" name="cover">
+                    <input type="file" class="custom-file-input" id="cover-upload" onfileselect="" onchange="story_changed(this); storyHandleFileSelect(event)" aria-describedby="inputGroupFileAddon01" name="cover">
                     <label class="custom-file-label" for="cover-upload">Choose file</label>
                 </div>
             </div>
         </form>
     </section>
 
-    <br><br>
+    <br>
     <!-- Object Row -->
 
     <h3 class="float-sm-left">Objects</h3>

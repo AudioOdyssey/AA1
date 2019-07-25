@@ -11,8 +11,6 @@
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/location/update">
     <input name="story_id" value="{{ story_id }}" readonly class="d-none">
     <input name="loc_id" value="{{ location_id }}" readonly class="d-none">
-    <button type="button" onclick="show_delete_pressed(this, 'location')" class="trash btn btn-danger"><i
-        class="fa fa-trash-alt fa-xs"></i></button>
 
     <section class="align-items-center row m0">
         <section class="row m0 fg-1">
@@ -57,6 +55,10 @@
         <br>
         <span class="hover-cursor" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}')">Edit
             Decisions</span>
+
+        <section style="width: 100%" class="row">
+            <button type="button" onclick="show_delete_pressed(this, 'location')" class="ml-auto btn btn-danger"><i class="fa fa-trash-alt"></i> Delete Story</button>
+        </section>
     </section>
 </form>
 
