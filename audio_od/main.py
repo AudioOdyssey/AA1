@@ -1487,8 +1487,24 @@ def dash_share():
 @authentication_required
 @check_header
 def dash_verified():
-    stories = Story.story_list_by_creatordate(g.user.user_id)
+    raw_stories = Story.story_list_by_creatordate(g.user.user_id)
+    stories = []
+    for story in raw_stories:
+        if story.verification_status == 3 and story.story_in_store != 1:
+            stories.append(story)
     return render_template("/dash/verified.html", stories=stories)
+
+
+@app.route("/dash/published")
+@authentication_required
+@check_header
+def dash_published():
+    raw_stories = Story.story_list_by_creatordate(g.user.user_id)
+    stories = []
+    for story in raw_stories:
+        if story.story_in_store == 1:
+            stories.append(story)
+    return render_template("/dash/published.html", stories=stories)
 
 
 @app.route("/dash/user")

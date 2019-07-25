@@ -178,7 +178,7 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"],updated_at=row['updated_at']))
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"],updated_at=row['updated_at'], story_in_store=row['story_in_store']))
         conn.close()
         return story_list
 
