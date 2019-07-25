@@ -472,6 +472,22 @@ def story_update():
     return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, coverimage=coverimage)
 
 
+@app.route("/story/publish", methods=["POST"])
+@authentication_required
+@check_header
+def story_publish():
+    story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
+    if story.verification_status != 3:
+        abort(403)
+    story.story_in_store = 1
+    story.update_verify()
+    return '{"status":"ok"}'
+
+
 @app.route("/story/image")
 @authentication_required
 @check_header
@@ -1487,7 +1503,7 @@ def dash_user():
 @check_header
 def forbidden_403(e):
     # Pretend all 403s are 404s for security purposes
-    return render_template('error/404.html'), 403
+    return render_template('error/404.html'), 404
 
 
 @app.errorhandler(404)

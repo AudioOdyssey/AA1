@@ -100,3 +100,13 @@ function profile_changed(evt, elem) {
     xhttp.open("POST", "/user/picture", true);
     xhttp.send(new FormData(elem.form));
 }
+
+function publish(sid) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200)
+            loadpage("/dash/story")
+    };
+    xhttp.open("POST", "/story/publish?story_id="+sid, true);
+    xhttp.send();
+}
