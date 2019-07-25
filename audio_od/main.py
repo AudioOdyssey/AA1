@@ -1398,6 +1398,14 @@ def dash_share():
     return render_template("/dash/shared.html", stories=stories)
 
 
+@app.route("/dash/verified")
+@authentication_required
+@check_header
+def dash_verified():
+    stories = Story.story_list_by_creatordate(g.user.user_id)
+    return render_template("/dash/verified.html", stories=stories)
+
+
 @app.route("/dash/user")
 @authentication_required
 @check_header

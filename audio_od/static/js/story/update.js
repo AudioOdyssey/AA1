@@ -30,7 +30,7 @@ function storyHandleFileSelect(evt) {
     var files = evt.target.files;
     var f = files[0];
     var filesize = f.size / 1024.0 / 1024;
-    if (filesize > 7.5) {
+    if (filesize > 7.9) {
         // The image is DUMMY THICC and the clap alerted the server!
         document.getElementById("dummy-thicc").style.display = "block";
         return;
