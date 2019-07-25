@@ -26,7 +26,6 @@ function show_changed(elem, endpt) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
             save();
         } else if (this.readyState == 4) {
             console.log(this.responseText);
@@ -113,6 +112,7 @@ function show_delete_pressed(btn, endpt) {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             btn.parentNode.parentNode.removeChild(btn.parentNode);
+            window.history.back();
         } else if (this.readyState == 4) {
             console.log(this.responseText);
         }

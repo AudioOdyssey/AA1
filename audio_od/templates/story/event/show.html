@@ -3,57 +3,11 @@
 <a href="/story/location/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Locations</button></a>
 <a href="/story/object/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Objects</button></a>
 
-<br>
 <section class="row m0">
     <h3>Events</h3>
-    <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
+    <button type="button" onclick="add_evt_redir('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
 </section>
-<form class="d-none" class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">
-
-    <input name="story_id" readonly class="d-none">
-    <input name="event_id" readonly class="d-none">
-
-    <button type="button" onclick="show_delete_pressed(this, 'event')" class="trash btn btn-light"><i
-            class="fa fa-xs fa-trash-alt"></i></button>
-
-    <section class="align-items-center row m0">
-        <section class="row m0 fg-1">
-            <div class="col-sm-4">
-                <label for="event_name"><b>Name:</b></label>
-                <input id="event_name" class="form-control" type="text" name="event_name"
-                    onchange="show_changed(this, 'event')">
-            </div>
-            <div class="col-sm-8">
-                <label for="locations"><b>Select Location or</b><span class="hover-cursor"
-                        onclick="add_loc_redir('{{story_id}}')">
-                        Add New Location</span></label>
-                <select name="event_loc" id="locations" onchange="show_changed(this, 'event')">
-                    <option value="0">None</option>
-                    {% for location in locations %}
-                    <option value="{{location.location_id}}">{{location.location_name|e}}</option>
-                    {%endfor%}
-                </select>
-            </div>
-        </section>
-
-        <section class="fg-0" onclick="show_show(this)">
-            <i class="fas fa-chevron-down fa-lg show-down-arrow"></i>
-        </section>
-    </section>
-
-    <section class="row m0 p-2" style="display: none">
-        <hr>
-        <label for="event_descr">Description</label>
-        <textarea id="event_descr" class="form-control" rows="3" name="ev_description"
-            onchange="show_changed(this, 'event')"></textarea>
-        <label>Is global?</label>
-        <input id="is_global" type="checkbox" autocomplete="off" name="is_global" onchange="show_changed(this, 'event')">
-        <br>
-    </section>
-</form>
-
-<div id="content-marker"></div>
 
 {% for event in events %}
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">

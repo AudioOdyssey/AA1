@@ -5,62 +5,9 @@
 
 <section class="row m0">
     <h3>Locations</h3>
-    <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
+    <button type="button" onclick="add_loc_redir('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
 </section>
-
-<form class="d-none" onclick="show_set_focus(this)" method="POST" action="/story/location/update">
-    <input name="story_id" value="{{story_id}}" readonly class="d-none">
-    <input name="loc_id" value="{{location_id}}" readonly class="d-none">
-
-    <button type="button" onclick="show_delete_pressed(this, 'location')" class="trash btn btn-light"><i
-            class="fa fa-trash-alt fa-xs"></i></button>
-
-    <section class="align-items-center row m0">
-        <section class="row m0 fg-1">
-            <div class="col-sm-4">
-                <label for="loc_name"><b>Name:</b></label>
-                <input id="loc_name" class="form-control" type="text" name="location_name"
-                    onchange="show_changed(this, 'location')">
-            </div>
-        </section>
-
-        <section class="fg-0" onclick="show_show(this)">
-            <i class="fas fa-chevron-down fa-lg show-down-arrow"></i>
-        </section>
-
-    </section>
-
-    <section class="row m0 p-2" style="display: none">
-        <hr>
-        <label for="orig_desc">Original Description</label>
-        <textarea id="orig_desc" class="form-control" rows="3" name="location_origin_description"
-            onchange="show_changed(this, 'location')"></textarea>
-        <hr>
-        <label for="short_desc">Short Description</label>
-        <textarea class="form-control" rows="3" name="location_short_description"
-            onchange="show_changed(this, 'location')"></textarea>
-        <hr>
-        <label for="loc_ev_name">Select Event Name (will occur upon entry): or <span class="hover-cursor"
-                onclick="add_evt_redir('{{story_id}}')"> Add New
-                Event</span></label>
-        <select id="loc_ev_name" class="form-control" type="text" autocomplete="off" name="location_event_id"
-            onchange="show_changed(this, 'location')">
-            <option value="0">None</option>
-            {%for event in events%}
-            <option value="{{event.event_id}}">{{event.event_name|e}}</option>
-            {%endfor%}
-        </select>
-        <label for="post_desc">Post Event Description</label>
-        <textarea id="post_desc" class="form-control" rows="3" name="location_post_event_description"
-            onchange="show_changed(this, 'location')"></textarea>
-
-        <hr>
-
-    </section>
-</form>
-
-<div id="content-marker"></div>
 
 {% for location in locations %}
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/location/update">
