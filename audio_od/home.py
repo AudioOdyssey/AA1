@@ -1,14 +1,15 @@
+# Python standard libraries
 import os
 import sys
 
-
+# Third-party libraries
 from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
 
-
+# Internal imports
 from audio_od import app
 import config
 from models import *
-from auth import authentication_required, check_header
+from auth import authentication_required, check_header, decode_auth_token
 
 @app.route("/")
 @app.route("/home")
@@ -30,6 +31,18 @@ def home():
             return redirect(url_for('dashboard'))
     return render_template('index.html')
 
+
+@app.route("/about")
+@check_header
+def about():
+    return render_template("about.html")
+
+
+
+@app.route("/contact")
+@check_header
+def contact():
+    return render_template("contact.html")
 
 
 @app.errorhandler(403)
