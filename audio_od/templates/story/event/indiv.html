@@ -1,5 +1,7 @@
 <button onclick="save()" style="float: right;" class="btn btn-primary">Save</button>
 
+<div class="mb-3"></div>
+
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">
     <input name="story_id" value="{{ event.story_id }}" readonly class="d-none">
     <input name="event_id" value="{{ event.event_id }}" readonly class="d-none">

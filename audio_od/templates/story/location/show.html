@@ -7,6 +7,8 @@
             class="fas fa-plus"></i> Add New Location</button>
 </section>
 
+<div class="mb-3"></div>
+
 {% for location in locations %}
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/location/update">
     <input name="story_id" value="{{ location.story_id }}" readonly class="d-none">

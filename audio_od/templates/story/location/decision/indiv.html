@@ -3,6 +3,8 @@
 <button class="btn btn-light" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{decision.loc_id}}')">Back to Decision List</button>
 <button class="btn btn-primary" style="float:right" onclick="loadpage('/save/saving?story_id={{ story_id }}')">Save</button>
 
+<div class="mb-3"></div>
+
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/location/decision/update">
     <input name="story_id" value="{{ decision.story_id }}" readonly class="d-none">
     <input name="location_id" value="{{ decision.loc_id}}" readonly class="d-none">
