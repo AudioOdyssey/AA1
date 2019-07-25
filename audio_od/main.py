@@ -461,6 +461,8 @@ def put_profile():
 @check_header
 def story_update():
     story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     objects = StoryObject.obj_list(request.args['story_id'])
@@ -475,9 +477,10 @@ def story_update():
 @check_header
 def story_image():
     story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    # print(story.get_image_base64())
     return story.get_image_base64()
 
 
@@ -491,6 +494,8 @@ def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_title = details['story_title']
@@ -521,6 +526,8 @@ def story_update_post():
 @authentication_required
 def story_destroy():
     story = Story.get(request.args['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkAdmin(getUid()):
         abort(403)
     Story.destroy(request.args['story_id'])
@@ -551,6 +558,8 @@ def object_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     objects = StoryObject.obj_list(story_id)
@@ -590,6 +599,8 @@ def object_update():
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     object_id = details['obj_id']
@@ -615,6 +626,8 @@ def object_update():
         is_hidden = 0
     # unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
+    if obj is None:
+        abort(404)
     obj.unhide_event_id = unhide_event_id
     obj.verification_status = 0
     obj.update_admin()
@@ -633,6 +646,8 @@ def object_new():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     obj = StoryObject(story_id)
@@ -646,6 +661,8 @@ def object_new():
 @authentication_required
 def object_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryObject.obj_del(request.form['story_id'], request.form['obj_id'])
@@ -662,6 +679,8 @@ def event_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     events = StoryEvent.event_list(story_id)
@@ -678,6 +697,8 @@ def event_update():
         details = request.form
         story_id = details['story_id']
         story = Story.get(story_id)
+        if story is None:
+            abort(404)
         if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
             abort(403)
         event_id = details['event_id']
@@ -694,6 +715,8 @@ def event_update():
         else:
             is_global = True
         evnt = StoryEvent.get(story_id, event_id)
+        if evnt is None:
+            abort(404)
         evnt.verification_status = 0
         evnt.update_admin()
         story.verification_status = 0
@@ -710,6 +733,8 @@ def event_new():
     details = request.args
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     evnt = StoryEvent(story_id)
@@ -723,6 +748,8 @@ def event_new():
 @authentication_required
 def event_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryEvent.event_del(request.form['story_id'], request.form['event_id'])
@@ -739,6 +766,8 @@ def location_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     locations = StoryLocation.loc_list(story_id)
@@ -754,10 +783,14 @@ def location_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
+    if location is None:
+        abort(404)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
@@ -771,10 +804,14 @@ def object_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
+    if obj is None:
+        abort(404)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
@@ -788,11 +825,15 @@ def decision_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
     decision = StoryDecision.get(story_id, location_id, decision_id)
+    if decision is None:
+        abort(404)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
@@ -807,10 +848,14 @@ def event_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
+    if event is None:
+        abort(404)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)
 
@@ -823,6 +868,8 @@ def location_update():
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = details['loc_id']
@@ -839,6 +886,8 @@ def location_update():
     if next_location_id is None:
         next_location_id = 0
     loc = StoryLocation.get(story_id, loc_id)
+    if loc is None:
+        abort(404)
     loc.update(story_id, loc_id, name, original_desc, short_desc,
                post_event_description, event_id, next_location_id)
     loc.verification_status = 0
@@ -855,6 +904,8 @@ def location_new():
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc = StoryLocation(story_id)
@@ -868,6 +919,8 @@ def location_new():
 @authentication_required
 def location_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryLocation.loc_del(request.form['story_id'], request.form['loc_id'])
@@ -883,6 +936,8 @@ def decision_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story = Story.get(request.args['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     decisions = StoryDecision.dec_list_for_story_loc(
@@ -908,6 +963,8 @@ def decision_update():
     details = request.form
     story_id = details["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
@@ -973,6 +1030,8 @@ def decision_update():
     if locked_by_event_desc is None:
         locked_by_event_desc = ""
     dec = StoryDecision.get(story_id, location_id, decision_id)
+    if dec is None:
+        abort(404)
     dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
     dec.verification_status = 0
@@ -993,12 +1052,16 @@ def decision_new():
     details = request.args
     story_id = details["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
+    loc = StoryLocation.get(story_id, location_id)
+    if loc is None:
+        abort(404)
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
-    loc = StoryLocation.get(story_id, location_id)
     loc.verification_status = 0
     loc.update_admin()
     story.verification_status = 0
@@ -1010,6 +1073,8 @@ def decision_new():
 @authentication_required
 def decision_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryDecision.dec_del(
@@ -1173,6 +1238,8 @@ def treeview():
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     locations = StoryLocation.loc_list(story_id)
@@ -1216,6 +1283,8 @@ def story_run():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = request.args.get("location_id")
