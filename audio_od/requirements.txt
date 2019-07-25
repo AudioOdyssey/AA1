@@ -9,3 +9,4 @@ pyjwt
 itsdangerous
 authlib
 loginpass
+bs4
