@@ -30,10 +30,6 @@ import config
 from models import *
 from auth import authentication_required, check_header
 
-
-ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
-
-
 app = Flask(__name__)
 app.secret_key = config.secret_key  
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
