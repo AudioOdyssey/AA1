@@ -1,22 +1,18 @@
-<a href="#bottom"><button class="btn btn-light">Bottom of Page</button></a>
-<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a href="/story/event/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Events</button></a>
-<a href="/story/object/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Objects</button></a>
+<button onclick="loadpage('/story/update?story_id={{ story_id }}')" class="btn btn-light">Back to Main Story</button>
+<button onclick="loadpage('/save/saving?story_id={{ story_id }}')" class="btn btn-light">Save</button>
 
 <section class="row m0">
     <h3>Locations</h3>
     <button type="button" onclick="add_loc_redir('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
-            class="fas fa-plus"></i></button>
+            class="fas fa-plus"></i> Add New Location</button>
 </section>
 
 {% for location in locations %}
 <form class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/location/update">
     <input name="story_id" value="{{ location.story_id }}" readonly class="d-none">
     <input name="loc_id" value="{{ location.location_id }}" readonly class="d-none">
-
-    <button type="button" onclick="show_delete_pressed(this, 'location')" class="trash btn btn-light"><i
-            class="fa fa-trash-alt fa-xs"></i></button>
-
+    
+    <!-- Summary Area -->
     <section class="align-items-center row m0">
         <section class="row m0 fg-1">
             <div class="col-sm-4">
@@ -26,23 +22,27 @@
             </div>
         </section>
 
+        <!-- Down Arrow -->
         <section class="fg-0" onclick="show_show(this)">
             <i class="fas fa-chevron-down fa-lg show-down-arrow"></i>
         </section>
 
     </section>
+    <!-- /Summary Area -->
 
+    <!-- Dropdown Area -->
     <section class="row m0 p-2" style="display: none">
         <hr>
+
         <label> Original Description</label>
         <textarea class="form-control" rows="3" name="location_origin_description"
             onchange="show_changed(this, 'location')">{{ location.original_description|e }}</textarea>
-        <hr>
+
         <label>Short Description</label>
         <textarea class="form-control" rows="3" name="location_short_description"
             onchange="show_changed(this, 'location')">{{ location.short_description|e }}</textarea>
+        
         <hr>
-
 
         <label>Select Event Name (changes description): or <span class="hover-cursor"
                 onclick="add_evt_redir('{{location.story_id}}')">Add New
@@ -59,14 +59,17 @@
         <label>Post Event Description</label>
         <textarea class="form-control" rows="3" name="location_post_event_description"
             onchange="show_changed(this, 'location')">{{ location.post_event_description|e }}</textarea>
+        
         <hr>
-        <br>
-        <a href="/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}">Edit
-            Decisions</a>
+
+        <section class="row">
+            <button type="button class="btn btn-primary" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}')">Edit Decisions</button>
+            <button type="button" onclick="show_delete_pressed(this, 'location')" class="ml-auto btn btn-danger"><i class="fa fa-trash-alt"></i> Delete Story</button>
+        </section>
     </section>
+    <!-- /Dropdown Area -->
 </form>
 {% endfor %}
-<br>
-<a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>
-<a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
-<a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
+
+<button onclick="loadpage('/story/update?story_id={{ story_id }}')" class="btn btn-light">Back to Main Story</button>
+<button onclick="loadpage('/save/saving?story_id={{ story_id }}')" class="btn btn-light">Save</button>

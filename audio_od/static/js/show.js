@@ -10,7 +10,6 @@ function show_set_focus(elem) {
     try {
         document.getElementById("show-active").id = "";
     } catch (err) {
-
     }
     elem.id = "show-active";
 }
