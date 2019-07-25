@@ -1118,15 +1118,16 @@ def review_update():
 def verification_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
+    story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
     locations = StoryLocation.loc_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("verification/status.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
+    return render_template("verification/status.html", events=events, story=story, locations=locations, decisions=decisions, objects=objects)
 
 
 @app.route("/verification/submit", methods=["POST"])
@@ -1362,11 +1363,13 @@ def reset_token(token):
 
 
 @app.route("/dashboard")
+@app.route("/dashboard/")
 @authentication_required
 @check_header
 def dashboard():
     stories = Story.story_list_by_creatordate(g.uid)
-    return render_template("/dash/index.html", stories=stories, base_url="")
+    base_url = base64.b64encode("/dash/story".encode()).decode("utf-8")
+    return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
 @app.route('/dashboard/<path:page>')
@@ -1375,7 +1378,6 @@ def dashboard():
 def dashboard_full(page):
     stories = Story.story_list_by_creatordate(g.uid)
     base_url = base64.b64encode(request.full_path[10:].encode()).decode("utf-8")
-    print(base_url)
     return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
@@ -1392,7 +1394,7 @@ def dash_story():
 @check_header
 def dash_share():
     stories = Story.story_shares_by_uid(g.user.user_id)
-    return render_template("/dash/story.html", stories=stories)
+    return render_template("/dash/shared.html", stories=stories)
 
 
 @app.route("/dash/user")
