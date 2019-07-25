@@ -164,10 +164,10 @@ def user_new():  # fix later
 @check_header
 def user_update():
     user = g.user
-    user.username = request.form.get('username')
-    user.first_name = request.form.get('first-name')
-    user.last_name = request.form.get('last-name')
-    if isValidEmail(request.form.get('email')):
+    user.username = request.form.get('username', '')
+    user.first_name = request.form.get('first-name', '')
+    user.last_name = request.form.get('last-name', '')
+    if isValidEmail(request.form.get('email', '')):
         user.email = request.form.get('email')
     user.update_user_info()
     return '{"status":"ok"}'
