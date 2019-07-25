@@ -7,7 +7,7 @@ body {
 	display: flex;
 	flex-flow: column;
 	min-height: 100%;
-	font-family: "Helvetica", sans-serif;
+	font-family: "Times New Roman", Times, serif;
 }
 
 .navbar {

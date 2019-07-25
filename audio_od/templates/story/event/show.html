@@ -1,8 +1,3 @@
-{% extends "template.html" %}
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/story/event/show.css') }}" type="text/css" />
-<script src="{{ url_for('static', filename='js/story/event/show.js') }}"></script>
-
 <a href="#bottom"><button class="btn btn-light">Bottom of Page</button></a>
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
 <a href="/story/location/show?story_id={{ story_id }}"><button class="btn btn-light">Edit Locations</button></a>
@@ -14,7 +9,7 @@
     <button type="button" onclick="add_btn_pressed('{{ story_id }}')" id="add-btn" class="btn btn-light"><i
             class="fas fa-plus"></i></button>
 </section>
-<form id="d-none" class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">
+<form class="d-none" class="show-main-row" onclick="show_set_focus(this)" method="POST" action="/story/event/update">
 
     <input name="story_id" readonly class="d-none">
     <input name="event_id" readonly class="d-none">
@@ -115,5 +110,3 @@
 <a href="#add-btn"><button id="bottom" class="btn btn-light">Back to Top</button></a>
 <a href="/story/update?story_id={{ story_id }}"><button class="btn btn-light">Back to Main Story Page</button></a>
 <a href="/save/saving?story_id={{ story_id }}"><button id="bottom" class="btn btn-light">Save</button></a>
-
-{% endblock %}
