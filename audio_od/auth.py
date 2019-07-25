@@ -11,7 +11,6 @@ import re
 from flask import redirect, render_template, request, url_for, make_response, jsonify, session, abort, g
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 from flask_mail import Message, Mail
-from werkzeug.utils import secure_filename
 import pymysql
 import pymysql.cursors
 import jwt
@@ -72,6 +71,23 @@ def check_header(func):
         return func(*args, **kwargs)
     func_wrapper.__name__ = func.__name__
     return func_wrapper
+
+
+
+@app.before_first_request
+def load_id():
+    token = request.cookies.get('remember_')
+    if token is None:
+        return redirect(url_for('home'))
+    uid = decode_auth_token(token)
+    if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
+        return redirect(url_for('session_new'))
+    resp = make_response(url_for('home'))
+    current_time = datetime.utcnow()
+    expiry_time = datetime.utcnow() + timedelta(days = 30)
+    new_token = encode_auth_token(uid, current_time, expiry_time)
+    resp.set_cookie("remember_", new_token, expires=expiry_time)
+    return resp
 
 
 @app.route("/user/new", methods=['GET', 'POST'])

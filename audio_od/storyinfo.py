@@ -5,13 +5,13 @@ import json
 import base64
 
 #Third-party libraries
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
+from flask import redirect, render_template, request, url_for
 
 #Internal imports
 from audio_od import app
 import config
 from models import *
-from auth import authentication_required, check_header, getUid
+from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
 @app.route("/story/update", methods=["GET"])
 @authentication_required
@@ -67,7 +67,7 @@ def story_update_post():
         pass
     if file and allowed_file(file):
         filename = str(story_id) + ".jpg"
-        file.save(os.path.join(UPLOAD_FOLDER, 'covers', filename))
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'covers', filename))
     story.verification_status = 0
     story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)

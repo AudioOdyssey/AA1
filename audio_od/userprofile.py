@@ -5,7 +5,7 @@ import json
 import base64
 
 #Third-party libraries
-from flask import redirect, render_template, request, url_for, make_response, jsonify, session, abort, g
+from flask import redirect, render_template, request, url_for, abort, g
 import jwt
 
 #internal imports
@@ -42,7 +42,7 @@ def upload_profile_pic():
     auth_token = request.args.get('token')
     uid = decode_auth_token(auth_token)
     pic_name = str(uid) + '.jpg'
-    with open(os.path.join(UPLOAD_FOLDER, 'profile_pics', pic_name), 'wb') as fh:
+    with open(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
     return json.dumps({'message' : 'success'}), 200
 
@@ -67,7 +67,7 @@ def put_profile():
         return '{"status" : "error"}'
     if file and allowed_file(file):
         filename = str(getUid()) + ".jpg"
-        file.save(os.path.join(UPLOAD_FOLDER, 'profile_pics', filename))
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', filename))
         return '{"status":"ok"}'
     return '{"status" : "error"}'
 
