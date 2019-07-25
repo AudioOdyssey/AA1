@@ -1,15 +1,17 @@
+#Python standard libraries
 import sys
+import json
 sys.path.append("..")
 
 
+#Third-party libraries
 import pymysql
 import pymysql.cursors
-import sys
 
+
+#Internal imports
 import config
 # from . import *
-
-import json
 
 
 class StoryDecision:

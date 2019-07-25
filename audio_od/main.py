@@ -1,36 +1,34 @@
-import config
-
-from models import *
-
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
-from flask_mail import Message, Mail
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
-from flask_dance.contrib.github import make_github_blueprint, github
-
-from werkzeug.utils import secure_filename
-
-import pymysql
-import pymysql.cursors
-
+#Python standard libraries
 import os
 import sys
-
 import random
 import hashlib
 import binascii
-
 import json
-
 from datetime import datetime, timedelta
-
-import jwt
-
 from functools import wraps
-
 import base64
-
 import re
+from urllib.request import (
+    urlopen, urlparse, urlunparse, urlretrieve)
+
+#Third-party libraries
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
+from flask_mail import Message, Mail
+from werkzeug.utils import secure_filename
+import pymysql
+import pymysql.cursors
+import jwt
+import requests
+from bs4 import BeautifulSoup as bs
+from authlib.flask.client import OAuth
+from loginpass import create_flask_blueprint, Facebook, Google
+
+#Internal imports
+import config
+from models import *
+
 
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
 
@@ -50,9 +48,44 @@ app.config['MAIL_USERNAME'] = config.mail_name
 app.config['MAIL_PASSWORD'] = config.mail_pass
 mail = Mail(app)
 
-random.seed()
+UPLOAD_FOLDER = config.upload_folder
+
+# oauth = OAuth(app)
+
+app.config['GOOGLE_CLIENT_ID']=config.google_client_id
+app.config['GOOGLE_CLIENT_SECRET']=config.google_client_secret
+GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
+
+app.config['FACEBOOK_CLIENT_ID'] = config.facebook_client_id
+app.config['FACEBOOK_CLIENT_SECRET'] = config.facebook_client_secret
+
+oauth = OAuth(app)
 
 # refresh_t = None
+
+def authentication_required(func):
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
+        remember = request.cookies.get('remember_')
+        if remember is None:
+            token = session.get('token')
+            if token is None or decode_auth_token(token) == 0:
+                return redirect(url_for('session_new'))
+            else:
+                return func(*args, **kwargs)
+        else:
+            uid = decode_auth_token(remember)
+            if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
+                return redirect(url_for('session_new'))
+            return func(*args, **kwargs)
+    return func_wrapper
+# google_blueprint = make_google_blueprint(client_id=config.google_client_id, client_secret=config.google_client_secret, scope=["profile","email"])
+
+# app.register_blueprint(google_blueprint, url_prefix='/google_login'
+
+random.seed()
+
+# google_client=WebApplicationClient(GOOGLE_CLIENT_ID)
 
 def check_header(func):
     @wraps(func)
@@ -78,13 +111,13 @@ def home():
         if token is None or not decode_auth_token(token):
             return render_template("index.html")
         else:
-            return redirect(url_for('story_show'))
+            return redirect(url_for('dashboard'))
     else:
         user_id = decode_auth_token(auth_token)
         if user_id == 'Signature expired. Please log in again.' or user_id == 0:
             return render_template('index.html')
         else:
-            return redirect(url_for('story_show'))
+            return redirect(url_for('dashboard'))
     return render_template('index.html')
 
 
@@ -95,11 +128,13 @@ def user_new():  # fix later
         details = request.form
         username = details['username']
         raw_password = details['password']
+        if len(raw_password) < 8:
+            return render_template("user/new.html", error="Please enter a password greater than 8 characters.")
         email = details['email_address']
         if not isValidEmail(email):
             return render_template("user/new.html", error="Invalid email")
         gender = int(details['gender'])
-        country_of_origin = (details['country_of_origin'])
+        country_of_origin = (details.get('country_of_origin'))
         profession = details['profession']
         disabilities = details.get('disabilities')
         if disabilities is None:
@@ -114,28 +149,43 @@ def user_new():  # fix later
         usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
                    profession_input=profession, disabilities_input=disabilities_bool, date_of_birth_input=date_of_birth,
                    first_name_input=first_name, last_name_input=last_name, language=language)
-        usr.add_to_server()
+        result = usr.add_to_server()
+        if result==-1:
+            return render_template("user/new.html", error="Username already in use")
+        elif result==-2:
+            return render_template("user/new.html", error="Email already in use")
+        else:
+            return redirect(url_for("home"))
     return render_template("user/new.html")
+
+
+@app.route("/user/update", methods=['POST'])
+@authentication_required
+@check_header
+def user_update():
+    user = g.user
+    user.username = request.form.get('username')
+    user.first_name = request.form.get('first-name')
+    user.last_name = request.form.get('last-name')
+    if isValidEmail(request.form.get('email')):
+        user.email = request.form.get('email')
+    user.update_user_info()
+    return '{"status":"ok"}'
 
 
 def isValidEmail(email):
     if len(email) > 7:
-        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
+        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
             return True
     return False
+    
     
 @app.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
     result = {}
     if request.method == "POST":
         details = request.get_json(force=True)
-        user_id = sign_up(details)
-        if user_id:
-            result['user_id'] = str(user_id)
-            result['message'] = "Successfully registered"
-        else:
-            result['message'] = 'Username already exists'
-    return make_response(json.dumps(result))
+    return make_response(sign_up(details))
 
 
 def sign_up(details_dict):
@@ -157,10 +207,15 @@ def sign_up(details_dict):
     usr = User(username, raw_password, email_input=email, gender_input=gender, country_of_origin_input=country_of_origin,
                profession_input=profession, disabilities_input=disabilities_bool,
                first_name_input=first_name, last_name_input=last_name, language=language)
-    if usr.add_to_server():
-        return usr.get_id()
+    result=usr.add_to_server()
+    if result==-1:
+        return json.dumps({"message" : "username already exists"})
+    elif result==-2:
+        return json.dumps({"message" : "email already in use"})
     else:
-        return None
+        cur = datetime.utcnow()
+        exp = datetime.utcnow() + timedelta(days=30)
+        return json.dumps({"token" : encode_auth_token(result, cur, exp), "message": "success"})
 
 
 @app.route("/session/new", methods=['GET', 'POST'])
@@ -171,7 +226,7 @@ def session_new():
         details = request.form
         user_id = authenticate(details)
         if user_id:
-            resp = make_response(redirect(url_for('story_show')))
+            resp = make_response(redirect(url_for('dashboard')))
             current_time = datetime.utcnow()
             expired_date = current_time + timedelta(days=30)
             token = encode_auth_token(user_id, current_time, expired_date)
@@ -179,38 +234,69 @@ def session_new():
                 resp.set_cookie("remember_", token, expires=expired_date)
             else:
                 session['token'] = token
-            # conn = pymysql.connect(db_host, user=db_user, passwd=db_password, db=db_name, connect_timeout=5,
-            #                        cursorclass=pymysql.cursors.DictCursor)
-            # with conn.cursor() as cur:
-            #     cur.execute(
-            #         ("SELECT encoded_token, expires FROM auth_tokens WHERE userid=%s"), (user_id))
-            #     query_data = cur.fetchone()
-            #     if query_data is None:
-            #         expired_date_refresh = datetime.utcnow(days=30)
-            #         refresh_t = encode_auth_token(
-            #             user_id, current_time, expired_date_refresh)
-            #         cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
-            #             refresh_t, user_id, expired_date_refresh))
-            #         conn.commit()
-            #     else:
-            #         refresh_t = query_data['encoded_token']
-            #         expires = query_data['expires']
-            #         if current_time > expires:
-            #             cur.execute(
-            #                 ("INSERT INTO invalid_tokens(invalid_token, user_id) VALUES(%s, %s)"), (refresh_t, user_id))
-            #             cur.execute(
-            #                 ("DELETE FROM auth_tokens WHERE id = (SELECT id WHERE encoded_token = %s)"), (refresh_t))
-            #             refresh_t = encode_auth_token(
-            #                 user_id, current_time, expired_date_refresh)
-            #             cur.execute(('INSERT INTO auth_tokens(encoded_token, userid, expires) VALUES (%s, %s, %s)'), (
-            #                 refresh_t, user_id, expired_date_refresh))
-            #             cur.commit()
-            # cur.close()
             return resp
         else:
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
+
+def google_callback(remote, token, userinfo):
+    username=userinfo["given_name"]+userinfo['family_name']
+    passwd = os.urandom(16).decode('latin-1')
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd, signed_in_with="Google")
+    result = usr.search_by_email()
+    if result == -1:
+        result.add_to_server()
+    else:
+        usr = User.get(result)
+    resp = make_response(redirect(url_for('home')))
+    cur = datetime.utcnow()
+    exp = datetime.utcnow() + timedelta(days=30)
+    token = encode_auth_token(usr.user_id, cur, exp)
+    resp.set_cookie("remember_", token, expires=exp)
+    # soup = bs(urlopen(userinfo['picture']))
+    # for image in soup.findAll("img"):
+    #     filename=str(usr.user_id)+".jpg"
+    #     outpath = os.path.join(UPLOAD_FOLDER,"profile_pics", filename)
+    #     urlretrieve(image['src'], outpath)
+    return resp
+
+google_bp = create_flask_blueprint(Google, oauth, google_callback)
+app.register_blueprint(google_bp, url_prefix='/google')
+
+
+def facebook_callback(remote, token, user_info):
+    username = user_info['given_name']+user_info['family_name']
+    email=user_info['email']
+    passwd = os.urandom(16).decode('latin-1')
+    usr = User(username_input=username, email_input=email, first_name_input=user_info['given_name'], last_name_input=user_info['family_name'], password_input = passwd, signed_in_with="Facebook")
+    result = usr.search_by_email()
+    if result == -1:
+        result.add_to_server()
+    else:
+        usr = User.get(result)
+    resp = make_response(redirect(url_for('home')))
+    cur = datetime.utcnow()
+    exp = datetime.utcnow() + timedelta(days=30)
+    token = encode_auth_token(usr.user_id, cur, exp)
+    resp.set_cookie("remember_", token, expires=exp)
+    return resp
+
+facebook_bp = create_flask_blueprint(Facebook, oauth, facebook_callback)
+app.register_blueprint(facebook_bp, url_prefix='/facebook')
+
+
+
+# @app.route('/facebook/login')
+# def facebook_login():
+#     redirect_uri= url_for('facebook_authorize', _external=True)
+#     return oauth.facebook.authorize_redirect(redirect_uri)
+
+
+# @app.route('/facebook/authenticate')
+# def facebook_authenticate():
+#     token = oauth.facebook.authorize_access_token()
+#     resp = outh.facebook.
 
 @app.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
@@ -231,24 +317,6 @@ def app_session_new():
     return jsonify(result)
 
 
-def authentication_required(func):
-    @wraps(func)
-    def func_wrapper(*args, **kwargs):
-        remember = request.cookies.get('remember_')
-        if remember is None:
-            token = session.get('token')
-            if token is None or decode_auth_token(token) == 0:
-                return redirect(url_for('session_new'))
-            else:
-                return func(*args, **kwargs)
-        else:
-            uid = decode_auth_token(remember)
-            if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
-                return redirect(url_for('session_new'))
-            return func(*args, **kwargs)
-    return func_wrapper
-
-
 @app.before_first_request
 def load_id():
     token = request.cookies.get('remember_')
@@ -264,13 +332,14 @@ def load_id():
     resp.set_cookie("remember_", new_token, expires=expiry_time)
     return resp
 
+
 def authenticate(details):
     conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5,
                            cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cur:
         username = details['username']
         cur.execute(
-            ("SELECT user_id, last_login_date FROM users WHERE username = %s"), username)
+            ("SELECT user_id FROM users WHERE username = %s"), username)
         result = cur.fetchone()
         if(result is None):
             return None
@@ -282,6 +351,7 @@ def authenticate(details):
                 return None
     return None
 
+
 @app.route("/refresh/token", methods=['GET'])
 def issue_new_token():
     token = request.args.get('token')
@@ -292,6 +362,7 @@ def issue_new_token():
     expiry_time = datetime.utcnow() + timedelta(days=30)
     new_token = encode_auth_token(uid, current_time, expiry_time)
     return json.dumps({'token' : new_token}), 200
+
 
 def encode_auth_token(user_id, current_time, expired_date):
     payload = {
@@ -314,6 +385,7 @@ def decode_auth_token(auth_token):
         return 0
     except jwt.InvalidTokenError:
         return 0
+
 
 @app.route("/app/session/logout")
 def app_logout():
@@ -339,9 +411,6 @@ def logout():
         resp.set_cookie('remember_', '', 0)
         return resp
 
-@app.route("/session/password/change", methods=['GET', 'POST'])
-def change_password():
-    pass
 
 @app.route("/app/user/info", methods=['GET'])
 def app_user_info():
@@ -350,6 +419,7 @@ def app_user_info():
     usr = User.get(user_id)
     return usr.user_profile_info()
 
+
 @app.route("/app/user/profile/upload", methods=['POST'])
 def upload_profile_pic():
     details = request.json
@@ -357,17 +427,33 @@ def upload_profile_pic():
     auth_token = request.args.get('token')
     uid = decode_auth_token(auth_token)
     pic_name = str(uid) + '.jpg'
-    with open(os.path.join(config.upload_folder, 'profile_pics', pic_name), 'wb') as fh:
+    with open(os.path.join(UPLOAD_FOLDER, 'profile_pics', pic_name), 'wb') as fh:
         fh.write(base64.b64decode(profile_pic)) 
     return json.dumps({'message' : 'success'}), 200
 
-@app.route("/story/show")
+
+@app.route("/user/picture", methods=['GET'])
 @authentication_required
 @check_header
-def story_show():
-    stories = Story.story_list_by_creator(getUid())
-    return render_template("story/show.html", stories=stories)
+def get_profile():
+    if (g.user is None):
+        abort(403)
+    return g.user.get_profile_pic_base64()
 
+
+@app.route("/user/picture", methods=['POST'])
+@authentication_required
+@check_header
+def put_profile():
+    filename = ''
+    file = request.files['picture']
+    if file.filename == '':
+        return '{"status" : "error"}'
+    if file and allowed_file(file):
+        filename = str(getUid()) + ".jpg"
+        file.save(os.path.join(UPLOAD_FOLDER, 'profile_pics', filename))
+        return '{"status":"ok"}'
+    return '{"status" : "error"}'
 
 
 @app.route("/story/update", methods=["GET"])  # THIS NEEDS TO BE FINISHED
@@ -375,12 +461,15 @@ def story_show():
 @check_header
 def story_update():
     story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     objects = StoryObject.obj_list(request.args['story_id'])
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
-    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations)
+    coverimage = story.get_image_base64().decode("utf-8")
+    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, coverimage=coverimage)
 
 
 @app.route("/story/image")
@@ -388,9 +477,10 @@ def story_update():
 @check_header
 def story_image():
     story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    # print(story.get_image_base64())
     return story.get_image_base64()
 
 
@@ -404,6 +494,8 @@ def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_title = details['story_title']
@@ -420,9 +512,9 @@ def story_update_post():
     file = request.files['cover']
     if file.filename == '':
         pass
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file):
         filename = str(story_id) + ".jpg"
-        file.save(os.path.join(config.upload_folder, 'covers', filename))
+        file.save(os.path.join(UPLOAD_FOLDER, 'covers', filename))
     story.verification_status = 0
     story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
@@ -434,15 +526,18 @@ def story_update_post():
 @authentication_required
 def story_destroy():
     story = Story.get(request.args['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkAdmin(getUid()):
         abort(403)
     Story.destroy(request.args['story_id'])
     return '{"status":"ok"}'
 
+valid_mimetypes = ['image/jpeg', 'image/png', 'image/bmp']
 
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def allowed_file(file):
+    mimetype = file.content_type
+    return mimetype in valid_mimetypes
 
 
 @app.route("/story/new", methods=["POST"])
@@ -463,6 +558,8 @@ def object_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     objects = StoryObject.obj_list(story_id)
@@ -502,6 +599,8 @@ def object_update():
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     object_id = details['obj_id']
@@ -527,6 +626,8 @@ def object_update():
         is_hidden = 0
     # unhide_event_id = details['unhide_event_id']
     obj = StoryObject.get(story_id, object_id)
+    if obj is None:
+        abort(404)
     obj.unhide_event_id = unhide_event_id
     obj.verification_status = 0
     obj.update_admin()
@@ -545,6 +646,8 @@ def object_new():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     obj = StoryObject(story_id)
@@ -558,6 +661,8 @@ def object_new():
 @authentication_required
 def object_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryObject.obj_del(request.form['story_id'], request.form['obj_id'])
@@ -574,6 +679,8 @@ def event_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     events = StoryEvent.event_list(story_id)
@@ -590,6 +697,8 @@ def event_update():
         details = request.form
         story_id = details['story_id']
         story = Story.get(story_id)
+        if story is None:
+            abort(404)
         if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
             abort(403)
         event_id = details['event_id']
@@ -606,6 +715,8 @@ def event_update():
         else:
             is_global = True
         evnt = StoryEvent.get(story_id, event_id)
+        if evnt is None:
+            abort(404)
         evnt.verification_status = 0
         evnt.update_admin()
         story.verification_status = 0
@@ -622,6 +733,8 @@ def event_new():
     details = request.args
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     evnt = StoryEvent(story_id)
@@ -635,6 +748,8 @@ def event_new():
 @authentication_required
 def event_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryEvent.event_del(request.form['story_id'], request.form['event_id'])
@@ -651,6 +766,8 @@ def location_show():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     locations = StoryLocation.loc_list(story_id)
@@ -666,10 +783,14 @@ def location_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
+    if location is None:
+        abort(404)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)
@@ -683,10 +804,14 @@ def object_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     object_id = request.args["object_id"]
     obj = StoryObject.get(story_id, object_id)
+    if obj is None:
+        abort(404)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
@@ -700,11 +825,15 @@ def decision_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
     decision = StoryDecision.get(story_id, location_id, decision_id)
+    if decision is None:
+        abort(404)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
@@ -719,10 +848,14 @@ def event_indiv():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
+    if event is None:
+        abort(404)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)
 
@@ -735,6 +868,8 @@ def location_update():
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = details['loc_id']
@@ -751,6 +886,8 @@ def location_update():
     if next_location_id is None:
         next_location_id = 0
     loc = StoryLocation.get(story_id, loc_id)
+    if loc is None:
+        abort(404)
     loc.update(story_id, loc_id, name, original_desc, short_desc,
                post_event_description, event_id, next_location_id)
     loc.verification_status = 0
@@ -767,6 +904,8 @@ def location_new():
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc = StoryLocation(story_id)
@@ -780,6 +919,8 @@ def location_new():
 @authentication_required
 def location_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryLocation.loc_del(request.form['story_id'], request.form['loc_id'])
@@ -795,6 +936,8 @@ def decision_show():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story = Story.get(request.args['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     decisions = StoryDecision.dec_list_for_story_loc(
@@ -820,6 +963,8 @@ def decision_update():
     details = request.form
     story_id = details["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
@@ -885,6 +1030,8 @@ def decision_update():
     if locked_by_event_desc is None:
         locked_by_event_desc = ""
     dec = StoryDecision.get(story_id, location_id, decision_id)
+    if dec is None:
+        abort(404)
     dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
     dec.verification_status = 0
@@ -905,12 +1052,16 @@ def decision_new():
     details = request.args
     story_id = details["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
+    loc = StoryLocation.get(story_id, location_id)
+    if loc is None:
+        abort(404)
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
-    loc = StoryLocation.get(story_id, location_id)
     loc.verification_status = 0
     loc.update_admin()
     story.verification_status = 0
@@ -922,6 +1073,8 @@ def decision_new():
 @authentication_required
 def decision_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryDecision.dec_del(
@@ -990,17 +1143,17 @@ def review_update():
     if entity_type.lower() == 'object':
         obj = StoryObject.get(story_id, ent_id)
         obj.reviewer_comments = reviewer_comment
-        obj.is_verified = is_verified
+        obj.verification_status = is_verified
         obj.update_admin()
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
         loc.reviewer_comments = reviewer_comment
-        loc.is_verified = is_verified
+        loc.verification_status = is_verified
         loc.update_admin()
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
         evnt.reviewer_comments = reviewer_comment
-        evnt.is_verified = is_verified
+        evnt.verification_status = is_verified
         evnt.update_admin()
     elif entity_type.lower() == 'story':
         story = Story.get(story_id)
@@ -1010,79 +1163,37 @@ def review_update():
         story.reviewer_comments = reviewer_comment
         if StoryDecision.check_verify(story_id) and StoryLocation.check_verify(story_id) and StoryObject.check_verify(story_id) and StoryEvent.check_verify(story_id):
             story.verification_status = is_verified
+            story.story_in_store = True
         if int(is_verified) == 2:
             story.verification_status = is_verified
+            story.story_in_store = False
+
         story.update_verify()
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
         dec.reviewer_comments = reviewer_comment
-        dec.is_verified = is_verified
+        dec.verification_status = is_verified
         dec.update_admin()
     return '{"status":"ok"}'
 
 
-@app.route("/verification/object")
-@authentication_required
-@check_header
-def verification_object():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
-        abort(403)
-    story_id = request.args["story_id"]
-    object_id = request.args["object_id"]
-    obj = StoryObject.get(story_id, object_id)
-    return render_template("verification/object.html", obj=obj, story_id=story_id, object_id=object_id)
-
-
-@app.route("/verification/location")
-@authentication_required
-@check_header
-def verification_location():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
-        abort(403)
-    story_id = request.args["story_id"]
-    location_id = request.args["location_id"]
-    location = StoryLocation.get(story_id, location_id)
-    decisions = StoryDecision.dec_list_for_story_loc(story_id, location_id)
-    return render_template("verification/location.html", location=location, story_id=story_id, location_id=location_id, decisions=decisions)
-
-
-@app.route("/verification/event")
-@authentication_required
-@check_header
-def verification_event():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
-        abort(403)
-    story_id = request.args["story_id"]
-    event_id = request.args["event_id"]
-    event = StoryEvent.get(story_id, event_id)
-    return render_template("verification/event.html", event=event, story_id=story_id, event_id=event_id)
-
-
-@app.route("/verification/story")
+@app.route("/verification/status")
 @authentication_required
 @check_header
 def verification_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
+    story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_id = request.args["story_id"]
+    story = Story.get(story_id)
     locations = StoryLocation.loc_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("verification/story.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
+    return render_template("verification/status.html", events=events, story=story, locations=locations, decisions=decisions, objects=objects)
 
 
 @app.route("/verification/submit", methods=["POST"])
@@ -1127,6 +1238,8 @@ def treeview():
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     locations = StoryLocation.loc_list(story_id)
@@ -1170,6 +1283,8 @@ def story_run():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = request.args.get("location_id")
@@ -1277,6 +1392,15 @@ def password_request():
         email = request.form.get('email')
         if email is not None:
             token = User.get_reset_token(email, 900)
+            usr = User(email_input = email)
+            result = usr.search_by_email()
+            if result != -1:
+                usr = User.get(result)
+                if usr.signed_in_with != "native" or usr.signed_in_with != '':
+                    error = "You signed in with " + usr.signed_in_with + "."
+                    return render_template("session/new.html", error=error)
+            else:
+                return render_template("session/new.html", error="Email not found.")
             print("Token Got")
             if token is not None:
                 msg = Message('Password Reset Request',
@@ -1285,7 +1409,7 @@ def password_request():
                 msg.body = f'''To reset your password, visit the following link:
 {url_for('reset_token', token=token, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
-'''
+                            '''
                 mail.send(msg)
                 print("Message Sent")
     return render_template("/password_reset/request.html")
@@ -1308,25 +1432,74 @@ def reset_token(token):
     return render_template("/password_reset/form.html")
 
 
+@app.route("/dashboard")
+@app.route("/dashboard/")
+@authentication_required
+@check_header
+def dashboard():
+    stories = Story.story_list_by_creatordate(g.uid)
+    base_url = base64.b64encode("/dash/story".encode()).decode("utf-8")
+    return render_template("/dash/index.html", stories=stories, base_url=base_url)
+
+
+@app.route('/dashboard/<path:page>')
+@authentication_required
+@check_header
+def dashboard_full(page):
+    stories = Story.story_list_by_creatordate(g.uid)
+    base_url = base64.b64encode(request.full_path[10:].encode()).decode("utf-8")
+    return render_template("/dash/index.html", stories=stories, base_url=base_url)
+
+
+@app.route("/dash/story")
+@authentication_required
+@check_header
+def dash_story():
+    stories = Story.story_list_by_creatordate(g.uid)
+    return render_template("/dash/story.html", stories=stories)
+
+
+@app.route("/dash/share")
+@authentication_required
+@check_header
+def dash_share():
+    stories = Story.story_shares_by_uid(g.user.user_id)
+    return render_template("/dash/shared.html", stories=stories)
+
+
+@app.route("/dash/verified")
+@authentication_required
+@check_header
+def dash_verified():
+    stories = Story.story_list_by_creatordate(g.user.user_id)
+    return render_template("/dash/verified.html", stories=stories)
+
+
+@app.route("/dash/user")
+@authentication_required
+@check_header
+def dash_user():
+    userimage = g.user.get_profile_pic_base64().decode("utf-8")
+    return render_template("/dash/user.html", userimage=userimage)
+
+
 @app.errorhandler(403)
 @check_header
-def page_not_found(e):
-    # Pretend all 403s are 404s for security
-    return render_template('404.html'), 403
+def forbidden_403(e):
+    # Pretend all 403s are 404s for security purposes
+    return render_template('error/404.html'), 403
 
 
 @app.errorhandler(404)
 @check_header
 def page_not_found_404(e):
-    # note that we set the 404 status explicitly
-    return render_template('404.html'), 404
+    return render_template('error/404.html'), 404
 
 
 @app.errorhandler(500)
 @check_header
-def page_not_found_500(e):
-    # note that we set the 404 status explicitly
-    return render_template('500.html'), 500
+def server_error_500(e):
+    return render_template('error/500.html'), 500
 
 
 @login_manager.user_loader
@@ -1348,7 +1521,6 @@ def getUid():
 def checkEditorAdmin(uid):
     user = User.get(uid)
     return user.is_admin or user.is_copy_editor or user.is_content_editor
-
 
 def checkAdmin(uid):
     user = User.get(uid)

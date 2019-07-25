@@ -3,40 +3,27 @@ html {
 }
 
 body {
-	background-color: #073884;
-
+	background-color: whitesmoke;
 	display: flex;
 	flex-flow: column;
 	min-height: 100%;
-}
-
-header {
-	flex: 0 1 auto;
+	font-family: "Times New Roman", Times, serif;
 }
 
 .navbar {
-	box-shadow: 0 0 4px 4px RGBA(50, 50, 50, 0.5);
-	background-color: white;
+	box-shadow: 0 0 5px 5px RGBA(50, 50, 50, 0.5);
+	background-color: whitesmoke;
+	z-index: 2;
 }
 
 .footer {
 	box-shadow: 0 0 4px 4px RGBA(50, 50, 50, 0.5);
-	background-color: white;
+	background-color: whitesmoke;
 	padding-top: 2em;
 	padding-bottom: 2em;
 	display: block;
-
 	flex: 0 1 40px;
-}
-
-#footer-title {
-	width: 100%;
-	text-align: center;
-}
-
-#footer-left {
-	width: 100%;
-	text-align: right;
+	z-index: 2;
 }
 
 #main-site {
@@ -46,27 +33,6 @@ header {
 	margin: 2em auto;
 	min-height: 100%;
 	flex: 1 1 auto;
-}
-
-.ml-auto {
-	margin-left: auto;
-}
-
-blockquote {
-	margin-left: 0.3em;
-	padding-left: 0.6em;
-	border-left: solid 0.3em #ccc;
-}
-
-pre {
-	background-color: #eee;
-	padding: 0.3em;
-	border-radius: 5px;
-	border: solid 2px #ddd;
-}
-
-lable {
-	font-weight: bold;
 }
 
 .input-group-text {
@@ -108,16 +74,6 @@ lable {
 	margin-top: 20px;
 }
 
-.about {
-	text-align: center;
-	font-family: "Helvetica"sans-serif;
-}
-
-.contact {
-	text-align: center;
-	font-family: "Helvetica"sans-serif;
-}
-
 #createstory {
 	width: 75%;
 	align-self: center;
@@ -128,18 +84,17 @@ lable {
 	margin-top: 100px;
 	text-align: center;
 	color: #073884;
-	font-family: "Helvetica"sans-serif;
 }
 
 .storycard {
-	border: 5px solid !important;
+	border: 5px solid;
 	border-color: #073884;
 	background-color: white;
 	color: #073884;
-	font-family: "Helvetica"sans-serif;
 	text-align: center;
 	padding: 10px !important;
 	transition: border 0.1s, padding 0.1s;
+	border-radius: 3px;
 }
 
 .storycard:hover {
@@ -149,22 +104,13 @@ lable {
 	transition: border 0.1s, padding 0.1s;
 }
 
-.title {
-	text-align: center !important;
-	font-family: "Helvetica"sans-serif;
-}
-
-.body {
-	text-align: left;
-	font-family: "Helvetica"sans-serif;
-}
-
 #save-bubble {
     position: fixed;
     bottom: 20px;
     left: 0px;
     width: 100%;
     display: none;
+    z-index: 10;
 }
 
 #save-bubble-inner {
@@ -176,4 +122,16 @@ lable {
     width: max-content;
     font-size: .75em;
     color: #155724;
+}
+
+.fg-1 {
+    flex-grow: 1;
+}
+
+.fg-0 {
+    flex-grow: 0;
+}
+
+.hover-cursor:hover {
+	cursor: pointer;
 }

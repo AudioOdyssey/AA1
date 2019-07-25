@@ -1,43 +1,17 @@
 {% extends "template_new.html" %}
-{% block content%}
 
+{% block header %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css" />
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
 
-<style>
-    /* Styles must stay in html file */
-    #backdrop-collaborate {
-        background-repeat: no-repeat;
-        background-position: top center;
-        background-color: #cccccc;
-        background-size: cover;
-        background-image: url("{{ url_for('static', filename='image/backdrop-stock.jpg') }}");
-        -webkit-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
-        -moz-box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
-        box-shadow: inset -200px 0px 100px -50px rgba(42, 42, 46, 1);
-    }
-
-    #hero-images li {
-        width: 100vw;
-        text-align: center;
-        list-style-type: none;
-        height: 30rem;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-color: #cccccc;
-        background-size: cover;
-        background-image: url("{{ url_for('static', filename='image/backdrop.jpg') }}");
-        position: relative;
-        float: left;
-        list-style: none;
-    }
-</style>
-
+{% block content%}
 <section id="hero-slider">
     <div class="hero-arrows hero-left">
-        <i class="fas fa-chevron-left text-light"></i>
+        <i onclick="left_image()" class="fas fa-chevron-left text-light"></i>
     </div>
     <ul id="hero-images">
-        <li>
+        <li style="background-image:url('{{url_for('static',filename='image/hero-engage.jpg')}}')">
             <div class="center-box">
                 <div class="center-box-inner">
                     <h2>Engage Audiances</h2>
@@ -47,7 +21,7 @@
                 </div>
             </div>
         </li>
-        <li>
+        <li style="background-image:url('{{url_for('static',filename='image/hero-trucks.jpg')}}')">
             <div class="center-box">
                 <div class="center-box-inner">
                     <h2>Keep drivers awake</h2>
@@ -65,7 +39,7 @@
         </div>
     </div>
     <div class="hero-arrows hero-right">
-        <i class="fas fa-chevron-right text-light"></i>
+        <i onclick="right_image()" class="fas fa-chevron-right text-light"></i>
     </div>
 </section>
 
@@ -106,7 +80,7 @@
 </section>
 
 <section class="row backdrop-dark">
-    <div class="col-md-8 d-none d-md-block" id="backdrop-collaborate"></div>
+    <div style="background-image:url('{{url_for('static',filename='image/backdrop-stock.jpg')}}');" class="col-md-8 d-none d-md-block" id="backdrop-collaborate"></div>
     <div class="col-md-3" id="backdrop-text">
         <h3>Simple, yet Powerful</h3>
         <p>AudioOdyssey's toolset allows authors to create stories their way, with the reader experiencing the excitment

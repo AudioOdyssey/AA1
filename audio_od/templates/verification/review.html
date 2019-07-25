@@ -251,7 +251,7 @@
     <input class="disp-none" name="ent_id" value="{{story.story_id}}" readonly>
     <input class="disp-none verified" name="is_verified">
     <input class="form-control" type="text" name="comment" placeholder="Comments...">
-    <select class="form-control details" name="parental_ratings">
+    <select class="form-control p-2" name="parental_ratings">
         <option {% if story.parental_ratings == "G" %}selected{%endif%}>G</option>
         <option {% if story.parental_ratings == "PG" %}selected{%endif%}>PG</option>
         <option {% if story.parental_ratings == "PG-13" %}selected{%endif%}>PG-13</option>

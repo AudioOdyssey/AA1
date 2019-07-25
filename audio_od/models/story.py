@@ -1,25 +1,24 @@
+#Python standard libraries
+import os
 import sys
+from decimal import Decimal
+from datetime import datetime, date
+import base64
 sys.path.append("..")
 
+#Third-party libraries
 import pymysql
 import pymysql.cursors
+import simplejson as json
 
+
+#Internal imports
 import config
 from .storydecision import StoryDecision
 from .storyevent import StoryEvent
 from .storylocation import StoryLocation
 from .storyobject import StoryObject
-
-import sys
-import os
-
-import simplejson as json
-
-from decimal import Decimal
-
-from datetime import datetime, date
-
-import base64
+from .User import User
 
 
 class Story:
@@ -46,11 +45,12 @@ class Story:
     parental_ratings = 0.0
     updated_at = None
     starting_loc = 0
+    author_name = ''
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', verifier_id=0, verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0, updated_at=None, author_name=''):
         if story_id:
             self.story_id = story_id
         self.story_title = story_title
@@ -74,6 +74,8 @@ class Story:
         self.inventory_size = inventory_size
         self.parental_ratings = parental_ratings
         self.verification_status = verification_status
+        self.updated_at = updated_at
+        self.author_name = author_name
 
     def add_to_server(self):
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
@@ -135,8 +137,8 @@ class Story:
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("UPDATE master_stories SET parental_ratings = %s, verification_status = %s, verifier_id = %s, reviewer_comments = %s, story_verification_date = CURDATE() WHERE story_id = %s"),
-                        (self.parental_ratings, self.verification_status, self.verifier_id, self.reviewer_comments, self.story_id))
+            cur.execute(("UPDATE master_stories SET story_in_store = %s, parental_ratings = %s, verification_status = %s, verifier_id = %s, reviewer_comments = %s, story_verification_date = CURDATE() WHERE story_id = %s"),
+                        (self.story_in_store, self.parental_ratings, self.verification_status, self.verifier_id, self.reviewer_comments, self.story_id))
             conn.commit()
         conn.close()
 
@@ -147,7 +149,7 @@ class Story:
             with open(os.path.join(config.upload_folder, "covers", cover_file), 'rb') as image_file:
                 result = base64.b64encode(image_file.read())
         except FileNotFoundError:
-            return ''
+            return b''
         return result
 
     @classmethod
@@ -162,6 +164,21 @@ class Story:
             for row in results:
                 story_list.append(
                     cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"]))
+        conn.close()
+        return story_list
+
+    @classmethod
+    def story_list_by_creatordate(cls, user_creator_id):
+        conn = pymysql.connect(
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                ("SELECT * FROM `master_stories` WHERE user_creator_id = %s ORDER BY updated_at DESC"), (user_creator_id))
+            results = cur.fetchall()
+            for row in results:
+                story_list.append(
+                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"], verification_status=row["verification_status"],updated_at=row['updated_at']))
         conn.close()
         return story_list
 
@@ -343,3 +360,22 @@ class Story:
             cur.execute(("DELETE FROM `master_stories` WHERE `story_id` = %s"), (story_id))
             conn.commit()
         conn.close()
+
+    @classmethod
+    def story_shares_by_uid(cls, uid):
+        conn = pymysql.connect(
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        story_list = []
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT story_id, story_title, user_creator_id FROM `master_stories` WHERE `story_id` IN (SELECT `story_id` FROM `story_shares` WHERE user_id = %s)", (uid))
+            results = cur.fetchall()
+            for row in results:
+                auth = User.get(row['user_creator_id'])
+                if auth is None:
+                    author_name = ""
+                else:
+                    author_name = auth.username
+                story_list.append(cls(row["story_id"], row["story_title"], author_name=author_name))
+        conn.close()
+        return story_list

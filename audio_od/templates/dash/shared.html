@@ -1,0 +1,32 @@
+<style>
+	.storycard {
+		text-align: left;
+	}
+
+	.storycard:hover {
+		cursor: pointer;
+	}
+</style>
+
+<section class="row">
+	<h2>Shared Stories</h2>
+</section>
+<hr>
+
+<div class="row">
+	{% for story in stories %}
+		<a class="col-sm-4" onclick="loadpage('/story/update?story_id={{story.story_id}}')">
+			<div class="storycard">
+				<h3>{{ story.story_title|e }}</h3>
+				Shared By: <i>@{{story.author_name|e}}</i>
+				<hr>
+				<p>{{ story.story_synopsis|e }}</p>
+				<div class="row">
+					<button class="ml-auto btn btn-secondary" onclick="loadpage('/story/update?story_id={{story.story_id}}')">Edit...</button>
+				</div>
+			</div>
+		</a>
+	{%else%}
+		<h3>Looks Like you don't have any stories, you can <span class="hover-cursor text-primary" onclick="storyCreate()">create one</span>.</h3>
+	{% endfor %}
+</div>

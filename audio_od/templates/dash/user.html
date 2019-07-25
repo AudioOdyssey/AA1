@@ -1,0 +1,103 @@
+<style>
+	#user-image {
+		width: 100%;
+		height: 100%;
+		margin-left: auto;
+		position: absolute;
+		border-radius: 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-color: #cccccc;
+		background-size: cover;
+		-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+		box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	}
+
+	.image {
+	    position: relative;
+	    padding-bottom: 100%;
+	}
+
+	.fifty {
+		width: 80%;
+		margin: auto;
+	}
+
+	.name-row {
+	    margin-left: 0px;
+	}
+
+	#profile-section {
+		border-left: solid 1px lightgrey;
+	}
+</style>
+
+<div id="dummy-thicc" style="display: none;" class="alert alert-danger">
+    <strong>Warning!</strong> The uploaded image was too big! It must be less than <u>8MB</u>.
+</div>
+<!-- User Settings -->
+<section class="row">
+	<!-- User Image -->
+	<form class="col-sm-3">
+		<div class="fifty">
+			<div class="image">
+				<div id="user-image" class="user-image" style="background-image: url('data:image/png;base64,{{userimage}}')"></div>
+			</div>
+			<div class="mt-4">
+	            <div class="custom-file">
+	                <input type="file" class="custom-file-input" id="cover-upload" onchange="profile_changed(event, this)"
+	                    aria-describedby="inputGroupFileAddon01" name="picture">
+	                <label class="custom-file-label" for="cover-upload">Choose file</label>
+	            </div>
+	        </div>
+	        <button type="button" onclick="logout()" class="w-100 mt-4 btn btn-secondary">Logout</button>
+		</div>
+	</form>
+	<!-- /User Image -->
+	<!-- User Details -->
+	<form id="profile-section" class="col-sm-9">
+		<section>
+			<label>Username:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-hashtag"></i></div>
+	            </div>
+	            <input type="text" name="username" placeholder="Username" class="form-control" autocomplete="username"
+	                required onchange="user_changed(this)" value="{{g.user.username|e}}">
+	        </div>
+		</section>
+		<section>
+			<label>First Name:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-user"></i></div>
+	            </div>
+	            <input type="text" name="first-name" placeholder="First Name" class="form-control" autocomplete="given-name"
+	                required onchange="user_changed(this)" value="{{g.user.first_name|e}}">
+	        </div>
+		</section>
+		<section>
+			<label>Family Name:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-users"></i></div>
+	            </div>
+	            <input type="text" name="last-name" placeholder="Family Name" class="form-control" autocomplete="family-name"
+	                required onchange="user_changed(this)" value="{{g.user.last_name|e}}">
+	        </div>
+		</section>
+		<section>
+			<label>Email:</label>
+	        <div class="input-group mb-2 icon-input">
+	            <div class="input-group-prepend">
+	                <div class="input-group-text"><i class="fas fa-at"></i></div>
+	            </div>
+	            <input type="email" name="last-name" placeholder="Last Name" class="form-control" autocomplete="email"
+	                required onchange="user_changed(this)" value="{{g.user.email|e}}">
+	        </div>
+		</section>
+	</form>
+	<!-- /User Details -->
+</section>
+<!-- /User Settings -->

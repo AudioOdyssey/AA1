@@ -1,0 +1,46 @@
+<style>
+	.storycard {
+		text-align: left;
+	}
+
+	.storycard:hover {
+		cursor: pointer;
+	}
+</style>
+
+<section class="row">
+	<h2>Stories</h2>
+	<button class="ml-auto btn btn-primary" onclick="create_story_btn()"><i class="fas fa-plus"></i> Create Story</button>
+</section>
+<hr>
+
+<div class="row">
+	{% for story in stories %}
+	{% if story.verification_status|int != 3 %}
+		<a class="col-sm-4" onclick="loadpage('/story/update?story_id={{story.story_id}}')">
+			<div class="storycard">
+				<h3>{{ story.story_title|e }}</h3>
+
+				{%if story.verification_status == 0%}
+					<i class="text-info far fa-question-circle"></i>
+					<i>Not Verified</i>
+				{%elif story.verification_status == 1%}
+					<i class="text-info far fa-clock"></i>
+					<i>Pending Verification</i>
+				{%elif story.verification_status == 2%}
+					<i class="text-warning fas fa-times"></i>
+					<i>Failed Verification</i>
+				{%endif%}
+
+				<hr>
+				<p>{{ story.story_synopsis|e }}</p>
+				<div class="row">
+					<button class="ml-auto btn btn-secondary" onclick="loadpage('/story/update?story_id={{story.story_id}}')">Edit...</button>
+				</div>
+			</div>
+		</a>
+	{% endif %}
+	{% else %}
+		<h3 class="mt-5 mx-auto">Looks Like you don't have any stories, you can <span class="hover-cursor text-primary" onclick="create_story_btn()">create one now</span>.</h3>
+	{% endfor %}
+</div>
