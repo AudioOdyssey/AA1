@@ -266,6 +266,8 @@ app.register_blueprint(google_bp, url_prefix='/google')
 
 
 def facebook_callback(remote, token, user_info):
+    if user_info is None:
+        return render_template("user/new.html", error="User declined authorization through Facebook")
     username = user_info['given_name']+user_info['family_name']
     email=user_info['email']
     passwd = os.urandom(16).decode('latin-1')
