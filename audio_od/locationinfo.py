@@ -8,7 +8,7 @@ from flask import render_template, request
 #Internal imports
 from audio_od import app
 import config
-from models import *
+from models import Story, StoryLocation, StoryEvent
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
 

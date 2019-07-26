@@ -8,7 +8,7 @@ from flask import render_template, request
 #Internal imports
 from audio_od import app
 import config
-from models import *
+from models import Story, StoryObject, StoryLocation, StoryEvent
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
 
@@ -115,7 +115,3 @@ def object_indiv():
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/object/indiv.html", obj=obj, locations=locations, story_id=story_id, object_id=object_id, events=events)
-
-
-
-

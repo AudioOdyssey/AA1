@@ -10,7 +10,6 @@ import jwt
 
 #internal imports
 from audio_od import app
-import config
 from models import User
 
 @app.route("/user/update", methods=['POST'])

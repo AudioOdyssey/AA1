@@ -6,9 +6,9 @@ import binascii
 import json
 
 
-
 #Third-party libraries
 from flask import redirect, render_template, request, url_for
+
 
 #Internal imports
 from audio_od import app
@@ -16,8 +16,6 @@ import config
 from models import *
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
-
-# oauth = OAuth(app)
 
 @app.route("/verification/view")
 @authentication_required
@@ -225,8 +223,6 @@ def story_run():
             backs.append(StoryLocation.get(story_id, back))
 
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
-
-
 
 
 @app.route("/verification/help")

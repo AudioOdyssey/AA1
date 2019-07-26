@@ -9,7 +9,7 @@ from flask import Flask, redirect, render_template, request, url_for, make_respo
 #Internal imports
 from audio_od import app
 import config
-from models import *
+from models import Story, StoryLocation, StoryDecision
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
 @app.route("/story/location/decision/indiv")
