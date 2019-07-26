@@ -164,10 +164,10 @@ def user_new():  # fix later
 @check_header
 def user_update():
     user = g.user
-    user.username = request.form.get('username')
-    user.first_name = request.form.get('first-name')
-    user.last_name = request.form.get('last-name')
-    if isValidEmail(request.form.get('email')):
+    user.username = request.form.get('username', '')
+    user.first_name = request.form.get('first-name', '')
+    user.last_name = request.form.get('last-name', '')
+    if isValidEmail(request.form.get('email', '')):
         user.email = request.form.get('email')
     user.update_user_info()
     return '{"status":"ok"}'
@@ -266,8 +266,6 @@ app.register_blueprint(google_bp, url_prefix='/google')
 
 
 def facebook_callback(remote, token, user_info):
-    if user_info is None:
-        return render_template("user/new.html", error="User declined authorization through Facebook")
     username = user_info['given_name']+user_info['family_name']
     email=user_info['email']
     passwd = os.urandom(16).decode('latin-1')
@@ -472,6 +470,22 @@ def story_update():
     locations = StoryLocation.loc_list(request.args['story_id'])
     coverimage = story.get_image_base64().decode("utf-8")
     return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, coverimage=coverimage)
+
+
+@app.route("/story/publish", methods=["POST"])
+@authentication_required
+@check_header
+def story_publish():
+    story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
+    if story.verification_status != 3:
+        abort(403)
+    story.story_in_store = 1
+    story.update_verify()
+    return '{"status":"ok"}'
 
 
 @app.route("/story/image")
@@ -1316,27 +1330,25 @@ def story_run():
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
-@app.route("/story/help")
+@app.route("/help/story")
 @authentication_required
 @check_header
 def help():
-    return render_template("story/help.html")
+    return render_template("help/story.html")
 
 
-@app.route("/verification/help")
+@app.route("/help/verification")
 @authentication_required
 @check_header
 def vhelp():
-    return render_template("verification/help.html")
+    return render_template("help/verification.html")
 
 
-@app.route("/story/treeview_help")
+@app.route("/help/treeview")
 @authentication_required
 @check_header
 def treeview_help():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("story/treeview_help.html", story=story)
+    return render_template("help/treeview.html")
 
 
 @app.route("/admin")
@@ -1457,7 +1469,11 @@ def dashboard_full(page):
 @authentication_required
 @check_header
 def dash_story():
-    stories = Story.story_list_by_creatordate(g.uid)
+    raw_stories = Story.story_list_by_creatordate(g.uid)
+    stories = []
+    for story in raw_stories:
+        if story.verification_status != 3:
+            stories.append(story)
     return render_template("/dash/story.html", stories=stories)
 
 
@@ -1473,8 +1489,24 @@ def dash_share():
 @authentication_required
 @check_header
 def dash_verified():
-    stories = Story.story_list_by_creatordate(g.user.user_id)
+    raw_stories = Story.story_list_by_creatordate(g.user.user_id)
+    stories = []
+    for story in raw_stories:
+        if story.verification_status == 3 and story.story_in_store != 1:
+            stories.append(story)
     return render_template("/dash/verified.html", stories=stories)
+
+
+@app.route("/dash/published")
+@authentication_required
+@check_header
+def dash_published():
+    raw_stories = Story.story_list_by_creatordate(g.user.user_id)
+    stories = []
+    for story in raw_stories:
+        if story.story_in_store == 1:
+            stories.append(story)
+    return render_template("/dash/published.html", stories=stories)
 
 
 @app.route("/dash/user")
@@ -1489,7 +1521,7 @@ def dash_user():
 @check_header
 def forbidden_403(e):
     # Pretend all 403s are 404s for security purposes
-    return render_template('error/404.html'), 403
+    return render_template('error/404.html'), 404
 
 
 @app.errorhandler(404)
