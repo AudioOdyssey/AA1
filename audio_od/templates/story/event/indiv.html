@@ -15,7 +15,7 @@
             </div>
 
             <div class="col-sm-8">
-                <label><b>Select Location or:</b><span class="hover-cursor" onclick="add_loc_redir('{{event.story_id}}')"> Add New Location</span></label>
+                <label><b>Select Location or:</b><span class="lnk" onclick="add_loc_redir('{{event.story_id}}')"> Add New Location</span></label>
                 <select class="form-control" autocomplete="off" name="event_loc" onchange="show_changed(this, 'event')"
                     value="{{event.event_location_id}}">
                     <option value="0">None</option>

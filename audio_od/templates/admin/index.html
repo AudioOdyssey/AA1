@@ -1,15 +1,10 @@
-{%extends "template.html" %}
-{% block content%}
-
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/index.css') }}" type="text/css" />
 
 <section class="row">
-    <a href="/admin/users" class="col-sm-6 storycard">
+    <span onclick="loadpage('/admin/users')" class="col-sm-6 storycard">
         <h2>{{users}} <small>Users</small></h2>
-    </a>
-    <a href="/admin/stories" class="col-sm-6 storycard">
+    </span>
+    <span onclick="loadpage('/admin/stories')" class="col-sm-6 storycard">
         <h2>{{stories}} <small>Stories</small></h2>
-    </a>
+    </span>
 </section>
-
-{% endblock %}

@@ -35,7 +35,7 @@
 
 
 
-        <label>Select Event Name (changes description): or <span class="hover-cursor" onclick="add_evt_redir('{{story_id}}')">Add
+        <label>Select Event Name (changes description): or <span class="lnk" onclick="add_evt_redir('{{story_id}}')">Add
                 New Event</span></label>
 
         <select class="form-control" rows="3" name="location_event_id" onchange="show_changed(this, 'location')">
@@ -52,7 +52,7 @@
 
         <hr>
         <br>
-        <span class="hover-cursor" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}')">Edit
+        <span class="lnk" onclick="loadpage('/story/location/decision/show?story_id={{story_id}}&location_id={{location.location_id}}')">Edit
             Decisions</span>
 
         <section style="width: 100%" class="row">

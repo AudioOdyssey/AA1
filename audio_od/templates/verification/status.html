@@ -16,7 +16,7 @@
     {%endif%}
     <label>Verification Comments</label>
     <textarea class="form-control" disabled>{{location.reviewer_comments|e}}</textarea>
-    <a href="/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}">Edit Location</a>
+    <span class="lnk" onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</span>
 </section>
 {% endfor %}
 
@@ -35,7 +35,7 @@
     {%endif%}
     <label>Verification Comments</label>
     <textarea class="form-control" disabled>{{decision.reviewer_comments|e}}</textarea>
-    <a href="/story/location/decision/show?story_id={{story.story_id}}&location_id={{decision.loc_id}}">Edit Decision</a>
+    <span class="lnk" onclick="loadpage('/story/location/decision/show?story_id={{story.story_id}}&location_id={{decision.loc_id}}')">Edit Decision</span>
     {%endfor%}
 
     <hr>
@@ -51,7 +51,7 @@
     {%endif%}
     <label>Verification Comments</label>
     <textarea class="form-control" disabled>{{object.reviewer_comments|e}}</textarea>
-    <a href="/story/object/indiv?story_id={{story.story_id}}&object_id={{object.obj_id}}">Edit Object</a>
+    <span class="lnk" onclick="loadpage('/story/object/indiv?story_id={{story.story_id}}&object_id={{object.obj_id}}')">Edit Object</span>
     {%endfor%}
 
     <hr><br>
@@ -68,7 +68,7 @@
     {%endif%}
     <label>Verification Comments</label>
     <textarea class="form-control" disabled>{{event.reviewer_comments|e}}</textarea>
-    <a href="/story/object/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}">Edit Event</a>
+    <span class="lnk" onclick="loadpage('/story/object/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}')">Edit Event</span>
     {%endfor%}
 
     <br>

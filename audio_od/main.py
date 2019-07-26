@@ -633,7 +633,6 @@ def object_update():
     else:
         can_pickup_obj = 0
     is_hidden = details.get('is_hidden')
-    import pdb; pdb.set_trace()  # breakpoint 05593b65 //
     if is_hidden:
         is_hidden = 1
     else:
@@ -1331,27 +1330,25 @@ def story_run():
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
-@app.route("/story/help")
+@app.route("/help/story")
 @authentication_required
 @check_header
 def help():
-    return render_template("story/help.html")
+    return render_template("help/story.html")
 
 
-@app.route("/verification/help")
+@app.route("/help/verification")
 @authentication_required
 @check_header
 def vhelp():
-    return render_template("verification/help.html")
+    return render_template("help/verification.html")
 
 
-@app.route("/story/treeview_help")
+@app.route("/help/treeview")
 @authentication_required
 @check_header
 def treeview_help():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("story/treeview_help.html", story=story)
+    return render_template("help/treeview.html")
 
 
 @app.route("/admin")

@@ -135,7 +135,7 @@
     <h3 class="float-sm-left">Locations</h3>
     <button type="button" onclick="add_loc_redir('{{story.story_id}}')" id="add-btn" class="float-sm-right btn btn-light"><i class="fas fa-plus"></i> Add new Location</button>
     <div class="clearfix"></div>
-    <span class="hover-cursor" onclick="loadpage('/story/treeview?story_id={{story.story_id}}')">Click Here for Tree View</span>
+    <span class="lnk" onclick="loadpage('/story/treeview?story_id={{story.story_id}}')">Click Here for Tree View</span>
     <hr>
     <section class="row" style="align-items: stretch">
         {% for location in locations %}

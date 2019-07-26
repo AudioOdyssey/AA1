@@ -24,7 +24,7 @@
             </div>
 
             <div class="col-sm-8">
-                <label class="font-weight-bold">Select Starting Location: or <span class="text-primary hover-cursor" onclick="add_loc_redir('{{object.story_id}}')">Add New Location</span></label>
+                <label class="font-weight-bold">Select Starting Location: or <span class="lnk" onclick="add_loc_redir('{{object.story_id}}')">Add New Location</span></label>
                 <select class="form-control" autocomplete="off" name="obj_starting_loc"
                     value="{{object.obj_starting_loc}}" onchange="show_changed(this, 'object')">
                     <option value="0">None</option>
@@ -63,8 +63,7 @@
             {%endif%}
 
             <div class="checkbox_hide" {%if not object.is_hidden%}style="display: none;" {%endif%}>
-                <label>Select Unhide Event Name: or <a href="/story/event/show?story_id={{ story_id }}"> Add New
-                        Event</a></label>
+                <label>Select Unhide Event Name: or <span class="lnk" onclick="loadpage('/story/event/show?story_id={{ story_id }}')"> Add New Event</a></label>
                 <select class="form-control" type="text" autocomplete="off" name="unhide_event_id"
                     onchange="show_changed(this, 'object')" value="{{ object.unhide_event_id}}">
                     <option value="0">None</option>

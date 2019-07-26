@@ -1,5 +1,3 @@
-{%extends "template.html" %}
-{% block content%}
 <div>
     <h1 text-center>Navigating Treeview</h1>
 
@@ -19,18 +17,13 @@
 
     <body class="body">If no location link appears than that decision leads NOWHERE. Use the "edit decision" links to
         edit the decisions for a particular location. For more
-        info visit <a href="/story/help">our story help page</a>
+        info visit <span class="lnk" onclick="loadpage('/help/story')">our story help page</span>
     </body>
     <br><br>
     <h6 text-center>Thank You for your interest! We look forward to experiencing your
-        AudioOdyssey! Feel free to <a href="/contact">contact</a> us with additional questions or
+        AudioOdyssey! Feel free to <span class="lnk" onclick="loadpage('/contact')">contact</span> us with additional questions or
         concerns.</h6>
     <br>
     <hr>
-    <a href="/story/update?story_id={{story.story_id}}"><button id="createstory" class="btn btn-primary">Return to Story
-            Form</button> </a>
-    <br>
-    <a href="/story/treeview?story_id={{story.story_id}}"><button id="createstory" class="btn btn-primary">Return to
-            Treeview</button> </a>
-
-    {% endblock %}
+    <button id="createstory" class="btn btn-primary" onclick="history.back()">Return to Story Form</button>
+</div>

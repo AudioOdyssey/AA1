@@ -19,7 +19,7 @@
         <div class="col-sm-4 small-card">
             <p>{{location.location_name|e}}</p>
             {% if location != None%}
-            <span class="hover-cursor" onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit</span>
+            <span class="lnk" onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit</span>
             {% endif %}
         </div>
     </section>
@@ -28,15 +28,13 @@
         {% for dec in decisions %}
         <div class="col-sm-4 small-card">
             {% if dec.transition_loc_id > 0 %}
-            <span class="hover-cursor" onclick="loadpage('/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}')">"{{dec.decision_name|e}}"
+            <span class="lnk" onclick="loadpage('/story/treeview?story_id={{story.story_id}}&location_id={{dec.transition_loc_id}}')">"{{dec.decision_name|e}}"
                 leads to "{{StoryLocation.get(story.story_id,dec.transition_loc_id).location_name|e}}"</span>
             <br>
             {%else%}
             <p>"{{dec.decision_name|e}}" leads to NOWHERE</p>
             {% endif%}
-            <span class="edit hover-cursor"
-                 onclick="loadpage('/story/location/decision/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}&decision_id={{dec.decision_id}}')">Edit
-                Decision</span>
+            <span class="edit lnk" onclick="loadpage('/story/location/decision/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}&decision_id={{dec.decision_id}}')">Edit Decision</span>
         </div>
         {% endfor %}
     </section>
@@ -45,7 +43,7 @@
     <hr>
     <button onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-primary">Return to Story
             Form</button>
-    <button onclick="loadpage('/story/treeview_help?story_id={{story.story_id}}')" class="btn btn-primary">How to Use
+    <button onclick="loadpage('/help/treeview?story_id={{story.story_id}}')" class="btn btn-primary">How to Use
             Treeview</button>
 
 </body>

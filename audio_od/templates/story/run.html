@@ -2,7 +2,7 @@
 
 {%if location is none%}
 <h1>Can't Load Run-View, No starting location!</h1>
-<a href="/story/update?story_id={{story.story_id}}" class="btn btn-light">Back to Main Story Page</a>
+<button onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light">Back to Main Story Page</button>
 {%else%}
 
 {%if backs|length > 0%}
@@ -10,9 +10,9 @@
 {%endif%}
 
 <button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
-<span onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="hover-cursor btn btn-light">Back to Main Story Page</span>
-<span class="btn btn-primary hover-cursor" style="float:right"
-    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</span>
+<button onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light">Back to Main Story Page</button>
+<button class="btn btn-primary" style="float:right"
+    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</button>
 
 <h1>Running {{story.story_title|e}}</h1>
 <br>
@@ -51,8 +51,8 @@
 <!--for objects at this location (brian idk how to keep track of that)-->
 <!--print their names and have a pick up option-->
 {%for obj in objects%}
-<a onclick="runAddItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up
-    <i>{{obj.obj_name}}</i></a>
+<button onclick="runAddItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up
+    <i>{{obj.obj_name}}</i></button>
 {%endfor%}
 <p>Would you like to ...</p>
 
@@ -156,8 +156,7 @@
 {%endif%}
 
 <button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
-<span onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light hover-cursor">Back to Main Story Page</span>
-<span class="btn btn-primary hover-cursor" style="float:right"
-    onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</span>
+<button onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light">Back to Main Story Page</button>
+<button class="btn btn-primary" style="float:right" onclick="loadpage('/story/location/indiv?story_id={{story.story_id}}&location_id={{location.location_id}}')">Edit Location</button>
 
 <div class="mb-3"></div>
