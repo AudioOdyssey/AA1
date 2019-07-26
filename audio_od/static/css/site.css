@@ -135,3 +135,10 @@ body {
 .hover-cursor:hover {
 	cursor: pointer;
 }
+.lnk {
+	color: #428bca;
+	text-decoration: underline;
+}
+.lnk:hover {
+	cursor: pointer;
+}
