@@ -1118,6 +1118,8 @@ def contact():
     return render_template("contact.html")
 
 
+@app.route("/verification")
+@app.route("/verification/")
 @app.route("/verification/view")
 @authentication_required
 @check_header
