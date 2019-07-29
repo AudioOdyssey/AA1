@@ -246,7 +246,7 @@ def google_callback(remote, token, userinfo):
     usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd, signed_in_with="Google")
     result = usr.search_by_email()
     if result == -1:
-        result.add_to_server()
+        usr.add_to_server()
     else:
         usr = User.get(result)
     resp = make_response(redirect(url_for('home')))
@@ -274,7 +274,7 @@ def facebook_callback(remote, token, user_info):
     usr = User(username_input=username, email_input=email, first_name_input=user_info['given_name'], last_name_input=user_info['family_name'], password_input = passwd, signed_in_with="Facebook")
     result = usr.search_by_email()
     if result == -1:
-        result.add_to_server()
+        usr.add_to_server()
     else:
         usr = User.get(result)
     resp = make_response(redirect(url_for('home')))
