@@ -1,32 +1,34 @@
 {% extends "template.html" %}
 {% block content %}
-<div>
-    <h1 text-center>Navigating Treeview</h1>
+<section class="container" id="main-site">
+    <div>
+        <h1 text-center>Navigating Treeview</h1>
 
-    <br>
-    <hr>
-    <h3 id="intro" text-center>1) Select starting location:</h3>
+        <br>
+        <hr>
+        <h3 id="intro" text-center>1) Select starting location:</h3>
 
-    <body>Utilize the drop down menu to select the location you would like to view first </body>
-    <br><br>
-    <h3 id="story" text-center>2) Use decision buttons to navigate</h3>
+        <body>Utilize the drop down menu to select the location you would like to view first </body>
+        <br><br>
+        <h3 id="story" text-center>2) Use decision buttons to navigate</h3>
 
-    <body class="body">You may select any of the available decisions to refresh the page with the subsequent
-        location as the starting location and see the next decision. You may repeat this step to see
-        the whole story or <strong>at anytime you may select a new starting location.</strong></body>
-    <br><br>
-    <h3 id="story" text-center>Note:</h3>
+        <body class="body">You may select any of the available decisions to refresh the page with the subsequent
+            location as the starting location and see the next decision. You may repeat this step to see
+            the whole story or <strong>at anytime you may select a new starting location.</strong></body>
+        <br><br>
+        <h3 id="story" text-center>Note:</h3>
 
-    <body class="body">If no location link appears than that decision leads NOWHERE. Use the "edit decision" links to
-        edit the decisions for a particular location. For more
-        info visit <a href="/help/story">our story help page</a>
-    </body>
-    <br><br>
-    <h6 text-center>Thank You for your interest! We look forward to experiencing your
-        AudioOdyssey! Feel free to <span class="lnk" onclick="loadpage('/contact')">contact</span> us with additional questions or
-        concerns.</h6>
-    <br>
-    <hr>
-    <button id="createstory" class="btn btn-primary" onclick="history.back()">Return to Story Form</button>
-</div>
+        <body class="body">If no location link appears than that decision leads NOWHERE. Use the "edit decision" links to
+            edit the decisions for a particular location. For more
+            info visit <a href="/help/story">our story help page</a>
+        </body>
+        <br><br>
+        <h6 text-center>Thank You for your interest! We look forward to experiencing your
+            AudioOdyssey! Feel free to <span class="lnk" onclick="loadpage('/contact')">contact</span> us with additional questions or
+            concerns.</h6>
+        <br>
+        <hr>
+        <button id="createstory" class="btn btn-primary" onclick="history.back()">Return to Story Form</button>
+    </div>
+</section>
 {% endblock %}
