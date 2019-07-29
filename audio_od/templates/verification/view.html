@@ -1,27 +1,34 @@
+{% extends "template.html" %}
+{% block content %}
+
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/verification/view.css') }}" type="text/css" />
-<h1 class="text">Story Verification</h1>
-<button onclick="loadpage('/help/verification')" id="createstory" class="btn btn-primary">How to Verify Story</button>
-<hr>
-<h2 class="text">Stories Ready for Verification:</h2>
-<br>
 
-<style>
-    .card-outer {
-        padding: .5rem;
-    }
+<section class="container" id="main-site">
+    <h1 class="text">Story Verification</h1>
+    <button onclick="loadpage('/help/verification')" id="createstory" class="btn btn-primary">How to Verify Story</button>
+    <hr>
+    <h2 class="text">Stories Ready for Verification:</h2>
+    <br>
 
-    .storycard {
-        border-radius: .25rem;
-        width: 100%;
-    }
-</style>
+    <style>
+        .card-outer {
+            padding: .5rem;
+        }
 
-<section class="row">
-    {% for story in stories %}
-    <div class="col-sm-4 card-outer">
-        <div class="storycard">
-            <a class="lnk" href="/verification/review?story_id={{story.story_id}}">{{story.story_title|e}}&nbsp;</a>
+        .storycard {
+            border-radius: .25rem;
+            width: 100%;
+        }
+    </style>
+
+    <section class="row">
+        {% for story in stories %}
+        <div class="col-sm-4 card-outer">
+            <div class="storycard">
+                <a class="lnk" href="/verification/review?story_id={{story.story_id}}">{{story.story_title|e}}&nbsp;</a>
+            </div>
         </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
+    </section>
 </section>
