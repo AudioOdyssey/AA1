@@ -9,7 +9,6 @@ import re
 
 #Third-party libraries
 from flask import redirect, render_template, request, url_for, make_response, jsonify, session, abort, g
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user, login_url
 from flask_mail import Message, Mail
 import pymysql
 import pymysql.cursors
@@ -32,7 +31,6 @@ mail = Mail(app)
 
 app.config['GOOGLE_CLIENT_ID']=config.google_client_id
 app.config['GOOGLE_CLIENT_SECRET']=config.google_client_secret
-GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
 
 app.config['FACEBOOK_CLIENT_ID'] = config.facebook_client_id
 app.config['FACEBOOK_CLIENT_SECRET'] = config.facebook_client_secret
@@ -55,7 +53,7 @@ def authentication_required(func):
             if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
                 return redirect(url_for('session_new'))
             return func(*args, **kwargs)
-    func_wrapper.__name__ = func.__name__
+    func_wrapper.func_name = func.func_name
     return func_wrapper
 
 
@@ -69,9 +67,8 @@ def check_header(func):
             return func(*args, **kwargs)
         g.user = User.get(g.uid)
         return func(*args, **kwargs)
-    func_wrapper.__name__ = func.__name__
+    func_wrapper.func_name = func.func_name
     return func_wrapper
-
 
 
 @app.before_first_request
