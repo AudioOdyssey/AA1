@@ -17,9 +17,9 @@
 <div class="row">
 	{% for story in stories %}
 	{% if story.verification_status|int != 3 %}
-		<span class="hover-cursor col-sm-4" onclick="loadpage('/story/update?story_id={{story.story_id}}')">
+		<span class="hover-cursor col-sm-4" style="padding: 1rem" onclick="loadpage('/story/update?story_id={{story.story_id}}')">
 			<div class="storycard">
-				<h3>{{ story.story_title|e }}</h3>
+				<h3 style="height: 33.6px; overflow: hidden">{{ story.story_title|e }}</h3>
 
 				{%if story.verification_status == 0%}
 					<i class="text-info far fa-question-circle"></i>
@@ -33,7 +33,7 @@
 				{%endif%}
 
 				<hr>
-				<p>{{ story.story_synopsis|e }}</p>
+				<p style="height: 72px; overflow: hidden">{{ story.story_synopsis|e }}</p>
 				<div class="row">
 					<button class="ml-auto btn btn-secondary" onclick="loadpage('/story/update?story_id={{story.story_id}}')">Edit...</button>
 				</div>
