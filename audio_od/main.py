@@ -1416,7 +1416,7 @@ def password_request():
             result = usr.search_by_email()
             if result != -1:
                 usr = User.get(result)
-                if usr.signed_in_with != "native" or usr.signed_in_with != '':
+                if usr.signed_in_with != "native":
                     error = "You signed in with " + usr.signed_in_with + "."
                     return render_template("session/new.html", error=error)
             else:
