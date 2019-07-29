@@ -33,6 +33,7 @@ function storyHandleFileSelect(evt) {
     if (filesize > 7.9) {
         // The image is DUMMY THICC and the clap alerted the server!
         document.getElementById("dummy-thicc").style.display = "block";
+        document.getElementById("dummy-thicc").scrollIntoView()
         return;
     }
     document.getElementById("dummy-thicc").style.display = "none";

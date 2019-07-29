@@ -14,6 +14,8 @@ body {
 	color: white;
 	padding: 1rem 1rem 0rem 1rem;
 	width: 15rem;
+	overflow-y: auto;
+	scrollbar-width: thin;
 }
 
 hr { 
