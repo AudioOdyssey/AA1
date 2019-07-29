@@ -42,6 +42,9 @@ body {
 	background-color: #073884;
 	color: white;
 }
+.btn-light {
+	border: solid thin RGBA(0,0,0,0.5);
+}
 .form-control {
 	transition: box-shadow 0.35s, border 0.35s !important;
 	background-color: white;

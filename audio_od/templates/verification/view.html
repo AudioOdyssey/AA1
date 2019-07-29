@@ -20,7 +20,7 @@
     {% for story in stories %}
     <div class="col-sm-4 card-outer">
         <div class="storycard">
-            <span class="lnk" onclick="loadpage('/verification/review?story_id={{story.story_id}}')">{{story.story_title|e}}&nbsp;</span>
+            <a class="lnk" href="/verification/review?story_id={{story.story_id}}">{{story.story_title|e}}&nbsp;</a>
         </div>
     </div>
     {% endfor %}

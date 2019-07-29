@@ -1340,17 +1340,21 @@ def help():
 
 
 @app.route("/help/verification")
-@authentication_required
 @check_header
 def vhelp():
     return render_template("help/verification.html")
 
 
 @app.route("/help/treeview")
-@authentication_required
 @check_header
 def treeview_help():
     return render_template("help/treeview.html")
+
+
+@app.route("/help")
+@check_header
+def index_help():
+    return render_template("help/index.html")
 
 
 @app.route("/admin")
