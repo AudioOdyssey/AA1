@@ -25,7 +25,7 @@ from audio_od.models import User
 
 
 oauth = OAuth(app)
-auth = Blueprint('Auth', __name__, template_folder='templates', static_folder='static')
+auth = Blueprint('Auth', __name__)
 
 def authentication_required(func):
     @wraps(func)
@@ -74,7 +74,7 @@ def load_id():
     return resp
 
 
-@bp.route("/user/new", methods=['GET', 'POST'])
+@auth.route("/user/new", methods=['GET', 'POST'])
 @check_header
 def user_new():  # fix later
     if request.method == "POST":
@@ -112,7 +112,7 @@ def user_new():  # fix later
     return render_template("user/new.html")
 
     
-@bp.route("/app/user/new", methods=['POST', 'GET'])
+@auth.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
     result = {}
     if request.method == "POST":
@@ -157,7 +157,7 @@ def isValidEmail(email):
     return False
 
 
-@bp.route("/session/new", methods=['GET', 'POST'])
+@auth.route("/session/new", methods=['GET', 'POST'])
 @check_header
 def session_new():
     error = None
@@ -178,7 +178,7 @@ def session_new():
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
-@bp.route("/app/session/new", methods=['POST', 'GET'])
+@auth.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
     result = None
     if request.method == 'POST':
@@ -265,7 +265,7 @@ app.register_blueprint(facebook_bp, url_prefix='/facebook')
 
 
 
-@bp.route("/refresh/token", methods=['GET'])
+@auth.route("/refresh/token", methods=['GET'])
 def issue_new_token():
     token = request.args.get('token')
     uid = decode_auth_token(token)
@@ -301,7 +301,7 @@ def decode_auth_token(auth_token):
 
 
 
-@bp.route("/session/logout", methods=['POST'])
+@auth.route("/session/logout", methods=['POST'])
 def logout():
     resp = make_response(redirect(url_for('home')))
     if request.cookies.get('remember_') is None:
@@ -318,7 +318,7 @@ def logout():
         return resp
 
 
-@bp.route("/app/session/logout")
+@auth.route("/app/session/logout")
 def app_logout():
     session.pop("logged_in", None)
     session.pop("user_id", None)
@@ -327,7 +327,7 @@ def app_logout():
 
 
 
-@bp.route("/password_reset", methods=["GET", "POST"])
+@auth.route("/password_reset", methods=["GET", "POST"])
 @check_header
 def password_request():
     if request.method == "POST":
@@ -356,7 +356,7 @@ If you did not make this request then simply ignore this email and no changes wi
                 print("Message Sent")
     return render_template("/password_reset/request.html")
 
-@bp.route("/password_reset/<token>",  methods=["GET", "POST"])
+@auth.route("/password_reset/<token>",  methods=["GET", "POST"])
 @check_header
 def reset_token(token):
     user = User.get_reset_user(token)
@@ -379,7 +379,7 @@ def getUid():
         token = request.cookies.get('remember_')
     return decode_auth_token(token)
 
-@bp.route("/admin")
+@auth.route("/admin")
 @authentication_required
 @check_header
 def admin_index():
@@ -393,7 +393,7 @@ def admin_index():
     users = User.get_user_count()
     return render_template("admin/index.html", stories=stories, users=users)
 
-@bp.route("/admin/users", methods=["GET", "POST"])
+@auth.route("/admin/users", methods=["GET", "POST"])
 @authentication_required
 @check_header
 def admin_users():

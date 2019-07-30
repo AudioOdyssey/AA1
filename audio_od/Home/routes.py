@@ -3,18 +3,18 @@ import os
 import sys
 
 # Third-party libraries
-from flask import redirect, render_template, request, url_for, session
+from flask import redirect, render_template, request, url_for, session, Blueprint
 
 
 # Internal imports
 from audio_od import app
 import config
-from models import *
 
+home = Blueprint('Home', __name__)
 
-@app.route("/")
-@app.route("/home")
-@app.route("/index")
+@home.route("/")
+@home.route("/home")
+@home.route("/index")
 @auth_bp.check_header
 def home():
     auth_token = request.cookies.get('remember_')
@@ -33,14 +33,14 @@ def home():
     return render_template('index.html')
 
 
-@app.route("/about")
+@home.route("/about")
 @auth_bp.check_header
 def about():
     return render_template("about.html")
 
 
 
-@app.route("/contact")
+@home.route("/contact")
 @auth_bp.check_header
 def contact():
     return render_template("contact.html")

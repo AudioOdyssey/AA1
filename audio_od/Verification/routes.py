@@ -7,7 +7,7 @@ import json
 
 
 #Third-party libraries
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, Blueprint
 
 
 #Internal imports
@@ -16,8 +16,10 @@ import config
 from models import *
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
+verification = Blueprint('Verification', __name__)
 
-@app.route("/verification/view")
+
+@verification.route("/verification/view")
 @authentication_required
 @check_header
 def verification_view():
@@ -29,7 +31,7 @@ def verification_view():
     return render_template("verification/view.html", stories=stories)
 
 
-@app.route("/verification/review")
+@verification.route("/verification/review")
 @authentication_required
 @check_header
 def verification_review():
@@ -45,7 +47,7 @@ def verification_review():
     return render_template("verification/review.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
-@app.route("/verification/review/update", methods=['POST'])
+@verification.route("/verification/review/update", methods=['POST'])
 @authentication_required
 def review_update():
     uid = getUid()
@@ -94,7 +96,7 @@ def review_update():
     return '{"status":"ok"}'
 
 
-@app.route("/verification/status")
+@verification.route("/verification/status")
 @authentication_required
 @check_header
 def verification_story():
@@ -111,7 +113,7 @@ def verification_story():
     return render_template("verification/status.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
 
 
-@app.route("/verification/submit", methods=["POST"])
+@verification.route("/verification/submit", methods=["POST"])
 @authentication_required
 @check_header
 def verification_submit():
@@ -145,7 +147,7 @@ def verification_submit():
     return '{"status":"ok"}'
 
 
-@app.route("/story/treeview")
+@verification.route("/story/treeview")
 @authentication_required
 @check_header
 def treeview():
@@ -167,7 +169,7 @@ def treeview():
     return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
 
 
-@app.route("/verification/treeview")
+@verification.route("/verification/treeview")
 @authentication_required
 @check_header
 def verify_treeview():
@@ -188,7 +190,7 @@ def verify_treeview():
     return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
 
 
-@app.route("/story/run")
+@verification.route("/story/run")
 @authentication_required
 @check_header
 def story_run():
@@ -225,14 +227,14 @@ def story_run():
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
-@app.route("/verification/help")
+@verification.route("/verification/help")
 @authentication_required
 @check_header
 def vhelp():
     return render_template("verification/help.html")
 
 
-@app.route("/story/treeview_help")
+@verification.route("/story/treeview_help")
 @authentication_required
 @check_header
 def treeview_help():
