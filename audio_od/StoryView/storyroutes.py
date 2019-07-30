@@ -5,12 +5,11 @@ import json
 import base64
 
 #Third-party libraries
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request
 
 #Internal imports
 from audio_od import app
 import StoryView
-import config
 from models import Story, StoryObject, StoryLocation, StoryEvent
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 

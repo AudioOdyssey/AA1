@@ -49,18 +49,28 @@ def load_id():
     print(1)
     token = request.cookies.get('remember_')
     if token is None:
-        return redirect(url_for('home'))
+        return redirect(url_for('home.index'))
     uid = decode_auth_token(token)
     if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
         return redirect(url_for('auth.session_new'))
-    resp = make_response(url_for('home'))
+    resp = make_response(url_for('home.index'))
     current_time = datetime.utcnow()
     expiry_time = datetime.utcnow() + timedelta(days = 30)
     new_token = encode_auth_token(uid, current_time, expiry_time)
     resp.set_cookie("remember_", new_token, expires=expiry_time)
     return resp
 
-
+def encode_auth_token(user_id, current_time, expired_date):
+    payload = {
+        'exp': expired_date,
+        'iat': current_time,
+        'sub': user_id
+    }
+    return jwt.encode(
+        payload,
+        app.config['SECRET_KEY'],
+        algorithm='HS256'
+    )
 
 def decode_auth_token(auth_token):
     try:

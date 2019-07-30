@@ -20,7 +20,7 @@ from loginpass import create_flask_blueprint, Facebook, Google
 from audio_od import app
 import audio_od.config
 from audio_od.models import User
-from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, load_user
+from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token
 
 
 
@@ -63,7 +63,7 @@ def user_new():  # fix later
         elif result==-2:
             return render_template("user/new.html", error="Email already in use")
         else:
-            return redirect(url_for("home"))
+            return redirect(url_for("home.index"))
     return render_template("user/new.html")
 
     
@@ -120,7 +120,7 @@ def session_new():
         details = request.form
         user_id = authenticate(details)
         if user_id:
-            resp = make_response(redirect(url_for('dashboard')))
+            resp = make_response(redirect(url_for('Users.dashboard')))
             current_time = datetime.utcnow()
             expired_date = current_time + timedelta(days=30)
             token = encode_auth_token(user_id, current_time, expired_date)
@@ -179,7 +179,7 @@ def google_callback(remote, token, userinfo):
         result.add_to_server()
     else:
         usr = User.get(result)
-    resp = make_response(redirect(url_for('home')))
+    resp = make_response(redirect(url_for('home.index')))
     cur = datetime.utcnow()
     exp = datetime.utcnow() + timedelta(days=30)
     token = encode_auth_token(usr.user_id, cur, exp)
@@ -206,7 +206,7 @@ def facebook_callback(remote, token, user_info):
         result.add_to_server()
     else:
         usr = User.get(result)
-    resp = make_response(redirect(url_for('home')))
+    resp = make_response(redirect(url_for('home.index')))
     cur = datetime.utcnow()
     exp = datetime.utcnow() + timedelta(days=30)
     token = encode_auth_token(usr.user_id, cur, exp)
@@ -217,18 +217,6 @@ def facebook_callback(remote, token, user_info):
 facebook_bp = create_flask_blueprint(Facebook, oauth, facebook_callback)
 app.register_blueprint(facebook_bp, url_prefix='/facebook')
 
-
-def encode_auth_token(user_id, current_time, expired_date):
-    payload = {
-        'exp': expired_date,
-        'iat': current_time,
-        'sub': user_id
-    }
-    return jwt.encode(
-        payload,
-        app.config['SECRET_KEY'],
-        algorithm='HS256'
-    )
 
 
 @auth.route("/refresh/token", methods=['GET'])
@@ -245,7 +233,7 @@ def issue_new_token():
 
 @auth.route("/session/logout", methods=['POST'])
 def logout():
-    resp = make_response(redirect(url_for('home')))
+    resp = make_response(redirect(url_for('home.index')))
     if request.cookies.get('remember_') is None:
         print(session)
         token = session.get('token')
@@ -254,7 +242,7 @@ def logout():
             return resp
         elif decode_auth_token(token) == 0 or token is None:
             session.clear()
-            return redirect(url_for("session_new"))
+            return redirect(url_for("auth.session_new"))
     else:
         resp.set_cookie('remember_', '', 0)
         return resp
@@ -265,7 +253,7 @@ def app_logout():
     session.pop("logged_in", None)
     session.pop("user_id", None)
     session.pop("platform", None)
-    return redirect(url_for("home"))
+    return redirect(url_for("home.index"))
 
 
 
@@ -291,7 +279,7 @@ def password_request():
                                 sender='noreply@myaudioodyssey.com',
                                 recipients=[email])
                 msg.body = f'''To reset your password, visit the following link:
-{url_for('reset_token', token=token, _external=True)}
+{url_for('auth.reset_token', token=token, _external=True)}
 If you did not make this request then simply ignore this email and no changes will be made.
                             '''
                 mail.send(msg)
@@ -303,7 +291,7 @@ If you did not make this request then simply ignore this email and no changes wi
 def reset_token(token):
     user = User.get_reset_user(token)
     if user is None:
-        return redirect(url_for("session_new"))
+        return redirect(url_for("auth.session_new"))
     if request.method == "POST":
         passwd = request.form.get('password')
         passco = request.form.get('password_confirm')
@@ -312,7 +300,7 @@ def reset_token(token):
         user.password_salt = User.generate_password_salt()
         user.password = User.encrypt_password(passwd, user.password_salt)
         user.update_password()
-        return redirect(url_for("session_new"))
+        return redirect(url_for("auth.session_new"))
     return render_template("/password_reset/form.html")
 
 

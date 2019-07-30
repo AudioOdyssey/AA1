@@ -9,11 +9,12 @@ from flask import redirect, render_template, request, url_for, abort, g, Bluepri
 
 #internal imports
 from audio_od import app
-from models import User
+from models import User, Story
+from audio_od.utils import authentication_required, check_header
 
 userprofile = Blueprint("Users", __name__)
 
-@Users.route("/user/update", methods=['POST'])
+@userprofile.route("/user/update", methods=['POST'])
 @authentication_required
 @check_header
 def user_update():
@@ -27,7 +28,7 @@ def user_update():
     return '{"status":"ok"}'
 
 
-@Users.route("/app/user/info", methods=['GET'])
+@userprofile.route("/app/user/info", methods=['GET'])
 def app_user_info():
     token = request.args.get('token')
     user_id = decode_auth_token(token)
@@ -35,7 +36,7 @@ def app_user_info():
     return usr.user_profile_info()
 
 
-@Users.route("/app/user/profile/upload", methods=['POST'])
+@userprofile.route("/app/user/profile/upload", methods=['POST'])
 def upload_profile_pic():
     details = request.json
     profile_pic = details.get('profile_pic')
@@ -47,7 +48,7 @@ def upload_profile_pic():
     return json.dumps({'message' : 'success'}), 200
 
 
-@Users.route("/user/picture", methods=['GET'])
+@userprofile.route("/user/picture", methods=['GET'])
 @authentication_required
 @check_header
 def get_profile():
@@ -57,7 +58,7 @@ def get_profile():
 
 
 
-@Users.route("/user/picture", methods=['POST'])
+@userprofile.route("/user/picture", methods=['POST'])
 @authentication_required
 @check_header
 def put_profile():
@@ -72,7 +73,7 @@ def put_profile():
     return '{"status" : "error"}'
 
 
-@Users.route("/dashboard")
+@userprofile.route("/dashboard")
 @authentication_required
 @check_header
 def dashboard():
@@ -80,7 +81,7 @@ def dashboard():
     return render_template("/dash/index.html", stories=stories, base_url="")
 
 
-@Users.route('/dashboard/<path:page>')
+@userprofile.route('/dashboard/<path:page>')
 @authentication_required
 @check_header
 def dashboard_full(page):
@@ -90,7 +91,7 @@ def dashboard_full(page):
     return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
-@Users.route("/dash/story")
+@userprofile.route("/dash/story")
 @authentication_required
 @check_header
 def dash_story():
@@ -98,7 +99,7 @@ def dash_story():
     return render_template("/dash/story.html", stories=stories)
 
 
-@Users.route("/dash/share")
+@userprofile.route("/dash/share")
 @authentication_required
 @check_header
 def dash_share():
@@ -106,7 +107,7 @@ def dash_share():
     return render_template("/dash/story.html", stories=stories)
 
 
-@Users.route("/dash/user")
+@userprofile.route("/dash/user")
 @authentication_required
 @check_header
 def dash_user():
@@ -114,7 +115,7 @@ def dash_user():
     return render_template("/dash/user.html", userimage=userimage)
 
 
-@Users.route("/app/library/", methods=['GET'])
+@userprofile.route("/app/library/", methods=['GET'])
 def stories_show_owned_by_user():
     user_id = decode_auth_token(request.args.get("auth"))
     return Story.json_story_library(user_id)

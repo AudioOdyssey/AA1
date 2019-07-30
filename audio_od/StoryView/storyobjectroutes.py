@@ -8,7 +8,6 @@ from flask import render_template, request
 #Internal imports
 from audio_od import app
 import StoryView
-import config
 from models import Story, StoryObject, StoryLocation, StoryEvent
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
@@ -17,8 +16,6 @@ from auth import authentication_required, check_header, checkEditorAdmin, getUid
 @authentication_required
 @check_header
 def object_show():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -32,8 +29,6 @@ def object_show():
 @StoryView.route("/story/object/update", methods=['POST'])
 @authentication_required
 def object_update():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
@@ -76,8 +71,6 @@ def object_update():
 @StoryView.route("/story/object/new", methods=['POST'])
 @authentication_required
 def object_new():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -105,8 +98,6 @@ def object_destroy():
 @authentication_required
 @check_header
 def object_indiv():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):

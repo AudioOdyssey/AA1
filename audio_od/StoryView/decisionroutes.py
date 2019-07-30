@@ -9,7 +9,6 @@ from flask import Flask, redirect, render_template, request, url_for, make_respo
 #Internal imports
 from audio_od import app
 import StoryView
-from audio_od import config
 from models import Story, StoryLocation, StoryDecision
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
@@ -17,8 +16,6 @@ from auth import authentication_required, check_header, checkEditorAdmin, getUid
 @authentication_required
 @check_header
 def decision_indiv():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
@@ -36,8 +33,6 @@ def decision_indiv():
 @authentication_required
 @check_header
 def decision_show():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
     story = Story.get(request.args['story_id'])
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
@@ -59,8 +54,6 @@ def decision_show():
 @StoryView.route("/story/location/decision/update", methods=['POST'])
 @authentication_required
 def decision_update():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
     details = request.form
     story_id = details["story_id"]
     story = Story.get(story_id)
@@ -140,8 +133,6 @@ def decision_update():
 @StoryView.route("/story/location/decision/new", methods=['POST'])
 @authentication_required
 def decision_new():
-    # if "logged_in" not in session:
-        # return redirect(url_for("session_new"))
     details = request.args
     story_id = details["story_id"]
     story = Story.get(story_id)
