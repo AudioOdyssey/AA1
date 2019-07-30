@@ -5,9 +5,6 @@ from flask import Flask
 app = Flask(__name__)
 
 import config
-app.config['SECRET_KEY'] = config.secret_key
-app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
-app.config['UPLOAD_FOLDER']=config.upload_folder
 
 app.config['SECRET_KEY'] = config.secret_key
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
@@ -29,6 +26,10 @@ from audio_od import home
 
 from audio_od.Auth.routes import auth as auth_bp
 from audio_od.Home.routes import home as home_bp
-from audio_od.Verification.routes import verification
+from audio_od.Verification.routes import verif_bp
+
+app.register_blueprint(home_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(verif_bp)
+
 
