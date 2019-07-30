@@ -9,13 +9,14 @@ from flask import redirect, render_template, request, url_for, session, Blueprin
 # Internal imports
 from audio_od import app
 import config
+from audio_od.utils import authentication_required, check_header
 
-home = Blueprint('Home', __name__)
+home = Blueprint('home', __name__)
 
 @home.route("/")
 @home.route("/home")
 @home.route("/index")
-@auth_bp.check_header
+@check_header
 def home():
     auth_token = request.cookies.get('remember_')
     if auth_token is None:
@@ -34,32 +35,32 @@ def home():
 
 
 @home.route("/about")
-@auth_bp.check_header
+@check_header
 def about():
     return render_template("about.html")
 
 
 
 @home.route("/contact")
-@auth_bp.check_header
+@check_header
 def contact():
     return render_template("contact.html")
 
 
 @app.errorhandler(403)
-@auth_bp.check_header
+@check_header
 def forbidden_403(e):
     # Pretend all 403s are 404s for security purposes
     return render_template('error/404.html'), 403
 
 
 @app.errorhandler(404)
-@auth_bp.check_header
+@check_header
 def page_not_found_404(e):
     return render_template('error/404.html'), 404
 
 
 @app.errorhandler(500)
-@auth_bp.check_header
+@check_header
 def server_error_500(e):
     return render_template('error/500.html'), 500

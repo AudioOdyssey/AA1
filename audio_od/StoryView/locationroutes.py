@@ -7,12 +7,13 @@ from flask import render_template, request
 
 #Internal imports
 from audio_od import app
+import StoryView
 import config
 from models import Story, StoryLocation, StoryEvent
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
 
-@app.route("/story/location/show")
+@StoryView.route("/story/location/show")
 @authentication_required
 @check_header
 def location_show():
@@ -27,7 +28,7 @@ def location_show():
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
 
-@app.route('/story/location/new', methods=['POST'])
+@StoryView.route('/story/location/new', methods=['POST'])
 @authentication_required
 def location_new():
     # if "logged_in" not in session:
@@ -43,7 +44,7 @@ def location_new():
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
 
-@app.route('/story/location/update', methods=['POST'])
+@StoryView.route('/story/location/update', methods=['POST'])
 @authentication_required
 def location_update():
     # if "logged_in" not in session:
@@ -76,7 +77,7 @@ def location_update():
     return '{"status":"ok"}'
 
 
-@app.route("/story/location/destroy", methods=['POST'])
+@StoryView.route("/story/location/destroy", methods=['POST'])
 @authentication_required
 def location_destroy():
     story = Story.get(request.form['story_id'])
@@ -88,7 +89,7 @@ def location_destroy():
     return '{"status":"ok"}'
 
 
-@app.route("/story/location/indiv")
+@StoryView.route("/story/location/indiv")
 @authentication_required
 @check_header
 def location_indiv():

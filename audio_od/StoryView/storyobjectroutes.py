@@ -7,12 +7,13 @@ from flask import render_template, request
 
 #Internal imports
 from audio_od import app
+import StoryView
 import config
 from models import Story, StoryObject, StoryLocation, StoryEvent
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
 
-@app.route("/story/object/show")
+@StoryView.route("/story/object/show")
 @authentication_required
 @check_header
 def object_show():
@@ -28,7 +29,7 @@ def object_show():
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
-@app.route("/story/object/update", methods=['POST'])
+@StoryView.route("/story/object/update", methods=['POST'])
 @authentication_required
 def object_update():
     # if "logged_in" not in session:
@@ -72,7 +73,7 @@ def object_update():
     return "ok"
 
 
-@app.route("/story/object/new", methods=['POST'])
+@StoryView.route("/story/object/new", methods=['POST'])
 @authentication_required
 def object_new():
     # if "logged_in" not in session:
@@ -88,7 +89,7 @@ def object_new():
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
-@app.route("/story/object/destroy", methods=['POST'])
+@StoryView.route("/story/object/destroy", methods=['POST'])
 @authentication_required
 def object_destroy():
     story = Story.get(request.form['story_id'])
@@ -100,7 +101,7 @@ def object_destroy():
     return '{"status":"ok"}'
 
 
-@app.route("/story/object/indiv")
+@StoryView.route("/story/object/indiv")
 @authentication_required
 @check_header
 def object_indiv():

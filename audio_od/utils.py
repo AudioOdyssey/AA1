@@ -60,17 +60,6 @@ def load_id():
     resp.set_cookie("remember_", new_token, expires=expiry_time)
     return resp
 
-def encode_auth_token(user_id, current_time, expired_date):
-    payload = {
-        'exp': expired_date,
-        'iat': current_time,
-        'sub': user_id
-    }
-    return jwt.encode(
-        payload,
-        app.config['SECRET_KEY'],
-        algorithm='HS256'
-    )
 
 
 def decode_auth_token(auth_token):
@@ -88,3 +77,13 @@ def getUid():
     if token is None:
         token = request.cookies.get('remember_')
     return decode_auth_token(token)
+
+
+def checkEditorAdmin(uid):
+    user = User.get(uid)
+    return user.is_admin or user.is_copy_editor or user.is_content_editor
+
+
+def checkAdmin(uid):
+    user = User.get(uid)
+    return user.is_admin

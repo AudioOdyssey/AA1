@@ -8,11 +8,12 @@ from flask import Flask, redirect, render_template, request, url_for, make_respo
 
 #Internal imports
 from audio_od import app
-import config
+import StoryView
+from audio_od import config
 from models import Story, StoryLocation, StoryDecision
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
-@app.route("/story/location/decision/indiv")
+@StoryView.route("/story/location/decision/indiv")
 @authentication_required
 @check_header
 def decision_indiv():
@@ -31,7 +32,7 @@ def decision_indiv():
     return render_template("story/location/decision/indiv.html", locations=locations, decision=decision, story_id=story_id, decision_id=decision_id, events=events, objects=objects)
 
 
-@app.route("/story/location/decision/show")
+@StoryView.route("/story/location/decision/show")
 @authentication_required
 @check_header
 def decision_show():
@@ -55,7 +56,7 @@ def decision_show():
     return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
 
-@app.route("/story/location/decision/update", methods=['POST'])
+@StoryView.route("/story/location/decision/update", methods=['POST'])
 @authentication_required
 def decision_update():
     # if "logged_in" not in session:
@@ -136,7 +137,7 @@ def decision_update():
     return '{"status":"ok"}'
 
 
-@app.route("/story/location/decision/new", methods=['POST'])
+@StoryView.route("/story/location/decision/new", methods=['POST'])
 @authentication_required
 def decision_new():
     # if "logged_in" not in session:
@@ -157,7 +158,7 @@ def decision_new():
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
 
-@app.route("/story/location/decision/destroy", methods=['POST'])
+@StoryView.route("/story/location/decision/destroy", methods=['POST'])
 @authentication_required
 def decision_destroy():
     story = Story.get(request.form['story_id'])

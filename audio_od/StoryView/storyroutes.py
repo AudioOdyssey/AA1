@@ -9,11 +9,12 @@ from flask import redirect, render_template, request, url_for
 
 #Internal imports
 from audio_od import app
+import StoryView
 import config
 from models import Story, StoryObject, StoryLocation, StoryEvent
 from auth import authentication_required, check_header, checkEditorAdmin, getUid
 
-@app.route("/story/update", methods=["GET"])
+@StoryView.route("/story/update", methods=["GET"])
 @authentication_required
 @check_header
 def story_update():
@@ -28,7 +29,7 @@ def story_update():
 
 
 
-@app.route("/story/image")
+@StoryView.route("/story/image")
 @authentication_required
 @check_header
 def story_image():
@@ -43,7 +44,7 @@ def story_image():
                 "Horror", "Thriller", "Comedy", "Adventure", "Sports", "Non-Fiction", "Other Fiction"}
 
 
-@app.route("/story/update", methods=["POST"])
+@StoryView.route("/story/update", methods=["POST"])
 @authentication_required
 def story_update_post():
     details = request.form
@@ -75,7 +76,7 @@ def story_update_post():
     return '{"status":"ok"}'
 
 
-@app.route("/story/destroy", methods=["POST"])
+@StoryView.route("/story/destroy", methods=["POST"])
 @authentication_required
 def story_destroy():
     story = Story.get(request.args['story_id'])
@@ -93,7 +94,7 @@ def allowed_file(file):
     return mimetype in valid_mimetypes
 
 
-@app.route("/story/new", methods=["POST"])
+@StoryView.route("/story/new", methods=["POST"])
 @authentication_required
 def story_new():
     uid = getUid()
@@ -103,24 +104,24 @@ def story_new():
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
 
-@app.route("/app/story/info", methods=['GET'])
+@StoryView.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
     return Story.get_entities(int(request.args.get('story_id')))
 
 
-@app.route("/app/store", methods=["GET"])
+@StoryView.route("/app/store", methods=["GET"])
 def app_store_info():
     return Story.display_for_store()
 
 
-@app.route("/store/story/info", methods=['GET'])
+@StoryView.route("/store/story/info", methods=['GET'])
 def app_store_expand():
     details = request.json
     story_id = details.get("story_id")
     return Story.get_info(story_id)
 
 
-@app.route("/story/help")
+@StoryView.route("/story/help")
 @authentication_required
 @check_header
 def help():

@@ -20,12 +20,14 @@ from loginpass import create_flask_blueprint, Facebook, Google
 from audio_od import app
 import audio_od.config
 from audio_od.models import User
+from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, load_user
 
 
 
 oauth = OAuth(app)
-auth = Blueprint('Auth', __name__)
+auth = Blueprint('auth', __name__)
 
+mail = Mail(app)
 
 @auth.route("/user/new", methods=['GET', 'POST'])
 @check_header
@@ -150,7 +152,7 @@ def app_session_new():
     return jsonify(result)
 
 def authenticate(details):
-    conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5,
+    conn = pymysql.connect(app.config['DB_HOST'], user=app.config['USER'], passwd=app.config['DB_PASSWORD'], db=app.config['DB_NAME'], connect_timeout=5,
                            cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cur:
         username = details['username']
@@ -216,6 +218,17 @@ facebook_bp = create_flask_blueprint(Facebook, oauth, facebook_callback)
 app.register_blueprint(facebook_bp, url_prefix='/facebook')
 
 
+def encode_auth_token(user_id, current_time, expired_date):
+    payload = {
+        'exp': expired_date,
+        'iat': current_time,
+        'sub': user_id
+    }
+    return jwt.encode(
+        payload,
+        app.config['SECRET_KEY'],
+        algorithm='HS256'
+    )
 
 
 @auth.route("/refresh/token", methods=['GET'])
@@ -348,15 +361,6 @@ def admin_users():
         print(user.user_id)
         user.update_admin()
         return '{"status":"ok"}'
-
-
-def checkEditorAdmin(uid):
-    user = User.get(uid)
-    return user.is_admin or user.is_copy_editor or user.is_content_editor
-
-def checkAdmin(uid):
-    user = User.get(uid)
-    return user.is_admin
 
 
 def load_user(user_id):

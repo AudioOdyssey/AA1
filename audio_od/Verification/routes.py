@@ -14,9 +14,9 @@ from flask import redirect, render_template, request, url_for, Blueprint
 from audio_od import app
 import config
 from models import *
-from auth import authentication_required, check_header, checkEditorAdmin, getUid
+from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
-verification = Blueprint('Verification', __name__)
+verification = Blueprint('verification', __name__)
 
 
 @verification.route("/verification/view")
