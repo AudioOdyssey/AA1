@@ -19,8 +19,8 @@ from loginpass import create_flask_blueprint, Facebook, Google
 
 #internal imports
 from audio_od import app
-import config
-from models import User
+import audio_od.config
+from audio_od.models import User
 
 app.config['MAIL_SERVER'] = config.mail_server
 app.config['MAIL_PORT'] = config.mail_port
@@ -45,15 +45,14 @@ def authentication_required(func):
         if remember is None:
             token = session.get('token')
             if token is None or decode_auth_token(token) == 0:
-                return redirect(url_for('session_new'))
+                return redirect(url_for('auth.session_new'))
             else:
                 return func(*args, **kwargs)
         else:
             uid = decode_auth_token(remember)
             if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
-                return redirect(url_for('session_new'))
+                return redirect(url_for('auth.session_new'))
             return func(*args, **kwargs)
-    func_wrapper.func_name = func.func_name
     return func_wrapper
 
 
@@ -67,7 +66,6 @@ def check_header(func):
             return func(*args, **kwargs)
         g.user = User.get(g.uid)
         return func(*args, **kwargs)
-    func_wrapper.func_name = func.func_name
     return func_wrapper
 
 
@@ -78,7 +76,7 @@ def load_id():
         return redirect(url_for('home'))
     uid = decode_auth_token(token)
     if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
-        return redirect(url_for('session_new'))
+        return redirect(url_for('auth.session_new'))
     resp = make_response(url_for('home'))
     current_time = datetime.utcnow()
     expiry_time = datetime.utcnow() + timedelta(days = 30)
@@ -87,7 +85,7 @@ def load_id():
     return resp
 
 
-@app.route("/user/new", methods=['GET', 'POST'])
+@bp.route("/user/new", methods=['GET', 'POST'])
 @check_header
 def user_new():  # fix later
     if request.method == "POST":
@@ -125,7 +123,7 @@ def user_new():  # fix later
     return render_template("user/new.html")
 
     
-@app.route("/app/user/new", methods=['POST', 'GET'])
+@bp.route("/app/user/new", methods=['POST', 'GET'])
 def app_user_new():
     result = {}
     if request.method == "POST":
@@ -170,7 +168,7 @@ def isValidEmail(email):
     return False
 
 
-@app.route("/session/new", methods=['GET', 'POST'])
+@bp.route("/session/new", methods=['GET', 'POST'])
 @check_header
 def session_new():
     error = None
@@ -191,7 +189,7 @@ def session_new():
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
 
-@app.route("/app/session/new", methods=['POST', 'GET'])
+@bp.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
     result = None
     if request.method == 'POST':
@@ -278,7 +276,7 @@ app.register_blueprint(facebook_bp, url_prefix='/facebook')
 
 
 
-@app.route("/refresh/token", methods=['GET'])
+@bp.route("/refresh/token", methods=['GET'])
 def issue_new_token():
     token = request.args.get('token')
     uid = decode_auth_token(token)
@@ -314,7 +312,7 @@ def decode_auth_token(auth_token):
 
 
 
-@app.route("/session/logout", methods=['POST'])
+@bp.route("/session/logout", methods=['POST'])
 def logout():
     resp = make_response(redirect(url_for('home')))
     if request.cookies.get('remember_') is None:
@@ -331,7 +329,7 @@ def logout():
         return resp
 
 
-@app.route("/app/session/logout")
+@bp.route("/app/session/logout")
 def app_logout():
     session.pop("logged_in", None)
     session.pop("user_id", None)
@@ -340,7 +338,7 @@ def app_logout():
 
 
 
-@app.route("/password_reset", methods=["GET", "POST"])
+@bp.route("/password_reset", methods=["GET", "POST"])
 @check_header
 def password_request():
     if request.method == "POST":
@@ -369,7 +367,7 @@ If you did not make this request then simply ignore this email and no changes wi
                 print("Message Sent")
     return render_template("/password_reset/request.html")
 
-@app.route("/password_reset/<token>",  methods=["GET", "POST"])
+@bp.route("/password_reset/<token>",  methods=["GET", "POST"])
 @check_header
 def reset_token(token):
     user = User.get_reset_user(token)
@@ -392,7 +390,7 @@ def getUid():
         token = request.cookies.get('remember_')
     return decode_auth_token(token)
 
-@app.route("/admin")
+@bp.route("/admin")
 @authentication_required
 @check_header
 def admin_index():
@@ -406,7 +404,7 @@ def admin_index():
     users = User.get_user_count()
     return render_template("admin/index.html", stories=stories, users=users)
 
-@app.route("/admin/users", methods=["GET", "POST"])
+@bp.route("/admin/users", methods=["GET", "POST"])
 @authentication_required
 @check_header
 def admin_users():
