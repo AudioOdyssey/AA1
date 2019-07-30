@@ -174,7 +174,7 @@ class StoryObject:
                 else:
                     can_pickup_bool = True
                 obj_info = {"obj_id": row["obj_id"], "obj_starting_loc": row["obj_starting_loc"], "obj_name": row["obj_name"], "obj_description": row["obj_description"],
-                            "can_pickup": can_pickup_bool, "is_hidden": is_hidden_bool, "unhide_event_id": row["obj_description"]}
+                            "can_pickup": can_pickup_bool, "is_hidden": is_hidden_bool, "unhide_event_id": row["unhide_event_id"]}
                 result.append(obj_info)
         return result
 
