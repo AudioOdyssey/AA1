@@ -1,14 +1,16 @@
 # Python standard libraries
 import os
+import base64
 
 # Third-party libraries
-from flask import redirect, render_template, request, url_for, session, Blueprint
+from flask import redirect, render_template, request, url_for, session, Blueprint, g
 
 # Internal imports
 from audio_od import app
+from models import Story
 from audio_od.utils import authentication_required, check_header, decode_auth_token
 
-dash_view = Blueprint('home', __name__)
+dash_view = Blueprint('dash', __name__)
 
 @dash_view.route("/dashboard")
 @app.route("/dashboard/")
@@ -18,6 +20,13 @@ def dashboard():
     stories = Story.story_list_by_creatordate(g.uid)
     base_url = base64.b64encode("/dash/story".encode()).decode("utf-8")
     return render_template("/dash/index.html", stories=stories, base_url=base_url)
+
+
+def isValidEmail(email):
+    if len(email) > 7:
+        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
+            return True
+    return False
 
 
 @dash_view.route('/dashboard/<path:page>')
