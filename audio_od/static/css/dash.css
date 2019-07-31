@@ -56,7 +56,7 @@ hr {
 	color: lightgrey;
 	transition: color .1s;
 	height: 1rem;
-	overflow: auto;
+	overflow: visible;
 	box-sizing: content-box;
 }
 
