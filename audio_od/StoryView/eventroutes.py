@@ -3,15 +3,14 @@ import os
 import sys
 
 #Third-party libraries
-from flask import redirect, render_template, request
-
+from flask import redirect, render_template, request, Blueprint
 #Internal imports
-from StoryView import sv
 from models import Story, StoryEvent, StoryLocation, StoryDecision
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
+ev_view = Blueprint("ev", __name__)
 
-@sv.route("/story/event/show", methods=['GET'])
+@ev_view.route("/story/event/show", methods=['GET'])
 @authentication_required
 @check_header
 def event_show():
@@ -24,7 +23,7 @@ def event_show():
     return render_template("story/event/show.html", locations=locations, events=events, story_id=story_id)
 
 
-@sv.route('/story/event/update', methods=['POST'])
+@ev_view.route('/story/event/update', methods=['POST'])
 @authentication_required
 def event_update():
     if request.method == 'POST':
@@ -55,7 +54,7 @@ def event_update():
     return '{"status":"ok"}'
 
 
-@sv.route('/story/event/new', methods=['POST'])
+@ev_view.route('/story/event/new', methods=['POST'])
 @authentication_required
 def event_new():
     details = request.args
@@ -70,7 +69,7 @@ def event_new():
     return '{"status":"ok","event":{"event_id":' + str(evnt.event_id) + '}}'
 
 
-@sv.route("/story/event/destroy", methods=['POST'])
+@ev_view.route("/story/event/destroy", methods=['POST'])
 @authentication_required
 def event_destroy():
     story = Story.get(request.form['story_id'])
@@ -82,7 +81,7 @@ def event_destroy():
     return '{"status":"ok"}'
 
 
-@sv.route("/story/event/indiv")
+@ev_view.route("/story/event/indiv")
 @authentication_required
 @check_header
 def event_indiv():

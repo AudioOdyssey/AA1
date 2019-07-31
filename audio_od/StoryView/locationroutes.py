@@ -3,15 +3,15 @@ import os
 import sys
 
 #Third-party libraries
-from flask import render_template, request
+from flask import render_template, request, Blueprint
 
 #Internal imports
-from StoryView import sv
 from models import Story, StoryLocation, StoryEvent
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
+loc_view = Blueprint("loc", __name__)
 
-@sv.route("/story/location/show")
+@loc_view.route("/story/location/show")
 @authentication_required
 @check_header
 def location_show():
@@ -24,7 +24,7 @@ def location_show():
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
 
-@sv.route('/story/location/new', methods=['POST'])
+@loc_view.route('/story/location/new', methods=['POST'])
 @authentication_required
 def location_new():
     story_id = request.args['story_id']
@@ -38,7 +38,7 @@ def location_new():
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
 
-@sv.route('/story/location/update', methods=['POST'])
+@loc_view.route('/story/location/update', methods=['POST'])
 @authentication_required
 def location_update():
     details = request.form
@@ -69,7 +69,7 @@ def location_update():
     return '{"status":"ok"}'
 
 
-@sv.route("/story/location/destroy", methods=['POST'])
+@loc_view.route("/story/location/destroy", methods=['POST'])
 @authentication_required
 def location_destroy():
     story = Story.get(request.form['story_id'])
@@ -81,7 +81,7 @@ def location_destroy():
     return '{"status":"ok"}'
 
 
-@sv.route("/story/location/indiv")
+@loc_view.route("/story/location/indiv")
 @authentication_required
 @check_header
 def location_indiv():

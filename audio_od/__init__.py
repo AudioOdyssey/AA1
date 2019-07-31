@@ -31,12 +31,21 @@ from audio_od.Auth.routes import auth as auth_bp
 from audio_od.Home.routes import home as home_bp
 from audio_od.Verification.routes import verification as verif_bp
 from audio_od.Users.routes import userprofile as user_bp
-from audio_od.StoryView import sv as sv_bp
+
+from audio_od.StoryView.decisionroutes import dec_view as dec_bp
+from audio_od.StoryView.eventroutes import ev_view as ev_bp
+from audio_od.StoryView.locationroutes import loc_view as loc_bp
+from audio_od.StoryView.storyobjectroutes import obj_view as obj_bp
+from audio_od.StoryView.storyroutes import story_view as story_bp
 
 app.register_blueprint(home_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(verif_bp)
 app.register_blueprint(user_bp)
-app.register_blueprint(sv_bp)
+app.register_blueprint(dec_bp)
+app.register_blueprint(ev_bp)
+app.register_blueprint(loc_bp)
+app.register_blueprint(obj_bp)
+app.register_blueprint(story_bp)
 
 from audio_od import utils

@@ -3,15 +3,16 @@ import os
 import sys
 
 #Third-party libraries
-from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g
+from flask import Flask, redirect, render_template, request, url_for, make_response, jsonify, session, flash, send_from_directory, abort, g, Blueprint
 
 
 #Internal imports
-from StoryView import sv
 from models import Story, StoryLocation, StoryDecision
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
-@sv.route("/story/location/decision/indiv")
+dec_view = Blueprint("dec", __name__)
+
+@dec_view.route("/story/location/decision/indiv")
 @authentication_required
 @check_header
 def decision_indiv():
@@ -28,7 +29,7 @@ def decision_indiv():
     return render_template("story/location/decision/indiv.html", locations=locations, decision=decision, story_id=story_id, decision_id=decision_id, events=events, objects=objects)
 
 
-@sv.route("/story/location/decision/show")
+@dec_view.route("/story/location/decision/show")
 @authentication_required
 @check_header
 def decision_show():
@@ -50,7 +51,7 @@ def decision_show():
     return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
 
-@sv.route("/story/location/decision/update", methods=['POST'])
+@dec_view.route("/story/location/decision/update", methods=['POST'])
 @authentication_required
 def decision_update():
     details = request.form
@@ -129,7 +130,7 @@ def decision_update():
     return '{"status":"ok"}'
 
 
-@sv.route("/story/location/decision/new", methods=['POST'])
+@dec_view.route("/story/location/decision/new", methods=['POST'])
 @authentication_required
 def decision_new():
     details = request.args
@@ -148,7 +149,7 @@ def decision_new():
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
 
-@sv.route("/story/location/decision/destroy", methods=['POST'])
+@dec_view.route("/story/location/decision/destroy", methods=['POST'])
 @authentication_required
 def decision_destroy():
     story = Story.get(request.form['story_id'])

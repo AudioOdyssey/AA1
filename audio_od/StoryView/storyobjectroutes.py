@@ -3,15 +3,15 @@ import os
 import sys
 
 #Third-party libraries
-from flask import render_template, request
+from flask import render_template, request, Blueprint
 
 #Internal imports
-from StoryView import sv
 from models import Story, StoryObject, StoryLocation, StoryEvent
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
+obj_view = Blueprint("obj", __name__)
 
-@sv.route("/story/object/show")
+@obj_view.route("/story/object/show")
 @authentication_required
 @check_header
 def object_show():
@@ -25,7 +25,7 @@ def object_show():
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
-@sv.route("/story/object/update", methods=['POST'])
+@obj_view.route("/story/object/update", methods=['POST'])
 @authentication_required
 def object_update():
     details = request.form
@@ -66,7 +66,7 @@ def object_update():
     return "ok"
 
 
-@sv.route("/story/object/new", methods=['POST'])
+@obj_view.route("/story/object/new", methods=['POST'])
 @authentication_required
 def object_new():
     story_id = request.args["story_id"]
@@ -80,7 +80,7 @@ def object_new():
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
-@sv.route("/story/object/destroy", methods=['POST'])
+@obj_view.route("/story/object/destroy", methods=['POST'])
 @authentication_required
 def object_destroy():
     story = Story.get(request.form['story_id'])
@@ -92,7 +92,7 @@ def object_destroy():
     return '{"status":"ok"}'
 
 
-@sv.route("/story/object/indiv")
+@obj_view.route("/story/object/indiv")
 @authentication_required
 @check_header
 def object_indiv():
