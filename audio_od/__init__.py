@@ -2,9 +2,9 @@ import os
 
 from flask import Flask
 
-app = Flask(__name__)
-
 import config
+
+app = Flask(__name__)
 
 app.config['SECRET_KEY'] = config.secret_key
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
@@ -37,6 +37,7 @@ from audio_od.StoryView.eventroutes import ev_view as ev_bp
 from audio_od.StoryView.locationroutes import loc_view as loc_bp
 from audio_od.StoryView.storyobjectroutes import obj_view as obj_bp
 from audio_od.StoryView.storyroutes import story_view as story_bp
+from audio_od.Dashboard.routes import dash_view as dash_db
 
 app.register_blueprint(home_bp)
 app.register_blueprint(auth_bp)
@@ -47,5 +48,7 @@ app.register_blueprint(ev_bp)
 app.register_blueprint(loc_bp)
 app.register_blueprint(obj_bp)
 app.register_blueprint(story_bp)
+app.register_blueprint(dash_db)
+
 
 from audio_od import utils
