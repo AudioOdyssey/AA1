@@ -103,7 +103,7 @@ def checkAdmin(uid):
 @check_header
 def forbidden_403(e):
     # Pretend all 403s are 404s for security purposes
-    return render_template('error/404.html'), 403
+    return render_template('error/404.html'), 404
 
 
 @app.errorhandler(404)

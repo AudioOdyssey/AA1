@@ -19,6 +19,8 @@ from audio_od.utils import authentication_required, check_header, checkEditorAdm
 verification = Blueprint('verification', __name__)
 
 
+@app.route("/verification")
+@app.route("/verification/")
 @verification.route("/verification/view")
 @authentication_required
 @check_header
@@ -44,7 +46,7 @@ def verification_review():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
-    return render_template("verification/review.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+    return render_template("verification/review.html", StoryObject=StoryObject, StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
 @verification.route("/verification/review/update", methods=['POST'])
@@ -62,17 +64,17 @@ def review_update():
     if entity_type.lower() == 'object':
         obj = StoryObject.get(story_id, ent_id)
         obj.reviewer_comments = reviewer_comment
-        obj.is_verified = is_verified
+        obj.verification_status = is_verified
         obj.update_admin()
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
         loc.reviewer_comments = reviewer_comment
-        loc.is_verified = is_verified
+        obj.verification_status = is_verified
         loc.update_admin()
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
         evnt.reviewer_comments = reviewer_comment
-        evnt.is_verified = is_verified
+        obj.verification_status = is_verified
         evnt.update_admin()
     elif entity_type.lower() == 'story':
         story = Story.get(story_id)
@@ -85,13 +87,13 @@ def review_update():
             story.story_in_store = True
         if int(is_verified) == 2:
             story.verification_status = is_verified
-            story.story_in_store=False
+            story.story_in_store = False
         story.update_verify()
     else:
         loc_id = details['loc_id']
         dec = StoryDecision.get(story_id, loc_id, ent_id)
         dec.reviewer_comments = reviewer_comment
-        dec.is_verified = is_verified
+        dec.verification_status = is_verified
         dec.update_admin()
     return '{"status":"ok"}'
 
@@ -102,15 +104,15 @@ def review_update():
 def verification_story():
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
-    uid = getUid()
-    if not checkEditorAdmin(uid):
+    story = Story.get(int(request.args['story_id']))
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_id = request.args["story_id"]
     locations = StoryLocation.loc_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
-    return render_template("verification/status.html", events=events, story_id=story_id, locations=locations, decisions=decisions, objects=objects)
+    return render_template("verification/status.html", events=events, story=story, locations=locations, decisions=decisions, objects=objects)
 
 
 @verification.route("/verification/submit", methods=["POST"])
@@ -155,6 +157,8 @@ def treeview():
     #     return redirect(url_for("session_new"))
     story_id = request.args['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     locations = StoryLocation.loc_list(story_id)
@@ -198,6 +202,8 @@ def story_run():
     #     return redirect(url_for("session_new"))
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = request.args.get("location_id")
@@ -227,17 +233,13 @@ def story_run():
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
 
 
-@verification.route("/verification/help")
-@authentication_required
+@verification.route("/help/verification")
 @check_header
 def vhelp():
-    return render_template("verification/help.html")
+    return render_template("help/verification.html")
 
 
-@verification.route("/story/treeview_help")
-@authentication_required
+@verification.route("/help/treeview")
 @check_header
 def treeview_help():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    return render_template("story/treeview_help.html", story=story)
+    return render_template("help/treeview.html")

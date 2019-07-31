@@ -17,6 +17,8 @@ loc_view = Blueprint("loc", __name__)
 def location_show():
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     locations = StoryLocation.loc_list(story_id)
@@ -29,6 +31,8 @@ def location_show():
 def location_new():
     story_id = request.args['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc = StoryLocation(story_id)
@@ -44,6 +48,8 @@ def location_update():
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     loc_id = details['loc_id']
@@ -60,6 +66,8 @@ def location_update():
     if next_location_id is None:
         next_location_id = 0
     loc = StoryLocation.get(story_id, loc_id)
+    if loc is None:
+        abort(404)
     loc.update(story_id, loc_id, name, original_desc, short_desc,
                post_event_description, event_id, next_location_id)
     loc.verification_status = 0
@@ -73,6 +81,8 @@ def location_update():
 @authentication_required
 def location_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryLocation.loc_del(request.form['story_id'], request.form['loc_id'])
@@ -87,10 +97,14 @@ def location_destroy():
 def location_indiv():
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     location = StoryLocation.get(story_id, location_id)
+    if location is None:
+        abort(404)
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/indiv.html", location=location, locations=locations, events=events, story_id=story_id, location_id=location_id)

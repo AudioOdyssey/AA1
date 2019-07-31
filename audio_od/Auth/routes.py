@@ -176,7 +176,7 @@ def google_callback(remote, token, userinfo):
     usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd, signed_in_with="Google")
     result = usr.search_by_email()
     if result == -1:
-        result.add_to_server()
+        usr.add_to_server()
     else:
         usr = User.get(result)
     resp = make_response(redirect(url_for('home.index')))
@@ -197,13 +197,15 @@ app.register_blueprint(google_bp, url_prefix='/google')
 
 
 def facebook_callback(remote, token, user_info):
+    if user_info is None:
+        return render_template("user/new.html", error="User declined authorization through Facebook")
     username = user_info['given_name']+user_info['family_name']
     email=user_info['email']
     passwd = os.urandom(16).decode('latin-1')
     usr = User(username_input=username, email_input=email, first_name_input=user_info['given_name'], last_name_input=user_info['family_name'], password_input = passwd, signed_in_with="Facebook")
     result = usr.search_by_email()
     if result == -1:
-        result.add_to_server()
+        usr.add_to_server()
     else:
         usr = User.get(result)
     resp = make_response(redirect(url_for('home.index')))
@@ -268,7 +270,7 @@ def password_request():
             result = usr.search_by_email()
             if result != -1:
                 usr = User.get(result)
-                if usr.signed_in_with != "native" or usr.signed_in_with != '':
+                if usr.signed_in_with != "native":
                     error = "You signed in with " + usr.signed_in_with + "."
                     return render_template("session/new.html", error=error)
             else:

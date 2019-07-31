@@ -19,10 +19,10 @@ userprofile = Blueprint("Users", __name__)
 @check_header
 def user_update():
     user = g.user
-    user.username = request.form.get('username')
-    user.first_name = request.form.get('first-name')
-    user.last_name = request.form.get('last-name')
-    if isValidEmail(request.form.get('email')):
+    user.username = request.form.get('username', '')
+    user.first_name = request.form.get('first-name', '')
+    user.last_name = request.form.get('last-name', '')
+    if isValidEmail(request.form.get('email', '')):
         user.email = request.form.get('email')
     user.update_user_info()
     return '{"status":"ok"}'
@@ -74,11 +74,13 @@ def put_profile():
 
 
 @userprofile.route("/dashboard")
+@app.route("/dashboard/")
 @authentication_required
 @check_header
 def dashboard():
     stories = Story.story_list_by_creatordate(g.uid)
-    return render_template("/dash/index.html", stories=stories, base_url="")
+    base_url = base64.b64encode("/dash/story".encode()).decode("utf-8")
+    return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
 @userprofile.route('/dashboard/<path:page>')
@@ -87,7 +89,6 @@ def dashboard():
 def dashboard_full(page):
     stories = Story.story_list_by_creatordate(g.uid)
     base_url = base64.b64encode(request.full_path[10:].encode()).decode("utf-8")
-    print(base_url)
     return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
@@ -95,7 +96,11 @@ def dashboard_full(page):
 @authentication_required
 @check_header
 def dash_story():
-    stories = Story.story_list_by_creatordate(g.uid)
+    raw_stories = Story.story_list_by_creatordate(g.uid)
+    stories = []
+    for story in raw_stories:
+        if story.verification_status != 3:
+            stories.append(story)
     return render_template("/dash/story.html", stories=stories)
 
 
@@ -104,7 +109,7 @@ def dash_story():
 @check_header
 def dash_share():
     stories = Story.story_shares_by_uid(g.user.user_id)
-    return render_template("/dash/story.html", stories=stories)
+    return render_template("/dash/shared.html", stories=stories)
 
 
 @userprofile.route("/dash/user")
@@ -115,7 +120,37 @@ def dash_user():
     return render_template("/dash/user.html", userimage=userimage)
 
 
+@userprofile.route("/dash/verified")
+@authentication_required
+@check_header
+def dash_verified():
+    raw_stories = Story.story_list_by_creatordate(g.user.user_id)
+    stories = []
+    for story in raw_stories:
+        if story.verification_status == 3 and story.story_in_store != 1:
+            stories.append(story)
+    return render_template("/dash/verified.html", stories=stories)
+
+
+@app.route("/dash/published")
+@authentication_required
+@check_header
+def dash_published():
+    raw_stories = Story.story_list_by_creatordate(g.user.user_id)
+    stories = []
+    for story in raw_stories:
+        if story.story_in_store == 1:
+            stories.append(story)
+    return render_template("/dash/published.html", stories=stories)
+
+
 @userprofile.route("/app/library/", methods=['GET'])
 def stories_show_owned_by_user():
     user_id = decode_auth_token(request.args.get("auth"))
     return Story.json_story_library(user_id)
+
+
+@userprofile.route("/help")
+@check_header
+def index_help():
+    return render_template("help/index.html")

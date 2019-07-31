@@ -18,6 +18,8 @@ story_view = Blueprint("story", __name__)
 @check_header
 def story_update():
     story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     objects = StoryObject.obj_list(request.args['story_id'])
@@ -33,9 +35,10 @@ def story_update():
 @check_header
 def story_image():
     story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    # print(story.get_image_base64())
     return story.get_image_base64()
 
 
@@ -49,6 +52,8 @@ def story_update_post():
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     story_title = details['story_title']
@@ -79,6 +84,8 @@ def story_update_post():
 @authentication_required
 def story_destroy():
     story = Story.get(request.args['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkAdmin(getUid()):
         abort(403)
     Story.destroy(request.args['story_id'])
@@ -120,8 +127,23 @@ def app_store_expand():
     return Story.get_info(story_id)
 
 
-@story_view.route("/story/help")
-@authentication_required
+@story_view.route("/help/story")
 @check_header
 def help():
-    return render_template("story/help.html")
+    return render_template("help/story.html")
+
+
+@story_view.route("/story/publish", methods=["POST"])
+@authentication_required
+@check_header
+def story_publish():
+    story = Story.get(int(request.args['story_id']))
+    if story is None:
+        abort(404)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
+    if story.verification_status != 3:
+        abort(403)
+    story.story_in_store = 1
+    story.update_verify()
+    return '{"status":"ok"}'

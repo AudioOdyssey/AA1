@@ -16,6 +16,8 @@ ev_view = Blueprint("ev", __name__)
 def event_show():
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     events = StoryEvent.event_list(story_id)
@@ -30,6 +32,8 @@ def event_update():
         details = request.form
         story_id = details['story_id']
         story = Story.get(story_id)
+        if story is None:
+            abort(404)
         if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
             abort(403)
         event_id = details['event_id']
@@ -46,6 +50,8 @@ def event_update():
         else:
             is_global = True
         evnt = StoryEvent.get(story_id, event_id)
+        if evnt is None:
+            abort(404)
         evnt.verification_status = 0
         evnt.update_admin()
         story.verification_status = 0
@@ -60,6 +66,8 @@ def event_new():
     details = request.args
     story_id = details['story_id']
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     evnt = StoryEvent(story_id)
@@ -73,6 +81,8 @@ def event_new():
 @authentication_required
 def event_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryEvent.event_del(request.form['story_id'], request.form['event_id'])
@@ -87,9 +97,13 @@ def event_destroy():
 def event_indiv():
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     event_id = request.args["event_id"]
     event = StoryEvent.get(story_id, event_id)
+    if event is None:
+        abort(404)
     locations = StoryLocation.loc_list(story_id)
     return render_template("story/event/indiv.html", StoryLocation=StoryLocation, event=event, locations=locations, story_id=story_id, event_id=event_id)

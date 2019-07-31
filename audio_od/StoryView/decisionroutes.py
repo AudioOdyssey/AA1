@@ -18,11 +18,15 @@ dec_view = Blueprint("dec", __name__)
 def decision_indiv():
     story_id = request.args["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
     decision = StoryDecision.get(story_id, location_id, decision_id)
+    if decision is None:
+        abort(404)
     objects = StoryObject.obj_list(story_id)
     events = StoryEvent.event_list(story_id)
     locations = StoryLocation.loc_list(story_id)
@@ -34,16 +38,14 @@ def decision_indiv():
 @check_header
 def decision_show():
     story = Story.get(request.args['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
-    decisions = StoryDecision.dec_list_for_story_loc(
-        request.args['story_id'], request.args['location_id'])
-    locations = StoryLocation.loc_list(
-        request.args['story_id'])
-    location = StoryLocation.get(
-        request.args['story_id'], request.args['location_id'])
-    objects = StoryObject.obj_list(
-        request.args['story_id'])
+    decisions = StoryDecision.dec_list_for_story_loc(request.args['story_id'], request.args['location_id'])
+    locations = StoryLocation.loc_list(request.args['story_id'])
+    location = StoryLocation.get(request.args['story_id'], request.args['location_id'])
+    objects = StoryObject.obj_list(request.args['story_id'])
   #  print(objects)
    # print(objects[0].obj_name)
     events = StoryEvent.event_list(
@@ -57,6 +59,8 @@ def decision_update():
     details = request.form
     story_id = details["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
@@ -118,6 +122,8 @@ def decision_update():
     if locked_by_event_desc is None:
         locked_by_event_desc = ""
     dec = StoryDecision.get(story_id, location_id, decision_id)
+    if dec is None:
+        abort(404)
     dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,
                show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
     dec.verification_status = 0
@@ -136,9 +142,14 @@ def decision_new():
     details = request.args
     story_id = details["story_id"]
     story = Story.get(story_id)
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     location_id = details["location_id"]
+    loc = StoryLocation.get(story_id, location_id)
+    if loc is None:
+        abort(404)
     dec = StoryDecision(story_id, location_id)
     dec.add_to_server()
     loc = StoryLocation.get(story_id, location_id)
@@ -153,6 +164,8 @@ def decision_new():
 @authentication_required
 def decision_destroy():
     story = Story.get(request.form['story_id'])
+    if story is None:
+        abort(404)
     if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
         abort(403)
     StoryDecision.dec_del(
