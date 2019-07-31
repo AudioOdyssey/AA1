@@ -7,7 +7,6 @@ from flask import Flask, redirect, render_template, request, url_for, make_respo
 
 
 #Internal imports
-from audio_od import app
 from StoryView import sv
 from models import Story, StoryLocation, StoryDecision
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid

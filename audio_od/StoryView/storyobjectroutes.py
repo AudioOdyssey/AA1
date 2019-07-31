@@ -6,7 +6,6 @@ import sys
 from flask import render_template, request
 
 #Internal imports
-from audio_od import app
 from StoryView import sv
 from models import Story, StoryObject, StoryLocation, StoryEvent
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
