@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 #Third-party libraries
-from flask import redirect, request, url_for, make_response, session, g
+from flask import redirect, request, render_template, url_for, make_response, session, g
 import jwt
 
 #internal imports
@@ -97,3 +97,22 @@ def checkEditorAdmin(uid):
 def checkAdmin(uid):
     user = User.get(uid)
     return user.is_admin
+
+
+@app.errorhandler(403)
+@check_header
+def forbidden_403(e):
+    # Pretend all 403s are 404s for security purposes
+    return render_template('error/404.html'), 403
+
+
+@app.errorhandler(404)
+@check_header
+def page_not_found_404(e):
+    return render_template('error/404.html'), 404
+
+
+@app.errorhandler(500)
+@check_header
+def server_error_500(e):
+    return render_template('error/500.html'), 500

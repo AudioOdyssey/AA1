@@ -8,11 +8,11 @@ from flask import Flask, redirect, render_template, request, url_for, make_respo
 
 #Internal imports
 from audio_od import app
-import StoryView
+from StoryView import sv
 from models import Story, StoryLocation, StoryDecision
-from auth import authentication_required, check_header, checkEditorAdmin, getUid
+from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
-@StoryView.route("/story/location/decision/indiv")
+@sv.route("/story/location/decision/indiv")
 @authentication_required
 @check_header
 def decision_indiv():
@@ -29,7 +29,7 @@ def decision_indiv():
     return render_template("story/location/decision/indiv.html", locations=locations, decision=decision, story_id=story_id, decision_id=decision_id, events=events, objects=objects)
 
 
-@StoryView.route("/story/location/decision/show")
+@sv.route("/story/location/decision/show")
 @authentication_required
 @check_header
 def decision_show():
@@ -51,7 +51,7 @@ def decision_show():
     return render_template("story/location/decision/show.html", StoryLocation=StoryLocation, decisions=decisions, events=events, objects=objects, story_id=request.args['story_id'], locations=locations, location=location)
 
 
-@StoryView.route("/story/location/decision/update", methods=['POST'])
+@sv.route("/story/location/decision/update", methods=['POST'])
 @authentication_required
 def decision_update():
     details = request.form
@@ -130,7 +130,7 @@ def decision_update():
     return '{"status":"ok"}'
 
 
-@StoryView.route("/story/location/decision/new", methods=['POST'])
+@sv.route("/story/location/decision/new", methods=['POST'])
 @authentication_required
 def decision_new():
     details = request.args
@@ -149,7 +149,7 @@ def decision_new():
     return '{"status":"ok","decision":{"decision_id":' + str(dec.decision_id) + '}}'
 
 
-@StoryView.route("/story/location/decision/destroy", methods=['POST'])
+@sv.route("/story/location/decision/destroy", methods=['POST'])
 @authentication_required
 def decision_destroy():
     story = Story.get(request.form['story_id'])

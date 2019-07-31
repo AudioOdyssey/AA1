@@ -7,12 +7,12 @@ from flask import render_template, request
 
 #Internal imports
 from audio_od import app
-import StoryView
+from StoryView import sv
 from models import Story, StoryLocation, StoryEvent
-from auth import authentication_required, check_header, checkEditorAdmin, getUid
+from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
 
-@StoryView.route("/story/location/show")
+@sv.route("/story/location/show")
 @authentication_required
 @check_header
 def location_show():
@@ -25,7 +25,7 @@ def location_show():
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
 
-@StoryView.route('/story/location/new', methods=['POST'])
+@sv.route('/story/location/new', methods=['POST'])
 @authentication_required
 def location_new():
     story_id = request.args['story_id']
@@ -39,7 +39,7 @@ def location_new():
     return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
 
 
-@StoryView.route('/story/location/update', methods=['POST'])
+@sv.route('/story/location/update', methods=['POST'])
 @authentication_required
 def location_update():
     details = request.form
@@ -70,7 +70,7 @@ def location_update():
     return '{"status":"ok"}'
 
 
-@StoryView.route("/story/location/destroy", methods=['POST'])
+@sv.route("/story/location/destroy", methods=['POST'])
 @authentication_required
 def location_destroy():
     story = Story.get(request.form['story_id'])
@@ -82,7 +82,7 @@ def location_destroy():
     return '{"status":"ok"}'
 
 
-@StoryView.route("/story/location/indiv")
+@sv.route("/story/location/indiv")
 @authentication_required
 @check_header
 def location_indiv():

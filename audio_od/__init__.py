@@ -31,7 +31,7 @@ from audio_od.Auth.routes import auth as auth_bp
 from audio_od.Home.routes import home as home_bp
 from audio_od.Verification.routes import verification as verif_bp
 from audio_od.Users.routes import userprofile as user_bp
-from audio_od.StoryView import StoryView as sv_bp
+from audio_od.StoryView import sv as sv_bp
 
 app.register_blueprint(home_bp)
 app.register_blueprint(auth_bp)

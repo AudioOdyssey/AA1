@@ -7,12 +7,12 @@ from flask import render_template, request
 
 #Internal imports
 from audio_od import app
-import StoryView
+from StoryView import sv
 from models import Story, StoryObject, StoryLocation, StoryEvent
-from auth import authentication_required, check_header, checkEditorAdmin, getUid
+from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
 
-@StoryView.route("/story/object/show")
+@sv.route("/story/object/show")
 @authentication_required
 @check_header
 def object_show():
@@ -26,7 +26,7 @@ def object_show():
     return render_template("story/object/show.html", locations=locations, events=events, objects=objects, story_id=story_id)
 
 
-@StoryView.route("/story/object/update", methods=['POST'])
+@sv.route("/story/object/update", methods=['POST'])
 @authentication_required
 def object_update():
     details = request.form
@@ -64,11 +64,10 @@ def object_update():
     story.update_verify()
     obj.update(story_id, object_id, name=name, starting_loc=starting_loc,
                desc=desc, can_pickup_obj=can_pickup_obj, is_hidden=is_hidden)
-    # return redirect(url_for("object_show"))
     return "ok"
 
 
-@StoryView.route("/story/object/new", methods=['POST'])
+@sv.route("/story/object/new", methods=['POST'])
 @authentication_required
 def object_new():
     story_id = request.args["story_id"]
@@ -82,7 +81,7 @@ def object_new():
     return '{"status":"ok","object":{"obj_id":' + str(obj.obj_id) + '}}'
 
 
-@StoryView.route("/story/object/destroy", methods=['POST'])
+@sv.route("/story/object/destroy", methods=['POST'])
 @authentication_required
 def object_destroy():
     story = Story.get(request.form['story_id'])
@@ -94,7 +93,7 @@ def object_destroy():
     return '{"status":"ok"}'
 
 
-@StoryView.route("/story/object/indiv")
+@sv.route("/story/object/indiv")
 @authentication_required
 @check_header
 def object_indiv():

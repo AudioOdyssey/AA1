@@ -1,3 +1,7 @@
 from flask import Blueprint
 
-StoryView = Blueprint('StoryView', __name__)
+from audio_od import app
+
+sv = Blueprint('StoryView', __name__)
+
+from StoryView import decisionroutes, eventroutes, locationroutes, storyobjectroutes, storyroutes
