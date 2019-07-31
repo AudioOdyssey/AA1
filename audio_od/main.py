@@ -1145,7 +1145,7 @@ def verification_review():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
-    return render_template("verification/review.html", StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+    return render_template("verification/review.html", StoryObject=StoryObject, StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
 
 
 @app.route("/verification/review/update", methods=['POST'])
