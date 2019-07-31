@@ -23,13 +23,13 @@ def index():
         if token is None or not decode_auth_token(token):
             return render_template("index.html")
         else:
-            return redirect(url_for('Users.dashboard'))
+            return redirect(url_for('dash.dashboard'))
     else:
         user_id = decode_auth_token(auth_token)
         if user_id == 'Signature expired. Please log in again.' or user_id == 0:
             return render_template('index.html')
         else:
-            return redirect(url_for('Users.dashboard'))
+            return redirect(url_for('dash.dashboard'))
     return render_template('index.html')
 
 
