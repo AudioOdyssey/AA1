@@ -127,12 +127,6 @@ def app_store_expand():
     return Story.get_info(story_id)
 
 
-@story_view.route("/help/story")
-@check_header
-def help():
-    return render_template("help/story.html")
-
-
 @story_view.route("/story/publish", methods=["POST"])
 @authentication_required
 @check_header

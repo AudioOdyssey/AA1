@@ -231,15 +231,3 @@ def story_run():
             backs.append(StoryLocation.get(story_id, back))
 
     return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
-
-
-@verification.route("/help/verification")
-@check_header
-def vhelp():
-    return render_template("help/verification.html")
-
-
-@verification.route("/help/treeview")
-@check_header
-def treeview_help():
-    return render_template("help/treeview.html")

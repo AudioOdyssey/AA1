@@ -85,9 +85,3 @@ def put_profile():
 def stories_show_owned_by_user():
     user_id = decode_auth_token(request.args.get("auth"))
     return Story.json_story_library(user_id)
-
-
-@userprofile.route("/help")
-@check_header
-def index_help():
-    return render_template("help/index.html")
