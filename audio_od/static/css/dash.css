@@ -4,7 +4,7 @@ body {
 
 #dash-content {
 	flex-grow: 1;
-	overflow-y: scroll;
+	overflow-y: auto;
 	padding: 2rem;
 	width: min-content;
 }
