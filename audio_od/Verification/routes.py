@@ -25,6 +25,7 @@ verification = Blueprint('verification', __name__)
 @authentication_required
 @check_header
 def verification_view():
+    """endpoint to view all the stories ready for verification. If the user does not have correct permissions, then a 403 will be thrown."""
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     if not checkEditorAdmin(getUid()):
@@ -37,6 +38,7 @@ def verification_view():
 @authentication_required
 @check_header
 def verification_review():
+    """endpoint to view all the information within the story. If the user does not have correct permissions, then a 403 will be thrown."""
     uid = getUid()
     if not checkEditorAdmin(uid):
         abort(403)
@@ -46,12 +48,16 @@ def verification_review():
     locations = StoryLocation.loc_list(story_id)
     events = StoryEvent.event_list(story_id)
     decisions = StoryDecision.dec_list_story(story_id)
-    return render_template("verification/review.html", StoryObject=StoryObject, StoryLocation=StoryLocation, StoryEvent=StoryEvent, story=story, story_id=story_id, objects=objects, locations=locations, events=events, decisions=decisions)
+    return render_template("verification/review.html", StoryObject=StoryObject, StoryLocation=StoryLocation, 
+        StoryEvent=StoryEvent, story=story, story_id=story_id, 
+        objects=objects, locations=locations, events=events, decisions=decisions)
 
 
 @verification.route("/verification/review/update", methods=['POST'])
 @authentication_required
 def review_update():
+    """endpoint that allows editors to leave comments and verify stories and the entities within the story.
+     If the user does not have correct permissions, then a 403 will be thrown."""
     uid = getUid()
     if not checkEditorAdmin(uid):
         abort(403)
@@ -102,6 +108,7 @@ def review_update():
 @authentication_required
 @check_header
 def verification_story():
+    """Endpoint allows the editors to see the verification status of the story. If the user does not have correct permissions, then a 403 will be thrown."""
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     story = Story.get(int(request.args['story_id']))
@@ -119,6 +126,8 @@ def verification_story():
 @authentication_required
 @check_header
 def verification_submit():
+    """endpoint to decide whether the story is ready for store. If any of the entities within the story is not ready, then the story will not be ready for verification.
+    If the user does not have correct permissions, then a 403 will be thrown."""
     details = request.args
     story_id = details['story_id']
     story = Story.get(story_id)
@@ -149,34 +158,11 @@ def verification_submit():
     return '{"status":"ok"}'
 
 
-@verification.route("/story/treeview")
-@authentication_required
-@check_header
-def treeview():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    if story is None:
-        abort(404)
-    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
-        abort(403)
-    locations = StoryLocation.loc_list(story_id)
-    loc_id = request.args.get('location_id')
-    decisions = []
-    location = None
-    if loc_id is not None:
-        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
-        location = StoryLocation.get(story_id, loc_id)
-    else:
-        loc_id = 0
-    return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
-
-
 @verification.route("/verification/treeview")
 @authentication_required
 @check_header
 def verify_treeview():
+    """Allows the editors to verify the story in a treeview format. Works the same as the storyroutes/treeview endpoint"""
     # if "logged_in" not in session:
     #     return redirect(url_for("session_new"))
     uid = getUid()
@@ -192,42 +178,3 @@ def verify_treeview():
 
     location = StoryLocation.get(story_id, loc_id)
     return render_template("verification/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
-
-
-@verification.route("/story/run")
-@authentication_required
-@check_header
-def story_run():
-    # if "logged_in" not in session:
-    #     return redirect(url_for("session_new"))
-    story_id = request.args["story_id"]
-    story = Story.get(story_id)
-    if story is None:
-        abort(404)
-    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
-        abort(403)
-    loc_id = request.args.get("location_id")
-    location = None
-    if loc_id is None:
-        loc_id = story.starting_loc
-    location = StoryLocation.get(story_id, loc_id)
-    decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
-    objects = StoryObject.obj_list_loc(story_id, loc_id)
-
-    cookies = request.cookies
-    rundata = cookies.get("rundata")
-    inv = []
-    evts = []
-    triggered = []
-    backs = []
-    if not rundata is None:
-        obj = json.loads(rundata)
-        for itm in obj['items']:
-            inv.append(StoryObject.get(story_id, itm))
-        for ent in obj['events']:
-            evts.append(StoryEvent.get(story_id, ent))
-        triggered = obj['decs']
-        for back in obj['back']:
-            backs.append(StoryLocation.get(story_id, back))
-
-    return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)

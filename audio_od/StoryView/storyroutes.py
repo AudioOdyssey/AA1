@@ -154,3 +154,65 @@ def story_publish():
     story.story_in_store = 1
     story.update_verify()
     return '{"status":"ok"}'
+
+@story_view.route("/story/treeview")
+@authentication_required
+@check_header
+def treeview():
+    """This allows the writer to see all the story in a treeview, rather than the conventional in-line mode. 
+    Users can click on the decisions to see what the next locations will contain.If the user does not have correct permissions, then a 403 will be thrown.
+    If the story does not exist, a 404 will be thrown."""
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    if story is None:
+        abort(404)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
+    locations = StoryLocation.loc_list(story_id)
+    loc_id = request.args.get('location_id')
+    decisions = []
+    location = None
+    if loc_id is not None:
+        decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+        location = StoryLocation.get(story_id, loc_id)
+    else:
+        loc_id = 0
+    return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
+
+
+@story_view.route("/story/run")
+@authentication_required
+@check_header
+def story_run():
+    """Allows the user to test the way the story plays. Functions the same the execution cycle in the app functions. The writer can play the story with this endpoint. 
+    If the user doesn't have correct permissions, then a 403 will be thrown. If the story does not exist, then a 404 will be thrown."""
+    story_id = request.args["story_id"]
+    story = Story.get(story_id)
+    if story is None:
+        abort(404)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
+    loc_id = request.args.get("location_id")
+    location = None
+    if loc_id is None:
+        loc_id = story.starting_loc
+    location = StoryLocation.get(story_id, loc_id)
+    decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
+    objects = StoryObject.obj_list_loc(story_id, loc_id)
+
+    cookies = request.cookies
+    rundata = cookies.get("rundata")
+    inv = []
+    evts = []
+    triggered = []
+    backs = []
+    if not rundata is None:
+        obj = json.loads(rundata)
+        for itm in obj['items']:
+            inv.append(StoryObject.get(story_id, itm))
+        for ent in obj['events']:
+            evts.append(StoryEvent.get(story_id, ent))
+        triggered = obj['decs']
+        for back in obj['back']:
+            backs.append(StoryLocation.get(story_id, back))
+    return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
