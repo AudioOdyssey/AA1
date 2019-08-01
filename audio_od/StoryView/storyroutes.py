@@ -17,6 +17,8 @@ story_view = Blueprint("story", __name__)
 @authentication_required
 @check_header
 def story_update():
+    """Endpoint for updating objects. If the wrong user is accessing the story, a 403 will be thrown. 
+    If the story does not exist, a 404 will be thrown."""
     story = Story.get(int(request.args['story_id']))
     if story is None:
         abort(404)
@@ -34,6 +36,8 @@ def story_update():
 @authentication_required
 @check_header
 def story_image():
+    """Endpoint for viewing story covers images. If the wrong user is accessing the story,
+    a 403 will be thrown. If the story does not exist, a 404 will be thrown. """
     story = Story.get(int(request.args['story_id']))
     if story is None:
         abort(404)
@@ -49,6 +53,8 @@ valid_genres = {"Mystery", "Romance", "Sci-Fi", "Fantasy", "Historical Fiction",
 @story_view.route("/story/update", methods=["POST"])
 @authentication_required
 def story_update_post():
+    """Endpoint for updating stories. If the wrong user is accessing the story,
+    a 403 will be thrown. If the story does not exist, a 404 will be thrown. The GET and POST methods are done asynchrously."""
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
@@ -83,6 +89,8 @@ def story_update_post():
 @story_view.route("/story/destroy", methods=["POST"])
 @authentication_required
 def story_destroy():
+    """Endpoint for destroying.If the wrong user is accessing the story,
+    a 403 will be thrown. If the story does not exist, a 404 will be thrown."""
     story = Story.get(request.args['story_id'])
     if story is None:
         abort(404)
@@ -103,6 +111,7 @@ def allowed_file(file):
 @story_view.route("/story/new", methods=["POST"])
 @authentication_required
 def story_new():
+    """Endpoint for creating new stories. A json with the story_id and status is returned."""
     uid = getUid()
     story = Story(user_creator_id=uid)
     story.story_synopsis = ""
@@ -112,16 +121,19 @@ def story_new():
 
 @story_view.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
+    """Returns all the objects, locations, decisions, events in the story. Also, returns the story cover. This endpoint is for the app."""
     return Story.get_entities(int(request.args.get('story_id')))
 
 
 @story_view.route("/app/store", methods=["GET"])
 def app_store_info():
+    """Endpoint for app. Sends all the stories ready for the store. Returns basic info, such as price, author, genre, synopsis of the story"""
     return Story.display_for_store()
 
 
 @story_view.route("/store/story/info", methods=['GET'])
 def app_store_expand():
+    """Endpoint for app. If user taps on the story, more info about the story will be given."""
     details = request.json
     story_id = details.get("story_id")
     return Story.get_info(story_id)
@@ -131,6 +143,7 @@ def app_store_expand():
 @authentication_required
 @check_header
 def story_publish():
+    """Endpoint for allowing users to publish stories. IF successful, will return a json with the status"""
     story = Story.get(int(request.args['story_id']))
     if story is None:
         abort(404)

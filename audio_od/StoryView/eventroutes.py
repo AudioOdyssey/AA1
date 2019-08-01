@@ -14,6 +14,8 @@ ev_view = Blueprint("ev", __name__)
 @authentication_required
 @check_header
 def event_show():
+    """Endpoint for viewing all the events. If the story of the event isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the event does not exist, a 404 will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:
@@ -28,6 +30,8 @@ def event_show():
 @ev_view.route('/story/event/update', methods=['POST'])
 @authentication_required
 def event_update():
+    """Endpoint for updating events. If the story of the events isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the event does not exist, a 404 will be thrown."""
     if request.method == 'POST':
         details = request.form
         story_id = details['story_id']
@@ -63,6 +67,8 @@ def event_update():
 @ev_view.route('/story/event/new', methods=['POST'])
 @authentication_required
 def event_new():
+    """Endpoint for creating new events. If the story of the event isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the event does not exist, a 404 will be thrown."""
     details = request.args
     story_id = details['story_id']
     story = Story.get(story_id)
@@ -80,6 +86,8 @@ def event_new():
 @ev_view.route("/story/event/destroy", methods=['POST'])
 @authentication_required
 def event_destroy():
+    """Endpoint for deleting individual events. If the story of the event isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the event does not exist, a 404 will be thrown."""
     story = Story.get(request.form['story_id'])
     if story is None:
         abort(404)
@@ -95,6 +103,8 @@ def event_destroy():
 @authentication_required
 @check_header
 def event_indiv():
+    """Endpoint for viewing individual events. If the story of the event isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the event does not exist, a 404 will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:

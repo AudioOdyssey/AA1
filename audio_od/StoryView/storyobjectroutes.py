@@ -15,6 +15,8 @@ obj_view = Blueprint("obj", __name__)
 @authentication_required
 @check_header
 def object_show():
+    """Endpoint for viewing all the objects. If the story of the object isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the object does not exist, a 404 will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:
@@ -30,6 +32,8 @@ def object_show():
 @obj_view.route("/story/object/update", methods=['POST'])
 @authentication_required
 def object_update():
+    """Endpoint for updating objects. If the story of the object isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the object does not exist, a 404 will be thrown."""
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
@@ -75,6 +79,8 @@ def object_update():
 @obj_view.route("/story/object/new", methods=['POST'])
 @authentication_required
 def object_new():
+    """Endpoint for creating new objects. If the story of the object isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the object does not exist, a 404 will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:
@@ -91,6 +97,8 @@ def object_new():
 @obj_view.route("/story/object/destroy", methods=['POST'])
 @authentication_required
 def object_destroy():
+    """Endpoint for deleting individual objects. If the story of the objects isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the objects does not exist, a 404 will be thrown."""
     story = Story.get(request.form['story_id'])
     if story is None:
         abort(404)
@@ -106,6 +114,8 @@ def object_destroy():
 @authentication_required
 @check_header
 def object_indiv():
+    """Endpoint for viewing individual objects. If the story of the object isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the object does not exist, a 404 will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:

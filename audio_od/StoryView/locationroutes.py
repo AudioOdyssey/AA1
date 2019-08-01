@@ -15,6 +15,8 @@ loc_view = Blueprint("loc", __name__)
 @authentication_required
 @check_header
 def location_show():
+    """Endpoint for viewing all the locations. If the story of the location isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the location does not exist, a 404 will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:
@@ -25,26 +27,11 @@ def location_show():
     events = StoryEvent.event_list(story_id)
     return render_template("story/location/show.html", locations=locations, events=events, story_id=story_id)
 
-
-@loc_view.route('/story/location/new', methods=['POST'])
-@authentication_required
-def location_new():
-    story_id = request.args['story_id']
-    story = Story.get(story_id)
-    if story is None:
-        abort(404)
-    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
-        abort(403)
-    loc = StoryLocation(story_id)
-    loc.add_to_server()
-    story.verification_status = 0
-    story.update_verify()
-    return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
-
-
 @loc_view.route('/story/location/update', methods=['POST'])
 @authentication_required
 def location_update():
+    """Endpoint for updating locations. If the story of the location isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the location does not exist, a 404 will be thrown."""
     details = request.form
     story_id = details['story_id']
     story = Story.get(story_id)
@@ -77,9 +64,32 @@ def location_update():
     return '{"status":"ok"}'
 
 
+@loc_view.route('/story/location/new', methods=['POST'])
+@authentication_required
+def location_new():
+    """Endpoint for creating new locations. If the story of the location isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the location does not exist, a 404 will be thrown."""
+    story_id = request.args['story_id']
+    story = Story.get(story_id)
+    if story is None:
+        abort(404)
+    if story.user_creator_id != getUid() and not checkEditorAdmin(getUid()):
+        abort(403)
+    loc = StoryLocation(story_id)
+    loc.add_to_server()
+    story.verification_status = 0
+    story.update_verify()
+    return '{"status":"ok","location":{"location_id":' + str(loc.location_id) + '}}'
+
+
+
+
+
 @loc_view.route("/story/location/destroy", methods=['POST'])
 @authentication_required
 def location_destroy():
+    """Endpoint for deleting individual locations. If the story of the locations isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the locations does not exist, a 404 will be thrown."""
     story = Story.get(request.form['story_id'])
     if story is None:
         abort(404)
@@ -95,6 +105,8 @@ def location_destroy():
 @authentication_required
 @check_header
 def location_indiv():
+    """Endpoint for viewing individual locations. If the story of the locations isn't first chosen, then a 404 will be thrown. If the wrong user is accessing the story,
+    a 403 will be thrown. If the location does not exist, a 404 will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:

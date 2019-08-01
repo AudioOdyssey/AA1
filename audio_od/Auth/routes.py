@@ -241,7 +241,7 @@ def issue_new_token():
     with a 200 will be sent back to the app."""
     token = request.args.get('token')
     uid = decode_auth_token(token)
-    if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
+    if uid == 0:
         return json.dumps({'token' : '0'}), 404
     current_time = datetime.utcnow()
     expiry_time = datetime.utcnow() + timedelta(days=30)
