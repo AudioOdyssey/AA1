@@ -14,6 +14,10 @@ from audio_od.models import User
 
 
 def authentication_required(func):
+    """This is used to check if a user is signed in. If the user is not signed it, the user will be redirected back to the
+    index. Else, the user will be able to access the desired page. It first checks the long-lived token. If it can be decoded, then
+    the user will be sent to the desired page. Else, s/he will be redirected back to index. If the remember_ token doesn't exist, 
+    the session cookie will be checked and the same thing will happen when checking it. """
     @wraps(func)
     def func_wrapper(*args, **kwargs):
         remember = request.cookies.get('remember_')
@@ -25,17 +29,19 @@ def authentication_required(func):
                 return func(*args, **kwargs)
         else:
             uid = decode_auth_token(remember)
-            if uid == 'Invalid token. please log in again' or uid == 0 or uid == "Signature expired. Please log in again.":
+            if uid == 0:
                 return redirect(url_for('auth.session_new'))
             return func(*args, **kwargs)
     return func_wrapper
 
 
 def check_header(func):
+    """This is used to show the correct info for the website header. If the token can not be decoded, then the user will be redirected back
+    to the index. Else, the correct information will be showed"""
     @wraps(func)
     def func_wrapper(*args, **kwargs):
         g.uid = getUid()
-        if g.uid == 'Invalid token. please log in again':
+        if g.uid == 0:
             g.uid = 0
             g.user = None
             return func(*args, **kwargs)
@@ -46,12 +52,13 @@ def check_header(func):
 
 @app.before_first_request
 def load_id():
-    print(1)
+    """Whenever the user first acccesses the website, the user's tokens will be checked. If it can be decoded, it will be refreshed.
+    Else, s/he will be redirected back to the index page.""" 
     token = request.cookies.get('remember_')
     if token is None:
         return redirect(url_for('home.index'))
     uid = decode_auth_token(token)
-    if uid == 0 or uid == 'Signature expired. Please log in again.' or uid == 'Invalid token. please log in again':
+    if uid == 0:
         return redirect(url_for('auth.session_new'))
     resp = make_response(url_for('home.index'))
     current_time = datetime.utcnow()
@@ -61,6 +68,7 @@ def load_id():
     return resp
 
 def encode_auth_token(user_id, current_time, expired_date):
+    """This method issues a new token. Contains the user_id, current time and expiry date"""
     payload = {
         'exp': expired_date,
         'iat': current_time,
@@ -73,6 +81,7 @@ def encode_auth_token(user_id, current_time, expired_date):
     )
 
 def decode_auth_token(auth_token):
+    """This method decodes the token. If successful, the user_id will be returned. Else, 0 will be returned."""
     try:
         payload = jwt.decode(auth_token, app.config['SECRET_KEY'])
         return payload['sub']
@@ -83,6 +92,7 @@ def decode_auth_token(auth_token):
 
 
 def getUid():
+    """Returns the user_id"""
     token = session.get('token')
     if token is None:
         token = request.cookies.get('remember_')
