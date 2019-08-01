@@ -41,10 +41,9 @@
     <section>
         {%for user in users%}
         <form class="user row">
-            <div class="input-group col-sm-4">
-                <label>User-Id:</label>
-                <input class="form-control" type="number" name="user_id" value="{{user.user_id}}" readonly>
-            </div>
+            <a href="/admin/user?uid={{user.user_id}}" class="col-sm-4">
+                User-Id: <span class="text-muted">{{user.user_id}}</span>
+            </a>
             <div class="input-group col-sm-4">
                 <label>Username</label>
                 <input class="form-control" type="text" name="username" value="{{user.username|e}}"
