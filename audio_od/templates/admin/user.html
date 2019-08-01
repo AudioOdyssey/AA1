@@ -1,61 +1,76 @@
 {% extends "template.html" %}
 {% block header %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/admin/index.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/index.css') }}" type="text/css" />
 {% endblock %}
 
 {% block content %}
-	<section class="container" id="main-site">
-	    <div class="input-group col-sm-4">
-	        <label>Username</label>
-	        <input class="form-control" type="text" name="username" value="{{user.username|e}}"
-	            onchange="onchangefield(this)">
-	    </div>
-	    <div class="input-group col-sm-4">
-	        <label>Email</label>
-	        <input class="form-control" type="email" name="email" value="{{user.email|e}}"
-	            onchange="onchangefield(this)">
-	    </div>
-	    <div class="input-group col-sm-4">
-	        <label>Firstname</label>
-	        <input class="form-control" type="text" name="first_name" value="{{user.last_name|e}}"
-	            onchange="onchangefield(this)">
-	    </div>
-	    <div class="input-group col-sm-4">
-	        <label>Lastname</label>
-	        <input class="form-control" type="text" name="last_name" value="{{user.first_name|e}}"
-	            onchange="onchangefield(this)">
-	    </div>
+    <section class="container" id="main-site">
+        <form>
+            <label>Username</label>
+            <div class="input-group">
+                <input class="form-control" type="text" name="username" value="{{user.username|e}}"
+                    onchange="onchangefield(this)">
+            </div>
+            <label>Email</label>
+            <div class="input-group">
+                <input class="form-control" type="email" name="email" value="{{user.email|e}}"
+                    onchange="onchangefield(this)">
+            </div>
+            <label>Firstname</label>
+            <div class="input-group">
+                <input class="form-control" type="text" name="first_name" value="{{user.last_name|e}}"
+                    onchange="onchangefield(this)">
+            </div>
+            <label>Lastname</label>
+            <div class="input-group">
+                <input class="form-control" type="text" name="last_name" value="{{user.first_name|e}}"
+                    onchange="onchangefield(this)">
+            </div>
+        </form>
 
-	    <section class="row px-3">
-		    <h2>Purchased Stories</h2>
-		    <button class="ml-auto btn btn-success" onclick="addPurchase('{{user.user_id}}', prompt('Story ID:'))">Add Story</button>
-	    </section>
-	    <hr>
-	    <section class="row">
-		    {% for story in purchased %}
-		    	<section class="col-sm-4 my-2">
-		    		<section class="storycard">
-		    			<h4>{{ story.story_title }}</h4>
-		    		</section>
-		    	</section>
-		    {% else %}
-		    	<h3 class="text-center">No owned stories</h3>
-		    {% endfor %}
-		</section>
-	</section>
+        <section class="row mt-3 mx-3">
+            <h2>Purchased Stories</h2>
+            <button class="ml-auto btn btn-success" onclick="addPurchase('{{user.user_id}}', prompt('Story ID:'))">Add Story</button>
+        </section>
+        <hr>
+        <section class="row">
+            {% for story in purchased %}
+                <section class="col-sm-4 my-2">
+                    <section class="storycard">
+                        <h4>{{ story.story_title }}</h4>
+                    </section>
+                </section>
+            {% else %}
+                <h3 class="text-center">No owned stories</h3>
+            {% endfor %}
+        </section>
+    </section>
 
-	<script>
-		function addPurchase(uid, sid) {
-	        var xhttp = new XMLHttpRequest();
-	        xhttp.onreadystatechange = function () {
-	            if (this.readyState == 4 && this.status == 200) {
-	                location.reload()
-	            } else if (this.readyState == 4) {
-	                console.log(this.responseText);
-	            }
-	        };
-	        xhttp.open("POST", "/admin/user/addstory?uid="+uid+"&sid="+sid, true);
-	        xhttp.send();
-	    }
-	</script>
+    <script>
+        function onchangefield(elem) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                } else if (this.readyState == 4) {
+                    console.log(this.responseText);
+                }
+            };
+            xhttp.open("POST", "/admin/users", true);
+            xhttp.send(new FormData(elem.form));
+        }
+
+        function addPurchase(uid, sid) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    location.reload()
+                } else if (this.readyState == 4) {
+                    console.log(this.responseText);
+                }
+            };
+            xhttp.open("POST", "/admin/user/addstory?uid="+uid+"&sid="+sid, true);
+            xhttp.send();
+        }
+    </script>
 {% endblock %}
