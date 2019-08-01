@@ -17,12 +17,14 @@ dash_view = Blueprint('dash', __name__)
 @authentication_required
 @check_header
 def dashboard():
+    """Endpoint for viewing the dashboard. Shows the stories a user created. Also on the side, shows the recently edited stories."""
     stories = Story.story_list_by_creatordate(g.uid)
     base_url = base64.b64encode("/dash/story".encode()).decode("utf-8")
     return render_template("/dash/index.html", stories=stories, base_url=base_url)
 
 
 def isValidEmail(email):
+    """Does the same thing as Auth/routes.isValidEmail"""
     if len(email) > 7:
         if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
             return True
