@@ -375,7 +375,7 @@ def admin_users():
         return '{"status":"ok"}'
 
 
-@auth.route("/admin/user", methods=["GET", "POST"])
+@auth.route("/admin/user")
 @authentication_required
 @check_header
 def admin_user():
@@ -384,6 +384,18 @@ def admin_user():
     uid = request.args.get("uid", "")
     purchased = Story.story_list_purchased_by_user(uid)
     return render_template("admin/user.html", purchased=purchased, user=User.get(uid))
+
+
+@auth.route("/admin/user/addstory", methods=["POST"])
+@authentication_required
+@check_header
+def admin_story_add():
+    if not checkAdmin(g.uid):
+        abort(403)
+    uid = request.args.get("uid", "")
+    sid = request.args.get("sid", "")
+    Story.get(sid).mark_purchased(uid)
+    return '{"status":"ok"}'
 
 
 def load_user(user_id):
