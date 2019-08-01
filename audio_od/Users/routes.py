@@ -28,6 +28,14 @@ def user_update():
     return '{"status":"ok"}'
 
 
+valid_mimetypes = ['image/jpeg', 'image/png', 'image/bmp']
+
+
+def allowed_file(file):
+    mimetype = file.content_type
+    return mimetype in valid_mimetypes
+
+
 @userprofile.route("/app/user/info", methods=['GET'])
 def app_user_info():
     token = request.args.get('token')
@@ -67,7 +75,7 @@ def put_profile():
     if file.filename == '':
         return '{"status" : "error"}'
     if file and allowed_file(file):
-        filename = str(getUid()) + ".jpg"
+        filename = str(g.uid) + ".jpg"
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', filename))
         return '{"status":"ok"}'
     return '{"status" : "error"}'
@@ -77,9 +85,3 @@ def put_profile():
 def stories_show_owned_by_user():
     user_id = decode_auth_token(request.args.get("auth"))
     return Story.json_story_library(user_id)
-
-
-@userprofile.route("/help")
-@check_header
-def index_help():
-    return render_template("help/index.html")

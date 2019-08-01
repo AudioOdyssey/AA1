@@ -1,0 +1,44 @@
+ * Serving Flask app "audio_od" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 324-468-429
+INFO:werkzeug:127.0.0.1 - - [31/Jul/2019 17:12:17] "GET /dashboard/dash/story HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 2463, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 2449, in wsgi_app
+    response = self.handle_exception(e)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 1866, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/venv/lib/python3.6/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/audio_od/utils.py", line 30, in func_wrapper
+    return func(*args, **kwargs)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/audio_od/utils.py", line 43, in func_wrapper
+    return func(*args, **kwargs)
+  File "/mnt/c/Users/Brian/Documents/GitHub/AA1/audio_od/Dashboard/routes.py", line 27, in dashboard_full
+    stories = Story.story_list_by_creatordate(g.uid)
+NameError: name 'Story' is not defined
+INFO:werkzeug:127.0.0.1 - - [31/Jul/2019 17:12:17] "GET /dashboard/dash/story?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [31/Jul/2019 17:12:17] "GET /dashboard/dash/story?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [31/Jul/2019 17:12:17] "GET /dashboard/dash/story?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [31/Jul/2019 17:12:17] "GET /dashboard/dash/story?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [31/Jul/2019 17:12:18] "GET /dashboard/dash/story?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+1

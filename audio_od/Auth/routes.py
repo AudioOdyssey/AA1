@@ -120,7 +120,7 @@ def session_new():
         details = request.form
         user_id = authenticate(details)
         if user_id:
-            resp = make_response(redirect(url_for('Users.dashboard')))
+            resp = make_response(redirect(url_for('dash.dashboard')))
             current_time = datetime.utcnow()
             expired_date = current_time + timedelta(days=30)
             token = encode_auth_token(user_id, current_time, expired_date)

@@ -39,6 +39,8 @@ from audio_od.StoryView.storyobjectroutes import obj_view as obj_bp
 from audio_od.StoryView.storyroutes import story_view as story_bp
 from audio_od.Dashboard.routes import dash_view as dash_db
 
+from audio_od.Help.routes import helper as help_bp
+
 app.register_blueprint(home_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(verif_bp)
@@ -49,6 +51,7 @@ app.register_blueprint(loc_bp)
 app.register_blueprint(obj_bp)
 app.register_blueprint(story_bp)
 app.register_blueprint(dash_db)
+app.register_blueprint(help_bp)
 
 
 from audio_od import utils
