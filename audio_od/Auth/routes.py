@@ -19,10 +19,8 @@ from loginpass import create_flask_blueprint, Facebook, Google
 #internal imports
 from audio_od import app
 import audio_od.config
-from audio_od.models import User
-from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token
-
-
+from audio_od.models import User, Story
+from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token, checkAdmin
 
 oauth = OAuth(app)
 auth = Blueprint('auth', __name__)
@@ -354,9 +352,6 @@ def admin_users():
     uid = getUid()
     if not checkAdmin(uid):
         abort(403)
-    acct = User.get(uid)
-    if not acct.is_admin:
-        abort(403)
     if request.method == "GET":
         users = User.list_of_all_users()
         return render_template("admin/users.html", users=users)
@@ -378,6 +373,17 @@ def admin_users():
         print(user.user_id)
         user.update_admin()
         return '{"status":"ok"}'
+
+
+@auth.route("/admin/user", methods=["GET", "POST"])
+@authentication_required
+@check_header
+def admin_user():
+    if not checkAdmin(g.uid):
+        abort(403)
+    uid = request.args.get("uid", "")
+    purchased = Story.story_list_purchased_by_user(uid)
+    return render_template("admin/user.html", purchased=purchased, user=User.get(uid))
 
 
 def load_user(user_id):
