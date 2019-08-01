@@ -199,6 +199,15 @@ class Story:
         conn.close()
         return story_list
 
+
+    def mark_purchased(self, uid):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
+        with conn.cursor() as cur:
+            cur.execute(("INSERT INTO user_downloads(user_id, story_id) VALUES(%s, %s)"), (uid, self.story_id))
+            conn.commit()
+        conn.close()
+
+
     @classmethod
     def story_list_purchased_by_user(cls, user_id):
         conn = pymysql.connect(
