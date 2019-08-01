@@ -19,10 +19,8 @@ from loginpass import create_flask_blueprint, Facebook, Google
 #internal imports
 from audio_od import app
 import audio_od.config
-from audio_od.models import User
-from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token
-
-
+from audio_od.models import User, Story
+from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token, checkAdmin
 
 oauth = OAuth(app)
 auth = Blueprint('auth', __name__)
