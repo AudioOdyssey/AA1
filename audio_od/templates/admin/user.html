@@ -12,23 +12,23 @@
 	    </div>
 	    <div class="input-group col-sm-4">
 	        <label>Email</label>
-	        <input class="form-control" type="email" name="email" value="{{user.username|e}}"
+	        <input class="form-control" type="email" name="email" value="{{user.email|e}}"
 	            onchange="onchangefield(this)">
 	    </div>
 	    <div class="input-group col-sm-4">
 	        <label>Firstname</label>
-	        <input class="form-control" type="text" name="first_name" value="{{user.username|e}}"
+	        <input class="form-control" type="text" name="first_name" value="{{user.last_name|e}}"
 	            onchange="onchangefield(this)">
 	    </div>
 	    <div class="input-group col-sm-4">
 	        <label>Lastname</label>
-	        <input class="form-control" type="text" name="last_name" value="{{user.username|e}}"
+	        <input class="form-control" type="text" name="last_name" value="{{user.first_name|e}}"
 	            onchange="onchangefield(this)">
 	    </div>
 
 	    <section class="row px-3">
 		    <h2>Purchased Stories</h2>
-		    <button class="ml-auto btn btn-success">Add Story</button>
+		    <button class="ml-auto btn btn-success" onclick="addPurchase('{{user.user_id}}', prompt('Story ID:'))">Add Story</button>
 	    </section>
 	    <hr>
 	    <section class="row">
@@ -45,17 +45,17 @@
 	</section>
 
 	<script>
-	    function onchangefield(elem) {
+		function addPurchase(uid, sid) {
 	        var xhttp = new XMLHttpRequest();
 	        xhttp.onreadystatechange = function () {
 	            if (this.readyState == 4 && this.status == 200) {
-	                console.log(this.responseText);
+	                location.reload()
 	            } else if (this.readyState == 4) {
 	                console.log(this.responseText);
 	            }
 	        };
-	        xhttp.open("POST", "/admin/users", true);
-	        xhttp.send(new FormData(elem.form));
+	        xhttp.open("POST", "/admin/user/addstory?uid="+uid+"&sid="+sid, true);
+	        xhttp.send();
 	    }
 	</script>
 {% endblock %}
