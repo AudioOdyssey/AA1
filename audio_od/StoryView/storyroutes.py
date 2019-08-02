@@ -8,7 +8,7 @@ import base64
 from flask import redirect, render_template, request, Blueprint
 
 #Internal imports
-from models import Story, StoryObject, StoryLocation, StoryEvent
+from models import Story, StoryObject, StoryLocation, StoryEvent, StoryDecision
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
 story_view = Blueprint("story", __name__)
