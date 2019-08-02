@@ -5,6 +5,7 @@ body {
 #dash-content {
 	flex-grow: 1;
 	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 	padding: 2rem;
 	width: min-content;
 }

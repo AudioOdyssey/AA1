@@ -12,7 +12,7 @@
 
 {% block content %}
 <section class="row fg-1" style="overflow: hidden;">
-	<section style="height: 100%; width: 100%; display: flex;">
+	<section id="safari-hack" style="height: 100%; width: 100%; display: flex;">
 		<!-- Side Bar -->
 		<section id="sidebar" class="d-none d-sm-block">
 			<!-- User Info -->
@@ -66,6 +66,13 @@
 	var url = atob("{{base_url|string|safe}}");
 	if (url !== "")
 		loadpage(url)
+	
+	var userAgent = navigator.userAgent.toLowerCase(); 
+	if (userAgent.indexOf('safari')!=-1){ 
+		if(userAgent.indexOf('chrome') < 0) {         
+			document.getElementById("safari-hack").style.height = "";
+		}
+	}
 </script>
 
 {% endblock %}
