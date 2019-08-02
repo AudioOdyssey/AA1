@@ -7,10 +7,11 @@ import json
 
 
 #Third-party libraries
-from flask import redirect, render_template, request, url_for, Blueprint
+from flask import redirect, render_template, request, url_for, Blueprint, abort
 
 
 #Internal imports
+from models import Story, StoryLocation, StoryEvent, StoryObject, StoryDecision
 from audio_od import app
 import config
 from models import *
@@ -75,12 +76,12 @@ def review_update():
     elif entity_type.lower() == 'location':
         loc = StoryLocation.get(story_id, ent_id)
         loc.reviewer_comments = reviewer_comment
-        obj.verification_status = is_verified
+        loc.verification_status = is_verified
         loc.update_admin()
     elif entity_type.lower() == 'event':
         evnt = StoryEvent.get(story_id, ent_id)
         evnt.reviewer_comments = reviewer_comment
-        obj.verification_status = is_verified
+        evnt.verification_status = is_verified
         evnt.update_admin()
     elif entity_type.lower() == 'story':
         story = Story.get(story_id)
