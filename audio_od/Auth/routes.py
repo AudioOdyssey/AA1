@@ -106,14 +106,6 @@ def sign_up(details_dict):
         return json.dumps({"token" : encode_auth_token(result, cur, exp), "message": "success"})
 
 
-def isValidEmail(email):
-    """ Uses regex to check if the email is valid or not. Will return true if valid, else will return false."""
-    if len(email) > 7:
-        if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
-            return True
-    return False
-
-
 @auth.route("/session/new", methods=['GET', 'POST'])
 @check_header
 def session_new():
@@ -136,6 +128,7 @@ def session_new():
         else:
             error = "Username and/or password not valid"
     return render_template("session/new.html", error=error)
+
 
 @auth.route("/app/session/new", methods=['POST', 'GET'])
 def app_session_new():
