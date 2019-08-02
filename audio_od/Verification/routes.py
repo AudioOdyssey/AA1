@@ -11,10 +11,9 @@ from flask import redirect, render_template, request, url_for, Blueprint, abort
 
 
 #Internal imports
-from models import Story, StoryLocation, StoryEvent, StoryObject, StoryDecision
 from audio_od import app
-import config
-from models import *
+from audio_od import config
+from audio_od.models import *
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
 verification = Blueprint('verification', __name__)

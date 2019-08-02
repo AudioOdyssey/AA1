@@ -17,7 +17,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as ResetSerializer
 import simplejson as json
 
 #Internal imports
-import config
+from audio_od import config
 # from . import *
 
 

@@ -8,7 +8,7 @@ import pymysql
 import pymysql.cursors
 
 #Internal imports
-import config
+from audio_od import config
 # from . import *
 
 class StoryEvent:

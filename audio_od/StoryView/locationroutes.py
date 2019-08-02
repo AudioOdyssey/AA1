@@ -6,7 +6,7 @@ import sys
 from flask import render_template, request, Blueprint
 
 #Internal imports
-from models import Story, StoryLocation, StoryEvent
+from audio_od.models import Story, StoryLocation, StoryEvent
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
 loc_view = Blueprint("loc", __name__)

@@ -13,7 +13,7 @@ import simplejson as json
 
 
 #Internal imports
-import config
+from audio_od import config
 from .storydecision import StoryDecision
 from .storyevent import StoryEvent
 from .storylocation import StoryLocation
