@@ -51,7 +51,7 @@ class Story:
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', verifier_id=0, verification_status='',
                  story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0, updated_at=None, author_name=''):
-        if story_id:
+        if story_id: #if a story_id is not provided, then it will be generated
             self.story_id = story_id
         self.story_title = story_title
         self.story_author = story_author
@@ -78,6 +78,8 @@ class Story:
         self.author_name = author_name
 
     def add_to_server(self):
+        """ This method adds the story to the server pretty self-explanatory
+        """
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
@@ -97,6 +99,7 @@ class Story:
 
     @classmethod
     def get(cls, story_id):
+        """Retrieves the story from the database"""
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
@@ -134,6 +137,7 @@ class Story:
         conn.close()
 
     def update_verify(self):
+        """Only editors can access this method. This updates the verification status of the story and decides whether the story belongs in the store."""
         if self.verification_status != 3:
             self.story_in_store = 0
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
@@ -156,6 +160,7 @@ class Story:
 
     @classmethod
     def story_list_by_creator(cls, user_creator_id):
+        """Displays all the story a specific author is working on."""
         conn = pymysql.connect(
             config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
@@ -186,6 +191,7 @@ class Story:
 
     @classmethod
     def story_list_for_purchase(cls):
+        """Returns all the stories ready for the store"""
         conn = pymysql.connect(
             config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
@@ -200,10 +206,11 @@ class Story:
         return story_list
 
 
-    def mark_purchased(self, uid):
+    def mark_purchased(self, user_id):
+        """This methods allows us to track which stories users bought"""
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
         with conn.cursor() as cur:
-            cur.execute(("INSERT INTO user_downloads(user_id, story_id) VALUES(%s, %s)"), (uid, self.story_id))
+            cur.execute(("INSERT INTO user_downloads(user_id, story_id) VALUES(%s, %s)"), (user_id, self.story_id))
             conn.commit()
         conn.close()
 
@@ -225,6 +232,7 @@ class Story:
 
     @classmethod
     def json_story_library(cls, user_id):
+        """This method sends to the app a json of all the stories a user owns."""
         library = cls.story_list_purchased_by_user(user_id)
         result = []
         for story in library:
@@ -257,6 +265,7 @@ class Story:
 
     @classmethod
     def story_list_master(cls):
+        """Just a list of all the stories in the database"""
         conn = pymysql.connect(
             config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         story_list = []
@@ -269,40 +278,6 @@ class Story:
         conn.close()
         return story_list
 
-    @classmethod
-    def story_list_json(cls, user_creator_id):
-        conn = pymysql.connect(
-            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
-        result = []
-        with conn.cursor() as cur:
-            cur.execute(
-                ("SELECT * FROM `master_stories` WHERE user_creator_id = %s"), (user_creator_id))
-            query_data = cur.fetchall()
-            if query_data is None:
-                return None
-            for row in query_data:
-                story_dict = {'story_id': row['story_id'], 'story_title': row['story_title'], 'story_author': row['story_author'], 'story_synopsis': row['story_synopsis'], 'story_price': row['story_price'],
-                              'author_paid': row['author_paid'], 'genre': row['genre'], 'length_of_story': row['length_of_story'], 'number_of_locations': row['number_of_locations'],
-                              'number_of_decisions': row['number_of_decisions'], 'story_in_store': row['story_in_store'], 'story_verification_date': row['story_verification_date'], 'name_of_verifier': row['name_of_verifier'],
-                              'verification_status':  row['verification_status'], 'story_ratings': row['story_ratings'], 'story_language_id': row['story_language_id'], 'storage_size': row['storage_size'],
-                              'obj_verification_status': row['obj_verification_status'], 'event_verification_status': row['event_verification_status'], 'user_creator_id': row['user_creator_id']}
-                result.append(story_dict)
-        conn.close()
-        return json.dumps(result)
-
-    @classmethod
-    def get_last_story_id(cls, user_creator_id):
-        last_id = 0
-        conn = pymysql.connect(
-            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)
-        with conn.cursor() as cur:
-            # unlike the other IDs, this table has an auto-incrememntal primary ID. So no +1 - Sonny
-            cur.execute(
-                ("SELECT MAX(story_id) FROM master_stories"))
-            result = cur.fetchone()
-            last_id = result[0]
-        conn.close()
-        return last_id
 
     @classmethod
     def get_story_count(cls):
@@ -345,7 +320,7 @@ class Story:
         return json.dumps(result)
 
     @classmethod
-    def display_for_store(cls):
+    def display_for_store(cls): 
         result = []
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)

@@ -10,7 +10,7 @@ from flask import redirect, render_template, request, url_for, abort, g, Bluepri
 #internal imports
 from audio_od import app
 from models import User, Story
-from audio_od.utils import authentication_required, check_header
+from audio_od.utils import authentication_required, check_header, isValidEmail
 
 userprofile = Blueprint("Users", __name__)
 
@@ -92,3 +92,13 @@ def stories_show_owned_by_user():
     """Returns all the stories an owner owns"""
     user_id = decode_auth_token(request.args.get("auth"))
     return Story.json_story_library(user_id)
+
+
+@userprofile.route("/app/purchase/story", methods=['POST'])
+def app_purchase_story():
+    token = request.args.get("token")
+    uid = decode_auth_token(token)
+    if uid:
+        story = Story.get(request.args.get("story_id"))
+    else:
+        return '{"status" : "error"}'
