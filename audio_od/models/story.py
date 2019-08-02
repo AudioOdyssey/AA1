@@ -326,7 +326,7 @@ class Story:
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories`"))
+                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories` WHERE story_in_store = 1"))
             query_data = cur.fetchall()
             for row in query_data:
                 stry = cls.get(row['story_id'])
