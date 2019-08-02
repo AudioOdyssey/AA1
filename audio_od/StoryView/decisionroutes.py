@@ -7,7 +7,7 @@ from flask import Flask, redirect, render_template, request, url_for, make_respo
 
 
 #Internal imports
-from models import Story, StoryLocation, StoryDecision
+from models import Story, StoryLocation, StoryDecision, StoryObject, StoryEvent
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
 dec_view = Blueprint("dec", __name__)
