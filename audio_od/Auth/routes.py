@@ -4,7 +4,6 @@ import sys
 import json
 from datetime import datetime, timedelta
 import base64
-import re
 
 #Third-party libraries
 from flask import redirect, render_template, request, url_for, make_response, jsonify, session, abort, g, Blueprint
@@ -20,7 +19,7 @@ from loginpass import create_flask_blueprint, Facebook, Google
 from audio_od import app
 import audio_od.config
 from audio_od.models import User, Story
-from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token, checkAdmin
+from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token, checkAdmin, isValidEmail
 
 oauth = OAuth(app)
 auth = Blueprint('auth', __name__)

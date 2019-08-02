@@ -2,6 +2,7 @@
 import os
 from datetime import datetime, timedelta
 from functools import wraps
+import re
 
 #Third-party libraries
 from flask import redirect, request, render_template, url_for, make_response, session, g
@@ -126,3 +127,10 @@ def page_not_found_404(e):
 @check_header
 def server_error_500(e):
     return render_template('error/500.html'), 500
+
+def isValidEmail(email):
+""" Uses regex to check if the email is valid or not. Will return true if valid, else will return false."""
+if len(email) > 7:
+    if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
+        return True
+return False
