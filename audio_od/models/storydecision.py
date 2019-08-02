@@ -17,7 +17,7 @@ import config
 class StoryDecision:
     story_id = 0
     loc_id = 0
-    sequence_num = 0
+    sequence_num = 1
     decision_id = 0
     decision_name = ""
     transition = True
@@ -39,7 +39,7 @@ class StoryDecision:
     reviewer_comments = ''
     verification_status = False
 
-    def __init__(self, story_id=0, loc_id=0, sequence_num=0, decision_id=0, decision_name="", transition=False, transition_loc_id=0, hidden=False, locked=False, decision_description="", show_event_id=0, show_object_id=0, unlock_event_id=0, unlock_object_id=0, locked_descr="", aftermath_descr="", cause_event=False, effect_event_id=0, can_occur_once=False, is_locked_by_event_id=0, locked_by_event_description="", reviewer_comments='', verification_status=False):
+    def __init__(self, story_id=0, loc_id=0, sequence_num=1, decision_id=0, decision_name="", transition=False, transition_loc_id=0, hidden=False, locked=False, decision_description="", show_event_id=0, show_object_id=0, unlock_event_id=0, unlock_object_id=0, locked_descr="", aftermath_descr="", cause_event=False, effect_event_id=0, can_occur_once=False, is_locked_by_event_id=0, locked_by_event_description="", reviewer_comments='', verification_status=False):
         self.story_id = story_id
         self.loc_id = loc_id
         self.sequence_num = sequence_num
@@ -69,8 +69,8 @@ class StoryDecision:
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             self.decision_id = self.get_last_id(self.story_id, self.loc_id)
-            cur.execute(("INSERT INTO decisions(story_id, loc_id, decision_id) VALUES (%s, %s, %s)"),
-                        (self.story_id, self.loc_id, self.decision_id))
+            cur.execute(("INSERT INTO decisions(story_id, loc_id, decision_id, sequence_num) VALUES (%s, %s, %s, %s)"),
+                        (self.story_id, self.loc_id, self.decision_id, self.sequence_num))
             conn.commit()
         conn.close()
 
