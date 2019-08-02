@@ -7,7 +7,7 @@ from flask import redirect, render_template, request, url_for, session, Blueprin
 
 # Internal imports
 from audio_od import app
-from models import Story
+from audio_od.models import Story
 from audio_od.utils import authentication_required, check_header, decode_auth_token, isValidEmail
 
 dash_view = Blueprint('dash', __name__)

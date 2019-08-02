@@ -5,7 +5,7 @@ import sys
 #Third-party libraries
 from flask import redirect, render_template, request, Blueprint
 #Internal imports
-from models import Story, StoryEvent, StoryLocation, StoryDecision
+from audio_od.models import Story, StoryEvent, StoryLocation, StoryDecision
 from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
 
 ev_view = Blueprint("ev", __name__)

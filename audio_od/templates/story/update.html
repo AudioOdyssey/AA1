@@ -67,7 +67,7 @@
             <div class="form-group">
                 <label>Starting Location:</label>
                 <select autocomplete="none" class="form-control" onchange="story_changed(this)" name="starting_loc">
-                    <option value="0" disabled>Starting Location</option>
+                    <option value="0">Starting Location</option>
                     {%for loc in locations%}
                     <option {%if story.starting_loc|int==loc.location_id|int%}selected{%endif%}
                         value="{{loc.location_id}}">{{loc.location_name|e}}</option>

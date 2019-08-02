@@ -17,7 +17,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as ResetSerializer
 import simplejson as json
 
 #Internal imports
-import config
+from audio_od import config
 # from . import *
 
 
@@ -280,3 +280,23 @@ class User(UserMixin):
                         (self.username, self.first_name, self.last_name, self.email, self.user_id))
             conn.commit()
         conn.close()
+
+    def invalidate_token(self, token):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("INSERT INTO `invalid_tokens`(invalid_token, user_id) VALUES (%s, %s)"), (token, self.user_id))
+            conn.commit()
+        conn.close()
+
+
+    def check_invalid_tokens(self, token):
+        conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
+                               db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT `invalid_token` FROM `invalid_tokens` WHERE user_id = %s"), (self.user_id))
+            query_data = cur.fetchall()
+            for row in query_data:
+                if token == row['invalid_token']:
+                    return True
+        return False
