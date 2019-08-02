@@ -205,7 +205,7 @@ class Story:
         conn.close()
         return story_list
 
-
+    
     def mark_purchased(self, user_id):
         """This methods allows us to track which stories users bought"""
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5)

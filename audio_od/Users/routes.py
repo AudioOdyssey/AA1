@@ -10,7 +10,7 @@ from flask import redirect, render_template, request, url_for, abort, g, Bluepri
 #internal imports
 from audio_od import app
 from models import User, Story
-from audio_od.utils import authentication_required, check_header, isValidEmail
+from audio_od.utils import authentication_required, check_header, isValidEmail, check_invalid_app_token
 
 userprofile = Blueprint("Users", __name__)
 
@@ -41,6 +41,8 @@ def allowed_file(file):
 def app_user_info():
     """Sends the app all the user info in a json"""
     token = request.args.get('token')
+    if check_invalid_app_token(token):
+        return '{"status": "error"}'
     user_id = decode_auth_token(token)
     usr = User.get(user_id)
     return usr.user_profile_info()
@@ -52,6 +54,9 @@ def upload_profile_pic():
     details = request.json
     profile_pic = details.get('profile_pic')
     auth_token = request.args.get('token')
+    token = request.args.get('token')
+    if check_invalid_app_token(token):
+        return '{"status": "error"}'
     uid = decode_auth_token(auth_token)
     if file and allowed_file(file):
         pic_name = str(uid) + '.jpg'
@@ -90,6 +95,9 @@ def put_profile():
 @userprofile.route("/app/library/", methods=['GET'])
 def stories_show_owned_by_user():
     """Returns all the stories an owner owns"""
+    token = request.args.get('auth')
+    if check_invalid_app_token(token):
+        return '{"status": "error"}'
     user_id = decode_auth_token(request.args.get("auth"))
     return Story.json_story_library(user_id)
 
@@ -97,6 +105,8 @@ def stories_show_owned_by_user():
 @userprofile.route("/app/purchase/story", methods=['POST'])
 def app_purchase_story():
     token = request.args.get("token")
+    if check_invalid_app_token(token):
+        return '{"status": "error"}'
     uid = decode_auth_token(token)
     if uid:
         story = Story.get(request.args.get("story_id"))

@@ -11,7 +11,6 @@ from flask_mail import Message, Mail
 import pymysql
 import pymysql.cursors
 import jwt
-from bs4 import BeautifulSoup as bs
 from authlib.flask.client import OAuth
 from loginpass import create_flask_blueprint, Facebook, Google
 
@@ -19,7 +18,7 @@ from loginpass import create_flask_blueprint, Facebook, Google
 from audio_od import app
 import audio_od.config
 from audio_od.models import User, Story
-from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token, checkAdmin, isValidEmail
+from audio_od.utils import check_header, authentication_required, getUid, decode_auth_token, encode_auth_token, checkAdmin, isValidEmail, load_user
 
 oauth = OAuth(app)
 auth = Blueprint('auth', __name__)
@@ -194,11 +193,6 @@ def google_callback(remote, token, userinfo):
     exp = datetime.utcnow() + timedelta(days=30)
     token = encode_auth_token(usr.user_id, cur, exp)
     resp.set_cookie("remember_", token, expires=exp)
-    # soup = bs(urlopen(userinfo['picture']))
-    # for image in soup.findAll("img"):
-    #     filename=str(usr.user_id)+".jpg"
-    #     outpath = os.path.join(UPLOAD_FOLDER,"profile_pics", filename)
-    #     urlretrieve(image['src'], outpath)
     return resp
 
 #This blueprint handle all OAuth-related actions necessary for logging in through Google
@@ -253,16 +247,20 @@ def logout():
     """Endpoint for logging users out. Either, clears out the session token or deletes the 
     long-lived token based on what's present. Invalidates tokens. It then redirects the user back to the index page."""
     resp = make_response(redirect(url_for('home.index')))
-    if request.cookies.get('remember_') is None:
-        print(session)
+    token = request.cookies.get('remember_')
+    if token is None:
         token = session.get('token')
         if token:
+            usr = load_user(decode_auth_token(token))
+            usr.invalidate_token(token)
             session.clear()
             return resp
         elif decode_auth_token(token) == 0 or token is None:
             session.clear()
             return redirect(url_for("auth.session_new"))
     else:
+        usr = load_user(decode_auth_token(token))
+        usr.invalidate_token(token)
         resp.set_cookie('remember_', '', 0)
         return resp
 
@@ -270,11 +268,12 @@ def logout():
 @auth.route("/app/session/logout")
 def app_logout():
     """Endpoint for logging users out. Invalidates all tokens."""
-    session.pop("logged_in", None)
-    session.pop("user_id", None)
-    session.pop("platform", None)
-    return redirect(url_for("home.index"))
-
+    token = request.args.get('token')
+    if decode_auth_token(token) == 0:
+        return '{"status" : "bad token"}'
+    usr = load_user(decode_auth_token(token))
+    usr.invalidate_token(token)
+    return '{"status" : "success"}'
 
 
 @auth.route("/password_reset", methods=["GET", "POST"])
@@ -396,6 +395,3 @@ def admin_story_add():
     Story.get(sid).mark_purchased(uid)
     return '{"status":"ok"}'
 
-
-def load_user(user_id):
-    return User.get(user_id)
