@@ -18,21 +18,30 @@ def authentication_required(func):
     """This is used to check if a user is signed in. If the user is not signed it, the user will be redirected back to the
     index. Else, the user will be able to access the desired page. It first checks the long-lived token. If it can be decoded, then
     the user will be sent to the desired page. Else, s/he will be redirected back to index. If the remember_ token doesn't exist, 
-    the session cookie will be checked and the same thing will happen when checking it. """
+    the session cookie will be checked and the same thing will happen when checking it. If the token is invalidated, then user 
+    will be redirected back to the log-in screen."""
     @wraps(func)
     def func_wrapper(*args, **kwargs):
         remember = request.cookies.get('remember_')
         if remember is None:
             token = session.get('token')
-            if token is None or decode_auth_token(token) == 0:
+            uid = decode_auth_token(token)
+            if uid == 0:
                 return redirect(url_for('auth.session_new'))
             else:
+                usr=load_user(uid)
+                if usr.check_invalid_tokens(token):
+                    return redirect(url_for('auth.session_new'))
                 return func(*args, **kwargs)
         else:
             uid = decode_auth_token(remember)
             if uid == 0:
                 return redirect(url_for('auth.session_new'))
-            return func(*args, **kwargs)
+            else:
+                usr=load_user(uid)
+                if usr is None or usr.check_invalid_tokens(remember):
+                    return redirect(url_for('auth.session_new'))
+                return func(*args, **kwargs)
     return func_wrapper
 
 
@@ -49,6 +58,20 @@ def check_header(func):
         g.user = User.get(g.uid)
         return func(*args, **kwargs)
     return func_wrapper
+
+
+def check_invalid_app_token(token):
+    """This method checks the app token to see if it has been invalidated before. If the token can't be decoded, method will return True. 
+    If the token is in the invalidated_tokens table, True will be return. All other cases will return false."""
+    uid=decode_auth_token(token)
+    if uid==0:
+        return True
+    else:
+        usr = load_user(uid)
+        if usr is None or usr.check_invalid_tokens(token):
+            return True
+    return False
+
 
 
 @app.before_first_request
@@ -134,3 +157,7 @@ def isValidEmail(email):
         if re.match(r"^.+@(\[?)[a-zA-Z0-9-.]+.(([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$)", email) != None:
             return True
     return False
+
+
+def load_user(user_id):
+    return User.get(user_id)
