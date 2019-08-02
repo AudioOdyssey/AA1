@@ -100,5 +100,10 @@ def app_purchase_story():
     uid = decode_auth_token(token)
     if uid:
         story = Story.get(request.args.get("story_id"))
+        if story is None:
+            return '{"status" : "Story does not exist."}'
+        else:
+            story.mark_purchased(uid)
+            return '{"status" : "success"}'
     else:
-        return '{"status" : "error"}'
+        return '{"status" : "User does not exist."}'
