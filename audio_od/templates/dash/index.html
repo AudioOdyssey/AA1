@@ -66,6 +66,13 @@
 	var url = atob("{{base_url|string|safe}}");
 	if (url !== "")
 		loadpage(url)
+	
+	var userAgent = navigator.userAgent.toLowerCase(); 
+	if (userAgent.indexOf('safari')!=-1){ 
+		if(userAgent.indexOf('chrome') < 0) {         
+			document.getElementById("safari-hack").style.height = "";
+		}
+	}
 </script>
 
 {% endblock %}

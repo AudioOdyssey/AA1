@@ -110,10 +110,3 @@ function publish(sid) {
     xhttp.open("POST", "/story/publish?story_id="+sid, true);
     xhttp.send();
 }
-
-var userAgent = navigator.userAgent.toLowerCase(); 
-if (userAgent.indexOf('safari')!=-1){ 
-    if(userAgent.indexOf('chrome') < 0) {         
-        document.getElementById("safari-hack").style.height = null;
-    }
-}
