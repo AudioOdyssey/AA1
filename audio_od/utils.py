@@ -39,7 +39,7 @@ def authentication_required(func):
                 return redirect(url_for('auth.session_new'))
             else:
                 usr=load_user(uid)
-                if usr.check_invalid_tokens(token):
+                if usr is None or usr.check_invalid_tokens(remember):
                     return redirect(url_for('auth.session_new'))
                 return func(*args, **kwargs)
     return func_wrapper
@@ -68,7 +68,7 @@ def check_invalid_app_token(token):
         return True
     else:
         usr = load_user(uid)
-        if usr.check_invalid_tokens(token):
+        if usr is None or usr.check_invalid_tokens(token):
             return True
     return False
 
