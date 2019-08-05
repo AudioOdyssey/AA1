@@ -84,7 +84,7 @@ def decision_update():
     reset_story = details.get("reset_story", False)
     if reset_story is not None:
         reset_story = True
-    dec = StoryDecision.get(decision_id)
+    dec = StoryDecision.get(story_id, location_id, decision_id)
     if dec is None:
         abort(404)
     dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,

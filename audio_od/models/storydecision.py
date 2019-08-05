@@ -84,12 +84,12 @@ class StoryDecision:
         return id
 
     @classmethod
-    def get(cls, decision_id):
+    def get(cls, story_id, loc_id, decision_id):
         conn = pymysql.connect(config.db_host, user=config.db_user, passwd=config.db_password,
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
-            cur.execute(("SELECT * FROM `decisions` WHERE decision_id = %s"),
-                        (decision_id))
+            cur.execute(("SELECT * FROM `decisions` WHERE decision_id = %s AND story_id = %s AND loc_id = %s"),
+                        (decision_id, story_id, loc_id))
             results = cur.fetchone()
             if results is None:
                 return None
