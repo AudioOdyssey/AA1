@@ -28,10 +28,7 @@
             about your story and is also a place where you can view lists of all the locations, objects and events you
             have
             entered so far. You can click on the boxes containing
-            information about locations, objects or events to edit them. It is on the individual location, decision,
-            object
-            and event forms that you can use the '+' and 'trash' icons to add or
-            remove elements.
+            information about locations, objects or events to edit them. To add new objects, events or locations, select the appropriate add button on the right hand side.
         </div>
         <br><br>
         <h6 text-center>Fields you may fill out for each Story are: </h6>
@@ -53,24 +50,28 @@
             <div><b>Length: </b>Enter the number of hours you expect a user to go through this story</div>
             <br>
 
-            <div>Select the "Save for Later" button to return to the story home page and save your progress for later
-            </div>
+            <div><b>Inventory Size: </b>Enter the number of objects a user can hold at a given time.</div>
             <br>
 
-            <div>Select the "Publish Story" button upon completion to submit the story for verification and return to
-                the
-                story home page</div>
-
+            <div><b>Starting Location: </b>Select the location your story starts on. Note that no locations will appear as options until you create them below.</div>
+            <br>
+            <div><b>Cover Photo: </b>This will photo should represent your story and will appear to users on the app</div>
+            <br>
 
         </div>
         <br>
         <hr><br>
+        <h2>Individual Entry Pages:</h2>
+        <div>Individual entry pages can be accessed by clicking the add buttons on the story page or by selecting existing 
+            objects, events or locations to edit them. In addition to information about the location, object or event, all individual entry page include buttons to navigate around your story, a save button and a delete button.
+        </div>
+        <br>
         <h2 id="location" text-center>Location Entry</h2>
 
         <div class="div">Locations contain the main audio messages that are played each time the user enters a new
             "location" in the game. Locations do not necessarily need to be literal locations as you would think of them
             in real life (ex "the grocery store" "school" etc.). They can also be abstract "locations" that represent
-            points in the your story (anywhere a new description is required).
+            points in the your story (anywhere a new description is required). You can switch to treeview to view your locations and decisions in a tree.
         </div>
         <br><br>
         <h6 text-center>Fields you may fill out for each Location are: </h6>
@@ -102,18 +103,7 @@
 
                 <br>
 
-                <div><b>Auto Go To: </b>If auto go to is checked the user will automatically be sent to the next
-                    location
-                    without being provided with decisions</div>
-                <br>
-
-                <div><b>Next Location: </b>Only can be filled out if auto go to is checked. Select name of next
-                    location
-                    or use the link to navigate to the create location page</div>
-                <br>
-
-                <div>Use the blue "edit decision" link at the bottom of the page to add decisions if auto go to is not
-                    checked</div>
+                <div>Use the blue "edit decision" link at the bottom of the page to add decisions.</div>
         </div><br>
         <hr><br>
         <h2 id="decision" text-center>Decision Entry</h2>
@@ -190,6 +180,14 @@
                 event
                 page</div>
         </div>
+        <div><b>Select Event to lock Decision: </b>Select an event which will lock this
+            decision. Or you may use the link to navigate to the create new event page</div>
+        <br>
+
+        <div><b>Description when Locked: </b>This despcription is read when the decision is initially locked and will most
+            likely be a hint about how to unlock this description</div>
+        <br>
+
         <br>
         <hr><br>
         <h2 id="object" text-center>Object Entry</h2>
@@ -218,7 +216,7 @@
             </div>
             <br>
 
-            <div><b>Description: </b>Enter a brief description of this object</div>
+            <div><b>Description: </b>Enter a brief description of this object that will be read when a user encounters this object</div>
             <br>
 
             <div><b>Is Hidden? </b>Check this box if you don't want the user to be able to see this object until a
@@ -239,7 +237,7 @@
         <div class="div">Events are things that change the state of a location or of the game. Occurences only need to
             be
             entered as events if they will affect decisions later, otherwise they can just be entered as part of a
-            decsription.</div>
+            decsription. Events can be triggered by either a decision or location (or both if desired)</div>
         <br><br>
         <h6 text-center>Fields you may fill out for each Event are: </h6>
         <br>
@@ -249,7 +247,7 @@
             <br>
 
             <div><b>Select Location: </b>Select the location in which this event occurs or use the link to create a
-                new location</div>
+                new location. This can be left blank if this event is only truggered by a decision.</div>
             <br>
 
             <div><b>Description: </b>This description will be read when this event occurs</div>
