@@ -10,7 +10,7 @@ from flask import redirect, render_template, request, url_for, abort, g, Bluepri
 #internal imports
 from audio_od import app
 from audio_od.models import User, Story
-from audio_od.utils import authentication_required, check_header, isValidEmail, check_invalid_app_token
+from audio_od.utils import authentication_required, check_header, isValidEmail, check_invalid_app_token, decode_auth_token
 
 userprofile = Blueprint("Users", __name__)
 
