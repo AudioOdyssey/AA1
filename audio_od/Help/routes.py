@@ -28,3 +28,9 @@ def vhelp():
 @check_header
 def treeview_help():
     return render_template("help/treeview.html")
+
+@helper.route("/help/run")
+@check_header
+def help_run():
+    return render_template("help/run.html")
+
