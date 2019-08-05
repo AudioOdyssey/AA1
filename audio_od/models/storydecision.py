@@ -248,12 +248,15 @@ class StoryDecision:
                 transition_bool = True
                 if row["transition"] == 0:
                     transition_bool = False
+                reset_story_bool = True
+                if row['reset_story_bool'] == 0:
+                    reset_story_bool = False
                 desc_dict = {'dec_id': row['decision_id'], 'sequence_num': row['sequence_num'], 'decision_name': row['decision_name'], 'transition': transition_bool,
                              'transition_loc_id': row['transition_loc_id'], 'hidden': is_hidden_bool, 'locked': is_locked_bool,
                              'decision_description': row['decision_description'], 'show_event_id': row['show_event_id'], 'show_object_id': row['show_object_id'],
                              'unlock_event_id': row['unlock_event_id'], 'unlock_object_id': row['unlock_object_id'], 'locked_descr': row['locked_descr'], 'aftermath_descr': row['aftermath_descr'],
                              'cause_event': cause_event_bool, 'effect_event_id': row['effect_event_id'], 'can_occur_once': can_occur_once_bool, 'is_locked_by_event_id': row['is_locked_by_event_id'],
-                             'locked_by_event_description': row['locked_by_event_description']}
+                             'locked_by_event_description': row['locked_by_event_description'], 'reset_story' : reset_story_bool}
                 result.append(desc_dict)
         return result
 
