@@ -55,61 +55,41 @@ def decision_update():
     sequence = details['sequence_number']
     if sequence == '':
         sequence = 0
-    transition = details.get('transition')
-    if transition is None:
-        transition = False
-    else:
+    transition = details.get('transition', False)
+    if transition is not None:
         transition = True
-    transition_loc_id = details.get("transition_loc_id")
-    if transition_loc_id is None:
-        transition_loc_id = 0
-    is_hidden = details.get('hidden')
-    if is_hidden is None:
-        is_hidden = False
-    else:
+    transition_loc_id = details.get("transition_loc_id", 0)
+    is_hidden = details.get('hidden', False)
+    if is_hidden is not None:
         is_hidden = True
     show_event_id = details.get("show_event_id", 0)
     show_object_id = details.get("show_object_id", 0)
-    is_locked = details.get("locked")
-    if is_locked is None:
-        is_locked = False
-    else:
+    is_locked = details.get("locked", False)
+    if is_locked is not None:
         is_locked = True
-    locked_descr = details.get('locked_descr')
-    if locked_descr is None:
-        locked_descr = ''
-    unlock_event_id = details.get('unlock_event_id')
-    if unlock_event_id is None:
-        unlock_event_id = 0
-    unlock_obj_id = details.get("unlock_object_id")
-    if unlock_obj_id is None:
-        unlock_obj_id = 0
+    locked_descr = details.get('locked_descr', '')
+    unlock_event_id = details.get('unlock_event_id', 0)
+    unlock_obj_id = details.get("unlock_object_id", 0)
     aftermath_desc = details['aftermath_desc']
-    cause_event = details.get('cause_event')
-    if cause_event is None:
-        cause_event = False
-    else:
+    cause_event = details.get('cause_event', False)
+    if cause_event is not None:
         cause_event = True
-    effect_event_id = details.get('effect_event_id')
-    if effect_event_id is None:
-        effect_event_id = 0
+    effect_event_id = details.get('effect_event_id', 0)
     dec_description = details['dec_description']
-    can_occur_once = details.get("can_occur_once")
-    if can_occur_once is None:
-        can_occur_once = False
-    else:
+    can_occur_once = details.get("can_occur_once", False)
+    if can_occur_once is not None:
         can_occur_once = True
-    is_locked_by_event_id = details.get("is_locked_by_event_id")
-    if is_locked_by_event_id is None:
-        is_locked_by_event_id = 0
-    locked_by_event_desc = details.get("locked_by_event_description")
-    if locked_by_event_desc is None:
-        locked_by_event_desc = ""
-    dec = StoryDecision.get(story_id, location_id, decision_id)
+    is_locked_by_event_id = details.get("is_locked_by_event_id", 0)
+    locked_by_event_desc = details.get("locked_by_event_description", '')
+    reset_story = details.get("reset_story", False)
+    if reset_story is not None:
+        reset_story = True
+    dec = StoryDecision.get(decision_id)
     if dec is None:
         abort(404)
     dec.update(story_id, decision_id, location_id, sequence, decision_name, transition, transition_loc_id, is_hidden, is_locked, dec_description, show_event_id,
-               show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc)
+               show_object_id, unlock_event_id, unlock_obj_id, locked_descr, aftermath_desc, 
+               cause_event, effect_event_id, can_occur_once, is_locked_by_event_id, locked_by_event_desc, reset_story)
     dec.verification_status = 0
     dec.update_admin()
     loc = StoryLocation.get(story_id, location_id)
@@ -181,7 +161,7 @@ def decision_indiv():
         abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
-    decision = StoryDecision.get(story_id, location_id, decision_id)
+    decision = StoryDecision.get(decision_id)
     if decision is None:
         abort(404)
     objects = StoryObject.obj_list(story_id)
