@@ -161,7 +161,7 @@ def decision_indiv():
         abort(403)
     location_id = request.args["location_id"]
     decision_id = request.args["decision_id"]
-    decision = StoryDecision.get(decision_id)
+    decision = StoryDecision.get(story_id, location_id, decision_id)
     if decision is None:
         abort(404)
     objects = StoryObject.obj_list(story_id)
