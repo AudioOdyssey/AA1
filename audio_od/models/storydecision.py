@@ -249,7 +249,7 @@ class StoryDecision:
                 if row["transition"] == 0:
                     transition_bool = False
                 reset_story_bool = True
-                if row['reset_story_bool'] == 0:
+                if row['reset_story'] == 0:
                     reset_story_bool = False
                 desc_dict = {'dec_id': row['decision_id'], 'sequence_num': row['sequence_num'], 'decision_name': row['decision_name'], 'transition': transition_bool,
                              'transition_loc_id': row['transition_loc_id'], 'hidden': is_hidden_bool, 'locked': is_locked_bool,
