@@ -56,33 +56,33 @@ def decision_update():
     if sequence == '':
         sequence = 0
     transition = details.get('transition', False)
-    if transition is not None:
+    if transition != False:
         transition = True
     transition_loc_id = details.get("transition_loc_id", 0)
     is_hidden = details.get('hidden', False)
-    if is_hidden is not None:
+    if is_hidden != False:
         is_hidden = True
     show_event_id = details.get("show_event_id", 0)
     show_object_id = details.get("show_object_id", 0)
     is_locked = details.get("locked", False)
-    if is_locked is not None:
+    if is_locked != False:
         is_locked = True
     locked_descr = details.get('locked_descr', '')
     unlock_event_id = details.get('unlock_event_id', 0)
     unlock_obj_id = details.get("unlock_object_id", 0)
     aftermath_desc = details['aftermath_desc']
     cause_event = details.get('cause_event', False)
-    if cause_event is not None:
+    if cause_event != False:
         cause_event = True
     effect_event_id = details.get('effect_event_id', 0)
     dec_description = details['dec_description']
     can_occur_once = details.get("can_occur_once", False)
-    if can_occur_once is not None:
+    if can_occur_once != False:
         can_occur_once = True
     is_locked_by_event_id = details.get("is_locked_by_event_id", 0)
     locked_by_event_desc = details.get("locked_by_event_description", '')
     reset_story = details.get("reset_story", False)
-    if reset_story is not None:
+    if reset_story != False:
         reset_story = True
     dec = StoryDecision.get(story_id, location_id, decision_id)
     if dec is None:
