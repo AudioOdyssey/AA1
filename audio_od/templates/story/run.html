@@ -8,7 +8,7 @@
     {%if backs|length > 0%}
         <button onclick="runBackOne('{{story.story_id}}')" class="btn btn-light">Back one location</button>
     {%endif%}
-
+<a href = "/help/run"><button class="btn btn-light">How to use Run Story</button></a>
     <button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
     <button onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light">Back to Main Story Page</button>
     <button class="btn btn-primary" style="float:right"
