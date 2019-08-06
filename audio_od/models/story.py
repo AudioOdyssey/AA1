@@ -46,11 +46,13 @@ class Story:
     updated_at = None
     starting_loc = 0
     author_name = ''
+    num_ratings = 0
 
     def __init__(self, story_id=0, story_title='', story_author='', story_synopsis='', story_price=0,
                  author_paid=False, genre='', length_of_story=0, number_of_locations=0, number_of_decisions=0, story_in_store=False,
                  story_verification_date='', verifier_id=0, verification_status='',
-                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', starting_loc=0, inventory_size=0, parental_ratings=0.0, updated_at=None, author_name=''):
+                 story_ratings=0, story_language_id=1, storage_size=0, user_creator_id=0, reviewer_comments='', 
+                 starting_loc=0, inventory_size=0, parental_ratings=0.0, updated_at=None, author_name='', num_ratings = 0):
         if story_id: #if a story_id is not provided, then it will be generated
             self.story_id = story_id
         self.story_title = story_title
@@ -76,6 +78,8 @@ class Story:
         self.verification_status = verification_status
         self.updated_at = updated_at
         self.author_name = author_name
+        self.num_ratings = num_ratings
+
 
     def add_to_server(self):
         """ This method adds the story to the server pretty self-explanatory
@@ -118,7 +122,8 @@ class Story:
                                "verifier_id"], verification_status=results['verification_status'], story_ratings=results["story_ratings"],
                            story_language_id=results["story_language_id"], storage_size=results[
                                "storage_size"], user_creator_id=results["user_creator_id"],
-                           reviewer_comments=results['reviewer_comments'], starting_loc=results['starting_loc'], inventory_size=results['inventory_size'], parental_ratings=results['parental_ratings'])
+                           reviewer_comments=results['reviewer_comments'], starting_loc=results['starting_loc'], 
+                           inventory_size=results['inventory_size'], parental_ratings=results['parental_ratings'], num_ratings = results['number_of_reviews'])
 
     def update(self, story_title, story_author, story_price, story_language_id, genre, story_synopsis):
         self.story_title = story_title
@@ -365,3 +370,26 @@ class Story:
                 story_list.append(cls(row["story_id"], row["story_title"], author_name=author_name))
         conn.close()
         return story_list
+
+
+    def story_ratings_average(self, new_rating):
+        new_rating = float(self.story_ratings*self.num_ratings + new_rating) / (self.num_ratings + 1)
+        self.num_ratings+=1
+        self.story_ratings = new_rating
+        conn = pymysql.connect(
+            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("UPDATE master_stories SET story_ratings = %s, number_of_reviews = %s WHERE story_id = %s"), (self.story_ratings, self.num_ratings, self.story_id))
+            conn.commit()
+        conn.close()
+
+    def has_reviewed_before(self, user_id):
+        conn = pymysql.connect(
+        config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cur:
+            cur.execute(("SELECT * FROM story_ratings WHERE user_id = %s AND story_id = %s"), (self.story_ratings, self.num_ratings, self.story_id))
+            query_data = cur.fetchall()
+            if query_data.get('user_id') is not None:
+                return False
+        conn.close()
+        return True
