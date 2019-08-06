@@ -79,15 +79,15 @@
                 </select>
             </div>
         </div>
-<label>Causes a Reset?</label>
-                    {% if decision.reset_story %}
-                    <input type="checkbox" autocomplete="off" name="reset_story" 
-                        onchange="show_changed(this, 'location/decision')" checked>
-                    {% else %}
-                    <input type="checkbox" autocomplete="off" name="reset_story" 
-                        onchange="show_changed(this, 'location/decision')">
-                    {% endif %}
-                    <br>
+        <label>Causes a Reset?</label>
+        {% if decision.reset_story %}
+        <input type="checkbox" autocomplete="off" name="reset_story" 
+            onchange="show_changed(this, 'location/decision')" checked>
+        {% else %}
+        <input type="checkbox" autocomplete="off" name="reset_story" 
+            onchange="show_changed(this, 'location/decision')">
+        {% endif %}
+        <br>
 
         <label>Can Occur only ONCE?</label>
         {% if decision.can_occur_once %}
