@@ -44,14 +44,10 @@ def event_update():
         if event_id == '':
             event_id = StoryEvent.get_last_id(story_id)
         name = details['event_name']
-        location = details.get('event_loc')
-        if location is None:
-            location = 0
+        location = details.get('event_loc', 0)
         desc = details['ev_description']
-        is_global = details.get('is_global')
-        if is_global is None:
-            is_global = False
-        else:
+        is_global = details.get('is_global', False)
+        if is_global != False: 
             is_global = True
         evnt = StoryEvent.get(story_id, event_id)
         if evnt is None:

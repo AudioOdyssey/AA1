@@ -46,12 +46,8 @@ def location_update():
     original_desc = details['location_origin_description']
     short_desc = details['location_short_description']
     post_event_description = details['location_post_event_description']
-    event_id = details.get("location_event_id")
-    if event_id is None:
-        event_id = 0
-    next_location_id = details.get('next_loc_id')
-    if next_location_id is None:
-        next_location_id = 0
+    event_id = details.get("location_event_id", 0)
+    next_location_id = details.get('next_loc_id', 0)
     loc = StoryLocation.get(story_id, loc_id)
     if loc is None:
         abort(404)

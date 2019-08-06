@@ -46,19 +46,13 @@ def object_update():
         object_id = StoryObject.get_last_id(story_id)
     name = details['obj_name']
     desc = details['obj_description']
-    starting_loc = details.get('obj_starting_loc')
-    if starting_loc is None:
-        starting_loc = 0
-    can_pickup_obj = details.get('can_pickup_obj')
-    if can_pickup_obj:
-        can_pickup_obj = 1
-    else:
-        can_pickup_obj = 0
-    is_hidden = details.get('is_hidden')
-    if is_hidden:
-        is_hidden = 1
-    else:
-        is_hidden = 0
+    starting_loc = details.get('obj_starting_loc', 0)
+    can_pickup_obj = details.get('can_pickup_obj', False)
+    if can_pickup_obj != False:
+        can_pickup_obj = True
+    is_hidden = details.get('is_hidden', False)
+    if is_hidden != False:
+        is_hidden = True
     unhide_event_id = details.get('unhide_event_id')
     if unhide_event_id is None:
         is_hidden = 0
