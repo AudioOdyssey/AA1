@@ -226,7 +226,7 @@ def story_run():
         for itm in obj['items']:
             inv.append(StoryObject.get(story_id, itm))
         for ent in obj['events']:
-            evts.append(StoryEvent.get(story_id, ent))
+            evts.append(ent)
         triggered = obj['decs']
         for back in obj['back']:
             backs.append(StoryLocation.get(story_id, back))

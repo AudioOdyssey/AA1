@@ -52,7 +52,7 @@
     <!--for objects at this location (brian idk how to keep track of that)-->
     <!--print their names and have a pick up option-->
     {%for obj in objects%}
-        <button onclick="runAddItem({{obj.obj_id}})" class="btn btn-light" {%if not obj.can_pickup_obj%}disabled{%endif%}>Pick Up <i>{{obj.obj_name}}</i></button>
+        <button onclick="runAddItem({{obj.obj_id}})" class="btn btn-light" {%if obj.is_hidden and obj.unhide_event_id|string not in evts%}disabled{%endif%}>Pick Up <i>{{obj.obj_name}}</i></button>
     {%endfor%}
     <p>Would you like to ...</p>
 
