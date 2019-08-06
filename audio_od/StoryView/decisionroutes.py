@@ -80,6 +80,9 @@ def decision_update():
     if can_occur_once != False:
         can_occur_once = True
     is_locked_by_event_id = details.get("is_locked_by_event_id", 0)
+    is_locked_by_event = details.get("is_locked_by_event", False)
+    if is_locked_by_event == False:
+        is_locked_by_event_id = 0
     locked_by_event_desc = details.get("locked_by_event_description", '')
     reset_story = details.get("reset_story", False)
     if reset_story != False:

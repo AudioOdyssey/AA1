@@ -223,34 +223,35 @@
             </div>
           
             <!--'location/decision' add checkbox here?-->
-            <div>
+        </div>
+
+        <div>
             <label>Can be locked by event (mid-game)?</label>
-            {% if decision.unlock_event_id ==0 %}
-            <input type="checkbox" autocomplete="off" name="locked" onclick="show_checkbox_visability_check(this)"
-                onchange="show_changed(this, 'location/decision')" checked>
+            {% if decision.is_locked_by_event_id == 0 %}
+            <input type="checkbox" autocomplete="off" name="is_locked_by_event" onclick="show_checkbox_visability_check(this)"
+                onchange="show_changed(this, 'location/decision')">
             {% else %}
-            <input type="checkbox" autocomplete="off" name="locked" onclick="show_checkbox_visability_check(this)"
-                onchange="show_changed(this, 'location/decision')">
+            <input type="checkbox" autocomplete="off" name="is_locked_by_event" onclick="show_checkbox_visability_check(this)"
+                onchange="show_changed(this, 'location/decision')" checked>
             {% endif %}
-            <div class="checkbox_hide" {%if not decision.unlock_event_id ==0%}style="display: none;" {%endif%}>
-            <br>
-            <label>Select Event that locks this decision: or <span class="lnk"
-                    onclick="add_evt_redir('{{ story_id }}')">
-                    Add New
-                    Event</span></label>
-            <select type="text" class="form-control" autocomplete="off" name="is_locked_by_event_id"
-                onchange="show_changed(this, 'location/decision')">
-                <option value="0">None</option>
-                {%for event in events%}
-                <option {%if decision.is_locked_by_event_id == event.event_id%}selected{%endif%}
-                    value="{{event.event_id}}">{{event.event_name}}</option>
-                {%endfor%}
-            </select>
-            <label>Description when newly locked:</label>
-            <textarea class="form-control" autocomplete="off" name="locked_by_event_description"
-                onchange="show_changed(this, 'location/decision')">{{decision.locked_by_event_description}}</textarea>
-        </div>
-        </div>
+            <div class="checkbox_hide" {%if decision.is_locked_by_event_id==0%}style="display: none;" {%endif%}>
+                <br>
+                <label>Select Event that locks this decision: or <span class="lnk"
+                        onclick="add_evt_redir('{{ story_id }}')">
+                        Add New
+                        Event</span></label>
+                <select type="text" class="form-control" autocomplete="off" name="is_locked_by_event_id"
+                    onchange="show_changed(this, 'location/decision')">
+                    <option value="0">None</option>
+                    {%for event in events%}
+                    <option {%if decision.is_locked_by_event_id == event.event_id%}selected{%endif%}
+                        value="{{event.event_id}}">{{event.event_name}}</option>
+                    {%endfor%}
+                </select>
+                <label>Description when newly locked:</label>
+                <textarea class="form-control" autocomplete="off" name="locked_by_event_description"
+                    onchange="show_changed(this, 'location/decision')">{{decision.locked_by_event_description}}</textarea>
+            </div>
         </div>
         <hr>
         <section style="width: 100%" class="row">
