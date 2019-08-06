@@ -46,7 +46,7 @@
     <section class="p-2">
         <!-- 'location/decision': add max value -->
         <label>Decision Sequence Number:</label>
-        <input class="form-control" name="sequence_number" min="1" type="number" onchange="show_changed(this, 'location/decision')"
+        <input class="form-control" name="sequence_number" min="1" max="10" type="number" onchange="show_changed(this, 'location/decision')"
             value="{{decision.sequence_num|e}}">
 
 
