@@ -51,7 +51,7 @@ def app_user_info():
 @userprofile.route("/app/user/profile/upload", methods=['POST'])
 def upload_profile_pic():
     """Allows users in the app to upload a profile picture"""
-   details = request.json
+    details = request.json
     profile_pic = details.get('profile_pic')
     auth_token = request.args.get('token')
     uid = decode_auth_token(auth_token)
