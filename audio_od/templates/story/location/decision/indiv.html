@@ -64,7 +64,9 @@
                 onchange="show_changed(this, 'location/decision')">
             {% endif %}
             <br>
-
+       
+            
+                    
             <div class="checkbox_hide" {%if not decision.transition%}style="display: none;" {%endif%}>
                 <label>Select Transition Location: or <span class="lnk" onclick="add_loc_redir('{{ story_id }}')"> Add New Location</span></label>
                 <select type="text" class="form-control" autocomplete="off" name="transition_loc_id"
@@ -77,7 +79,15 @@
                 </select>
             </div>
         </div>
-
+<label>Causes a Reset?</label>
+                    {% if decision.reset_story %}
+                    <input type="checkbox" autocomplete="off" name="reset_story" 
+                        onchange="show_changed(this, 'location/decision')" checked>
+                    {% else %}
+                    <input type="checkbox" autocomplete="off" name="reset_story" 
+                        onchange="show_changed(this, 'location/decision')">
+                    {% endif %}
+                    <br>
 
         <label>Can Occur only ONCE?</label>
         {% if decision.can_occur_once %}
