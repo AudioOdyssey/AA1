@@ -1,13 +1,15 @@
-<div class="text-center">
-    <h1>text-center Audio Odyssey</h1>
-    <br>
+{% extends "template.html" %}
+{% block content %}
+<div class="text-center body">
+    <h1>Audio Odyssey</h1>
+    <br><br>
     <h2>Our Mission</h2>
 
     <body>AudioOdyssey, Inc. strives to present a safe and enjoyable gaming experience for our users as well as provide
         a
         creative opportunity for our contributors. In doing so, we hope to prevent drowsy driving accidents and
         encourage safer driving habits.</body>
-    <br>
+    <br><br>
     <h2>Our Story</h2>
 
     <body>The original concept for AudioOdyssey was born during a hackathon at Hyland Software in Westlake, Ohio in
@@ -16,7 +18,7 @@
         intend on pursuing the project futher. However, when they were approached by one of the judges of the
         competition, Miguel Zubizeretta, and offered summer jobs developing their project they agreed ecstatically!
         AudioOdyssey officially began development in the summer of 2019.</body>
-    <br>
+    <br><br>
     <h2>Our Team</h2>
 
     <body><strong>Miguel Zubizeretta</strong></body>
@@ -36,5 +38,8 @@
 
     <body><strong>Adam Zhang</strong></body>
 </div>
+<br><br>
 
-<img class="logo" src="{{ url_for('static', filename='image/logoimage.jpg') }}">
+<img style= "width: 50%; align-self: center" class="logo" src="{{ url_for('static', filename='image/logoimage.jpg') }}">
+<br>
+{% endblock %}
