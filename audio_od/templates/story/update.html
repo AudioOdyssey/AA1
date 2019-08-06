@@ -106,7 +106,6 @@
             <div class="hover-cursor small-card" onclick="loadpage('/story/object/indiv?story_id={{story.story_id}}&object_id={{object.obj_id}}')">
                 <h4>{{ object.obj_name|e }}&nbsp;</h4>
                 <hr>
-                <h5>{{ object.obj_starting_loc_name|e }}&nbsp;</h5>
                 <p>{{ StoryLocation.get(story.story_id,object.obj_starting_loc).location_name|e }}&nbsp;</p>
             </div>
         </div>
