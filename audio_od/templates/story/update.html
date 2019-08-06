@@ -123,7 +123,7 @@
             <div class="hover-cursor small-card" onclick="loadpage('/story/event/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}')">
                 <h4>{{ event.event_name|e }}&nbsp;</h4>
                 <hr>
-                <h5>{{ event.event_location_name|e }}&nbsp;</h5>
+                <h5>{{ StoryLocation.get(story.story_id,event.event_location_id).location_name|e }}&nbsp;</h5>
                 <p>{{ event.event_description|e }}&nbsp;</p>
             </div>
         </div>
