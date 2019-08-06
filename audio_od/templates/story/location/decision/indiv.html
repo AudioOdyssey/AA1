@@ -223,6 +223,17 @@
             </div>
             <hr>
             <!--'location/decision' add checkbox here?-->
+            <div>
+            <label>Can be locked by event (mid-game)?</label>
+            {% if decision.unlock_event_id ==0 %}
+            <input type="checkbox" autocomplete="off" name="locked" onclick="show_checkbox_visability_check(this)"
+                onchange="show_changed(this, 'location/decision')" checked>
+            {% else %}
+            <input type="checkbox" autocomplete="off" name="locked" onclick="show_checkbox_visability_check(this)"
+                onchange="show_changed(this, 'location/decision')">
+            {% endif %}
+            <div class="checkbox_hide" {%if not decision.unlock_event_id ==0%}style="display: none;" {%endif%}>
+            <br>
             <label>Select Event that locks this decision: or <span class="lnk"
                     onclick="add_evt_redir('{{ story_id }}')">
                     Add New
@@ -238,6 +249,8 @@
             <label>Description when newly locked:</label>
             <textarea class="form-control" autocomplete="off" name="locked_by_event_description"
                 onchange="show_changed(this, 'location/decision')">{{decision.locked_by_event_description}}</textarea>
+        </div>
+        </div>
         </div>
         <section style="width: 100%" class="row">
             <button type="button" onclick="show_delete_pressed(this, 'location/decision')" class="ml-auto btn btn-danger"><i class="fa fa-trash-alt"></i> Delete Decision</button>
