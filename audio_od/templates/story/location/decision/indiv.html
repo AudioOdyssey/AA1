@@ -54,7 +54,7 @@
         <textarea class="form-control" rows="3" name="dec_description"
             onchange="show_changed(this, 'location/decision')">{{ decision.decision_description|e }}</textarea>
 
-        <div class="row m0">
+        <div>
             <label>Causes a transition?</label>
             {% if decision.transition %}
             <input type="checkbox" autocomplete="off" name="transition" onclick="show_checkbox_visability_check(this)"
@@ -97,7 +97,7 @@
         {% endif %}
 
 
-        <div class="row m0">
+        <div>
             <label>Is Hidden?</label>
             {% if decision.hidden %}
             <input type="checkbox" autocomplete="off" name="hidden" onclick="show_checkbox_visability_check(this)"
