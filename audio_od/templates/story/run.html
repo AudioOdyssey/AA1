@@ -1,5 +1,3 @@
-<script src="{{ url_for('static', filename='js/story/run.js') }}"></script>
-
 {%if location is none%}
     <h1>Can't Load Run-View, No starting location!</h1>
     <button onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light">Back to Main Story Page</button>
@@ -8,7 +6,7 @@
     {%if backs|length > 0%}
         <button onclick="runBackOne('{{story.story_id}}')" class="btn btn-light">Back one location</button>
     {%endif%}
-<a href = "/help/run"><button class="btn btn-light">How to use Run Story</button></a>
+    <a href = "/help/run"><button class="btn btn-light">How to use Run Story</button></a>
     <button onclick="runStartOver('{{story.story_id}}')" class="btn btn-light">Restart</button>
     <button onclick="loadpage('/story/update?story_id={{story.story_id}}')" class="btn btn-light">Back to Main Story Page</button>
     <button class="btn btn-primary" style="float:right"
@@ -16,21 +14,28 @@
 
     <h1>Running {{story.story_title|e}}</h1>
     <br>
+
     <h3>Inventory:</h3>
     <div class="clearfix"></div>
+
     {%for itm in inv%}
         <p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{itm.obj_name|e}}</p>
     {%else%}
         <p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</p>
     {%endfor%}
+
     <div class="clearfix"></div>
+
     <h3>Triggered Events:</h3>
+
     <div class="clearfix"></div>
+
     {%for event in evts%}
         <p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">{{event.event_name|e}}</p>
     {%else%}
         <p style="width: max-content; float: left; margin:0.5rem; border: solid grey 1px; padding: 0.25rem; background: white">Nothing!</p>
     {%endfor%}
+
     <div class="clearfix"></div>
 
     <h2>At {{location.location_name|e}}</h2>
