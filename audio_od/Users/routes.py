@@ -51,20 +51,16 @@ def app_user_info():
 @userprofile.route("/app/user/profile/upload", methods=['POST'])
 def upload_profile_pic():
     """Allows users in the app to upload a profile picture"""
-    details = request.json
+   details = request.json
     profile_pic = details.get('profile_pic')
     auth_token = request.args.get('token')
-    token = request.args.get('token')
-    if check_invalid_app_token(token):
-        return '{"status": "error"}'
     uid = decode_auth_token(auth_token)
-    if file and allowed_file(file):
-        pic_name = str(uid) + '.jpg'
-        with open(os.path.join(app.config['UPLOAD_FOLDER'], 'profile_pics', pic_name), 'wb') as fh:
-            fh.write(base64.b64decode(profile_pic)) 
-        return json.dumps({'message' : 'success'}), 200
-    return '{"status" : "error"}', 404
+    pic_name = str(uid) + '.jpg'
+    with open(os.path.join(config.upload_folder, 'profile_pics', pic_name), 'wb') as fh:
+        fh.write(base64.b64decode(profile_pic)) 
+    return json.dumps({'message' : 'success'}), 200
 
+    
 @userprofile.route("/user/picture", methods=['GET'])
 @authentication_required
 @check_header
