@@ -9,7 +9,7 @@ from flask import redirect, render_template, request, Blueprint
 
 #Internal imports
 from audio_od.models import Story, StoryObject, StoryLocation, StoryEvent, StoryDecision
-from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid
+from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid, check_invalid_app_token, decode_auth_token
 
 story_view = Blueprint("story", __name__)
 
@@ -137,6 +137,21 @@ def app_store_expand():
     details = request.json
     story_id = details.get("story_id")
     return Story.get_info(story_id)
+
+
+@story_view.route("/store/review/story", methods=['POST'])
+def review_story():
+    auth_token = request.args.get('auth_token')
+    if check_invalid_app_token(auth_token):
+        return "{'message' : 'token is invalid'}", 403
+    story_id = request.args.get('story_id')
+    stry = Story.get(story_id)
+    uid = decode_auth_token(auth_token)
+    if stry.has_reviewed_before(uid):
+        return "{'message' : 'User reviewed story before'}"
+    rating = request.args.get('rating')
+    story_ratings_average(rating)
+    return "{'message' : 'Review recorded'}", 200
 
 
 @story_view.route("/story/publish", methods=["POST"])
