@@ -1,24 +1,23 @@
-#Python standard libraries
+"""Routes for pages relating to stories"""
 import os
-import sys
 import json
-import base64
 
 #Third-party libraries
 from flask import render_template, request, Blueprint, g, abort
 
 #Internal imports
 from audio_od.models import Story, StoryObject, StoryLocation, StoryEvent, StoryDecision
-from audio_od.utils import authentication_required, check_header, checkEditorAdmin, getUid, check_invalid_app_token, decode_auth_token
+from audio_od.utils import (app, authentication_required, check_header, checkAdmin,
+                            checkEditorAdmin, getUid, check_invalid_app_token, decode_auth_token)
 
-story_view = Blueprint("story", __name__)
+STORY_VIEW = Blueprint("story", __name__)
 
-@story_view.route("/story/update", methods=["GET"])
+@STORY_VIEW.route("/story/update", methods=["GET"])
 @authentication_required
 @check_header
 def story_update():
-    """Endpoint for updating objects. If the wrong user is accessing the story, a 403 will be thrown. 
-    If the story does not exist, a 404 will be thrown."""
+    """Endpoint for updating objects. If the wrong user is accessing the story, 
+    a 403 will be thrown. If the story does not exist, a 404 will be thrown."""
     story = Story.get(int(request.args['story_id']))
     if story is None:
         abort(404)
@@ -28,11 +27,13 @@ def story_update():
     events = StoryEvent.event_list(request.args['story_id'])
     locations = StoryLocation.loc_list(request.args['story_id'])
     coverimage = story.get_image_base64().decode("utf-8")
-    return render_template("story/update.html", StoryLocation=StoryLocation, story=story, objects=objects, events=events, locations=locations, coverimage=coverimage)
+    return render_template("story/update.html", StoryLocation=StoryLocation, story=story,
+                           objects=objects, events=events, locations=locations, 
+                           coverimage=coverimage)
 
 
 
-@story_view.route("/story/image")
+@STORY_VIEW.route("/story/image")
 @authentication_required
 @check_header
 def story_image():
@@ -46,15 +47,17 @@ def story_image():
     return story.get_image_base64()
 
 
-valid_genres = {"Mystery", "Romance", "Sci-Fi", "Fantasy", "Historical Fiction", "Drama",
-                "Horror", "Thriller", "Comedy", "Adventure", "Sports", "Non-Fiction", "Other Fiction"}
+VALID_GENRES = {"Mystery", "Romance", "Sci-Fi", "Fantasy", "Historical Fiction", 
+                "Drama", "Horror", "Thriller", "Comedy", "Adventure", "Sports", 
+                "Non-Fiction", "Other Fiction"}
 
 
-@story_view.route("/story/update", methods=["POST"])
+@STORY_VIEW.route("/story/update", methods=["POST"])
 @authentication_required
 def story_update_post():
     """Endpoint for updating stories. If the wrong user is accessing the story,
-    a 403 will be thrown. If the story does not exist, a 404 will be thrown. The GET and POST methods are done asynchrously."""
+    a 403 will be thrown. If the story does not exist, a 404 will be thrown. 
+    The GET and POST methods are done asynchrously."""
     details = request.form
     story_id = request.form.get('story_id')
     story = Story.get(story_id)
@@ -66,7 +69,7 @@ def story_update_post():
     story_synopsis = details['story_synopsis']
     story_price = details['story_price']
     genre = details.get('genre')
-    if genre is None or genre not in valid_genres:
+    if genre is None or genre not in VALID_GENRES:
         genre = "Miscellaneous"
     story.length_of_story = details['length_of_story']
     story.inventory_size = details.get('inventory_size')
@@ -82,11 +85,12 @@ def story_update_post():
     story.verification_status = 0
     story.update_verify()
     story.update(story_title, "", story_price, 0, genre, story_synopsis)
-    #story_title, story_author, story_price, story_language_id, length_of_story, genre, story_synopsis, inventory_size
+    # story_title, story_author, story_price, story_language_id, 
+    # length_of_story, genre, story_synopsis, inventory_size
     return '{"status":"ok"}'
 
 
-@story_view.route("/story/destroy", methods=["POST"])
+@STORY_VIEW.route("/story/destroy", methods=["POST"])
 @authentication_required
 def story_destroy():
     """Endpoint for destroying.If the wrong user is accessing the story,
@@ -100,15 +104,16 @@ def story_destroy():
     return '{"status":"ok"}'
 
 
-valid_mimetypes = ['image/jpeg', 'image/png', 'image/bmp']
+VALID_MIMETYPES = ['image/jpeg', 'image/png', 'image/bmp']
 
 
 def allowed_file(file):
+    """Checks if an image is of an allowed type"""
     mimetype = file.content_type
-    return mimetype in valid_mimetypes
+    return mimetype in VALID_MIMETYPES
 
 
-@story_view.route("/story/new", methods=["POST"])
+@STORY_VIEW.route("/story/new", methods=["POST"])
 @authentication_required
 @check_header
 def story_new():
@@ -121,19 +126,21 @@ def story_new():
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
 
-@story_view.route("/app/story/info", methods=['GET'])
+@STORY_VIEW.route("/app/story/info", methods=['GET'])
 def app_story_logistics():
-    """Returns all the objects, locations, decisions, events in the story. Also, returns the story cover. This endpoint is for the app."""
+    """Returns all the objects, locations, decisions, events in the story. 
+    Also, returns the story cover. This endpoint is for the app."""
     return Story.get_entities(int(request.args.get('story_id')))
 
 
-@story_view.route("/app/store", methods=["GET"])
+@STORY_VIEW.route("/app/store", methods=["GET"])
 def app_store_info():
-    """Endpoint for app. Sends all the stories ready for the store. Returns basic info, such as price, author, genre, synopsis of the story"""
+    """Endpoint for app. Sends all the stories ready for the store. Returns 
+    basic info, such as price, author, genre, synopsis of the story"""
     return Story.display_for_store()
 
 
-@story_view.route("/store/story/info", methods=['GET'])
+@STORY_VIEW.route("/store/story/info", methods=['GET'])
 def app_store_expand():
     """Endpoint for app. If user taps on the story, more info about the story will be given."""
     details = request.json
@@ -141,26 +148,28 @@ def app_store_expand():
     return Story.get_info(story_id)
 
 
-@story_view.route("/store/review/story", methods=['POST'])
+@STORY_VIEW.route("/store/review/story", methods=['POST'])
 def review_story():
+    """Endpoint for app users to review stories with stars."""
     auth_token = request.args.get('auth_token')
     if check_invalid_app_token(auth_token):
         return "{'message' : 'token is invalid'}", 403
     story_id = request.args.get('story_id')
-    stry = Story.get(story_id)
+    story = Story.get(story_id)
     uid = decode_auth_token(auth_token)
-    if stry.has_reviewed_before(uid):
+    if story.has_reviewed_before(uid):
         return "{'message' : 'User reviewed story before'}"
     rating = request.args.get('rating')
-    story_ratings_average(rating)
+    story.story_ratings_average(rating)
     return "{'message' : 'Review recorded'}", 200
 
 
-@story_view.route("/story/publish", methods=["POST"])
+@STORY_VIEW.route("/story/publish", methods=["POST"])
 @authentication_required
 @check_header
 def story_publish():
-    """Endpoint for allowing users to publish stories. IF successful, will return a json with the status"""
+    """Endpoint for allowing users to publish stories. If successful, 
+    will return a json with the status"""
     story = Story.get(int(request.args['story_id']))
     if story is None:
         abort(404)
@@ -172,13 +181,14 @@ def story_publish():
     story.update_verify()
     return '{"status":"ok"}'
 
-@story_view.route("/story/treeview")
+@STORY_VIEW.route("/story/treeview")
 @authentication_required
 @check_header
 def treeview():
-    """This allows the writer to see all the story in a treeview, rather than the conventional in-line mode. 
-    Users can click on the decisions to see what the next locations will contain.If the user does not have correct permissions, then a 403 will be thrown.
-    If the story does not exist, a 404 will be thrown."""
+    """This allows the writer to see all the story in a treeview, rather than the conventional
+    in-line mode. Users can click on the decisions to see what the next locations will contain.
+    If the user does not have correct permissions, then a 403 will be thrown.If the story does 
+    not exist, a 404 will be thrown."""
     story_id = request.args['story_id']
     story = Story.get(story_id)
     if story is None:
@@ -194,15 +204,18 @@ def treeview():
         location = StoryLocation.get(story_id, loc_id)
     else:
         loc_id = 0
-    return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id, locations=locations, location=location, decisions=decisions, story=story)
+    return render_template("story/treeview.html", StoryLocation=StoryLocation, loc_id=loc_id,
+                           locations=locations, location=location, decisions=decisions, story=story)
 
 
-@story_view.route("/story/run")
+@STORY_VIEW.route("/story/run")
 @authentication_required
 @check_header
 def story_run():
-    """Allows the user to test the way the story plays. Functions the same the execution cycle in the app functions. The writer can play the story with this endpoint. 
-    If the user doesn't have correct permissions, then a 403 will be thrown. If the story does not exist, then a 404 will be thrown."""
+    """Allows the user to test the way the story plays. Functions the same the execution cycle
+    in the app functions. The writer can play the story with this endpoint. If the user doesn't
+    have correct permissions, then a 403 will be thrown. If the story does not exist, then a 404
+    will be thrown."""
     story_id = request.args["story_id"]
     story = Story.get(story_id)
     if story is None:
@@ -217,8 +230,7 @@ def story_run():
     decisions = StoryDecision.dec_list_for_story_loc(story_id, loc_id)
     objects = StoryObject.obj_list_loc(story_id, loc_id)
 
-    cookies = request.cookies
-    rundata = cookies.get("rundata")
+    rundata = request.cookies.get("rundata")
     inv = []
     evts = []
     triggered = []
@@ -232,4 +244,7 @@ def story_run():
         triggered = obj['decs']
         for back in obj['back']:
             backs.append(StoryLocation.get(story_id, back))
-    return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs, objects=objects, decisions=decisions, StoryEvent=StoryEvent, StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, location=location)
+    return render_template("story/run.html", inv=inv, evts=evts, triggered=triggered, backs=backs,
+                           objects=objects, decisions=decisions, StoryEvent=StoryEvent, 
+                           StoryLocation=StoryLocation, StoryObject=StoryObject, story=story, 
+                           location=location)

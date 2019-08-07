@@ -345,7 +345,7 @@ class Story:
                 stry = cls.get(row['story_id'])
                 stry_info = {'story_id': row['story_id'], 'story_title': row['story_title'],
                              'story_author': row['story_author'], 'story_synopsis': row['story_synopsis'],
-                             'story_price': row['story_price'], 'genre': row['genre'], 'story_rating' : row['story_ratings']
+                             'story_price': row['story_price'], 'genre': row['genre'], 'story_rating' : row['story_ratings'],
                              'cover': stry.get_image_base64()}
                 result.append(stry_info)
         storefront = {"stories": result}
