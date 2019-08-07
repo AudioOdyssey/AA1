@@ -339,13 +339,13 @@ class Story:
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories` WHERE story_in_store = 1"))
+                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre, story_ratings FROM `master_stories` WHERE story_in_store = 1"))
             query_data = cur.fetchall()
             for row in query_data:
                 stry = cls.get(row['story_id'])
                 stry_info = {'story_id': row['story_id'], 'story_title': row['story_title'],
                              'story_author': row['story_author'], 'story_synopsis': row['story_synopsis'],
-                             'story_price': row['story_price'], 'genre': row['genre'], 'story_rating' : row['story_ratings']
+                             'story_price': row['story_price'], 'genre': row['genre'], 'story_rating' : row['story_ratings'],
                              'cover': stry.get_image_base64()}
                 result.append(stry_info)
         storefront = {"stories": result}
