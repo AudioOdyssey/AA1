@@ -194,25 +194,6 @@ class Story:
         conn.close()
         return story_list
 
-    @classmethod
-    def story_list_for_purchase(cls):
-        """Returns all the stories ready for the store"""
-        conn = pymysql.connect(
-            config.db_host, user=config.db_user, passwd=config.db_password, db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
-        story_list = []
-        with conn.cursor() as cur:
-            cur.execute(
-                ("SELECT * FROM `master_stories` WHERE verification_status = 3"))
-            results = cur.fetchall()
-            for row in results:
-                story_list.append(
-                    cls(row["story_id"], row["story_title"], 
-                        row["story_author"], row["story_synopsis"], 
-                        row["story_price"], row["genre"], 
-                        story_ratings = row["story_ratings"], user_creator_id=row["user_creator_id"]))
-        conn.close()
-        return story_list
-
     
     def mark_purchased(self, user_id):
         """This methods allows us to track which stories users bought"""
@@ -339,7 +320,7 @@ class Story:
                                db=config.db_name, connect_timeout=5, cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
             cur.execute(
-                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre FROM `master_stories` WHERE story_in_store = 1"))
+                ("SELECT story_id, story_title, story_author, story_synopsis, story_price, genre, story_ratings FROM `master_stories` WHERE story_in_store = 1"))
             query_data = cur.fetchall()
             for row in query_data:
                 stry = cls.get(row['story_id'])
