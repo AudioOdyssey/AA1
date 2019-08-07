@@ -5,7 +5,7 @@ import json
 import base64
 
 #Third-party libraries
-from flask import redirect, render_template, request, Blueprint
+from flask import render_template, request, Blueprint, g, abort
 
 #Internal imports
 from audio_od.models import Story, StoryObject, StoryLocation, StoryEvent, StoryDecision
@@ -110,11 +110,13 @@ def allowed_file(file):
 
 @story_view.route("/story/new", methods=["POST"])
 @authentication_required
+@check_header
 def story_new():
     """Endpoint for creating new stories. A json with the story_id and status is returned."""
     uid = getUid()
     story = Story(user_creator_id=uid)
     story.story_synopsis = ""
+    story.story_author = g.user.first_name + " " + g.user.last_name
     story.add_to_server()
     return '{"status":"ok", "story": {"story_id":' + str(story.story_id) + '}}'
 
