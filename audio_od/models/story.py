@@ -206,7 +206,10 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"]))
+                    cls(row["story_id"], row["story_title"], 
+                        row["story_author"], row["story_synopsis"], 
+                        row["story_price"], row["genre"], 
+                        story_ratings = row["story_ratings"], user_creator_id=row["user_creator_id"]))
         conn.close()
         return story_list
 
@@ -231,7 +234,10 @@ class Story:
             results = cur.fetchall()
             for row in results:
                 story_list.append(
-                    cls(row["story_id"], row["story_title"], row["story_author"], row["story_synopsis"], row["story_price"], row["genre"], user_creator_id=row["user_creator_id"]))
+                    cls(row["story_id"], row["story_title"], 
+                        row["story_author"], row["story_synopsis"], 
+                        row["story_price"], row["genre"], story_ratings = row["story_ratings"], 
+                        user_creator_id=row["user_creator_id"]))
         conn.close()
         return story_list
 
@@ -248,6 +254,7 @@ class Story:
                 "story_synopsis": story.story_synopsis,
                 "story_price": story.story_price,
                 "genre": story.genre,
+                "story_rating" : story.story_ratings
                 "cover": story.get_image_base64()
             }
             result.append(stry_schema)
@@ -307,7 +314,8 @@ class Story:
             'length_of_story': stry.length_of_story,
             'number_of_locations': stry.number_of_locations,
             'number_of_decisions': stry.number_of_decisions,
-            'genre': stry.genre
+            'genre': stry.genre,
+            'story_rating' : stry.story_ratings
         }
         return json.dumps(result)
 
@@ -337,7 +345,7 @@ class Story:
                 stry = cls.get(row['story_id'])
                 stry_info = {'story_id': row['story_id'], 'story_title': row['story_title'],
                              'story_author': row['story_author'], 'story_synopsis': row['story_synopsis'],
-                             'story_price': row['story_price'], 'genre': row['genre'],
+                             'story_price': row['story_price'], 'genre': row['genre'], 'story_rating' : row['story_ratings']
                              'cover': stry.get_image_base64()}
                 result.append(stry_info)
         storefront = {"stories": result}
