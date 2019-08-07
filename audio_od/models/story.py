@@ -254,7 +254,7 @@ class Story:
                 "story_synopsis": story.story_synopsis,
                 "story_price": story.story_price,
                 "genre": story.genre,
-                "story_rating" : story.story_ratings
+                "story_rating" : story.story_ratings,
                 "cover": story.get_image_base64()
             }
             result.append(stry_schema)
