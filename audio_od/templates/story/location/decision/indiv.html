@@ -17,10 +17,10 @@
                 <input class="form-control" type="text" name="decision_name" onchange="show_changed(this, 'location/decision')"
                     value="{{ decision.decision_name|e }}">
             </div>
-            <hr>
-            <div class="col-sm-8">
+            
+            <div class= "col-sm-4">
                 <label><b>Properties:</b></label>
-                <br>
+              <br>
                 <p class="form-control">
                     {%if decision.hidden%}
                     Hidden,
