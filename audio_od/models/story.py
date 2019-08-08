@@ -382,3 +382,18 @@ class Story:
                 return False
         conn.close()
         return True
+
+    @classmethod
+    def update_library(cls, story):
+        """Sends the new story to the app library after the story gets purchased""" 
+        stry_schema = {
+            "story_id": story.story_id,
+            "story_title": story.story_title,
+            "story_author": story.story_author,
+            "story_synopsis": story.story_synopsis,
+            "story_price": story.story_price,
+            "genre": story.genre,
+            "story_rating" : story.story_ratings,
+            "cover": story.get_image_base64()
+        }
+        return stry_schema

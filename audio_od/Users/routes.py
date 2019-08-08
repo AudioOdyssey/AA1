@@ -1,11 +1,11 @@
 #Python standard libraries
 import os
 import sys
-import json
 import base64
 
 #Third-party libraries
 from flask import redirect, render_template, request, url_for, abort, g, Blueprint
+import simplejson as json
 
 #internal imports
 from audio_od import app
@@ -105,11 +105,13 @@ def app_purchase_story():
         return '{"status": "error"}'
     uid = decode_auth_token(token)
     if uid:
-        story = Story.get(request.args.get("story_id"))
+        story_id = request.args.get("story_id")
+        story = Story.get(story_id)
         if story is None:
             return '{"status" : "Story does not exist."}'
         else:
             story.mark_purchased(uid)
-            return '{"status" : "success"}'
+            result = {"status" : "success", "story" : Story.update_library(story)}
+            return json.dumps(result)
     else:
         return '{"status" : "User does not exist."}'
