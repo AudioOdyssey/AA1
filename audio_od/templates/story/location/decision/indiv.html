@@ -20,26 +20,9 @@
             
             <div class= "col-sm-4">
                 <label><b>Properties:</b></label>
-              <br>
-                <p class="form-control">
-                    {%if decision.hidden%}
-                    Hidden,
-                    {%else%}
-                    Not Hidden,
-                    {%endif%}
-
-                    {%if decision.transition%}
-                    Transition,
-                    {%else%}
-                    Not Transtion,
-                    {%endif%}
-
-                    {%if decision.locked%}
-                    Locked
-                    {%else%}
-                    Not Locked
-                    {%endif%}
-                </p>
+                <input class="form-control" disabled type="text" value=
+                    "{%if not decision.hidden%}Not {%endif%}Hidden, {%if not decision.transition%}Not {%endif%}Transtion, {%if not decision.locked%}Not {%endif%}Locked"
+                />
             </div>
         </section>
     </section>
