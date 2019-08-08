@@ -4,10 +4,13 @@
 <section class="container" id="main-site">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/verification/review.css') }}" type="text/css" />
-
+    <a href="loc">Locations</a>
+    <a href="dec">Decisions</a>
+    <a href="obj">Objects</a>
+    <a href="ev">Events</a>
     <h1 class="text" style="text-align: center;">Story Verification Status</h1>
     <hr>
-    <h2 class="text">Locations:</h2>
+    <h2 id = "loc" class="text">Locations:</h2>
     <br>
 
     {% for location in locations %}
@@ -26,7 +29,7 @@
     {% endfor %}
 
     <hr>
-    <h2 class="text">Decisions:</h2>
+    <h2 id = "dec" class="text">Decisions:</h2>
     <br>
 
     {%for decision in decisions%}
@@ -44,7 +47,7 @@
         {%endfor%}
 
         <hr>
-        <h2>Objects:</h2>
+        <h2 id="obj">Objects:</h2>
         <br>
         {%for object  in objects%}
         <p><strong>{{object.obj_name|e}}</strong></p>
@@ -61,7 +64,7 @@
 
         <hr><br>
 
-        <h2>Events:</h2>
+        <h2 id= "ev">Events:</h2>
         <br>
         {%for event in events%}
         <p><strong>{{event.event_name|e}}</strong></p>
