@@ -34,3 +34,7 @@ def treeview_help():
 def help_run():
     return render_template("help/run.html")
 
+@helper.route("/help/storyverif")
+@check_header
+def help_storyverif():
+    return render_template("help/storyverif.html")
