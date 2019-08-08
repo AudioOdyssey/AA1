@@ -1,7 +1,6 @@
 #Python standard libraries
 import os
 import sys
-import json
 from datetime import datetime, timedelta
 import base64
 
@@ -11,6 +10,7 @@ from flask_mail import Message, Mail
 import pymysql
 import pymysql.cursors
 import jwt
+import simplejson as json
 from authlib.flask.client import OAuth
 from loginpass import create_flask_blueprint, Facebook, Google
 
@@ -80,6 +80,8 @@ def sign_up(details_dict):
     username = details_dict['username']
     raw_password = details_dict['password']
     email = details_dict['email_address']
+    if not isValidEmail(email):
+        return '{"message" : "Email is not valid."}'
     gender = int(details_dict['gender'])
     country_of_origin = details_dict['country_of_origin']
     profession = details_dict['profession']
@@ -97,9 +99,9 @@ def sign_up(details_dict):
                first_name_input=first_name, last_name_input=last_name, language=language)
     result=usr.add_to_server()
     if result==-1:
-        return json.dumps({"message" : "username already exists"})
+        return json.dumps({"message" : "Username already exists"})
     elif result==-2:
-        return json.dumps({"message" : "email already in use"})
+        return json.dumps({"message" : "Email already in use"})
     else:
         cur = datetime.utcnow()
         exp = datetime.utcnow() + timedelta(days=30)

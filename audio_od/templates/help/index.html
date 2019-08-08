@@ -1,19 +1,52 @@
 {% extends "template.html" %}
 {% block content %}
-<section class="container" id="main-site">
-	<h2 class="text-center">How Can we Help?</h2>
-	<section class="row">
-		<a href="/help/story" class="col-sm-4 storycard">
-			<p>Story Help</p>
+<style>
+	#hero-help {
+	    text-align: center;
+	    background-repeat: no-repeat;
+	    background-position: center;
+	    background-color: #cccccc;
+	    background-size: cover;
+	    background-image: url("{{url_for('static', filename='image/help.jpg')}}");
+	    position: relative;
+	    color: black;
+	    padding: 10rem 0rem;
+	}
+
+	#help-items {
+		align-items: stretch;
+	}
+</style>
+
+<section class="p-0 container" id="main-site">
+	<section id="hero-help">
+		<h2 class="text-center">How Can we Help?</h2>
+	</section>
+	<section id="help-items" class="m-3 row">
+		<a href="/help/story" class="p-3  col-sm-4">
+			<div class="h-100 storycard">
+				<h3>Story Help</h3>
+				<p>How to use our tools to build engaging stories...</p>
+			</div>
 		</a>
-		<a href="/help/treeview" class="col-sm-4 storycard">
-			<p>Treeview Help</p>
+		<a href="/help/treeview" class="p-3 col-sm-4">
+			<div class="h-100 storycard">
+				<h3>Treeview Help</h3>
+				<p>See how your decisions flow into new locations...</p>
+			</div>
 		</a>
-		<a href="/help/verification" class="col-sm-4 storycard">
-			<p>Verification Help</p>
+		<a href="/help/verification" class="p-3 col-sm-4">
+			<div class="h-100 storycard">
+				<h3>Verification Help</h3>
+				<p>Learn how to get your story verified and sold...</p>
+			</div>
 		</a>
-		<a href="/help/run" class="col-sm-4 storycard">
-			<p>Run Story Help</p>
+		<a href="/help/run" class="p-3 col-sm-4">
+			<div class="h-100 storycard">
+				<h3>Run Story Help</h3>
+				<p>Run your story in your browser to find issues...</p>
+			</div>
 		</a>
+	</section>
 </section>
 {% endblock %}
