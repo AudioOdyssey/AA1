@@ -175,9 +175,9 @@ def authenticate(details):
 def google_callback(remote, token, userinfo):
     """Endpoint for users after they authenticate through Google. If the email has been used before, then those accounts will merge. 
     Else, a new account will be created. Creates a 30 day auth-token and redirects user to homepage"""
-    username=userinfo["given_name"]+userinfo['family_name']
+    username=userinfo.get("given_name","")+userinfo.get('family_name',"")
     passwd = os.urandom(16).decode('latin-1')
-    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo['given_name'], last_name_input=userinfo['family_name'], password_input = passwd, signed_in_with="Google")
+    usr = User(username_input=username, email_input=userinfo['email'], first_name_input=userinfo.get("given_name",""), last_name_input=userinfo.get('family_name',""), password_input = passwd, signed_in_with="Google")
     result = usr.search_by_email()
     if result == -1:
         usr.add_to_server()
