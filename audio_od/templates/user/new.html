@@ -405,9 +405,22 @@
                     <label class="form-check-label">Vision Impaired</label>
                 </div>
 
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="elua" id="eula" value="blind" autocomplete="off" onchange="eulaClick(this)">
+                    <label for="eula" class="form-check-label">I've read and agree to the <a href="/eula">end user license agreement</a></label>
+                </div>
+
+                <script>
+                    function eulaClick(elem) {
+                        if (elem.checked)
+                            document.getElementById("submit-btn").disabled = false
+                        else
+                            document.getElementById("submit-btn").disabled = true
+                    }
+                </script>
+
                 <div class="row">
-                    <input type="submit" value="Create Account" class="btn btn-primary"
-                        style="margin: 0em 0.75em; width: 100%; text-align: center">
+                    <input type="submit" disabled="" id="submit-btn" value="Create Account" class="btn btn-primary" style="margin: 0em 0.75em; width: 100%; text-align: center">
                 </div>
             </form>
         </div>
