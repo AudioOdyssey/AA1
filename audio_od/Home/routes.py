@@ -36,7 +36,7 @@ def about():
 @home.route("/eula")
 @check_header
 def eula():
-    return render_template("eula.html")
+    return render_template("EULA.html")
 
 
 @home.route("/robots.txt")
