@@ -61,6 +61,10 @@ def user_new():
         elif result==-2:
             return render_template("user/new.html", error="Email already in use")
         else:
+            cur = datetime.utcnow()
+            exp = datetime.utcnow() + timedelta(days=30)
+            token = encode_auth_token(usr.user_id, cur, exp)
+            session['token'] = token
             return redirect(url_for("home.index"))
     return render_template("user/new.html")
 
