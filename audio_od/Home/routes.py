@@ -39,10 +39,3 @@ def index():
 @check_header
 def about():
     return render_template("about.html")
-
-
-
-@home.route("/contact")
-@check_header
-def contact():
-    return render_template("contact.html")
