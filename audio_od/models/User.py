@@ -27,7 +27,7 @@ class User(UserMixin):
     password_salt = ""
     email = ""
     gender = 0
-    country_of_origin = 0
+    country_of_origin = "UN"
     profession = ""
     disabilities = 0
     company_id = 0
@@ -47,7 +47,7 @@ class User(UserMixin):
     REGION = 'us-east-2b'
 
     def __init__(self, username_input="", password_input="", password_salt_input="", email_input="", first_name_input="", last_name_input="",
-                 gender_input=0, country_of_origin_input=1, profession_input="", disabilities_input=0, 
+                 gender_input=0, country_of_origin_input="UN", profession_input="", disabilities_input=0, 
                  date_of_birth_input=date.min, language=0, user_type=0, user_id=0, signed_in_with = 'native'):
         self.username = username_input
         if password_salt_input == "":
