@@ -3,6 +3,7 @@ from flask import redirect, render_template, request, url_for, session, Blueprin
 
 
 # Internal imports
+from audio_od import app
 from audio_od.utils import check_header, decode_auth_token
 
 home = Blueprint('home', __name__)
@@ -36,3 +37,8 @@ def about():
 @check_header
 def eula():
     return render_template("eula.html")
+
+
+@home.route("/robots.txt")
+def robots():
+    return app.send_static_file("robots.txt")
