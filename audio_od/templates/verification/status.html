@@ -72,7 +72,7 @@
     {%endif%}
     <label>Verification Comments</label>
     <textarea class="form-control" disabled>{{event.reviewer_comments|e}}</textarea>
-    <span class="lnk" onclick="loadpage('/story/object/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}')">Edit Event</span>
+    <span class="lnk" onclick="loadpage('/story/event/indiv?story_id={{story.story_id}}&event_id={{event.event_id}}')">Edit Event</span>
     {%endfor%}
 
     <br>
