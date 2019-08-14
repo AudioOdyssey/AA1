@@ -270,4 +270,6 @@ class StoryDecision:
             query_data = cur.fetchone()
             last_id = query_data[0]
         conn.close()
+        if last_id is None:
+            last_id = 1
         return last_id
