@@ -376,6 +376,7 @@
                         <div class="input-group-text"><i class="fas fa-language"></i></div>
                     </div>
                     <select name="language-id" class="form-control" autocomplete="language">
+                        <option value="" selected disabled>Select your Language...</option>
                         <option value="1">English</option>
                         <option value="2">Japanese</option>
                         <option value="3">Spanish</option>
@@ -385,6 +386,7 @@
                 <label>Gender:</label>
                 <div class="input-group mb-2">
                     <select class="form-control" name="gender" autocomplete="sex">
+                        <option value="" selected disabled>Select your Gender...</option>
                         <option value="1">Male</option>
                         <option value="2">Female</option>
                         <option value="0">Other</option>
@@ -394,6 +396,7 @@
                 <label>Profession:</label>
                 <div class="input-group mb-2">
                     <select class="form-control" name="profession" autocomplete="off">
+                        <option value="" selected disabled>Select your Profession...</option>
                         <option value="trucker">Professional Driver</option>
                         <option value="doctor">Healthcare Professional</option>
                         <option value="other">Other</option>
@@ -401,8 +404,8 @@
                 </div>
 
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" name="disabilities" value="blind" autocomplete="off">
-                    <label class="form-check-label">Vision Impaired</label>
+                    <input class="form-check-input" id="blind" type="checkbox" name="disabilities" value="blind" autocomplete="off">
+                    <label for="blind" class="form-check-label">Vision Impaired</label>
                 </div>
 
                 <div class="form-check mb-2">
@@ -426,6 +429,5 @@
         </div>
         <div class="col-lg-3"></div>
     </section>
-    <div class="clearfix"></div>
 </section>
 {% endblock %}
